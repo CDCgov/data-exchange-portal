@@ -8,7 +8,7 @@ function App() {
   const [msg, setMsg] = useState("");
 
   useEffect(() => {
-    fetch("/api/dexPortalAPI")
+    fetch("/api/oauth_callback?name=foo")
       .then((res) => res.text())
       .then((text) => setMsg(text));
   }, []);

@@ -5,7 +5,7 @@ import {
   InvocationContext,
 } from "@azure/functions";
 
-export async function dexPortalAPI(
+export async function oauthCallback(
   context: InvocationContext,
   request: HttpRequest
 ): Promise<HttpResponse> {
@@ -16,8 +16,8 @@ export async function dexPortalAPI(
   return { body: `Hello, ${name}!` };
 }
 
-app.http("oauth", {
+app.http("oauth_callback", {
   methods: ["GET", "POST"],
   authLevel: "anonymous",
-  handler: dexPortalAPI,
+  handler: oauthCallback,
 });
