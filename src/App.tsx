@@ -8,7 +8,7 @@ function App() {
   const [msg, setMsg] = useState("");
 
   useEffect(() => {
-    fetch("/api/oauth_callback?name=foo")
+    fetch("/api/helloWorld?name=chase")
       .then((res) => res.text())
       .then((text) => setMsg(text));
   }, []);
@@ -16,16 +16,17 @@ function App() {
   return (
     <>
       <div>
-        {msg.length > 0 && <p>{msg}</p>}
-        <a href='https://vitejs.dev' target='_blank'>
-          <img src={viteLogo} className='logo' alt='Vite logo' />
+        <p>API Result: </p>
+        {msg.length > 0 ? <p>{msg}</p> : <p>No result yet</p>}
+        <a href="https://vitejs.dev" target="_blank">
+          <img src={viteLogo} className="logo" alt="Vite logo" />
         </a>
-        <a href='https://react.dev' target='_blank'>
-          <img src={reactLogo} className='logo react' alt='React logo' />
+        <a href="https://react.dev" target="_blank">
+          <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
       </div>
-      <h1>Vite + React</h1>
-      <div className='card'>
+      <h1>Vite + Elephants</h1>
+      <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
         </button>
@@ -33,7 +34,7 @@ function App() {
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
       </div>
-      <p className='read-the-docs'>
+      <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
     </>

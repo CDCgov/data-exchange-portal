@@ -5,7 +5,7 @@ import {
   InvocationContext,
 } from "@azure/functions";
 
-export async function oauthCallback(
+export async function helloWorld(
   context: InvocationContext,
   request: HttpRequest
 ): Promise<HttpResponse> {
@@ -16,8 +16,8 @@ export async function oauthCallback(
   return { body: `Hello, ${name}!` };
 }
 
-app.http("oauth_callback", {
+app.http("helloWorld", {
   methods: ["GET", "POST"],
   authLevel: "anonymous",
-  handler: oauthCallback,
+  handler: helloWorld,
 });
