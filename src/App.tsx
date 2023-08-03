@@ -1,23 +1,17 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
+import { useAuth } from "react-oidc-context";
 
 function App() {
   const [count, setCount] = useState(0);
-  const [msg, setMsg] = useState("");
-
-  useEffect(() => {
-    fetch("/api/helloWorld?name=chase")
-      .then((res) => res.text())
-      .then((text) => setMsg(text));
-  }, []);
+  const auth = useAuth();
 
   return (
     <>
       <div>
-        <p>API Result: </p>
-        {msg.length > 0 ? <p>{msg}</p> : <p>No result yet</p>}
+        <button onClick={() => auth.signinRedirect()}>Log in with SAMS</button>
         <a href="https://vitejs.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
         </a>
