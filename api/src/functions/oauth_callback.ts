@@ -9,6 +9,7 @@ export async function oauthCallback(
   context: InvocationContext,
   request: HttpRequest
 ): Promise<HttpResponse> {
+  console.log(request.query);
   console.log(request.body);
 
   const name = request.query.get("name") || (await request.text()) || "world";

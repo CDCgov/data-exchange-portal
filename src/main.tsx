@@ -5,14 +5,15 @@ import "./index.css";
 import { AuthProvider, AuthProviderProps } from "react-oidc-context";
 
 const oidcConfig: AuthProviderProps = {
-  authority: "https://apigw-stg.cdc.gov:8443",
+  authority: "https://apigw-stg.cdc.gov",
   client_id: "0342deed-73fd-4e45-b306-ba3cbeebe628",
   redirect_uri: "http://localhost:7071/api/oauth_callback",
   response_type: "code",
+  scope: "openid profile email",
   metadata: {
     authorization_endpoint:
       "https://apigw-stg.cdc.gov:8443/auth/oauth/v2/authorize",
-    issuer: "https://apigw-stg.cdc.gov:8443",
+    issuer: "https://apigw-stg.cdc.gov",
     userinfo_endpoint:
       "https://apigw-stg.cdc.gov:8443/openid/connect/v1/userinfo",
   },
