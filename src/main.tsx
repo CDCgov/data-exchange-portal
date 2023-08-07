@@ -3,20 +3,19 @@ import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 import { AuthProvider, AuthProviderProps } from "react-oidc-context";
+import { getEnv } from "./utils.ts";
 
 const oidcConfig: AuthProviderProps = {
-  authority: "https://apigw-stg.cdc.gov",
-  client_id: "0342deed-73fd-4e45-b306-ba3cbeebe628",
-  redirect_uri: "http://localhost:7071/api/oauth_callback",
+  authority: getEnv("REACT_APP_SAMS_AUTHORITY_URL"),
+  client_id: getEnv("REACT_APP_SAMS_CLIENT_ID"),
+  redirect_uri: getEnv("REACT_APP_OAUTH_CALLBACK_URL"),
   response_type: "code",
   scope: "openid profile email",
   disablePKCE: true,
   metadata: {
-    authorization_endpoint:
-      "https://apigw-stg.cdc.gov:8443/auth/oauth/v2/authorize",
-    issuer: "https://apigw-stg.cdc.gov",
-    userinfo_endpoint:
-      "https://apigw-stg.cdc.gov:8443/openid/connect/v1/userinfo",
+    authorization_endpoint: getEnv("REACT_APP_SAMS_AUTH_ENDPOINT"),
+    issuer: getEnv("REACT_APP_SAMS_AUTHORITY_URL"),
+    userinfo_endpoint: getEnv("REACT_APP_SAMS_USER_INFO_ENDPOINT"),
   },
 };
 
