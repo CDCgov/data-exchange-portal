@@ -10,6 +10,7 @@ const oidcConfig: AuthProviderProps = {
   redirect_uri: "http://localhost:7071/api/oauth_callback",
   response_type: "code",
   scope: "openid profile email",
+  disablePKCE: true,
   metadata: {
     authorization_endpoint:
       "https://apigw-stg.cdc.gov:8443/auth/oauth/v2/authorize",
