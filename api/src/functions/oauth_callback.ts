@@ -12,9 +12,8 @@ export async function oauthCallback(
   console.log(request.query);
   console.log(request.body);
 
-  const name = request.query.get("name") || (await request.text()) || "world";
-
-  return { body: `Hello, ${name}!` };
+  const authCode = request.query.get("code") || "Did not receive an auth code.";
+  return { body: authCode };
 }
 
 app.http("oauth_callback", {
