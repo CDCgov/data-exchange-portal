@@ -8,6 +8,10 @@
   -webkit-text-size-adjust: 100%;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   height: 100vh;
 }
@@ -18,4 +22,18 @@ h2 {
 
 h4 {
   font-size: 1.5rem;
+}
+
+.logo {
+  background-image: url("./assets/logo.svg");
+  width: 118px;
+  height: 46px;
+}
+
+.logo * {
+  visibility: hidden;
+}
+
+.logo-small {
+  background-image: url("./assets/logo_small.svg");
 }

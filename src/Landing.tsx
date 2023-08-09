@@ -4,7 +4,12 @@ import { Button } from "@us-gov-cdc/cdc-react";
 export function Landing() {
   return (
     <div className={styles.wrapper}>
-      <section className={styles["logo-section"]}>DEX</section>
+      <section className={styles["logo-section"]}>
+        <div className="logo">
+          <span>dex</span>
+        </div>
+        <span></span>
+      </section>
       <section>
         <h2>Welcome to DEX</h2>
         <span>The Data Exchange (DEX) Portal</span>
