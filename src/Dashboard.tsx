@@ -1,4 +1,5 @@
 import {
+  Button,
   Icon,
   ProfileHeader,
   ProfileHeaderLogo,
@@ -137,21 +138,37 @@ function Dashboard() {
         <Sidebar sections={[]} />
       </div>
       <div className="right">
-        <ProfileHeader
-          className="profile-header"
-          logo={logo}
-          menu={menu(
-            "profile-header-menu-items",
-            setProfileHeaderPopupOpen,
-            profileHeaderNotifications
-          )}
-          popupMenu={popupMenu(
-            "profile-header-popup-wrap",
-            "profile-header-popup",
-            profileHeaderPopupOpen,
-            profileHeaderNotifications
-          )}
-        />
+        <section>
+          <ProfileHeader
+            className="profile-header"
+            logo={logo}
+            menu={menu(
+              "profile-header-menu-items",
+              setProfileHeaderPopupOpen,
+              profileHeaderNotifications
+            )}
+            popupMenu={popupMenu(
+              "profile-header-popup-wrap",
+              "profile-header-popup",
+              profileHeaderPopupOpen,
+              profileHeaderNotifications
+            )}
+          />
+        </section>
+        <section className="main_content">
+          <div className="box">
+            <h2>TBD</h2>
+          </div>
+          <div className="box">
+            <h2>New to DEX?</h2>
+            <Button ariaLabel="request access" variation="text">
+              Request access
+            </Button>
+            <Button ariaLabel="learn more" variation="outline">
+              Learn more
+            </Button>
+          </div>
+        </section>
       </div>
     </div>
   );
