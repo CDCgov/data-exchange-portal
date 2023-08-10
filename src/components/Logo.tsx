@@ -82,15 +82,16 @@ const logos = {
 
 interface LogoProps {
   name: keyof typeof logos;
+  className?: string;
 }
 
-export function Logo({ name }: LogoProps) {
+export function Logo({ name, className }: LogoProps) {
   return (
     <span style={{ position: "relative" }}>
       <span style={{ visibility: "hidden", position: "absolute" }}>
         {logos[name].screenReaderText}
       </span>
-      <span>{logos[name].svg}</span>
+      <span className={className}>{logos[name].svg}</span>
     </span>
   );
 }

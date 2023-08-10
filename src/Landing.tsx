@@ -17,15 +17,20 @@ export function Landing() {
       </section>
       <section>
         <h2>
-          Welcome to <Logo name="mainSmall" />
+          Welcome to
+          <Logo name="mainSmall" className={styles["welcome-logo"]} />
         </h2>
-        <span>The Data Exchange (DEX) Portal</span>
+        <span className={styles["welcome-bottom-text"]}>
+          The Data Exchange (DEX) Portal
+        </span>
         <Divider
           height="2"
           stroke="#BDBDBD"
           className={styles["rightside-divider"]}
         />
-        <h4>Already have a SAMS login?</h4>
+        <h4 className={styles["already-sams-user-header"]}>
+          Already have a SAMS login?
+        </h4>
         <Button
           ariaLabel="Login with SAMS"
           iconPosition="right"
@@ -39,7 +44,7 @@ export function Landing() {
           stroke="#BDBDBD"
           className={styles["rightside-divider"]}
         />
-        <h4>New to DEX?</h4>
+        <h4 className={styles["new-to-dex-header"]}>New to DEX?</h4>
         <Button
           ariaLabel="request access"
           variation="outline"

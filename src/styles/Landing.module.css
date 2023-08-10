@@ -30,3 +30,24 @@
   padding-left: 1rem;
   padding-right: 1rem;
 }
+
+.welcome-logo svg {
+  width: 4.5rem;
+  margin-left: 0.5rem;
+  margin-bottom: -0.3rem;
+}
+
+.welcome-bottom-text {
+  margin-top: -1rem;
+  display: block;
+}
+
+.already-sams-user-header {
+  width: 13rem;
+  text-align: center;
+  margin-top: 0rem;
+}
+
+.new-to-dex-header {
+  margin-top: 0rem;
+}
