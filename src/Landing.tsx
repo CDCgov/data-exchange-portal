@@ -12,6 +12,7 @@ export function Landing() {
         <div className={styles.logos}>
           <Logo name="main" className={styles["main-logo"]} />
           <Divider
+            width="118"
             height="2"
             stroke="#C0E9FF"
             className={styles["logo-section-divider"]}
@@ -30,6 +31,7 @@ export function Landing() {
               The Data Exchange (DEX) Portal
             </span>
             <Divider
+              width="374"
               height="2"
               stroke="#BDBDBD"
               className={styles["rightside-divider"]}
@@ -47,6 +49,7 @@ export function Landing() {
               Login With SAMS
             </Button>
             <Divider
+              width="374"
               height="2"
               stroke="#BDBDBD"
               className={styles["rightside-divider"]}
