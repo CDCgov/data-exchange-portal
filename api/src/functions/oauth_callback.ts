@@ -26,7 +26,7 @@ export async function oauthCallback(
     code: authCode,
     client_id: process.env["SAMS_CLIENT_ID"],
     client_secret: process.env["SAMS_CLIENT_SECRET"],
-    redirect_uri: `http://${process.env["WEBSITE_HOSTNAME"]}/api/oauth_callback`,
+    redirect_uri: process.env["SAMS_REDIRECT_URL"],
   };
 
   try {
