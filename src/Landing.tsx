@@ -1,8 +1,11 @@
 import { Logo } from "./components/Logo";
 import styles from "./styles/Landing.module.css";
 import { Button, Divider } from "@us-gov-cdc/cdc-react";
+import { useAuth } from "react-oidc-context";
 
 export function Landing() {
+  const auth = useAuth();
+
   return (
     <div className={styles.wrapper}>
       <section className={styles["leftside-section"]}>
@@ -39,6 +42,7 @@ export function Landing() {
               iconPosition="right"
               iconName="squareArrowUpRight"
               className={styles["login-btn"]}
+              onClick={() => auth.signinRedirect()}
             >
               Login With SAMS
             </Button>

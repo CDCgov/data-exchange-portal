@@ -20,33 +20,40 @@
   opacity: 0.25;
 }
 
+.login-content {
+  width: 22rem;
+}
+
 .login-btn {
-  padding-left: 1rem;
-  padding-right: 1rem;
-  margin-bottom: 4rem;
+  font-size: 1rem;
+  padding: 0.5rem 0.8rem;
+  margin-bottom: 2.4rem;
 }
 
 .request-access-btn {
-  padding-left: 1rem;
-  padding-right: 1rem;
+  font-size: 1rem;
+  padding: 0.5rem 0.8rem;
+  margin-bottom: 1rem;
 }
 
 .welcome-logo svg {
-  width: 4.5rem;
-  margin-left: 0.5rem;
-  margin-bottom: -0.3rem;
+  margin-left: 0.6rem;
 }
 
 .welcome-bottom-text {
+  font-size: 0.8rem;
+  font-weight: 400;
   margin-top: -1rem;
-  margin-bottom: 4rem;
+  margin-bottom: 2.4rem;
   display: block;
+  color: #333333;
 }
 
 .already-sams-user-header {
-  width: 13rem;
+  width: 12rem;
   text-align: center;
-  margin-top: 4rem;
+  margin-top: 2.4rem;
+  font-size: 1.3rem;
 }
 
 .login-with-dex {
@@ -64,23 +71,23 @@
 }
 
 .new-to-dex-header {
-  margin-top: 4rem;
+  margin-top: 2.4rem;
 }
 
 .rightside-content .login-content {
-  width: 357px;;
+  width: 21.24rem;
 }
 
 .logos {
-  width: 11.8rem;
+  width: 7rem;
 }
 
 .logos span:first-child {
-    display: block;
-    margin-bottom: 4rem;
+  display: block;
+  margin-bottom: 0.6rem;
 }
 
 .logos span:last-child {
-    display: block;
-    margin-top: 4rem;
+  display: block;
+  margin-top: 1.4rem;
 }

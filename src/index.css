@@ -16,18 +16,10 @@ body {
   height: 100vh;
 }
 
-h2 {
-  font-size: 2rem;
-}
-
-h4 {
-  font-size: 1.5rem;
-}
-
 .logo {
   background-image: url("./assets/logo.svg");
-  width: 118px;
-  height: 46px;
+  width: 7rem;
+  height: 2.7rem;
 }
 
 .logo * {
