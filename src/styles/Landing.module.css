@@ -15,3 +15,18 @@
 .logo-section {
   background: linear-gradient(225deg, #005EAA 0%, #26418F 100%);
 }
+
+.logo-section-divider {
+  opacity: 0.25;
+  margin: 4rem 0;
+}
+
+.rightside-divider {
+  margin: 4rem 0;
+  width: 28rem;
+}
+
+.btn-padding-lr {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
