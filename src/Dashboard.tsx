@@ -135,7 +135,7 @@ function Dashboard() {
               heading: "Insights",
               items: [
                 { icon: "dashboard", text: "Dashboard" },
-                { icon: "process", text: "Process Status" },
+                { icon: "process", text: "Submission Status" },
                 { icon: "quality", text: "Quality" },
               ],
             },
