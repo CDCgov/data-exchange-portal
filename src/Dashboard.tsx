@@ -129,7 +129,22 @@ function Dashboard() {
   return (
     <div className="dashboard">
       <div className="left">
-        <Sidebar sections={[]} />
+        <Sidebar
+          sections={[
+            {
+              heading: "Insights",
+              items: [
+                { icon: "dashboard", text: "Dashboard" },
+                { icon: "process", text: "Process Status" },
+                { icon: "quality", text: "Quality" },
+              ],
+            },
+            {
+              heading: "Admin Tasks",
+              items: [{ icon: "user", text: "Manage Users" }],
+            },
+          ]}
+        />
       </div>
       <div className="right">
         <section>
