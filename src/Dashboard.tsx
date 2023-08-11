@@ -151,7 +151,7 @@ function Dashboard() {
           </div>
           <div className="box">
             <h2>New to DEX?</h2>
-            <Button ariaLabel="request access" variation="text">
+            <Button ariaLabel="request access" variation="outline">
               Request access
             </Button>
             <Button ariaLabel="learn more" variation="outline">
