@@ -9,22 +9,16 @@ import {
   Sidebar,
 } from "@us-gov-cdc/cdc-react";
 import { Dispatch, SetStateAction, useState } from "react";
+import dexLogo from "./assets/dex_logo.svg";
 
-const logo = <ProfileHeaderLogo classNames={["logo"]} />;
+const logo = <ProfileHeaderLogo image={dexLogo} classNames={["logo"]} />;
 
 const menu = (
   menuClassName: string,
-  setProfileHeaderPopupOpen: Dispatch<SetStateAction<boolean>>,
-  profileHeaderNotifications: ProfileHeaderNotification[]
+  setProfileHeaderPopupOpen: Dispatch<SetStateAction<boolean>>
 ) => {
   return (
     <div className={menuClassName}>
-      <ProfileHeaderMenuItem className="profile-header-menu-item hide-on-mobile">
-        <Icon
-          name="notifications"
-          hasBadge={profileHeaderNotifications.length > 0}
-        />
-      </ProfileHeaderMenuItem>
       <ProfileHeaderMenuItem className="profile-header-menu-item hide-on-mobile">
         <Icon name="settings" />
       </ProfileHeaderMenuItem>
@@ -142,11 +136,7 @@ function Dashboard() {
           <ProfileHeader
             className="profile-header"
             logo={logo}
-            menu={menu(
-              "profile-header-menu-items",
-              setProfileHeaderPopupOpen,
-              profileHeaderNotifications
-            )}
+            menu={menu("profile-header-menu-items", setProfileHeaderPopupOpen)}
             popupMenu={popupMenu(
               "profile-header-popup-wrap",
               "profile-header-popup",
