@@ -37,7 +37,11 @@ export async function oauthCallback(
       data: samsAuthReqBody,
     });
 
-    return { body: authResponse.data as HttpResponseBody };
+    return {
+      status: 301,
+      headers: { Location: process.env["DEX_PORTAL_REDIRECT_URL"] },
+      body: authResponse.data as HttpResponseBody,
+    };
   } catch (error: unknown) {
     context.error(error);
     if (axios.isAxiosError(error)) {
