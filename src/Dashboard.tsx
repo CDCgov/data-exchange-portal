@@ -6,12 +6,14 @@ import {
 import styles from "./styles/Dashboard.module.css";
 
 import dexLogo from "./assets/dex_logo.svg";
+
 import {
   Button,
   ProfileHeader,
   ProfileHeaderLogo,
   Sidebar,
 } from "@us-gov-cdc/cdc-react";
+
 import { useState } from "react";
 
 function Dashboard() {
