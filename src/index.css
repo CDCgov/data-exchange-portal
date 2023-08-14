@@ -17,15 +17,6 @@ body {
 }
 
 .logo {
-  background-image: url("./assets/logo.svg");
   width: 7rem;
   height: 2.7rem;
-}
-
-.logo * {
-  visibility: hidden;
-}
-
-.logo-small {
-  background-image: url("./assets/logo_small.svg");
 }
