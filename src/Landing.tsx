@@ -44,8 +44,7 @@ export function Landing() {
               iconPosition="right"
               iconName="squareArrowUpRight"
               className={styles["login-btn"]}
-              onClick={() => auth.signinRedirect()}
-            >
+              onClick={() => auth.signinRedirect()}>
               Login With SAMS
             </Button>
             <Divider
@@ -60,8 +59,7 @@ export function Landing() {
             <Button
               ariaLabel="request access"
               variation="outline"
-              className={styles["request-access-btn"]}
-            >
+              className={styles["request-access-btn"]}>
               Request access
             </Button>
             <Button ariaLabel="learn more" variation="text">
