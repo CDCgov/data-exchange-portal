@@ -1,6 +1,11 @@
 /* includes all global styles from the cdc-react component library */
 @import url("@us-gov-cdc/cdc-react/dist/style.css");
 
+*,
+html,
+body {
+  margin: 0;
+}
 .dashboard {
   display: grid;
   grid-template-columns: auto 1fr;
