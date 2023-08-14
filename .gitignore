@@ -11,7 +11,7 @@ node_modules
 dist
 dist-ssr
 *.local
-
+.yarnrc
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -25,3 +25,4 @@ dist-ssr
 
 # App
 .env
+.yarnrc

@@ -6,11 +6,13 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,css,scss,json,md}\"",
+    "format:write": "prettier \"src/**/*.{js,jsx,ts,tsx,css,scss,json,md}\" --write",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@types/react-router-dom": "^5.3.3",
+    "@us-gov-cdc/cdc-react": "^0.4.1",
     "oidc-client-ts": "^2.2.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -21,12 +23,16 @@
     "@types/node": "^20.4.8",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
+    "@types/react-router-dom": "^5.3.3",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "@vitejs/plugin-react": "^4.0.3",
-    "eslint": "^8.45.0",
+    "eslint": "^8.47.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-react": "^7.33.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
+    "prettier": "^3.0.1",
     "sass": "^1.65.1",
     "typescript": "^5.0.2",
     "vite": "^4.4.5"
