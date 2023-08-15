@@ -1,0 +1,39 @@
+/* includes all global styles from the cdc-react component library */
+@import url("@us-gov-cdc/cdc-react/dist/style.css");
+
+*,
+html,
+body {
+  margin: 0;
+}
+
+.dashboard {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  .right {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    .main_content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding: 2.4rem;
+      gap: 2.4rem;
+    }
+    .box {
+      height: 17.93rem;
+      padding: 0rem 2rem;
+      background-color: white;
+      border-radius: 0.4rem;
+      background: var(--system-gray-white, #fff);
+      box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+    .dex-logo {
+      margin-left: 0.75rem;
+    }
+  }
+}
