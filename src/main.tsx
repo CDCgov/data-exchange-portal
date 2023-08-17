@@ -12,10 +12,12 @@ const oidcConfig: AuthProviderProps = {
   response_type: "code",
   scope: "openid profile email",
   disablePKCE: true,
+  loadUserInfo: true,
   metadata: {
-    authorization_endpoint: getEnv("VITE_SAMS_AUTH_ENDPOINT"),
+    authorization_endpoint: getEnv("VITE_SAMS_AUTH_URL"),
+    token_endpoint: getEnv("VITE_OAUTH_TOKEN_URL"),
     issuer: getEnv("VITE_SAMS_AUTHORITY_URL"),
-    userinfo_endpoint: getEnv("VITE_SAMS_USER_INFO_ENDPOINT"),
+    userinfo_endpoint: getEnv("VITE_SAMS_USER_INFO_URL"),
   },
 };
 

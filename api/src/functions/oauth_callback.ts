@@ -11,7 +11,7 @@ export async function oauthCallback(
   context: InvocationContext,
   request: HttpRequest
 ): Promise<HttpResponse> {
-  const authCode = request.query.get("code");
+  const authCode = (await request.formData()).get("code");
 
   if (!authCode) {
     context.error("Did not receive auth code from auth provider.");
@@ -38,8 +38,8 @@ export async function oauthCallback(
     });
 
     return {
-      status: 301,
-      headers: { Location: process.env["DEX_PORTAL_REDIRECT_URL"] },
+      status: 200,
+      headers: { "Content-Type": "application/json" },
       body: authResponse.data as HttpResponseBody,
     };
   } catch (error: unknown) {
