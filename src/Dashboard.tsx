@@ -22,12 +22,11 @@ function Dashboard() {
   const auth = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+  const [profileHeaderPopupOpen, setProfileHeaderPopupOpen] = useState(false);
 
   if (!auth.isAuthenticated) {
     return <Navigate to="/" state={{ from: location }} replace />;
   }
-
-  const [profileHeaderPopupOpen, setProfileHeaderPopupOpen] = useState(false);
 
   const logo = <ProfileHeaderLogo image={dexLogo} classNames={["dex-logo"]} />;
 

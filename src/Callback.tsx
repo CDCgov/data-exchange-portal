@@ -16,7 +16,7 @@ function Callback() {
     return auth.events.addUserLoaded(() => {
       navigate(from, { replace: true });
     });
-  }, []);
+  }, [auth.events, from, navigate]);
 
   return <></>; // Can possibly add a loading message here in the future.
 }
