@@ -51,7 +51,7 @@ export async function oauthCallback(
   }
 }
 
-app.http("oauth_callback", {
+app.http("token", {
   methods: ["GET", "POST"],
   authLevel: "anonymous",
   handler: oauthCallback,
