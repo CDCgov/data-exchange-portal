@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from "./Dashboard";
 import { Landing } from "./Landing";
 import Callback from "./Callback";
+import Profile from "./Profile";
 
 function App() {
   return (
@@ -13,7 +14,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Landing />}></Route>
         <Route path="/oauth_callback" element={<Callback />}></Route>
-        <Route path="/dashboard" element={<Dashboard />}></Route>
+        <Route path="/dashboard" element={<Dashboard />}>
+          <Route path="/dashboard/profile" element={<Profile />}></Route>
+        </Route>
       </Routes>
     </Router>
   );

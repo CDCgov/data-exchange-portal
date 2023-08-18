@@ -16,11 +16,12 @@ import {
 
 import { useState } from "react";
 import { useAuth } from "react-oidc-context";
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
 
 function Dashboard() {
   const auth = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
 
   if (!auth.isAuthenticated) {
     return <Navigate to="/" state={{ from: location }} replace />;
@@ -55,7 +56,7 @@ function Dashboard() {
       icon: "user",
       iconPosition: "left",
       text: "Your Profile",
-      onClick: undefined,
+      onClick: () => navigate("/dashboard/profile"),
       badgeCount: 0,
     },
     {
@@ -111,26 +112,30 @@ function Dashboard() {
             popupMenuItems={popupMenuItems}
           />
         </section>
-        <section className="main_content">
-          <div className="box">
-            <h2>TBD</h2>
-          </div>
-          <div className="box">
-            <h2>New to DEX?</h2>
-            <Button
-              className={styles["request-access-btn"]}
-              ariaLabel="request access"
-              variation="outline">
-              Request access
-            </Button>
-            <Button
-              className={styles["learn-more-btn"]}
-              ariaLabel="learn more"
-              variation="outline">
-              Learn more
-            </Button>
-          </div>
-        </section>
+        {location.pathname.includes("profile") ? (
+          <Outlet />
+        ) : (
+          <section className="main_content">
+            <div className="box">
+              <p>Welcome {auth.user?.profile.email}</p>
+            </div>
+            <div className="box">
+              <h2>New to DEX?</h2>
+              <Button
+                className={styles["request-access-btn"]}
+                ariaLabel="request access"
+                variation="outline">
+                Request access
+              </Button>
+              <Button
+                className={styles["learn-more-btn"]}
+                ariaLabel="learn more"
+                variation="outline">
+                Learn more
+              </Button>
+            </div>
+          </section>
+        )}
       </div>
     </div>
   );
