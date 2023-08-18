@@ -4,7 +4,7 @@ function Profile() {
   const auth = useAuth();
 
   return (
-    <section style={{ wordBreak: "break-all" }}>
+    <section style={{ wordBreak: "break-all", padding: "1rem" }}>
       {auth.user &&
         Object.keys(auth.user.profile).map((key) => (
           <div key={key}>
