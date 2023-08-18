@@ -56,7 +56,7 @@ function Dashboard() {
       icon: "user",
       iconPosition: "left",
       text: "Your Profile",
-      onClick: () => navigate("/dashboard/profile"),
+      onClick: () => navigate("/dashboard/profile"), // Not sure if this is the final structure, but it's good enough for demo purposes.
       badgeCount: 0,
     },
     {
