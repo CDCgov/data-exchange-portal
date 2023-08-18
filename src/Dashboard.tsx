@@ -123,9 +123,9 @@ function Dashboard() {
               <h2>New to DEX?</h2>
               <Button
                 className={styles["request-access-btn"]}
-                ariaLabel="request access"
+                ariaLabel="take a tour"
                 variation="outline">
-                Request access
+                Take a tour
               </Button>
               <Button
                 className={styles["learn-more-btn"]}
