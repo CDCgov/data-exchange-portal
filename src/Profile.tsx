@@ -4,14 +4,8 @@ function Profile() {
   const auth = useAuth();
 
   return (
-    <section style={{ wordBreak: "break-all", padding: "1rem" }}>
-      {auth.user &&
-        Object.keys(auth.user.profile).map((key) => (
-          <div key={key}>
-            <span>{key}: </span>
-            <span>{JSON.stringify(auth.user?.profile[key])}</span>
-          </div>
-        ))}
+    <section style={{ padding: "1rem" }}>
+      {auth.user && <pre>{JSON.stringify(auth.user.profile, null, 2)}</pre>}
     </section>
   );
 }
