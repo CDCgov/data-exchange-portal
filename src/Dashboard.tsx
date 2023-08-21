@@ -15,9 +15,18 @@ import {
 } from "@us-gov-cdc/cdc-react";
 
 import { useState } from "react";
+import { useAuth } from "react-oidc-context";
+import { Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
 
 function Dashboard() {
+  const auth = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [profileHeaderPopupOpen, setProfileHeaderPopupOpen] = useState(false);
+
+  if (!auth.isAuthenticated) {
+    return <Navigate to="/" state={{ from: location }} replace />;
+  }
 
   const logo = <ProfileHeaderLogo image={dexLogo} classNames={["dex-logo"]} />;
 
@@ -46,7 +55,7 @@ function Dashboard() {
       icon: "user",
       iconPosition: "left",
       text: "Your Profile",
-      onClick: undefined,
+      onClick: () => navigate("/dashboard/profile"), // Not sure if this is the final structure, but it's good enough for demo purposes.
       badgeCount: 0,
     },
     {
@@ -102,26 +111,30 @@ function Dashboard() {
             popupMenuItems={popupMenuItems}
           />
         </section>
-        <section className="main_content">
-          <div className="box">
-            <h2>TBD</h2>
-          </div>
-          <div className="box">
-            <h2>New to DEX?</h2>
-            <Button
-              className={styles["request-access-btn"]}
-              ariaLabel="request access"
-              variation="outline">
-              Request access
-            </Button>
-            <Button
-              className={styles["learn-more-btn"]}
-              ariaLabel="learn more"
-              variation="outline">
-              Learn more
-            </Button>
-          </div>
-        </section>
+        {location.pathname.includes("profile") ? (
+          <Outlet />
+        ) : (
+          <section className="main_content">
+            <div className="box">
+              <p>Welcome {auth.user?.profile.email}</p>
+            </div>
+            <div className="box">
+              <h2>New to DEX?</h2>
+              <Button
+                className={styles["request-access-btn"]}
+                ariaLabel="take a tour"
+                variation="outline">
+                Take a tour
+              </Button>
+              <Button
+                className={styles["learn-more-btn"]}
+                ariaLabel="learn more"
+                variation="outline">
+                Learn more
+              </Button>
+            </div>
+          </section>
+        )}
       </div>
     </div>
   );
