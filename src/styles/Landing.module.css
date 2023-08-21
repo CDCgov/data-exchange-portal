@@ -27,11 +27,13 @@
 .login-btn {
   padding: 0.5rem 0.8rem;
   margin-bottom: 2.4rem;
+  margin-top: 0.675rem;
 }
 
 .request-access-btn {
   padding: 0.5rem 0.8rem;
   margin-bottom: 1rem;
+  margin-top: 0.675rem;
 }
 
 .welcome-logo svg {
@@ -41,7 +43,7 @@
 .welcome-bottom-text {
   font-size: 0.8rem;
   font-weight: 400;
-  margin-top: -1rem;
+  margin-top: 0.25rem;
   margin-bottom: 2.4rem;
   display: block;
   color: #333333;
