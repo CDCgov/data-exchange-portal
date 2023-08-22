@@ -1,27 +1,26 @@
-# React + TypeScript + Vite
+# Data Exchange Portal
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the web application for the data upload management dashboard for DEX.
 
-Currently, two official plugins are available:
+## Deploying to the Dev Environment
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This app is deployed to a single Azure Static Web instance. This instance has a dev, staging, and production environment. The following instructions will explain how to perform a manual deployment to the dev environment.
 
-## Expanding the ESLint configuration
+1. Install non-dev dependencies for the React app and API functions. To do this, first run `yarn install --production=true` in the root directory. Then, in the `api` directory, run `npm install --production`.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+2. Create a production build of the React app in dev mode. To do this, first create a file called `.env.dev` at the root of this project. Next, fill out that file with all required environment variables, and set their values to ones appropriate for the dev environment. Finally, generate a build with the command `yarn build:dev`. This will run the TypeScript compiler and Vite to create a production-ready bundle of the React app, but will replace the environment variable references with the values in `.env.dev`. The build should be in a new folder called `dist` at the root of the repo.
 
-- Configure the top-level `parserOptions` property like this:
+3. Create a production build of the API function. This can be done by running `npm run build` within the `api` directory. This simply runs the TypeScript compiler on the Azure function code. Again, this should create a `dist` directory within the `api` directory.
 
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
+4. Finally, use the SWA CLI to execute the deployment to the dev environment. The first piece of information we need here is the deployment token. This is a secret value that validates that the user doing the deployment is authorized to do so. This can be retrieved from the Azure Static Web App instance overview page. Next, run the following command providing the deployment token:
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+`swa deploy ./dist --api-location ./api -d ***** --env dev -w .`
+
+Here's the summary of this command:
+
+- `swa deploy` This tells the CLI we are executing a deployment.
+- `./dist` This tells the CLI where the static site assets are for the front end site.
+- `--api-location` This tells the CLI where the code is that will be deployed to the managed Azure Function.
+- `-d` This is the argument flag for the deployment token.
+- `--env` This is the argument flag for the environment that will be deployed to. This must match the name of the environment in the instance.
+- `-w` This is the argument flag for the location of the JSON configuration file for the static web app. It should pick up `staticwebapp.config.json` file in the root of the project.
