@@ -615,7 +615,7 @@
     "@typescript-eslint/types" "6.4.0"
     eslint-visitor-keys "^3.4.1"
 
-"@us-gov-cdc/cdc-react@^0.4.2":
+"@us-gov-cdc/cdc-react@^0.4.1":
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/@us-gov-cdc/cdc-react/-/cdc-react-0.4.1.tgz#cfa570cd603af9844e0ba4c1414e1e866e91df74"
   integrity sha512-sinfT4SKmHUwne4uxNUjIuemmaqi2+WByikxu4BH8EbeleWZ/mlyrWJ7983xx9hMXn8HhNeXbE/euSpw4a16tw==

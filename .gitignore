@@ -24,5 +24,5 @@ dist-ssr
 *.sw?
 
 # App
-.env
+.env*
 .yarnrc
