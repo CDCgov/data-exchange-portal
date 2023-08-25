@@ -1,6 +1,12 @@
 # Data Exchange Portal
 
-This is the web application for the data upload management dashboard for DEX.
+This is the web application for the data upload management dashboard for DEX. It is built using ReactJS and Vite. It is deployed to one of three environments in the [ocio-dmz-dex](https://portal.azure.com/#@cdc.onmicrosoft.com/resource/subscriptions/7d1e3999-6577-4cd5-b296-f518e5c8e677/resourceGroups/OCIO-API-PRD/providers/Microsoft.Web/staticSites/ocio-dmz-dex/staticsite) Azure Static Web App. It also uses managed Azure Functions for the middleware API endpoints.
+
+## Environments
+
+| Env | URL                    |
+| --- | ---------------------- |
+| dev | https://dexdev.cdc.gov |
 
 ## Deploying to the Dev Environment
 
