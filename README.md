@@ -74,9 +74,13 @@ Of course, it is possible to run the front end and backend dev servers separatly
 - Start the front end server by running `yarn dev` in the project root directory.
 - Start the backend server by running `func host start` in the `api` directory.
 
-## Deploying to the Dev Environment
+## Running Automated Tests
 
-This app is deployed to a single Azure Static Web instance. This instance has a dev, staging, and production environment. The following instructions will explain how to perform a manual deployment to the dev environment.
+We encourage TDD while making changes to this app. To run unit tests for the front end, simply run `yarn test` in the project root directory. These tests will be run as part of the acceptance criteria for a PR.
+
+## Manual Deployments to the Dev Environment
+
+This app is deployed to a single Azure Static Web instance. This instance has a dev, staging, and production environment. Eventually, a CD pipeline will be built to automate the deployment process to each environment. **Manual deployments should only be used when this pipeline is unavailable.** The following instructions will explain how to perform a manual deployment to the dev environment.
 
 1. Install non-dev dependencies for the React app and API functions. To do this, first run `yarn install --production=true` in the root directory. Then, in the `api` directory, run `npm install --production`.
 
