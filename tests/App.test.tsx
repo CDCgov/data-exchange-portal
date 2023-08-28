@@ -1,14 +1,10 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import App from "../src/App";
-import { AuthProvider } from "react-oidc-context";
+import { renderWithAuthProvider } from "./helpers";
 
 describe("App", () => {
   it("should render landing page when no user session active", () => {
-    render(
-      <AuthProvider>
-        <App />
-      </AuthProvider>
-    );
+    renderWithAuthProvider(<App />);
 
     expect(screen.getByText("Login With SAMS")).toBeInTheDocument();
   });
