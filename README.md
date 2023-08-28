@@ -4,9 +4,31 @@ This is the web application for the data upload management dashboard for DEX. It
 
 ## Environments
 
-| Env | URL                    |
-| --- | ---------------------- |
-| dev | https://dexdev.cdc.gov |
+| Env | URL                    | SAMS OAuth URL            |
+| --- | ---------------------- | ------------------------- |
+| dev | https://dexdev.cdc.gov | https://apigw-stg.cdc.gov |
+
+## Local Developer Environment Setup
+
+The following software is required to develop this app:
+
+1. NodeJS
+2. Azure CLI
+3. Azure Functions Core Tools version 4.0.5095
+4. Azure Static Web App CLI
+
+Next, you will need to install NPM dependencies for both the front end app, and the backend server. To do this, run `yarn install` in the root project directory. Then, `cd` into the `api` directory and run `npm install`.
+
+### Environment Variables
+
+Next, you will need to set two sets of environment variables: one for the front end and one for the backend. **Please note that no secret values shall be placed in front end environment variables as these values get substituted into the code and exposed in the browser.**
+
+To set your front end environment variables, first make a file called `.env` in the root project directory. Then, add the following variables to it:
+
+- `VITE_SAMS_AUTHORITY_URL` - This is the URL for the SAMS auth provider for OAuth login. See the table above to see which environment in the DEX portal maps to which SAMS environment. For local development, it should match the URL for the DEX portal dev environment.
+- `VITE_SAMS_CLIENT_ID` - This is the client ID given by SAMS when registering this app. You can find this value in the [dex-portal-sams-client-id](https://portal.azure.com/#@cdc.onmicrosoft.com/asset/Microsoft_Azure_KeyVault/Secret/https://tf-ede-envar-vault.vault.azure.net/secrets/dex-portal-sams-client-id) Azure Key Vault secret.
+- `VITE_SAMS_AUTH_URL` - This is the full URL of the SAMS API endpoint for logging in a user. For our purposes, this is the endpoint that opens the SAMS login portal. A copy of the SAMS API documentation can be found in the DEX sharepoint [here](https://cdc.sharepoint.com/:b:/r/teams/CDC-Data-Exchange/Shared%20Documents/Build%20-%20DEX%20Portal/sams_docs.pdf?csf=1&web=1&e=OsHEAY).
+- `VITE_SAMS_USER_INFO_URL` - This is the full URL of the SAMS API endpoint for getting user profile information in JSON format provided a valid authentication token. For our purposes, this is the data the portal uses to populate the user's profile components.
 
 ## Deploying to the Dev Environment
 
