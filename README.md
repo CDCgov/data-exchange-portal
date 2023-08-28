@@ -4,9 +4,9 @@ This is the web application for the data upload management dashboard for DEX. It
 
 ## Environments
 
-| Env | URL                    | SAMS OAuth URL            |
-| --- | ---------------------- | ------------------------- |
-| dev | https://dexdev.cdc.gov | https://apigw-stg.cdc.gov |
+| Env | URL                    | SAMS OAuth URL                 |
+| --- | ---------------------- | ------------------------------ |
+| dev | https://dexdev.cdc.gov | https://apigw-stg.cdc.gov:8443 |
 
 ## Local Developer Environment Setup
 
@@ -30,6 +30,24 @@ To set your front end environment variables, first make a file called `.env` in 
 - `VITE_SAMS_AUTH_URL` - This is the full URL of the SAMS API endpoint for logging in a user. For our purposes, this is the endpoint that opens the SAMS login portal. A copy of the SAMS API documentation can be found in the DEX sharepoint [here](https://cdc.sharepoint.com/:b:/r/teams/CDC-Data-Exchange/Shared%20Documents/Build%20-%20DEX%20Portal/sams_docs.pdf?csf=1&web=1&e=OsHEAY).
 - `VITE_SAMS_USER_INFO_URL` - This is the full URL of the SAMS API endpoint for getting user profile information in JSON format provided a valid authentication token. For our purposes, this is the data the portal uses to populate the user's profile components.
 - `VITE_OAUTH_TOKEN_URL` - This is the full URL of the endpoint that will exchange an auth code for a valid auth token and refresh token.
+- `VITE_OAUTH_CALLBACK_URL` - The URL that the SAMS client will redirect the client after a successful login attempt. It should have `/outh_callback` set as its path to match the front end rounting configuration of this app.
+
+To set your backend environment variables, first make a file called `local.settings.json` within the `api` directory. Next, add the following content to the file, filling in the environment variables with the appripriate values:
+
+```JSON
+{
+  "IsEncrypted": false,
+  "Values": {
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+    "AzureWebJobsFeatureFlags": "EnableWorkerIndexing",
+    "AzureWebJobsStorage": "",
+    "SAMS_CLIENT_ID": "", // Matches the VITE_SAMS_CLIENT_ID value set above.
+    "SAMS_CLIENT_SECRET": "", // The client secret given by SAMS when registering this app.  Can also be found in the key vault holding the client ID.
+    "SAMS_URL": "", // The base hostname for SAMS, without any path parameters.  Again, find this in the table in the Environments section above.
+    "SAMS_REDIRECT_URL": "" // The URL that was used to redirect the client after a successful SAMS login for a particular user's login attempt.  It should match the VITE_OAUTH_CALLBACK_URL value set in the front end environment variables.
+  }
+}
+```
 
 ## Deploying to the Dev Environment
 
