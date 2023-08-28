@@ -23,7 +23,7 @@ function Dashboard() {
   const location = useLocation();
   const navigate = useNavigate();
   const [profileHeaderPopupOpen, setProfileHeaderPopupOpen] = useState(false);
-
+  console.log(auth);
   if (!auth.isAuthenticated) {
     return <Navigate to="/" state={{ from: location }} replace />;
   }
