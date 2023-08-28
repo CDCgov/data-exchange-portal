@@ -12,10 +12,10 @@ This is the web application for the data upload management dashboard for DEX. It
 
 The following software is required to develop this app:
 
-1. NodeJS
-2. Azure CLI
-3. Azure Functions Core Tools version 4.0.5095
-4. Azure Static Web App CLI
+1. [NodeJS](https://nodejs.org/en) (latest LTS)
+2. [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli) (latest version)
+3. [Azure Functions Core Tools version 4.0.5095](https://github.com/Azure/azure-functions-core-tools/releases/tag/4.0.5095)
+4. [Azure Static Web App CLI](https://azure.github.io/static-web-apps-cli/docs/use/install)
 
 Next, you will need to install NPM dependencies for both the front end app, and the backend server. To do this, run `yarn install` in the root project directory. Then, `cd` into the `api` directory and run `npm install`.
 
