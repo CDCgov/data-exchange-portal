@@ -55,11 +55,11 @@ The front end and backend use separate servers when run locally. There are sever
 
 ### First thing's first; build the backend
 
-The backend code is writtin in TypeScript, and needs to be transpiled to JavaScript before it can be ran. To do this, run `npm run build` in the `api` directory. This needs to be repeated for any changes made to the backend code.
+The backend code is written in TypeScript, and needs to be transpiled to JavaScript before it can be ran. To do this, run `npm run build` in the `api` directory. This needs to be repeated for any changes made to the backend code.
 
 ### Using a single SWA CLI command
 
-This is the simplest way to start everything. The SWA CLI provides convinient commands and arguments for serving the front end and backend at the same time. In addition, it serves the app up on a single URL and port, and even takes care of the reverse proxying for you, so no need to set up CORS in the backend just for local development. This can be done with the following command:
+This is the simplest way to start everything. The SWA CLI provides convenient commands and arguments for serving the front end and backend at the same time. In addition, it serves the app up on a single URL and port, and even takes care of the reverse proxying for you, so no need to set up CORS in the backend just for local development. This can be done with the following command:
 
 `swa start http://localhost:5173 --run "yarn dev" --api-location ./api`
 
@@ -69,7 +69,7 @@ This command runs the Vite dev server for the front end app on `localhost:5173`,
 
 ### Using separate commands
 
-Of course, it is possible to run the front end and backend dev servers separatly if you do not with to use the SWA CLI. However, we do not recommend doing this as it requires CORS to be configured in the backend, and environment variables to be changed. If you still with to do this, you need to run the following commands to start each server:
+Of course, it is possible to run the front end and backend dev servers separately if you do not with to use the SWA CLI. However, we do not recommend doing this as it requires CORS to be configured in the backend, and environment variables to be changed. If you still wish to do this, you need to run the following commands to start each server:
 
 - Start the front end server by running `yarn dev` in the project root directory.
 - Start the backend server by running `func host start` in the `api` directory.
