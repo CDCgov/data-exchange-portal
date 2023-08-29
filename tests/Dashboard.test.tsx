@@ -1,21 +1,27 @@
 import { screen, render } from "@testing-library/react";
 import Dashboard from "../src/Dashboard";
-import { AuthProvider, useAuth } from "react-oidc-context";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { vi } from "vitest";
+import { createMockedAuthContext, withMockedAuthProvider } from "./helpers";
 
 vi.mock("react-oidc-context");
 
 describe("Dashboard", () => {
-  it("should show sidebar", () => {
-    vi.mocked(useAuth).mockReturnValue({ isAuthenticated: true });
+  afterEach(() => {
+    vi.clearAllMocks();
+    vi.restoreAllMocks();
+  });
 
+  it("should show sidebar", () => {
     render(
-      <AuthProvider>
+      withMockedAuthProvider(
         <MemoryRouter initialEntries={["/dashboard"]}>
-          <Dashboard />
-        </MemoryRouter>
-      </AuthProvider>
+          <Routes>
+            <Route path="/dashboard" element={<Dashboard />} />
+          </Routes>
+        </MemoryRouter>,
+        createMockedAuthContext({ isAuthenticated: true, isLoading: false })
+      )
     );
 
     expect(screen.getByText("Insights")).toBeInTheDocument();
