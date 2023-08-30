@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "simulate": "swa start http://localhost:5173 --run \"yarn dev\" --api-location ./api",
     "build": "tsc && vite build",
     "build:dev": "tsc && vite build --mode dev",
     "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,css,scss,json,md}\"",
