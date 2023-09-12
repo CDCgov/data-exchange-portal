@@ -1,7 +1,7 @@
 import {
   MenuItemType,
   PopupMenuItemType,
-} from "@us-gov-cdc/cdc-react/dist/@types";
+} from "@us-gov-cdc/cdc-react/dist/src/@types";
 
 import styles from "./styles/Dashboard.module.css";
 
@@ -14,69 +14,69 @@ import {
   Sidebar,
 } from "@us-gov-cdc/cdc-react";
 
-import { useState } from "react";
-import { useAuth } from "react-oidc-context";
-import { Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useAuth, hasAuthParams } from "react-oidc-context";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Icons } from "@us-gov-cdc/cdc-react-icons";
 
 function Dashboard() {
   const auth = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
-  const [profileHeaderPopupOpen, setProfileHeaderPopupOpen] = useState(false);
 
-  if (!auth.isAuthenticated) {
-    return <Navigate to="/" state={{ from: location }} replace />;
-  }
+  // automatically sign-in
+  useEffect(() => {
+    if (
+      !hasAuthParams() &&
+      !auth.isAuthenticated &&
+      !auth.activeNavigator &&
+      !auth.isLoading
+    ) {
+      auth.signinSilent();
+    }
+  }, [auth]);
 
   const logo = <ProfileHeaderLogo image={dexLogo} classNames={["dex-logo"]} />;
 
-  // More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
   const menuItems: MenuItemType[] = [
     {
       badgeCount: 5,
-      icon: "notifications",
+      icon: <Icons.Notifications hasBadge={true} />,
       className: "hide-on-mobile",
+      srText: "Notifications button",
     },
     {
       badgeCount: 0,
-      icon: "settings",
+      icon: <Icons.Settings />,
       className: "hide-on-mobile",
-    },
-    {
-      badgeCount: 0,
-      icon: "user",
-      className: "user-profile",
-      onClick: () => setProfileHeaderPopupOpen(!profileHeaderPopupOpen),
+      srText: "Settings button",
     },
   ];
 
-  const popupMenuItems: PopupMenuItemType[] = [
+  const userProfilePopupMenuItems: PopupMenuItemType[] = [
     {
-      icon: "user",
+      icon: <Icons.User />,
       iconPosition: "left",
       text: "Your Profile",
-      onClick: () => navigate("/dashboard/profile"), // Not sure if this is the final structure, but it's good enough for demo purposes.
       badgeCount: 0,
+      onClick: () => navigate("/dashboard/profile"),
     },
     {
-      icon: "notifications",
+      icon: <Icons.Notifications hasBadge={true} />,
       iconPosition: "left",
       text: "Notifications",
-      onClick: undefined,
       badgeCount: 1,
     },
     {
-      icon: "settings",
+      icon: <Icons.Settings />,
       iconPosition: "left",
       text: "Settings",
-      onClick: undefined,
       badgeCount: 0,
     },
     {
-      icon: "logout",
+      icon: <Icons.Logout />,
       iconPosition: "left",
       text: "Logout",
-      onClick: undefined,
       badgeCount: 0,
     },
   ];
@@ -89,14 +89,55 @@ function Dashboard() {
             {
               heading: "Insights",
               items: [
-                { icon: "dashboard", text: "Dashboard" },
-                { icon: "process", text: "Submission Status" },
-                { icon: "quality", text: "Quality" },
+                {
+                  componentType: "a",
+                  icon: <Icons.Dashboard />,
+                  text: "Dashboard",
+                  href: "/dashboard",
+                },
+                {
+                  componentType: "a",
+                  icon: <Icons.Process />,
+                  text: "Process Status",
+                  href: "/",
+                },
+                {
+                  componentType: "a",
+                  icon: <Icons.Quality />,
+                  text: "Quality",
+                  href: "/",
+                },
               ],
             },
             {
               heading: "Admin Tasks",
-              items: [{ icon: "user", text: "Manage Users" }],
+              items: [
+                {
+                  componentType: "a",
+                  icon: <Icons.User />,
+                  text: "Manage Users",
+                  href: "/",
+                },
+              ],
+            },
+          ]}
+          footer={[
+            {
+              heading: "",
+              items: [
+                {
+                  componentType: "a",
+                  icon: <Icons.Support />,
+                  text: "Support",
+                  href: "/support",
+                },
+                {
+                  componentType: "a",
+                  icon: <Icons.Logout />,
+                  text: "Logout",
+                  href: "/logout",
+                },
+              ],
             },
           ]}
         />
@@ -104,11 +145,10 @@ function Dashboard() {
       <div className="right">
         <section>
           <ProfileHeader
-            className="profile-header"
-            profileHeaderPopupOpen={profileHeaderPopupOpen}
             logo={logo}
+            className="profile-header"
             menuItems={menuItems}
-            popupMenuItems={popupMenuItems}
+            userProfilePopupMenuItems={userProfilePopupMenuItems}
           />
         </section>
         {location.pathname.includes("profile") ? (

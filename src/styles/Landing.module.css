@@ -30,6 +30,12 @@
   margin-top: 0.675rem;
 }
 
+.login-btn svg {
+  margin-left: 0.5rem;
+  margin-top: 0.2rem;
+  margin-right: -0.5rem;
+}
+
 .request-access-btn {
   padding: 0.5rem 0.8rem;
   margin-bottom: 1rem;

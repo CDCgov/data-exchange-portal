@@ -1,3 +1,4 @@
+import { Icons } from "@us-gov-cdc/cdc-react-icons";
 import { Logo } from "./components/Logo";
 import styles from "./styles/Landing.module.css";
 import { Button, Divider } from "@us-gov-cdc/cdc-react";
@@ -42,7 +43,7 @@ export function Landing() {
             <Button
               ariaLabel="Login with SAMS"
               iconPosition="right"
-              iconName="squareArrowUpRight"
+              icon={<Icons.SquareArrowUpRight />}
               className={styles["login-btn"]}
               onClick={() => auth.signinRedirect()}>
               Login With SAMS
