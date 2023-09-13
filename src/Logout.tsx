@@ -2,13 +2,11 @@ import { useAuth } from "react-oidc-context";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-// The main purpose of this component is to handle the redirect from SAMS and register an event handler
-// for when the user profile has been successfuly populated.
+// The main purpose of this component is to handle the deauthication
 function Logout() {
   const auth = useAuth();
   const navigate = useNavigate();
 
-  // In case the user tried to access a page directly.
   const from = "/";
 
   useEffect(() => {
