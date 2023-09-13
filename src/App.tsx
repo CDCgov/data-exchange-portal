@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from "./Dashboard";
 import { Landing } from "./Landing";
 import Callback from "./Callback";
+import Logout from "./Logout";
 import Profile from "./Profile";
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Landing />}></Route>
         <Route path="/oauth_callback" element={<Callback />}></Route>
+        <Route path="/logout" element={<Logout />}></Route>
         <Route path="/dashboard" element={<Dashboard />}>
           <Route path="/dashboard/profile" element={<Profile />}></Route>
         </Route>

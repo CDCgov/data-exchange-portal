@@ -14,7 +14,7 @@ import {
   Sidebar,
 } from "@us-gov-cdc/cdc-react";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuth, hasAuthParams } from "react-oidc-context";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
@@ -24,17 +24,24 @@ function Dashboard() {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const [isSessionRestore, setSessionRestore] = useState(false);
+
   // automatically sign-in
   useEffect(() => {
     if (
       !hasAuthParams() &&
       !auth.isAuthenticated &&
       !auth.activeNavigator &&
-      !auth.isLoading
+      !auth.isLoading &&
+      !isSessionRestore
     ) {
       auth.signinSilent();
+      setSessionRestore(true);
+    } else if (isSessionRestore && !auth.isAuthenticated) {
+      sessionStorage.clear();
+      navigate("/", { replace: true });
     }
-  }, [auth]);
+  }, [auth, isSessionRestore, navigate]);
 
   const logo = <ProfileHeaderLogo image={dexLogo} classNames={["dex-logo"]} />;
 
