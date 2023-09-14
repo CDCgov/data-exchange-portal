@@ -14,17 +14,16 @@ import {
   Sidebar,
 } from "@us-gov-cdc/cdc-react";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAuth, hasAuthParams } from "react-oidc-context";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
+import { getEnv } from "./utils";
 
 function Dashboard() {
   const auth = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
-
-  const [isSessionRestore, setSessionRestore] = useState(false);
 
   // automatically sign-in
   useEffect(() => {
@@ -32,16 +31,21 @@ function Dashboard() {
       !hasAuthParams() &&
       !auth.isAuthenticated &&
       !auth.activeNavigator &&
-      !auth.isLoading &&
-      !isSessionRestore
+      !auth.isLoading
     ) {
-      auth.signinSilent();
-      setSessionRestore(true);
-    } else if (isSessionRestore && !auth.isAuthenticated) {
-      sessionStorage.clear();
-      navigate("/", { replace: true });
+      const oidcStorage = sessionStorage.getItem(
+        `oidc.user:${getEnv("VITE_SAMS_AUTHORITY_URL")}:${getEnv(
+          "VITE_SAMS_CLIENT_ID"
+        )}`
+      );
+
+      if (oidcStorage) {
+        auth.signinSilent();
+      } else {
+        navigate("/", { replace: true });
+      }
     }
-  }, [auth, isSessionRestore, navigate]);
+  }, [auth, navigate]);
 
   const logo = <ProfileHeaderLogo image={dexLogo} classNames={["dex-logo"]} />;
 
