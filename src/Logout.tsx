@@ -10,9 +10,9 @@ function Logout() {
   const from = "/";
 
   useEffect(() => {
-    sessionStorage.clear();
+    auth.removeUser();
     navigate(from, { replace: true });
-  }, [auth.events, from, navigate]);
+  }, [auth, from, navigate]);
 
   return <></>; // Can possibly add a loading message here in the future.
 }
