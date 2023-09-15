@@ -1,6 +1,5 @@
 import { screen, render } from "@testing-library/react";
 import Dashboard from "../src/Dashboard";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { vi } from "vitest";
 import {
   createMockedAuthContext,
@@ -19,11 +18,7 @@ describe("Dashboard", () => {
   it("should show sidebar", () => {
     render(
       withMockedAuthProvider(
-        <MemoryRouter initialEntries={["/dashboard"]}>
-          <Routes>
-            <Route path="/dashboard" element={<Dashboard />} />
-          </Routes>
-        </MemoryRouter>,
+        withMemoryRouter(<Dashboard />, "/dashboard", { protected: true }),
         createMockedAuthContext({ isAuthenticated: true, isLoading: false })
       )
     );
