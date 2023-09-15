@@ -15,7 +15,7 @@ import {
 } from "@us-gov-cdc/cdc-react";
 
 import { useAuth, hasAuthParams } from "react-oidc-context";
-import { Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
 import { getEnv } from "./utils";
 import { useEffect } from "react";
@@ -26,17 +26,6 @@ function Dashboard() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!auth.isAuthenticated) {
-      window.onpageshow = function (event) {
-        if (event.persisted) {
-          window.location.reload();
-        }
-      };
-    }
-  }, [auth]);
-
-  // automatically sign-in
-  (async () => {
     if (
       !hasAuthParams() &&
       !auth.isAuthenticated &&
@@ -50,10 +39,12 @@ function Dashboard() {
       );
 
       if (oidcStorage) {
-        await auth.signinSilent();
+        auth.signinSilent();
+      } else {
+        navigate("/", { replace: true });
       }
     }
-  })();
+  }, [auth, navigate]);
 
   const logo = <ProfileHeaderLogo image={dexLogo} classNames={["dex-logo"]} />;
 
@@ -100,107 +91,104 @@ function Dashboard() {
       onClick: () => navigate("/logout", { replace: true }),
     },
   ];
-  if (auth.isAuthenticated) {
-    return (
-      <div className="dashboard">
-        <div className="left">
-          <Sidebar
-            sections={[
-              {
-                heading: "Insights",
-                items: [
-                  {
-                    componentType: "a",
-                    icon: <Icons.Dashboard />,
-                    text: "Dashboard",
-                    href: "/dashboard",
-                  },
-                  {
-                    componentType: "a",
-                    icon: <Icons.Process />,
-                    text: "Process Status",
-                    href: "/",
-                  },
-                  {
-                    componentType: "a",
-                    icon: <Icons.Quality />,
-                    text: "Quality",
-                    href: "/",
-                  },
-                ],
-              },
-              {
-                heading: "Admin Tasks",
-                items: [
-                  {
-                    componentType: "a",
-                    icon: <Icons.User />,
-                    text: "Manage Users",
-                    href: "/",
-                  },
-                ],
-              },
-            ]}
-            footer={[
-              {
-                heading: "",
-                items: [
-                  {
-                    componentType: "a",
-                    icon: <Icons.Support />,
-                    text: "Support",
-                    href: "/support",
-                  },
-                  {
-                    componentType: "a",
-                    icon: <Icons.Logout />,
-                    text: "Logout",
-                    href: "/logout",
-                  },
-                ],
-              },
-            ]}
-          />
-        </div>
-        <div className="right">
-          <section>
-            <ProfileHeader
-              logo={logo}
-              className="profile-header"
-              menuItems={menuItems}
-              userProfilePopupMenuItems={userProfilePopupMenuItems}
-            />
-          </section>
-          {location.pathname.includes("profile") ? (
-            <Outlet />
-          ) : (
-            <section className="main_content">
-              <div className="box">
-                <p>Welcome {auth.user?.profile.email}</p>
-              </div>
-              <div className="box">
-                <h2>New to DEX?</h2>
-                <Button
-                  className={styles["request-access-btn"]}
-                  ariaLabel="take a tour"
-                  variation="outline">
-                  Take a tour
-                </Button>
-                <Button
-                  className={styles["learn-more-btn"]}
-                  ariaLabel="learn more"
-                  variation="outline">
-                  Learn more
-                </Button>
-              </div>
-            </section>
-          )}
-        </div>
+
+  return (
+    <div className="dashboard">
+      <div className="left">
+        <Sidebar
+          sections={[
+            {
+              heading: "Insights",
+              items: [
+                {
+                  componentType: "a",
+                  icon: <Icons.Dashboard />,
+                  text: "Dashboard",
+                  href: "/dashboard",
+                },
+                {
+                  componentType: "a",
+                  icon: <Icons.Process />,
+                  text: "Process Status",
+                  href: "/",
+                },
+                {
+                  componentType: "a",
+                  icon: <Icons.Quality />,
+                  text: "Quality",
+                  href: "/",
+                },
+              ],
+            },
+            {
+              heading: "Admin Tasks",
+              items: [
+                {
+                  componentType: "a",
+                  icon: <Icons.User />,
+                  text: "Manage Users",
+                  href: "/",
+                },
+              ],
+            },
+          ]}
+          footer={[
+            {
+              heading: "",
+              items: [
+                {
+                  componentType: "a",
+                  icon: <Icons.Support />,
+                  text: "Support",
+                  href: "/support",
+                },
+                {
+                  componentType: "a",
+                  icon: <Icons.Logout />,
+                  text: "Logout",
+                  href: "/logout",
+                },
+              ],
+            },
+          ]}
+        />
       </div>
-    );
-  } else {
-    return <Navigate to="/" replace={true} />;
-  }
+      <div className="right">
+        <section>
+          <ProfileHeader
+            logo={logo}
+            className="profile-header"
+            menuItems={menuItems}
+            userProfilePopupMenuItems={userProfilePopupMenuItems}
+          />
+        </section>
+        {location.pathname.includes("profile") ? (
+          <Outlet />
+        ) : (
+          <section className="main_content">
+            <div className="box">
+              <p>Welcome {auth.user?.profile.email}</p>
+            </div>
+            <div className="box">
+              <h2>New to DEX?</h2>
+              <Button
+                className={styles["request-access-btn"]}
+                ariaLabel="take a tour"
+                variation="outline">
+                Take a tour
+              </Button>
+              <Button
+                className={styles["learn-more-btn"]}
+                ariaLabel="learn more"
+                variation="outline">
+                Learn more
+              </Button>
+            </div>
+          </section>
+        )}
+      </div>
+    </div>
+  );
 }
 
 export default Dashboard;

@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
-import { WebStorageStateStore } from "oidc-client-ts";
 import { AuthProvider, AuthProviderProps } from "react-oidc-context";
 import { getEnv } from "./utils.ts";
 
@@ -20,7 +19,6 @@ const oidcConfig: AuthProviderProps = {
     issuer: getEnv("VITE_SAMS_AUTHORITY_URL"),
     userinfo_endpoint: getEnv("VITE_SAMS_USER_INFO_URL"),
   },
-  userStore: new WebStorageStateStore({ store: window.sessionStorage }),
 };
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
