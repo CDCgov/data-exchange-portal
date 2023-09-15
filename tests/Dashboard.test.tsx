@@ -3,6 +3,7 @@ import Dashboard from "../src/Dashboard";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { vi } from "vitest";
 import { createMockedAuthContext, withMockedAuthProvider } from "./helpers";
+import { ProtectedRoute } from "../src/components/ProtectedRoute";
 
 vi.mock("react-oidc-context");
 
@@ -25,5 +26,27 @@ describe("Dashboard", () => {
     );
 
     expect(screen.getByText("Insights")).toBeInTheDocument();
+  });
+
+  it("should not show sidebar when not authenticated", () => {
+    render(
+      withMockedAuthProvider(
+        <MemoryRouter initialEntries={["/dashboard"]}>
+          <Routes>
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </MemoryRouter>,
+        createMockedAuthContext({ isAuthenticated: false, isLoading: false })
+      )
+    );
+
+    expect(screen.queryByText("Insights")).toBeNull();
   });
 });

@@ -14,37 +14,13 @@ import {
   Sidebar,
 } from "@us-gov-cdc/cdc-react";
 
-import { useAuth, hasAuthParams } from "react-oidc-context";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "react-oidc-context";
+import { Outlet, useNavigate } from "react-router-dom";
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
-import { getEnv } from "./utils";
-import { useEffect } from "react";
 
 function Dashboard() {
   const auth = useAuth();
-  const location = useLocation();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (
-      !hasAuthParams() &&
-      !auth.isAuthenticated &&
-      !auth.activeNavigator &&
-      !auth.isLoading
-    ) {
-      const oidcStorage = sessionStorage.getItem(
-        `oidc.user:${getEnv("VITE_SAMS_AUTHORITY_URL")}:${getEnv(
-          "VITE_SAMS_CLIENT_ID"
-        )}`
-      );
-
-      if (oidcStorage) {
-        auth.signinSilent();
-      } else {
-        navigate("/", { replace: true });
-      }
-    }
-  }, [auth, navigate]);
 
   const logo = <ProfileHeaderLogo image={dexLogo} classNames={["dex-logo"]} />;
 
