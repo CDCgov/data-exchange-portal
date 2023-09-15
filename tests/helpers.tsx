@@ -5,7 +5,13 @@ import {
   AuthState,
   useAuth,
 } from "react-oidc-context";
+import { MemoryRouter, Routes, Route } from "react-router-dom";
 import { vi } from "vitest";
+import { ProtectedRoute } from "../src/components/ProtectedRoute";
+
+interface TestRouterOptions {
+  protected: boolean;
+}
 
 export function withMockedAuthProvider(
   children: React.ReactElement,
@@ -45,4 +51,27 @@ export function createMockedAuthContext(
     startSilentRenew: vi.fn(),
     stopSilentRenew: vi.fn(),
   };
+}
+
+export function withMemoryRouter(
+  children: React.ReactElement,
+  path: string,
+  opts: TestRouterOptions
+): React.ReactElement {
+  return (
+    <MemoryRouter initialEntries={[path]}>
+      <Routes>
+        <Route
+          path={path}
+          element={
+            opts.protected ? (
+              <ProtectedRoute>{children}</ProtectedRoute>
+            ) : (
+              children
+            )
+          }
+        />
+      </Routes>
+    </MemoryRouter>
+  );
 }

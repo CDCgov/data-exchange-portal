@@ -2,8 +2,11 @@ import { screen, render } from "@testing-library/react";
 import Dashboard from "../src/Dashboard";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { vi } from "vitest";
-import { createMockedAuthContext, withMockedAuthProvider } from "./helpers";
-import { ProtectedRoute } from "../src/components/ProtectedRoute";
+import {
+  createMockedAuthContext,
+  withMemoryRouter,
+  withMockedAuthProvider,
+} from "./helpers";
 
 vi.mock("react-oidc-context");
 
@@ -31,18 +34,7 @@ describe("Dashboard", () => {
   it("should not show sidebar when not authenticated", () => {
     render(
       withMockedAuthProvider(
-        <MemoryRouter initialEntries={["/dashboard"]}>
-          <Routes>
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              }
-            />
-          </Routes>
-        </MemoryRouter>,
+        withMemoryRouter(<Dashboard />, "/dashboard", { protected: true }),
         createMockedAuthContext({ isAuthenticated: false, isLoading: false })
       )
     );
