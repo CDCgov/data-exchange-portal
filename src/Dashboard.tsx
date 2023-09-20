@@ -14,27 +14,13 @@ import {
   Sidebar,
 } from "@us-gov-cdc/cdc-react";
 
-import { useEffect } from "react";
-import { useAuth, hasAuthParams } from "react-oidc-context";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "react-oidc-context";
+import { Outlet, useNavigate } from "react-router-dom";
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
 
 function Dashboard() {
   const auth = useAuth();
-  const location = useLocation();
   const navigate = useNavigate();
-
-  // automatically sign-in
-  useEffect(() => {
-    if (
-      !hasAuthParams() &&
-      !auth.isAuthenticated &&
-      !auth.activeNavigator &&
-      !auth.isLoading
-    ) {
-      auth.signinSilent();
-    }
-  }, [auth]);
 
   const logo = <ProfileHeaderLogo image={dexLogo} classNames={["dex-logo"]} />;
 
@@ -78,6 +64,7 @@ function Dashboard() {
       iconPosition: "left",
       text: "Logout",
       badgeCount: 0,
+      onClick: () => navigate("/logout", { replace: true }),
     },
   ];
 
