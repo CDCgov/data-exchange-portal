@@ -1,36 +1,37 @@
 import { test, expect } from "@playwright/test";
+import { getEnv } from "./utils";
 
-test("has title", async ({ page }) => {
-  await page.goto("https://dexdev.cdc.gov/");
+test.describe("Landing Page", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto(getEnv("DEX_URL"));
+  });
 
-  await expect(page).toHaveTitle("DEX");
-});
+  test("has title", async ({ page }) => {
+    await expect(page).toHaveTitle("DEX");
+  });
 
-test("navigates to SAMS", async ({ page }) => {
-  await page.goto("https://dexdev.cdc.gov/");
+  test("navigates to SAMS", async ({ page }) => {
+    await page.getByText("Login with SAMS").click();
 
-  await page.getByText("Login with SAMS").click();
+    await expect(page).toHaveTitle("Secure Access Management Service");
+  });
 
-  await expect(page).toHaveTitle("Secure Access Management Service");
-});
+  test("signs into SAMS", async ({ page }) => {
+    await page.getByText("Login with SAMS").click();
 
-test("signs into SAMS", async ({ page }) => {
-  await page.goto("https://dexdev.cdc.gov/");
+    await page
+      .getByRole("group", { name: "SAMS Credentials" })
+      .locator("#USER")
+      .fill(getEnv("SAMS_USERNAME"));
+    await page
+      .getByRole("group", { name: "SAMS Credentials" })
+      .locator("#PASSWORD")
+      .fill(getEnv("SAMS_PASSWORD"));
+    await page
+      .getByRole("group", { name: "SAMS Credentials" })
+      .getByRole("button")
+      .click();
 
-  await page.getByText("Login with SAMS").click();
-
-  await page
-    .getByRole("group", { name: "SAMS Credentials" })
-    .locator("#USER")
-    .fill("chase.farmer@gsa.gov");
-  await page
-    .getByRole("group", { name: "SAMS Credentials" })
-    .locator("#PASSWORD")
-    .fill("Sphs2013!");
-  await page
-    .getByRole("group", { name: "SAMS Credentials" })
-    .getByRole("button")
-    .click();
-
-  await expect(page.locator("p")).toContainText("chase.farmer@gsa.gov");
+    await expect(page.locator("p")).toContainText("chase.farmer@gsa.gov");
+  });
 });
