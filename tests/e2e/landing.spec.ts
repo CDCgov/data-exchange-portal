@@ -32,6 +32,8 @@ test.describe("Landing Page", () => {
       .getByRole("button")
       .click();
 
-    await expect(page.locator("p")).toContainText("chase.farmer@gsa.gov");
+    await expect(page.getByText(/Welcome/)).toContainText(
+      "chase.farmer@gsa.gov"
+    );
   });
 });
