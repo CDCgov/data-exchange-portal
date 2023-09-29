@@ -26,3 +26,6 @@ dist-ssr
 # App
 .env*
 .yarnrc
+/test-results/
+/playwright-report/
+/playwright/.cache/
