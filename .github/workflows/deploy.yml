@@ -19,7 +19,7 @@ jobs:
       - name: Install SWA CL
         run: yarn global add @azure/static-web-apps-cli
       - name: Install production dependencies
-        run: yarn install --production=true
+        run: yarn install
       - name: Create dev environment variables
         run: |
           touch .env.dev
