@@ -18,7 +18,7 @@ jobs:
           node-version: 18
       - name: Install SWA CL
         run: yarn global add @azure/static-web-apps-cli
-      - name: Install production dependencies
+      - name: Install dependencies
         run: yarn install
       - name: Create dev environment variables
         run: |
@@ -32,4 +32,4 @@ jobs:
       - name: Build
         run: yarn build:dev
       - name: Deploy
-        run: swa deploy ./dist --api-location ./api -d ${{ secrets.AZURE_SWA_DEPLOY_TOKEN }} --env dev -w .
+        run: swa deploy ./dist --api-location ./api -d ${{ secrets.AZURE_SWA_DEPLOY_TOKEN }} --api-language node --api-version 18 --env dev -w .
