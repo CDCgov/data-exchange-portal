@@ -22,7 +22,7 @@ jobs:
         run: yarn install
       - name: Install API dependencies
         working-directory: api
-        run: npm install
+        run: npm install --production
       - name: Create dev environment variables
         run: |
           touch .env.dev
