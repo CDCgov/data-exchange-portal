@@ -8,6 +8,7 @@ import { getEnv } from "./utils";
 export function Landing() {
   const auth = useAuth();
   const buildNumber = getEnv("VITE_APP_BUILD_NUMBER");
+  console.log(buildNumber);
 
   return (
     <div className={styles.wrapper}>
@@ -22,7 +23,9 @@ export function Landing() {
           />
           <Logo name="cdc" className={styles["cdc-logo"]} />
         </div>
-        <small className={styles["build-number"]}>Build {buildNumber}</small>
+        {buildNumber && (
+          <small className={styles["build-number"]}>Build {buildNumber}</small>
+        )}
       </section>
       <section className={styles["rightside-section"]}>
         <div className={styles["login-content"]}>
