@@ -8,7 +8,6 @@ import { getEnv } from "./utils";
 export function Landing() {
   const auth = useAuth();
   const buildNumber = getEnv("VITE_APP_BUILD_NUMBER");
-  console.log(buildNumber);
 
   return (
     <div className={styles.wrapper}>
