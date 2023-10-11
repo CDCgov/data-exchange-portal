@@ -4,8 +4,8 @@ This is a set of middleware endpoints deployed to Azure Functions managed by Azu
 
 ## Endpoints
 
-- `/api/oauth_callback`
-  This is the endpoint that gets invoked when the user successfully logs into an auth provider. The incoming request contains an auth code that can be exchanged with the same auth provider for an auth token. The endpoint then responds to the client with token and redirects the browser back to the DeX portal dashboard.
+- `/api/token`
+  This is the endpoint that gets invoked when the user successfully logs into an auth provider. The incoming request contains an auth code that can be exchanged with the same auth provider for an auth token. The endpoint then responds to the client with token.
 
 ## Setup
 
@@ -23,7 +23,6 @@ You will need to set the following environment variables in the `local.settings.
 - `SAMS_CLIENT_SECRET` - This is the client secret given by SAMS for the dex portal app registration.
 - `SAMS_URL` - This is the base URL for SAMS.
 - `SAMS_REDIRECT_URL` - This is the URL that SAMS was configured to redirect the client to. It is required by SAMS as a security mechanism.
-- `DEX_PORTAL_REDIRECT_URL` - This is the URL that the middleware will send back to the client. It should be set so it redirects the client back to the DeX portal user dashboard.
 
 Next, install the project dependencies by running `npm install`.
 Next, build the project with `npm run build`.
