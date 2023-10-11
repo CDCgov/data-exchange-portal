@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { Landing } from "../src/Landing";
 import { createMockedAuthContext, withMockedAuthProvider } from "./helpers";
 import { vi } from "vitest";
-import { getEnv } from "../src/utils";
+import * as Utils from "../src/utils";
 
 vi.mock("react-oidc-context");
 
@@ -20,9 +20,9 @@ describe("Landing", () => {
 
   it("should show build number when environment variable defined", () => {
     const testBuildNumber = "1.2.3";
-    vi.mocked(getEnv).mockReturnValue(testBuildNumber);
-    // const mockedGetEnv = vi.fn(getEnv);
-    // mockedGetEnv.mockRejectedValueOnce(testBuildNumber);
+    const getEnvSpy = vi
+      .spyOn(Utils, "getEnv")
+      .mockReturnValueOnce(testBuildNumber);
 
     render(
       withMockedAuthProvider(
@@ -31,6 +31,21 @@ describe("Landing", () => {
       )
     );
 
+    expect(getEnvSpy).toHaveBeenCalled();
     expect(screen.getByText(`Build 1.2.3`)).toBeInTheDocument();
+  });
+
+  it("should not show build number when environment variable undefined", () => {
+    const getEnvSpy = vi.spyOn(Utils, "getEnv").mockReturnValueOnce("");
+
+    render(
+      withMockedAuthProvider(
+        <Landing />,
+        createMockedAuthContext({ isAuthenticated: false, isLoading: false })
+      )
+    );
+
+    expect(getEnvSpy).toHaveBeenCalled();
+    expect(screen.queryByText("Build")).toBeNull();
   });
 });
