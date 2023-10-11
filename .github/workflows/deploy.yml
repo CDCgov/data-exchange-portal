@@ -30,6 +30,8 @@ jobs:
           echo VITE_OAUTH_CALLBACK_URL=https://dexdev.cdc.gov/oauth_callback >> .env.dev
           echo VITE_OAUTH_TOKEN_URL=https://dexdev.cdc.gov/api/token >> .env.dev
       - name: Build
-        run: yarn build:dev
+        run: |
+          yarn build:dev
+          cd api && npm run build
       - name: Deploy
         run: swa deploy ./dist --api-location ./api -d ${{ secrets.AZURE_SWA_DEPLOY_TOKEN }} --api-language node --api-version 18 --env dev -w .
