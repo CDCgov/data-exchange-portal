@@ -23,6 +23,12 @@ jobs:
       - name: Install API dependencies
         working-directory: api
         run: npm install --production
+      - name: Generate build number
+        id: gen_build_number
+        run: |
+          PACKAGE_VERSION=$(node -r "console.log(require(\"./package.json\").version)")
+          SHORT_SHA=$(git rev-parse --short HEAD)
+          echo "build_number=${PACKAGE_VERSION}_${SHORT_SHA}" >> $GITHUB_OUTPUT
       - name: Create dev environment variables
         run: |
           touch .env.dev
@@ -32,6 +38,7 @@ jobs:
           echo VITE_SAMS_USER_INFO_URL=https://apigw-stg.cdc.gov:8443/openid/connect/v1/userinfo >> .env.dev
           echo VITE_OAUTH_CALLBACK_URL=https://dexdev.cdc.gov/oauth_callback >> .env.dev
           echo VITE_OAUTH_TOKEN_URL=https://dexdev.cdc.gov/api/token >> .env.dev
+          echo VITE_BUILD_NUMBER=${{ steps.gen_build_number.outputs.build_number }}
       - name: Build frontend
         run: yarn build:dev
       - name: Build API
