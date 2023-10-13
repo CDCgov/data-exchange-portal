@@ -1,10 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { getEnv } from "./utils";
 
-test.use({
-  ignoreHTTPSErrors: true,
-});
-
 test.describe("Landing Page", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(getEnv("DEX_URL"));
