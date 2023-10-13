@@ -26,7 +26,7 @@ jobs:
       - name: Generate build number
         id: gen_build_number
         run: |
-          PACKAGE_VERSION=$(node -r "console.log(require(\"./package.json\").version)")
+          PACKAGE_VERSION=$(node -e "console.log(require(\"./package.json\").version)")
           SHORT_SHA=$(git rev-parse --short HEAD)
           echo "build_number=${PACKAGE_VERSION}_${SHORT_SHA}" >> $GITHUB_OUTPUT
       - name: Create dev environment variables
