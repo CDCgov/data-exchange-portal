@@ -63,4 +63,4 @@ jobs:
       - name: Run Playwright tests
         env:
           PLAYWRIGHT_TEST_BASE_URL: https://dexdev.cdc.gov
-        run: yarn e2e
+        run: npx playwright test
