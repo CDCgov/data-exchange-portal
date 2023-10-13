@@ -64,4 +64,6 @@ jobs:
       - name: Run Playwright tests
         env:
           PLAYWRIGHT_TEST_BASE_URL: https://dexdev.cdc.gov
+          SAMS_USERNAME: ${{ secrets.SAMS_USERNAME }}
+          SAMS_PASSWORD: ${{ secrets.SAMS_PASSWORD }}
         run: npx playwright test
