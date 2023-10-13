@@ -8,7 +8,6 @@ on:
 
 jobs:
   deploy:
-    if: false
     name: "Deploy to Dev"
     runs-on: ubuntu-latest
     steps:
@@ -48,7 +47,7 @@ jobs:
       - name: Deploy
         run: swa deploy ./dist --api-location ./api -d ${{ secrets.AZURE_SWA_DEPLOY_TOKEN }} --api-language node --api-version 18 --env dev -w .
   e2e:
-    # needs: deploy
+    needs: deploy
     name: "Run e2e regression tests"
     runs-on: ubuntu-latest
     steps:
