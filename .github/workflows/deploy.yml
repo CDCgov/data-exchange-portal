@@ -8,6 +8,7 @@ on:
 
 jobs:
   deploy:
+    if: false
     name: "Deploy to Dev"
     runs-on: ubuntu-latest
     steps:
