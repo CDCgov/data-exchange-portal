@@ -58,6 +58,8 @@ jobs:
           node-version: 18
       - name: Install dependencies
         run: yarn install
+      - name: Install Playwright dependencies
+        run: npx playwright install --with-deps
       - name: Run Playwright tests
         env:
           PLAYWRIGHT_TEST_BASE_URL: https://dexdev.cdc.gov
