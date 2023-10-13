@@ -1,6 +1,10 @@
 import { test, expect } from "@playwright/test";
 import { getEnv } from "./utils";
 
+test.use({
+  ignoreHTTPSErrors: true,
+});
+
 test.describe("Landing Page", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(getEnv("DEX_URL"));
@@ -12,14 +16,14 @@ test.describe("Landing Page", () => {
 
   test("navigates to SAMS", async ({ page }) => {
     await page.getByText("Login with SAMS").click();
-    await page.waitForURL("**auth-stg.cdc.gov**");
+    await page.waitForURL("https://auth-stg.cdc.gov/**");
 
     await expect(page).toHaveTitle("Secure Access Management Service");
   });
 
   test("signs into SAMS", async ({ page }) => {
     await page.getByText("Login with SAMS").click();
-    await page.waitForURL("**auth-stg.cdc.gov**");
+    await page.waitForURL("https://auth-stg.cdc.gov/**");
 
     await page
       .getByRole("group", { name: "SAMS Credentials" })
