@@ -16,6 +16,13 @@
   background: linear-gradient(225deg, #005eaa 0%, #26418f 100%);
 }
 
+.build-number {
+  position: absolute;
+  bottom: 0;
+  color: #cacaca;
+  font-style: italic;
+}
+
 .logo-section-divider {
   opacity: 0.25;
 }
