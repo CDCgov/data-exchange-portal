@@ -6,8 +6,6 @@ import { useAuth } from "react-oidc-context";
 import { getEnv } from "./utils";
 
 import { CDCFooter } from "@cdcent/templatepackage-react";
-import "@cdcent/templatepackage-react/assets/css/bootstrap.min.css";
-import "@cdcent/templatepackage-react/assets/css/app.min.css";
 
 export function Landing() {
   const auth = useAuth();

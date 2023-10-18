@@ -1,6 +1,9 @@
 /* includes all global styles from the cdc-react component library */
 @import url("@us-gov-cdc/cdc-react/dist/style.css");
 
+@import url("@cdcent/templatepackage-react/assets/css/bootstrap.min.css");
+@import url("@cdcent/templatepackage-react/assets/css/app.min.css");
+
 *,
 html,
 body {

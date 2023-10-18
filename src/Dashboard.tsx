@@ -19,8 +19,6 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
 
 import { CDCFooter } from "@cdcent/templatepackage-react";
-import "@cdcent/templatepackage-react/assets/css/bootstrap.min.css";
-import "@cdcent/templatepackage-react/assets/css/app.min.css";
 
 function Dashboard() {
   const auth = useAuth();
