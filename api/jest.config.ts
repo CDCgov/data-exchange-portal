@@ -1,5 +1,6 @@
 export default {
   preset: "ts-jest",
   testEnvironment: "node",
-  globalSetup: "./test/setup.ts",
+  globalSetup: "./test/globalSetup.ts",
+  setupFilesAfterEnv: ["./test/jest.setup.ts"],
 };
