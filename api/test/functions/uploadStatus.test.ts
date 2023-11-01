@@ -2,6 +2,7 @@ import { HttpRequest, InvocationContext } from "@azure/functions";
 import { uploadStatus } from "../../src/functions/uploadStatus";
 import { http, HttpResponse } from "msw";
 import { server } from "../mocks/node";
+import { describe, beforeEach, test, expect, vi } from "vitest";
 
 describe("/upload/status/{destinationId}", () => {
   let context: InvocationContext;
@@ -11,7 +12,7 @@ describe("/upload/status/{destinationId}", () => {
     context = new InvocationContext({
       functionName: "uploadStatus",
       invocationId: "uploadStatusTestId",
-      logHandler: jest.fn(),
+      logHandler: vi.fn(),
     });
     request = new HttpRequest({
       url: "http://localhost",
