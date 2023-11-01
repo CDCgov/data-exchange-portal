@@ -32,7 +32,7 @@ export async function uploadStatus(
   // Then, send request to Supplemental API given destination ID.
   try {
     const statusResponse = await axios({
-      url: `https://apidev.cdc.gov/status/destination/${destinationId}`, // TODO: make env var.
+      url: `${process.env["SUPPLEMENTAL_API_URL"]}/destination/${destinationId}`,
       method: "get",
       headers: { Authorization: authToken },
       params: {
