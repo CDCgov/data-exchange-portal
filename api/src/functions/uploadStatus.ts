@@ -1,5 +1,4 @@
 import {
-  app,
   HttpRequest,
   InvocationContext,
   HttpResponse,
@@ -54,10 +53,3 @@ export async function uploadStatus(
     return { status: 500, body: error as HttpResponseBody };
   }
 }
-
-app.http("uploadStatus", {
-  methods: ["GET"],
-  authLevel: "function",
-  route: "upload/status/{destinationId:alpha}",
-  handler: uploadStatus,
-});
