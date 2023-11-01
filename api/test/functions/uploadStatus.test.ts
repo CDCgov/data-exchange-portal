@@ -41,5 +41,6 @@ describe("/upload/status/{destinationId}", () => {
 
     const response = await uploadStatus(context, request);
     expect(response.status).toBe(200);
+    expect(response.body).toHaveLength(0);
   });
 });
