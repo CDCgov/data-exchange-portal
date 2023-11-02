@@ -43,4 +43,21 @@ describe("/upload/status/{destinationId}", () => {
     expect(response.status).toBe(200);
     expect(response.body).toHaveLength(0);
   });
+
+  test("should return unauthorized if supplemental API returns unauthorized", async () => {
+    server.use(
+      http.get(`${process.env["SUPPLEMENTAL_API_URL"]}/destination/*`, () => {
+        return new HttpResponse(null, {
+          status: 401,
+          statusText: "Unauthorized",
+        });
+      })
+    );
+
+    // Create dummy auth token.
+    request.headers.set("Authorization", "12345");
+
+    const response = await uploadStatus(context, request);
+    expect(response.status).toBe(401);
+  });
 });

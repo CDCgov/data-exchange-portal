@@ -44,7 +44,7 @@ export async function oauthCallback(
   } catch (error: unknown) {
     context.error(error);
     if (axios.isAxiosError(error)) {
-      return { status: +error.code, body: error.message };
+      return { status: error.response.status, body: error.message };
     }
     return { status: 500, body: error as HttpResponseBody };
   }
