@@ -23,6 +23,7 @@ You will need to set the following environment variables in the `local.settings.
 - `SAMS_CLIENT_SECRET` - This is the client secret given by SAMS for the dex portal app registration.
 - `SAMS_URL` - This is the base URL for SAMS.
 - `SAMS_REDIRECT_URL` - This is the URL that SAMS was configured to redirect the client to. It is required by SAMS as a security mechanism.
+- `SUPPLEMENTAL_API_URL` - This is the URL for the third-party API that provides upload status. See the [Data Exchange API Example repo README.md](https://github.com/CDCgov/data-exchange-api-examples) for hostnames for that API.
 
 Next, install the project dependencies by running `npm install`.
 Next, build the project with `npm run build`.
