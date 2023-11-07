@@ -26,6 +26,7 @@ export async function oauthCallback(
     client_id: process.env["SAMS_CLIENT_ID"],
     client_secret: process.env["SAMS_CLIENT_SECRET"],
     redirect_uri: process.env["SAMS_REDIRECT_URL"],
+    scope: "dex:status",
   };
 
   try {
