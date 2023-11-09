@@ -5,7 +5,7 @@ import { server } from "../mocks/node";
 import { describe, beforeEach, test, expect, vi } from "vitest";
 
 describe("/upload/status/{destinationId}", () => {
-  const endpoint = `${process.env["SUPPLEMENTAL_API_URL"]}/status/destination/*`;
+  const supplementalApiEndpoint = `${process.env["SUPPLEMENTAL_API_URL"]}/status/destination/*`;
   let context: InvocationContext;
   let request: HttpRequest;
 
@@ -32,7 +32,7 @@ describe("/upload/status/{destinationId}", () => {
   test("should return empty array when no upload events found", async () => {
     // Init MSW request handlers.
     server.use(
-      http.get(endpoint, () => {
+      http.get(supplementalApiEndpoint, () => {
         return HttpResponse.json([]);
       })
     );
@@ -47,7 +47,7 @@ describe("/upload/status/{destinationId}", () => {
 
   test("should return unauthorized if supplemental API returns unauthorized", async () => {
     server.use(
-      http.get(endpoint, () => {
+      http.get(supplementalApiEndpoint, () => {
         return new HttpResponse(null, {
           status: 401,
           statusText: "Unauthorized",
