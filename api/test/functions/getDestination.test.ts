@@ -66,11 +66,7 @@ describe("Route: GET Destination ID", () => {
     test("should fetch a mocked response with 3 destinations", async () => {
       server.use(
         http.get(endpoint, () => {
-          return HttpResponse.json([
-            { destinationID: "dextesting" },
-            { destinationID: "abc" },
-            { destinationID: "123" },
-          ]);
+          return HttpResponse.json(["dextesting", "ndlp", "pulsenet"]);
         })
       );
       request.headers.set("Authorization", "12345");
@@ -78,8 +74,15 @@ describe("Route: GET Destination ID", () => {
       const response = await getDestination(context, request);
 
       expect(response.status).toBe(200);
+      expect(response.body).toBeDefined();
       expect(Array.isArray(response.body)).toBe(true);
       expect(response.body).toHaveLength(3);
+
+      if (Array.isArray(response.body)) {
+        response.body.forEach((item) => {
+          expect(typeof item).toBe("string");
+        });
+      }
     });
   });
 });
