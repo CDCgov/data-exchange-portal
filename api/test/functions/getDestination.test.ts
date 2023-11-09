@@ -19,9 +19,6 @@ describe("Route: GET Destination ID", () => {
     request = new HttpRequest({
       url: "http://localhost",
       method: "GET",
-      params: {
-        destinationId: "test",
-      },
     });
   });
 
