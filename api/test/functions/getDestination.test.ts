@@ -47,7 +47,7 @@ describe("Route: GET Destination ID", () => {
   });
 
   describe("Auth: GET /api/upload/destination", () => {
-    test("should return empty array when no upload events found", async () => {
+    test("should return empty array when no destinations are found", async () => {
       // Init MSW request handlers.
       server.use(
         http.get(endpoint, () => {
