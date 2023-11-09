@@ -5,7 +5,7 @@ import { server } from "../mocks/node";
 import { describe, beforeEach, test, expect, vi } from "vitest";
 
 describe("Route: GET Destination ID", () => {
-  const endpoint = `${process.env["SUPPLEMENTAL_API_URL"]}/destination`;
+  const supplementalApiEndpoint = `${process.env["SUPPLEMENTAL_API_URL"]}/destination`;
   let context: InvocationContext;
   let request: HttpRequest;
 
@@ -30,7 +30,7 @@ describe("Route: GET Destination ID", () => {
 
     test("should return unauthorized if supplemental API returns unauthorized", async () => {
       server.use(
-        http.get(endpoint, () => {
+        http.get(supplementalApiEndpoint, () => {
           return new HttpResponse(null, {
             status: 401,
             statusText: "Unauthorized",
@@ -50,7 +50,7 @@ describe("Route: GET Destination ID", () => {
     test("should return empty array when no destinations are found", async () => {
       // Init MSW request handlers.
       server.use(
-        http.get(endpoint, () => {
+        http.get(supplementalApiEndpoint, () => {
           return HttpResponse.json([]);
         })
       );
@@ -65,7 +65,7 @@ describe("Route: GET Destination ID", () => {
 
     test("should fetch a mocked response with 3 destinations", async () => {
       server.use(
-        http.get(endpoint, () => {
+        http.get(supplementalApiEndpoint, () => {
           return HttpResponse.json(["dextesting", "ndlp", "pulsenet"]);
         })
       );
