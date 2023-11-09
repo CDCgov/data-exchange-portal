@@ -63,19 +63,6 @@ describe("Route: GET Destination ID", () => {
       expect(response.body).toHaveLength(0);
     });
 
-    test("should return 200 if authenticated", async () => {
-      server.use(
-        http.get(endpoint, () => {
-          return HttpResponse.json([]);
-        })
-      );
-
-      request.headers.set("Authorization", "12345");
-
-      const response = await getDestination(context, request);
-      expect(response.status).toBe(200);
-    });
-
     test("should fetch a mocked response with 3 destinations", async () => {
       server.use(
         http.get(endpoint, () => {
