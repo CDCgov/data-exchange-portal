@@ -25,7 +25,6 @@ export async function getDestination(
       url: endpoint,
       method: "get",
       headers: { Authorization: authToken },
-      params: request.query,
     });
 
     return {
