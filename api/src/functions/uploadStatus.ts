@@ -32,7 +32,7 @@ export async function uploadStatus(
   // Then, send request to Supplemental API given destination ID.
   try {
     const statusResponse = await axios({
-      url: `${process.env["SUPPLEMENTAL_API_URL"]}/destination/${destinationId}`,
+      url: `${process.env["SUPPLEMENTAL_API_URL"]}/status/destination/${destinationId}`,
       method: "get",
       headers: { Authorization: authToken },
       params: {
