@@ -6,11 +6,11 @@ import {
 } from "@azure/functions";
 import axios from "axios";
 
-export async function uploadStatus(
+export async function getDestination(
   context: InvocationContext,
   request: HttpRequest
 ): Promise<HttpResponse> {
-  // First, get auth token from headers.
+  const endpoint = `${process.env["SUPPLEMENTAL_API_URL"]}/destination`;
   const authToken = request.headers.get("Authorization");
 
   if (!authToken) {
@@ -20,24 +20,11 @@ export async function uploadStatus(
     };
   }
 
-  // Next, get destination ID from path param.
-  const destinationId = request.params.destinationId;
-
-  const startDate = new Date();
-  startDate.setDate(startDate.getDate() - 30);
-  const startDateISOString = startDate
-    .toISOString()
-    .replace(/[^a-zA-Z0-9]/g, "");
-
-  // Then, send request to Supplemental API given destination ID.
   try {
     const statusResponse = await axios({
-      url: `${process.env["SUPPLEMENTAL_API_URL"]}/status/destination/${destinationId}`,
+      url: endpoint,
       method: "get",
       headers: { Authorization: authToken },
-      params: {
-        date_start: startDateISOString,
-      },
     });
 
     return {
