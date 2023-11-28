@@ -1,12 +1,15 @@
-name: "PR Checks - Unit Tests"
+name: "PR Checks - API Unit Tests"
 
 on:
   pull_request:
     branches:
       - main
     paths:
-      - src/**
+      - api/**
 
+defaults:
+  run:
+    working-directory: api
 
 jobs:
   unit-test:
@@ -20,6 +23,6 @@ jobs:
           node-version: 18
           cache: "npm"
       - name: Install dependencies
-        run: yarn
+        run: npm install
       - name: Vitest
-        run: yarn test
+        run: npm run test
