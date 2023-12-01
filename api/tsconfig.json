@@ -10,8 +10,5 @@
     "resolveJsonModule": true,
     "esModuleInterop": true
   },
-  "exclude": [
-    "node_modules",
-    "test"
-  ]
+  "include": ["src"]
 }
