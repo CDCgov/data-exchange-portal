@@ -45,7 +45,7 @@ jobs:
       working-directory: api
       run: npm run build
     - name: Zip Release Candidate
-      run: zip -r ${{ github.ref_name }}.zip dist api/dist
+      run: zip -r bundle.zip dist api/dist
     - name: Create Github Prerelease
       uses: actions/create-release@v1 
       env:
@@ -61,6 +61,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./${{ github.ref_name }}.zip
-        asset_name: ${{ github.ref_name }}.zip
+        asset_path: ./bundle.zip
+        asset_name: bundle.zip
         asset_content_type: application/zip
