@@ -33,7 +33,7 @@ jobs:
       run: |
         touch .env.stg
         echo VITE_SAMS_AUTHORITY_URL=https://apigw-stg.cdc.gov >> .env.stg
-        echo VITE_SAMS_CLIENT_ID=${{ secrets.SAMS_CLIENT_ID }} >> .env.stg
+        echo VITE_SAMS_CLIENT_ID=${{ secrets.SAMS_CLIENT_ID_STG }} >> .env.stg
         echo VITE_SAMS_AUTH_URL=https://apigw-stg.cdc.gov:8443/auth/oauth/v2/authorize >> .env.stg
         echo VITE_SAMS_USER_INFO_URL=https://apigw-stg.cdc.gov:8443/openid/connect/v1/userinfo >> .env.stg
         echo VITE_OAUTH_CALLBACK_URL=https://dexstg.cdc.gov/oauth_callback >> .env.stg
@@ -65,3 +65,26 @@ jobs:
         asset_path: ./bundle.zip
         asset_name: bundle.zip
         asset_content_type: application/zip
+    - name: Deploy
+      run: swa deploy ./dist --api-location ./api -d ${{ secrets.AZURE_SWA_DEPLOY_TOKEN }} --api-language node --api-version 18 --env stg -w .
+  
+  e2e:
+    needs: create-rc
+    name: "Run e2e regression tests"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install dependencies
+        run: yarn install
+      - name: Install Playwright dependencies
+        run: npx playwright install --with-deps
+      - name: Run Playwright tests
+        env:
+          PLAYWRIGHT_TEST_BASE_URL: https://dexstg.cdc.gov
+          SAMS_USERNAME: ${{ secrets.SAMS_USERNAME }}
+          SAMS_PASSWORD: ${{ secrets.SAMS_PASSWORD }}
+        run: npx playwright test
