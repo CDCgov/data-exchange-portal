@@ -18,6 +18,8 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: 18
+    - name: Install SWA CL
+      run: yarn global add @azure/static-web-apps-cli
     - name: Install frontend dependencies
       run: yarn install
     - name: Install API dependencies
