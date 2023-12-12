@@ -42,7 +42,7 @@ jobs:
         echo VITE_OAUTH_TOKEN_URL=https://dexstg.cdc.gov/api/token >> .env.stg
         echo VITE_APP_BUILD_NUMBER=${{ steps.gen_build_number.outputs.build_number }} >> .env.stg
     - name: Build frontend
-      run: yarn build:dev
+      run: yarn build:stg
     - name: Build API
       working-directory: api
       run: npm run build
