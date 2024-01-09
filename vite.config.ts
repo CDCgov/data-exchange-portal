@@ -1,15 +1,19 @@
 import { configDefaults, defineConfig } from "vitest/config";
-import copy from "rollup-plugin-copy";
+import { viteStaticCopy } from "vite-plugin-static-copy";
 
 import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [
-    copy({
+    viteStaticCopy({
       targets: [
         {
           src: "node_modules/@us-gov-cdc/cdc-react/dist/fonts",
-          dest: ["dist", "public"],
+          dest: "fonts",
+        },
+        {
+          src: "node_modules/@us-gov-cdc/cdc-react/dist/fonts",
+          dest: "../public",
         },
       ],
     }),
