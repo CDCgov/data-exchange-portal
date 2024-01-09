@@ -7,6 +7,8 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+
+public/fonts
 node_modules
 dist
 dist-ssr
