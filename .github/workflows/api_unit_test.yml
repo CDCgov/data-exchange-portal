@@ -13,7 +13,7 @@ defaults:
 
 jobs:
   unit-test:
-    name: "Run Unit Test"
+    name: "Run Gradle Test"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
