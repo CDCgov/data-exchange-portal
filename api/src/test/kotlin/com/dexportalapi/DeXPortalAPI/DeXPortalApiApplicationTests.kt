@@ -38,6 +38,18 @@ class DeXPortalApiApplicationTests(@Autowired private val mockMvc: MockMvc) {
     }
 
     @Test
+    fun `get auth token`() {
+        this.mockMvc
+                .perform(get("/api/token?code=test&state=test").content("{}"))
+                .andExpect(status().isOk())
+    }
+
+    @Test
+    fun `get auth token bad request`() {
+        this.mockMvc.perform(get("/api/token")).andExpect(status().isBadRequest())
+    }
+
+    @Test
     fun `get upload status with auth token`() {
         this.mockMvc
                 .perform(

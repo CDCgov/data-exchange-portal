@@ -21,11 +21,6 @@ import org.springframework.web.server.ResponseStatusException
 @RestController
 class MainController() {
 
-    private val sams_url: String = System.getenv("SAMS_URL")
-    private val client_id: String = System.getenv("SAMS_CLIENT_ID")
-    private val client_secret: String = System.getenv("SAMS_CLIENT_SECRET")
-    private val redirect_uri: String = System.getenv("SAMS_REDIRECT_URL")
-    private val supplemental_api_url: String = System.getenv("SUPPLEMENTAL_API_URL")
     private val webClient = WebClient.builder().build()
 
     @GetMapping("/health")
@@ -39,6 +34,7 @@ class MainController() {
             @RequestHeader("Authorization") auth_token: String
     ): String {
 
+        val supplemental_api_url: String = System.getenv("SUPPLEMENTAL_API_URL").toString()
         val currentDate: LocalDate = LocalDate.now()
         val currentDateMinusThirtyDays: LocalDate = currentDate.minusDays(30)
 
@@ -72,6 +68,8 @@ class MainController() {
     @GetMapping("/upload/destination")
     suspend fun getDestinationRequest(@RequestHeader("Authorization") auth_token: String): String {
 
+        val supplemental_api_url: String = System.getenv("SUPPLEMENTAL_API_URL").toString()
+
         val response =
                 webClient
                         .get()
@@ -94,6 +92,11 @@ class MainController() {
             @RequestParam("code") auth_code: String,
             @RequestParam("state") state: String
     ): String {
+        val sams_url: String = System.getenv("SAMS_URL").toString()
+        val client_id: String = System.getenv("SAMS_CLIENT_ID").toString()
+        val client_secret: String = System.getenv("SAMS_CLIENT_SECRET").toString()
+        val redirect_uri: String = System.getenv("SAMS_REDIRECT_URL").toString()
+
         val grant_type: String = "authorization_code"
         val scope: String = "dex:status"
 
