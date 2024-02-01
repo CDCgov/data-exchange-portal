@@ -5,7 +5,6 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "simulate": "swa start http://localhost:5173 --run \"yarn dev\" --api-location ./api",
     "build": "tsc && vite build",
     "build:dev": "tsc && vite build --mode dev",
     "build:stg": "tsc && vite build --mode stg",
