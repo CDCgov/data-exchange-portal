@@ -6,7 +6,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
+import org.springframework.test.web.servlet.post
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @SpringBootTest
@@ -40,13 +42,13 @@ class DeXPortalApiApplicationTests(@Autowired private val mockMvc: MockMvc) {
     @Test
     fun `get auth token`() {
         this.mockMvc
-                .perform(get("/api/token?code=test&state=test").content("{}"))
+                .perform(post("/api/token?code=test&state=test").content("{}"))
                 .andExpect(status().isOk())
     }
 
     @Test
     fun `get auth token bad request`() {
-        this.mockMvc.perform(get("/api/token")).andExpect(status().isBadRequest())
+        this.mockMvc.perform(post("/api/token")).andExpect(status().isBadRequest())
     }
 
     @Test

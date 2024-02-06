@@ -122,7 +122,6 @@ class MainController() {
                         }
                         .awaitBody<String>()
 
-        println(response)
         return response
     }
 }
