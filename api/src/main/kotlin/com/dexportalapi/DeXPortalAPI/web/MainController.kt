@@ -5,7 +5,9 @@ import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED
+import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -87,11 +89,9 @@ class MainController() {
         return response
     }
 
-    @GetMapping("/api/token")
-    suspend fun getAuthTokenRequest(
-            @RequestParam("code") auth_code: String,
-            @RequestParam("state") state: String
-    ): String {
+    @CrossOrigin
+    @PostMapping("/api/token")
+    suspend fun postAuthTokenRequest(@RequestParam("code") auth_code: String): String {
         val sams_url: String = System.getenv("SAMS_URL").toString()
         val client_id: String = System.getenv("SAMS_CLIENT_ID").toString()
         val client_secret: String = System.getenv("SAMS_CLIENT_SECRET").toString()
@@ -121,6 +121,8 @@ class MainController() {
                             throw ResponseStatusException(HttpStatus.BAD_REQUEST)
                         }
                         .awaitBody<String>()
+
+        println(response)
         return response
     }
 }

@@ -3,9 +3,8 @@ package com.dexportalapi.DeXPortalAPI
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
-@SpringBootApplication
-class DeXPortalApiApplication
+@SpringBootApplication class DeXPortalApiApplication
 
 fun main(args: Array<String>) {
-	runApplication<DeXPortalApiApplication>(*args)
+    runApplication<DeXPortalApiApplication>(*args)
 }

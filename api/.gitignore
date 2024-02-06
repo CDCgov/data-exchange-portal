@@ -27,6 +27,7 @@ out/
 !**/src/test/**/out/
 .env
 .env.sh
+api/src/main/resources/static
 
 ### NetBeans ###
 /nbproject/private/

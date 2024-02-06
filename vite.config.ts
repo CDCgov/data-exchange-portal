@@ -25,4 +25,7 @@ export default defineConfig({
     setupFiles: "./tests/setup.ts",
     exclude: [...configDefaults.exclude, "./tests/e2e/**", "./api/**"],
   },
+  build: {
+    outDir: "./api/src/main/resources/static",
+  },
 });
