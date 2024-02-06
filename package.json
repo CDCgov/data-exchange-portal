@@ -16,8 +16,8 @@
     "e2e": "npx playwright test"
   },
   "dependencies": {
-    "@us-gov-cdc/cdc-react": "^0.7.2",
-    "@us-gov-cdc/cdc-react-icons": "^1.1.1",
+    "@us-gov-cdc/cdc-react": "^1.3.0",
+    "@us-gov-cdc/cdc-react-icons": "^2.2.0",
     "oidc-client-ts": "^2.2.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
