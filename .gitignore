@@ -28,7 +28,44 @@ dist-ssr
 
 # App
 .env*
+*/**/.env*
 .yarnrc
 /test-results/
 /playwright-report/
 /playwright/.cache/
+
+api/.gradle
+api/build/
+api/!gradle/wrapper/gradle-wrapper.jar
+api/!**/src/main/**/build/
+api/!**/src/test/**/build/
+api/src/main/resources/application.properties
+
+### STS ###
+api/.apt_generated
+api/.classpath
+api/.factorypath
+api/.project
+api/.settings
+api/.springBeans
+api/.sts4-cache
+api/bin/
+api/!**/src/main/**/bin/
+api/!**/src/test/**/bin/
+
+### IntelliJ IDEA ###
+api/.idea
+api/*.iws
+api/*.iml
+api/*.ipr
+api/out/
+api/!**/src/main/**/out/
+api/!**/src/test/**/out/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
