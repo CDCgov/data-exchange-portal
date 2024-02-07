@@ -3,7 +3,8 @@ version: "2.4"
 services:
   dexportalapi:
     build:
-      context: .
+      context: ./api
+      dockerfile: Dockerfile
     container_name: dex-portal-api
     ports:
       - 4280:4280

@@ -1,5 +1,5 @@
 FROM gradle AS build
-COPY ./api /home/gradle/src
+COPY ./ /home/gradle/src
 WORKDIR /home/gradle/src
 RUN gradle build
 
