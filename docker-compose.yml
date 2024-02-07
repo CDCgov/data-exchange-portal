@@ -1,0 +1,12 @@
+version: "2.4"
+
+services:
+  dexportalapi:
+    build:
+      context: .
+    container_name: dex-portal-api
+    ports:
+      - 4280:4280
+    env_file:
+      - ./api/.env  
+    
