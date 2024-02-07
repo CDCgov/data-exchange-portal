@@ -63,3 +63,9 @@ This instance has a dev, staging, and production environment. Eventually, a CD p
 2. Create a production build of the React app in dev mode. To do this, first create a file called `.env.dev` at the root of this project. Next, fill out that file with all required environment variables, and set their values to ones appropriate for the dev environment. Finally, generate a build with the command `yarn build:dev`. This will run the TypeScript compiler and Vite to create a production-ready bundle of the React app, but will replace the environment variable references with the values in `.env.dev`. The build should be in a new folder called `dist` at the root of the repo.
 
 3. Create a production build of the API. This can be done by running `./gradlew build` within the `api` directory. This should create a `build` directory within the `api` directory.
+
+## Running the API in Docker
+
+- Install Docker Desktop [download](https://www.docker.com/products/docker-desktop/)
+
+This should install docker desktop along with docker/docker-compose cmdline/terminal commands. Make sure you have your `./api/.env` file populated. Then run `docker-compose build` in the root directory. This will create the container for the api. Then you will be able to start the api by running `docker-compose up`.
