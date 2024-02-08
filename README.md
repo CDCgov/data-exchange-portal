@@ -69,3 +69,30 @@ This instance has a dev, staging, and production environment. Eventually, a CD p
 - Install Docker Desktop [download](https://www.docker.com/products/docker-desktop/)
 
 This should install docker desktop along with docker/docker-compose cmdline/terminal commands. Make sure you have your `./api/.env` file populated. Then run `docker-compose build` in the root directory. This will create the container for the api. Then you will be able to start the api by running `docker-compose up`.
+
+### Using the SWA CLI command
+
+The SWA CLI provides convenient commands and arguments for serving the front end and backend at the same time. In addition, it serves the app up on a single URL and port, and even takes care of the reverse proxying for you, so no need to set up CORS in the backend just for local development. This can be done with the following command:
+
+`swa start http://localhost:5173 --run "yarn dev" --api-devserver-url http://localhost:{API_PORT} --swa-config-location ./ -p {APP_PORT}`
+
+## Manual Deployments to the Dev Environment
+
+This app is deployed to a single Azure Static Web instance. This instance has a dev, staging, and production environment. Eventually, a CD pipeline will be built to automate the deployment process to each environment. **Manual deployments should only be used when this pipeline is unavailable.** The following instructions will explain how to perform a manual deployment to the dev environment.
+
+1. Install non-dev dependencies for the React app and API functions. To do this, first run `yarn install --production=true` in the root directory.
+
+2. Create a production build of the React app in dev mode. To do this, first create a file called `.env.dev` at the root of this project. Next, fill out that file with all required environment variables, and set their values to ones appropriate for the dev environment. Finally, generate a build with the command `yarn build:dev`. This will run the TypeScript compiler and Vite to create a production-ready bundle of the React app, but will replace the environment variable references with the values in `.env.dev`. The build should be in a new folder called `dist` at the root of the repo.
+
+3. Finally, use the SWA CLI to execute the deployment to the dev environment. The first piece of information we need here is the deployment token. This is a secret value that validates that the user doing the deployment is authorized to do so. This can be retrieved from the Azure Static Web App instance overview page. Next, run the following command providing the deployment token:
+
+`swa deploy ./dist --api-devserver-url http://localhost:{API_PORT}  -d ***** --env dev -w .`
+
+Here's the summary of this command:
+
+- `swa deploy` This tells the CLI we are executing a deployment.
+- `./dist` This tells the CLI where the static site assets are for the front end site.
+- `--api-devserver-url` This tells the CLI where the api url is
+- `-d` This is the argument flag for the deployment token.
+- `--env` This is the argument flag for the environment that will be deployed to. This must match the name of the environment in the instance.
+- `-w` This is the argument flag for the location of the JSON configuration file for the static web app. It should pick up `staticwebapp.config.json` file in the root of the project.
