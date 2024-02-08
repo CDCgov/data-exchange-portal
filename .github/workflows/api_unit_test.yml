@@ -13,16 +13,14 @@ defaults:
 
 jobs:
   unit-test:
-    name: "Run Vitest"
+    name: "Run Gradle Test"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-java@v4
         with:
-          node-version: 18
-          cache: "npm"
-      - name: Install dependencies
-        run: npm install
-      - name: Vitest
-        run: npm run test
+          distribution: "microsoft"
+          java-version: 17
+      - name: Unit Test
+        run: ./gradlew test
