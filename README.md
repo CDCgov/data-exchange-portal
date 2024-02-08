@@ -1,6 +1,6 @@
 # Data Exchange Portal
 
-This is the web application for the data upload management dashboard for DEX. It is built using ReactJS and Vite. The backend `api` application utlizes Kotlin/Spring MVC.
+This is the web application for the data upload management dashboard for DEX. It is built using ReactJS and Vite. The backend `api` application utilizes Kotlin/Spring MVC.
 
 ## Environments
 
