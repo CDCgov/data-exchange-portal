@@ -1,6 +1,6 @@
 # Data Exchange Portal
 
-This is the web application for the data upload management dashboard for DEX. It is built using ReactJS and Vite. The backend `api` application utlizes Kotlin/Spring MVC.
+This is the web application for the data upload management dashboard for DEX. It is built using ReactJS and Vite. The backend `api` application utilizes Kotlin/Spring MVC.
 
 ## Environments
 
@@ -78,7 +78,7 @@ The SWA CLI provides convenient commands and arguments for serving the front end
 
 ## Manual Deployments to the Dev Environment
 
-This app is deployed to a single Azure Static Web instance. This instance has a dev, staging, and production environment. Eventually, a CD pipeline will be built to automate the deployment process to each environment. **Manual deployments should only be used when this pipeline is unavailable.** The following instructions will explain how to perform a manual deployment to the dev environment.
+This instance has a dev, staging, and production environment. Eventually, a CD pipeline will be built to automate the deployment process to each environment. **Manual deployments should only be used when this pipeline is unavailable.** The following instructions will explain how to perform a manual deployment to the dev environment.
 
 1. Install non-dev dependencies for the React app and API functions. To do this, first run `yarn install --production=true` in the root directory.
 
