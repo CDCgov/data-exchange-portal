@@ -3,13 +3,6 @@ import React, { Fragment } from "react";
 import "@us-gov-cdc/cdc-react/dist/style.css";
 
 function App() {
-  // return (
-  //   <Router>
-  //     <Routes>
-  //       <Route path="/" element={<Landing />}></Route>
-  //     </Routes>
-  //   </Router>
-  // );
   return (
     <Fragment>
       <h1>File Upload</h1>
