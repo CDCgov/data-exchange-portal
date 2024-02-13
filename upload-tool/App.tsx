@@ -1,22 +1,43 @@
-import React from "react";
-
-import { Button, Divider } from "@us-gov-cdc/cdc-react";
-
-import { Icons } from "@us-gov-cdc/cdc-react-icons";
+import React, { ChangeEvent, useReducer } from "react";
 
 import "@us-gov-cdc/cdc-react/dist/style.css";
+import { Button, Divider } from "@us-gov-cdc/cdc-react";
+import { Icons } from "@us-gov-cdc/cdc-react-icons";
 
 function App() {
   const fileTypes = [".csv", ".hl7", ".txt"];
+
+  const initialState = {
+    fileName: "",
+    environment: "",
+    destination: "",
+    event: "",
+  };
+
+  function reducer(state, action) {
+    switch (action.type) {
+      case "updateField":
+        return {
+          ...state,
+          [action.field]: action.payload,
+        };
+    }
+  }
+
+  const [formState, dispatch] = useReducer(reducer, initialState);
 
   const handleFileUpload = () => {
     document?.getElementById("file-uploader")?.click();
   };
 
-  const handleInputChange = (e) => {
-    const file = document.getElementById("file-uploader")?.files[0];
-    const fileName = document.getElementById("file-name");
-    fileName.textContent = file.name;
+  const handleFileNameChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      dispatch({
+        type: "updateField",
+        field: "fileName",
+        payload: e.target.files[0].name,
+      });
+    }
   };
 
   return (
@@ -39,11 +60,11 @@ function App() {
             name="file-uploader"
             accept={fileTypes.toString()}
             multiple
-            onChange={(e) => handleInputChange(e)}
+            onChange={(e) => handleFileNameChange(e)}
           />
         </div>
         <p id="file-name" className="text-italic text-normal">
-          No file chosen
+          {formState.fileName ? formState.fileName : "No file chosen"}
         </p>
       </div>
       <p className="text-italic text-normal">
