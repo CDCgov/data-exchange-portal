@@ -109,26 +109,32 @@ function App() {
         items={[]}
         onSelect={(item) => handleEnvironmentSelect(item)}
       />
-      <label className="usa-label" htmlFor="dataStream">
-        Data Stream
-      </label>
-      <Dropdown
-        id="dataStream"
-        label="Data Stream"
-        srText="Data Stream"
-        items={[]}
-        onSelect={(item) => handleDataStreamSelect(item)}
-      />
-      <label className="usa-label" htmlFor="route">
-        Route
-      </label>
-      <Dropdown
-        id="route"
-        label="Select a Route"
-        srText="Select a Route"
-        items={[]}
-        onSelect={(item) => handleRouteSelect(item)}
-      />
+      <div className="grid-row flex-wrap flex-align-start">
+        <div className="grid-col-3">
+          <label className="usa-label" htmlFor="dataStream">
+            Data Stream
+          </label>
+          <Dropdown
+            id="dataStream"
+            label="Data Stream"
+            srText="Data Stream"
+            items={[]}
+            onSelect={(item) => handleDataStreamSelect(item)}
+          />
+        </div>
+        <div className="grid-col-3">
+          <label className="usa-label" htmlFor="route">
+            Route
+          </label>
+          <Dropdown
+            id="route"
+            label="Select a Route"
+            srText="Select a Route"
+            items={[]}
+            onSelect={(item) => handleRouteSelect(item)}
+          />
+        </div>
+      </div>
     </>
   );
 }
