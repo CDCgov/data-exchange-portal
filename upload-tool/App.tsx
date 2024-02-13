@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useReducer } from "react";
 
 import "@us-gov-cdc/cdc-react/dist/style.css";
-import { Button, Divider } from "@us-gov-cdc/cdc-react";
+import { Button, Divider, Dropdown } from "@us-gov-cdc/cdc-react";
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
 
 function App() {
@@ -10,8 +10,8 @@ function App() {
   const initialState = {
     fileName: "",
     environment: "",
-    destination: "",
-    event: "",
+    dataStream: "aims-celr",
+    route: "",
   };
 
   function reducer(state, action) {
@@ -38,6 +38,22 @@ function App() {
         payload: e.target.files[0].name,
       });
     }
+  };
+
+  const handleEnvironmentSelect = (item) => {
+    dispatch({
+      type: "updateField",
+      field: "environment",
+      payload: item,
+    });
+  };
+
+  const handleRouteSelect = (item) => {
+    dispatch({
+      type: "updateField",
+      field: "route",
+      payload: item,
+    });
   };
 
   return (
@@ -73,6 +89,50 @@ function App() {
         per upload
       </p>
       <Divider height={2} stroke="#000" width={1000} />
+      <label className="usa-label" htmlFor="environment">
+        Environment
+      </label>
+      <Dropdown
+        id="environment"
+        items={["Staging", "Development"]}
+        label="Select an Environment"
+        onSelect={(item) => handleEnvironmentSelect(item)}
+        srText="Select an Environment"
+      />
+
+      {/* <form className="usa-form">
+        <label className="usa-label" htmlFor="options">
+          Dropdown label
+        </label>
+        <select className="usa-select" name="options" id="options">
+          <option>- Select -</option>
+          <option value="value1">Option A</option>
+          <option value="value2">Option B</option>
+          <option value="value3">Option C</option>
+        </select>
+      </form> */}
+
+      <label className="usa-label" htmlFor="dataStream">
+        Data Stream
+      </label>
+      <Dropdown
+        id="dataStream"
+        label="Data Stream"
+        srText="Data Stream"
+        items={["aims-celr"]}
+        onSelect={() => {}}
+      />
+
+      <label className="usa-label" htmlFor="route">
+        Route
+      </label>
+      <Dropdown
+        id="route"
+        items={["csv", "hl7"]}
+        label="Select a Route"
+        onSelect={(item) => handleRouteSelect(item)}
+        srText="Select a Route"
+      />
     </React.Fragment>
   );
 }
