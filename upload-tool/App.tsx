@@ -10,7 +10,7 @@ function App() {
   const initialState = {
     fileName: "",
     environment: "",
-    dataStream: "aims-celr",
+    dataStream: "",
     route: "",
   };
 
@@ -21,6 +21,8 @@ function App() {
           ...state,
           [action.field]: action.payload,
         };
+      default:
+        throw new Error("Unrecognized action type provided to form reducer");
     }
   }
 
@@ -48,6 +50,14 @@ function App() {
     });
   };
 
+  const handleDataStreamSelect = (item) => {
+    dispatch({
+      type: "updateField",
+      field: "dataStream",
+      payload: item,
+    });
+  };
+
   const handleRouteSelect = (item) => {
     dispatch({
       type: "updateField",
@@ -57,7 +67,7 @@ function App() {
   };
 
   return (
-    <React.Fragment>
+    <>
       <h1>File Upload</h1>
       <div className="display-flex flex-row flex-justify-start flex-align-center">
         <div className="margin-right-2">
@@ -94,24 +104,11 @@ function App() {
       </label>
       <Dropdown
         id="environment"
-        items={["Staging", "Development"]}
         label="Select an Environment"
-        onSelect={(item) => handleEnvironmentSelect(item)}
         srText="Select an Environment"
+        items={[]}
+        onSelect={(item) => handleEnvironmentSelect(item)}
       />
-
-      {/* <form className="usa-form">
-        <label className="usa-label" htmlFor="options">
-          Dropdown label
-        </label>
-        <select className="usa-select" name="options" id="options">
-          <option>- Select -</option>
-          <option value="value1">Option A</option>
-          <option value="value2">Option B</option>
-          <option value="value3">Option C</option>
-        </select>
-      </form> */}
-
       <label className="usa-label" htmlFor="dataStream">
         Data Stream
       </label>
@@ -119,21 +116,20 @@ function App() {
         id="dataStream"
         label="Data Stream"
         srText="Data Stream"
-        items={["aims-celr"]}
-        onSelect={() => {}}
+        items={[]}
+        onSelect={(item) => handleDataStreamSelect(item)}
       />
-
       <label className="usa-label" htmlFor="route">
         Route
       </label>
       <Dropdown
         id="route"
-        items={["csv", "hl7"]}
         label="Select a Route"
-        onSelect={(item) => handleRouteSelect(item)}
         srText="Select a Route"
+        items={[]}
+        onSelect={(item) => handleRouteSelect(item)}
       />
-    </React.Fragment>
+    </>
   );
 }
 
