@@ -1,8 +1,14 @@
-import React, { ChangeEvent, useReducer, useEffect } from "react";
+import React, { ChangeEvent, useReducer, useState, useEffect } from "react";
 
 import "@us-gov-cdc/cdc-react/dist/style.css";
 import { Button, Divider, Dropdown } from "@us-gov-cdc/cdc-react";
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
+
+import Uppy from "@uppy/core";
+import Tus from "@uppy/tus";
+import { DragDrop, FileInput } from "@uppy/react";
+
+import "@uppy/core/dist/style.min.css";
 
 function App() {
   const fileTypes = [".csv", ".hl7", ".txt"];
@@ -81,13 +87,28 @@ function App() {
     });
   };
 
+  const [uppy] = useState(() =>
+    new Uppy({ id: "uppy1", autoProceed: false, debug: true }).use(Tus, {
+      endpoint: "https://tusd.tusdemo.net/files/",
+    })
+  );
+
   return (
     <>
       <div className="grid-container">
         <h1>File Upload</h1>
         <div className="display-flex flex-row flex-justify-start flex-align-center">
           <div className="margin-right-2">
-            <Button
+            <DragDrop
+              uppy={uppy}
+              locale={{
+                strings: {
+                  dropHereOr: "Choose a file",
+                },
+              }}
+            />
+            {/* <Button
+              uppy={uppy}
               id="choose-file"
               ariaLabel="Choose a file"
               icon={<Icons.Folder />}
@@ -103,7 +124,7 @@ function App() {
               accept={fileTypes.toString()}
               multiple
               onChange={(e) => handleFileNameChange(e)}
-            />
+            /> */}
           </div>
           <p id="file-name" className="text-italic text-normal">
             {formState.filename ? formState.filename : "No file chosen"}
