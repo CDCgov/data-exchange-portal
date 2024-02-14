@@ -4,10 +4,15 @@ import "@us-gov-cdc/cdc-react/dist/style.css";
 import { Button, Divider, Dropdown } from "@us-gov-cdc/cdc-react";
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
 
+import * as tus from "tus-js-client";
+
+import { getEnv } from "../src/utils";
+
 function App() {
   const fileTypes = [".csv", ".hl7", ".txt"];
 
   const initialState = {
+    file: {},
     filename: "",
     environment: "",
     data_stream: "",
@@ -47,6 +52,11 @@ function App() {
     if (e.target.files) {
       dispatch({
         type: "updateField",
+        field: "file",
+        payload: e.target.files[0],
+      });
+      dispatch({
+        type: "updateField",
         field: "filename",
         payload: e.target.files[0].name,
       });
@@ -54,7 +64,28 @@ function App() {
   };
 
   const handleUpload = () => {
-    console.log("no upload capability yet");
+    // grab the other form fields?
+    // validation?
+    const upload = new tus.Upload(formState.file, {
+      endpoint: getEnv("VITE_UPLOAD_API_ENDPOINT"),
+      retryDelays: [0, 3000, 5000, 10000, 20000],
+      metadata: {
+        filename: formState.fileName,
+        filetype: formState.filetype,
+      },
+      onError: function (error) {
+        console.log("Failed because: " + error);
+      },
+      onProgress: function (bytesUploaded, bytesTotal) {
+        const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2);
+        console.log(bytesUploaded, bytesTotal, percentage + "%");
+      },
+      onSuccess: function () {
+        console.log("success");
+      },
+    });
+
+    upload.start();
   };
 
   const handleEnvironmentSelect = (item) => {
