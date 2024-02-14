@@ -1,5 +1,6 @@
 import { UserConfig, configDefaults, defineConfig } from "vitest/config";
 import { viteStaticCopy } from "vite-plugin-static-copy";
+import { resolve } from "path";
 
 import react from "@vitejs/plugin-react";
 
@@ -15,6 +16,14 @@ export default defineConfig({
     }),
     react(),
   ],
+  build: {
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, "index.html"),
+        "upload-tool": resolve(__dirname, "upload-tool/index.html"),
+      },
+    },
+  },
   test: {
     globals: true,
     environment: "jsdom",
