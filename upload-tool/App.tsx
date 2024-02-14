@@ -109,6 +109,7 @@ function App() {
             />
             {/* <Button
               uppy={uppy}
+
               id="choose-file"
               ariaLabel="Choose a file"
               icon={<Icons.Folder />}
@@ -124,6 +125,7 @@ function App() {
               accept={fileTypes.toString()}
               multiple
               onChange={(e) => handleFileNameChange(e)}
+
             /> */}
           </div>
           <p id="file-name" className="text-italic text-normal">
