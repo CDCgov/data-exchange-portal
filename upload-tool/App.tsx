@@ -157,7 +157,7 @@ function App() {
           onSelect={(item) => handleEnvironmentSelect(item)}
         />
         <div className="grid-row flex-wrap flex-align-start">
-          <div className="grid-col-3">
+          <div className="grid-col-4">
             <label className="usa-label" htmlFor="data_stream">
               Data Stream
             </label>
@@ -169,7 +169,7 @@ function App() {
               onSelect={(item) => handleDataStreamSelect(item)}
             />
           </div>
-          <div className="grid-col-3">
+          <div className="grid-col-4">
             <label className="usa-label" htmlFor="route">
               Route
             </label>
