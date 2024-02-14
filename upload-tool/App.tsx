@@ -83,7 +83,7 @@ function App() {
 
   return (
     <>
-      <div class="grid-container">
+      <div className="grid-container">
         <h1>File Upload</h1>
         <div className="display-flex flex-row flex-justify-start flex-align-center">
           <div className="margin-right-2">
