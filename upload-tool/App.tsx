@@ -53,7 +53,9 @@ function App() {
     }
   };
 
-  const handleUpload = () => {};
+  const handleUpload = () => {
+    console.log("no upload capability yet");
+  };
 
   const handleEnvironmentSelect = (item) => {
     dispatch({
