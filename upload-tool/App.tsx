@@ -1,13 +1,18 @@
-import React, { ChangeEvent, useReducer, useEffect } from "react";
+import { ChangeEvent, useReducer, useEffect } from "react";
 
 import "@us-gov-cdc/cdc-react/dist/style.css";
 import { Button, Divider, Dropdown } from "@us-gov-cdc/cdc-react";
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
 
+import * as tus from "tus-js-client";
+
+import { getEnv } from "../src/utils";
+
 function App() {
   const fileTypes = [".csv", ".hl7", ".txt"];
 
   const initialState = {
+    file: {},
     filename: "",
     environment: "",
     data_stream: "",
@@ -47,6 +52,11 @@ function App() {
     if (e.target.files) {
       dispatch({
         type: "updateField",
+        field: "file",
+        payload: e.target.files[0],
+      });
+      dispatch({
+        type: "updateField",
         field: "filename",
         payload: e.target.files[0].name,
       });
@@ -54,31 +64,33 @@ function App() {
   };
 
   const handleUpload = () => {
-    console.log("no upload capability yet");
-  };
-
-  const handleEnvironmentSelect = (item) => {
-    dispatch({
-      type: "updateField",
-      field: "environment",
-      payload: item,
+    // grab the other form fields?
+    // validation?
+    const upload = new tus.Upload(formState.file, {
+      endpoint: getEnv("VITE_UPLOAD_API_ENDPOINT"),
+      retryDelays: [0, 3000, 5000, 10000, 20000],
+      metadata: {
+        filename: formState.fileName,
+        filetype: formState.filetype,
+        meta_username: formState.meta_username,
+        meta_ext_filestatus: formState.meta_ext_filestatus,
+        meta_program: formState.meta_program,
+        meta_ext_source: formState.meta_ext_source,
+        meta_organization: formState.meta_organization,
+      },
+      onError: function (error) {
+        console.log("Failed because: " + error);
+      },
+      onProgress: function (bytesUploaded, bytesTotal) {
+        const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2);
+        console.log(bytesUploaded, bytesTotal, percentage + "%");
+      },
+      onSuccess: function () {
+        console.log("success");
+      },
     });
-  };
 
-  const handleDataStreamSelect = (item) => {
-    dispatch({
-      type: "updateField",
-      field: "data_stream",
-      payload: item,
-    });
-  };
-
-  const handleRouteSelect = (item) => {
-    dispatch({
-      type: "updateField",
-      field: "route",
-      payload: item,
-    });
+    upload.start();
   };
 
   return (
@@ -123,10 +135,16 @@ function App() {
           label="Select an Environment"
           srText="Select an Environment"
           items={[]}
-          onSelect={(item) => handleEnvironmentSelect(item)}
+          onSelect={(item) => {
+            dispatch({
+              type: "updateField",
+              field: "environment",
+              payload: item,
+            });
+          }}
         />
         <div className="grid-row flex-wrap flex-align-start">
-          <div className="grid-col-3">
+          <div className="grid-col-4">
             <label className="usa-label" htmlFor="data_stream">
               Data Stream
             </label>
@@ -135,10 +153,16 @@ function App() {
               label="Data Stream"
               srText="Data Stream"
               items={[]}
-              onSelect={(item) => handleDataStreamSelect(item)}
+              onSelect={(item) => {
+                dispatch({
+                  type: "updateField",
+                  field: "data_stream",
+                  payload: item,
+                });
+              }}
             />
           </div>
-          <div className="grid-col-3">
+          <div className="grid-col-4">
             <label className="usa-label" htmlFor="route">
               Route
             </label>
@@ -147,7 +171,13 @@ function App() {
               label="Select a Route"
               srText="Select a Route"
               items={[]}
-              onSelect={(item) => handleRouteSelect(item)}
+              onSelect={(item) => {
+                dispatch({
+                  type: "updateField",
+                  field: "route",
+                  payload: item,
+                });
+              }}
             />
           </div>
         </div>
@@ -244,7 +274,6 @@ function App() {
             });
           }}
         />
-
         <Button
           className="margin-y-4"
           id="upload-button"
