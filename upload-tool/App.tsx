@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useReducer, useEffect } from "react";
+import { ChangeEvent, useReducer, useEffect } from "react";
 
 import "@us-gov-cdc/cdc-react/dist/style.css";
 import { Button, Divider, Dropdown } from "@us-gov-cdc/cdc-react";
