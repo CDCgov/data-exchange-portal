@@ -1,4 +1,4 @@
-import { ChangeEvent, useReducer, useEffect } from "react";
+import React, { ChangeEvent, useReducer, useEffect } from "react";
 
 import "@us-gov-cdc/cdc-react/dist/style.css";
 import { Button, Divider, Dropdown } from "@us-gov-cdc/cdc-react";
@@ -72,6 +72,9 @@ function App() {
       metadata: {
         filename: formState.fileName,
         filetype: formState.filetype,
+        environment: formState.environment,
+        data_stream: formState.data_stream,
+        route: formState.route,
         meta_username: formState.meta_username,
         meta_ext_filestatus: formState.meta_ext_filestatus,
         meta_program: formState.meta_program,
@@ -134,7 +137,7 @@ function App() {
           id="environment"
           label="Select an Environment"
           srText="Select an Environment"
-          items={[]}
+          items={["Staging", "Development"]}
           onSelect={(item) => {
             dispatch({
               type: "updateField",
@@ -152,7 +155,7 @@ function App() {
               id="data_stream"
               label="Data Stream"
               srText="Data Stream"
-              items={[]}
+              items={["aims-celr"]}
               onSelect={(item) => {
                 dispatch({
                   type: "updateField",
@@ -170,7 +173,7 @@ function App() {
               id="route"
               label="Select a Route"
               srText="Select a Route"
-              items={[]}
+              items={["csv", "hl7"]}
               onSelect={(item) => {
                 dispatch({
                   type: "updateField",
