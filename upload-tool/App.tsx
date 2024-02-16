@@ -15,8 +15,8 @@ function App() {
     file: {},
     filename: "",
     environment: "",
-    data_stream: "",
-    route: "",
+    destination: "",
+    event: "",
     filetype: "",
     meta_username: "",
     meta_ext_filestatus: "",
@@ -64,14 +64,14 @@ function App() {
   };
 
   const handleUpload = () => {
-    // grab the other form fields?
-    // validation?
     const upload = new tus.Upload(formState.file, {
       endpoint: getEnv("VITE_UPLOAD_API_ENDPOINT"),
       retryDelays: [0, 3000, 5000, 10000, 20000],
       metadata: {
         filename: formState.fileName,
         filetype: formState.filetype,
+        meta_destination_id: formState.destination,
+        meta_ext_event: formState.event,
         meta_username: formState.meta_username,
         meta_ext_filestatus: formState.meta_ext_filestatus,
         meta_program: formState.meta_program,
@@ -86,7 +86,7 @@ function App() {
         console.log(bytesUploaded, bytesTotal, percentage + "%");
       },
       onSuccess: function () {
-        console.log("success");
+        console.log("Success");
       },
     });
 
@@ -134,7 +134,7 @@ function App() {
           id="environment"
           label="Select an Environment"
           srText="Select an Environment"
-          items={[]}
+          items={["Test"]}
           onSelect={(item) => {
             dispatch({
               type: "updateField",
@@ -145,36 +145,36 @@ function App() {
         />
         <div className="grid-row flex-wrap flex-align-start">
           <div className="grid-col-4">
-            <label className="usa-label" htmlFor="data_stream">
-              Data Stream
+            <label className="usa-label" htmlFor="destination">
+              Destination
             </label>
             <Dropdown
-              id="data_stream"
-              label="Data Stream"
-              srText="Data Stream"
-              items={[]}
+              id="destination"
+              label="Destination"
+              srText="Destination"
+              items={["aims-celr"]}
               onSelect={(item) => {
                 dispatch({
                   type: "updateField",
-                  field: "data_stream",
+                  field: "destination",
                   payload: item,
                 });
               }}
             />
           </div>
           <div className="grid-col-4">
-            <label className="usa-label" htmlFor="route">
-              Route
+            <label className="usa-label" htmlFor="event">
+              Event
             </label>
             <Dropdown
-              id="route"
-              label="Select a Route"
-              srText="Select a Route"
-              items={[]}
+              id="event"
+              label="Select Event"
+              srText="Select Event"
+              items={["csv", "hl7"]}
               onSelect={(item) => {
                 dispatch({
                   type: "updateField",
-                  field: "route",
+                  field: "event",
                   payload: item,
                 });
               }}
