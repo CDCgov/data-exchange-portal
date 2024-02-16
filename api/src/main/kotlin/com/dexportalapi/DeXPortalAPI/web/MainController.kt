@@ -25,11 +25,13 @@ class MainController() {
 
     private val webClient = WebClient.builder().build()
 
+    @CrossOrigin
     @GetMapping("/health")
     fun health(): String {
         return "Status: OK"
     }
 
+    @CrossOrigin
     @GetMapping("/upload/status")
     suspend fun getDestinationStatusRequest(
             @RequestParam("destination") destination: String,
@@ -67,6 +69,7 @@ class MainController() {
         return response
     }
 
+    @CrossOrigin
     @GetMapping("/upload/destination")
     suspend fun getDestinationRequest(@RequestHeader("Authorization") auth_token: String): String {
 
