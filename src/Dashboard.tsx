@@ -90,6 +90,12 @@ function Dashboard() {
                 },
                 {
                   componentType: "a",
+                  icon: <Icons.Process />,
+                  text: "File Submissions",
+                  href: "/",
+                },
+                {
+                  componentType: "a",
                   icon: <Icons.Quality />,
                   text: "Quality",
                   href: "/",

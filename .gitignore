@@ -7,7 +7,7 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-
+**/.DS_Store
 public/fonts
 node_modules
 dist
