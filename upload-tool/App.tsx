@@ -1,4 +1,4 @@
-import { ChangeEvent, useReducer, useEffect } from "react";
+import { ChangeEvent, useReducer, useState, useEffect } from "react";
 
 import "@us-gov-cdc/cdc-react/dist/style.css";
 import { Button, Divider, Dropdown } from "@us-gov-cdc/cdc-react";
@@ -29,6 +29,8 @@ function App() {
     system_provider: "",
     original_file_name: "",
   };
+
+  const [uploadFeedback, setUploadFeedback] = useState("");
 
   function reducer(state, action) {
     switch (action.type) {
@@ -90,13 +92,15 @@ function App() {
       },
       onError: function (error) {
         console.log("Failed because: " + error);
+        setUploadFeedback(`Upload failed: ${error.message}`);
       },
       onProgress: function (bytesUploaded, bytesTotal) {
         const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2);
+        setUploadFeedback(`Uploading: ${percentage}%`);
         console.log(bytesUploaded, bytesTotal, percentage + "%");
       },
       onSuccess: function () {
-        console.log("Success");
+        setUploadFeedback(`Upload successful: ${upload.file.name}`);
       },
     });
 
@@ -359,6 +363,15 @@ function App() {
             });
           }}
         />
+
+        {uploadFeedback !== "" && (
+          <div
+            className="usa-summary-box width-mobile-lg"
+            role="region"
+            aria-labelledby="summary-box-key-information">
+            <div className="usa-summary-box__text">{uploadFeedback}</div>
+          </div>
+        )}
         <Button
           className="margin-y-4"
           id="upload-button"
