@@ -3,10 +3,6 @@ import {
   PopupMenuItemType,
 } from "@us-gov-cdc/cdc-react/dist/src/@types";
 
-import Dashboard from "./Dashboard";
-import Profile from "./Profile";
-import Submissions from "./Submissions";
-
 import dexLogo from "./assets/dex_logo.svg";
 
 import {
@@ -15,7 +11,8 @@ import {
   Sidebar,
 } from "@us-gov-cdc/cdc-react";
 
-import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
+
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
 
 function Shell() {
@@ -44,7 +41,7 @@ function Shell() {
       iconPosition: "left",
       text: "Your Profile",
       badgeCount: 0,
-      onClick: () => navigate("/profile"),
+      onClick: () => navigate("/home/profile"),
     },
     {
       icon: <Icons.Notifications hasBadge={true} />,
@@ -79,7 +76,7 @@ function Shell() {
                   componentType: "a",
                   icon: <Icons.Dashboard />,
                   text: "Dashboard",
-                  href: "/dashboard",
+                  href: "/home/dashboard",
                 },
                 {
                   componentType: "a",
@@ -91,7 +88,7 @@ function Shell() {
                   componentType: "a",
                   icon: <Icons.Process />,
                   text: "File Submissions",
-                  href: "/submissions",
+                  href: "/home/submissions",
                 },
                 {
                   componentType: "a",
@@ -143,14 +140,7 @@ function Shell() {
             userProfilePopupMenuItems={userProfilePopupMenuItems}
           />
         </section>
-
-        <Routes>
-          <Route path="dashboard" element={<Dashboard />}></Route>
-          <Route path="profile" element={<Profile />}></Route>
-          <Route path="submissions" element={<Submissions />}></Route>
-
-          <Route path="*" element={<Navigate to="dashboard" replace />} />
-        </Routes>
+        <Outlet />
       </div>
     </div>
   );
