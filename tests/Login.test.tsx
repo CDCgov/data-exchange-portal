@@ -1,16 +1,16 @@
 import { render, screen } from "@testing-library/react";
-import { Landing } from "../src/Landing";
+import { Login } from "../src/Login";
 import { createMockedAuthContext, withMockedAuthProvider } from "./helpers";
 import { vi } from "vitest";
 import * as Utils from "../src/utils";
 
 vi.mock("react-oidc-context");
 
-describe("Landing", () => {
+describe("Login", () => {
   it("should show welcome message", () => {
     render(
       withMockedAuthProvider(
-        <Landing />,
+        <Login />,
         createMockedAuthContext({ isAuthenticated: false, isLoading: false })
       )
     );
@@ -26,7 +26,7 @@ describe("Landing", () => {
 
     render(
       withMockedAuthProvider(
-        <Landing />,
+        <Login />,
         createMockedAuthContext({ isAuthenticated: false, isLoading: false })
       )
     );
@@ -40,7 +40,7 @@ describe("Landing", () => {
 
     render(
       withMockedAuthProvider(
-        <Landing />,
+        <Login />,
         createMockedAuthContext({ isAuthenticated: false, isLoading: false })
       )
     );

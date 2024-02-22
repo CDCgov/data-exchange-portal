@@ -2,30 +2,39 @@ import "@us-gov-cdc/cdc-react/dist/style.css";
 
 import "./App.css";
 
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Dashboard from "./Dashboard";
-import { Landing } from "./Landing";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import Shell from "./Shell";
+import { Login } from "./Login";
 import Callback from "./Callback";
 import Logout from "./Logout";
-import Profile from "./Profile";
+
 import { ProtectedRoute } from "./components/ProtectedRoute";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Landing />}></Route>
-        <Route path="/oauth_callback" element={<Callback />}></Route>
-        <Route path="/logout" element={<Logout />}></Route>
+        {/* Protected Routes */}
         <Route
-          path="/dashboard"
+          path="/*"
           element={
             <ProtectedRoute>
-              <Dashboard />
+              <Shell />
             </ProtectedRoute>
-          }>
-          <Route path="/dashboard/profile" element={<Profile />}></Route>
-        </Route>
+          }
+        />
+
+        {/* Public Routes */}
+        <Route path="login" element={<Login />} />
+        <Route path="oauth_callback" element={<Callback />} />
+        <Route path="logout" element={<Logout />} />
+
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
   );
