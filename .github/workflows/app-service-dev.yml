@@ -1,0 +1,16 @@
+name: "DEV - Backend App Service"
+
+on:
+    workflow_dispatch:
+    push:
+        branches:
+            - main
+        paths:
+            - api/**
+    
+jobs:
+    remote-trigger:
+        uses: ./.github/workflows/remote-trigger-template.yml
+        with:
+            WORKFLOW: app-service-dev.yml
+        secrets: inherit
