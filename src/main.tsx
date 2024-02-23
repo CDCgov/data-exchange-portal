@@ -21,13 +21,9 @@ const oidcConfig: AuthProviderProps = {
   },
 };
 
-function onSigninCallback() {
-  window.location.href = "/dashboard";
-}
-
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <AuthProvider {...oidcConfig} onSigninCallback={onSigninCallback}>
+    <AuthProvider {...oidcConfig}>
       <App />
     </AuthProvider>
   </React.StrictMode>

@@ -10,7 +10,7 @@ function Callback() {
   const location = useLocation();
 
   // In case the user tried to access a page directly.
-  const from = location.state?.from?.pathname || "/dashboard";
+  const from = location.state?.from?.pathname || "/home";
 
   useEffect(() => {
     return auth.events.addUserLoaded(() => {
