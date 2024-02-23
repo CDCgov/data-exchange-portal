@@ -1,4 +1,4 @@
-import { ChangeEvent, useReducer, useEffect } from "react";
+import { ChangeEvent, useReducer, useState, useEffect } from "react";
 
 import "@us-gov-cdc/cdc-react/dist/style.css";
 import { Button, Divider, Dropdown } from "@us-gov-cdc/cdc-react";
@@ -23,7 +23,14 @@ function App() {
     meta_program: "",
     meta_ext_source: "",
     meta_organization: "",
+    message_type: "",
+    route: "",
+    reporting_jurisdiction: "",
+    system_provider: "",
+    original_file_name: "",
   };
+
+  const [uploadFeedback, setUploadFeedback] = useState("");
 
   function reducer(state, action) {
     switch (action.type) {
@@ -77,16 +84,23 @@ function App() {
         meta_program: formState.meta_program,
         meta_ext_source: formState.meta_ext_source,
         meta_organization: formState.meta_organization,
+        message_type: formState.message_type,
+        route: formState.route,
+        reporting_jurisdiction: formState.reporting_jurisdiction,
+        system_provider: formState.system_provider,
+        original_file_name: formState.original_file_name,
       },
       onError: function (error) {
         console.log("Failed because: " + error);
+        setUploadFeedback(`Upload failed: ${error.message}`);
       },
       onProgress: function (bytesUploaded, bytesTotal) {
         const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2);
+        setUploadFeedback(`Uploading: ${percentage}%`);
         console.log(bytesUploaded, bytesTotal, percentage + "%");
       },
       onSuccess: function () {
-        console.log("Success");
+        setUploadFeedback(`Upload successful: ${upload.file.name}`);
       },
     });
 
@@ -274,6 +288,90 @@ function App() {
             });
           }}
         />
+        <label className="usa-label" htmlFor="message_type">
+          message_type
+        </label>
+        <input
+          className="usa-input"
+          id="message_type"
+          name="message_type"
+          onChange={(e) => {
+            dispatch({
+              type: "updateField",
+              field: "message_type",
+              payload: e.target.value,
+            });
+          }}
+        />
+        <label className="usa-label" htmlFor="route">
+          route
+        </label>
+        <input
+          className="usa-input"
+          id="route"
+          name="route"
+          onChange={(e) => {
+            dispatch({
+              type: "updateField",
+              field: "route",
+              payload: e.target.value,
+            });
+          }}
+        />
+        <label className="usa-label" htmlFor="reporting_jurisdiction">
+          reporting_jurisdiction
+        </label>
+        <input
+          className="usa-input"
+          id="reporting_jurisdiction"
+          name="reporting_jurisdiction"
+          onChange={(e) => {
+            dispatch({
+              type: "updateField",
+              field: "reporting_jurisdiction",
+              payload: e.target.value,
+            });
+          }}
+        />
+        <label className="usa-label" htmlFor="system_provider">
+          system_provider
+        </label>
+        <input
+          className="usa-input"
+          id="system_provider"
+          name="system_provider"
+          onChange={(e) => {
+            dispatch({
+              type: "updateField",
+              field: "system_provider",
+              payload: e.target.value,
+            });
+          }}
+        />
+        <label className="usa-label" htmlFor="original_file_name">
+          original_file_name
+        </label>
+        <input
+          className="usa-input"
+          id="original_file_name"
+          name="original_file_name"
+          onChange={(e) => {
+            dispatch({
+              type: "updateField",
+              field: "original_file_name",
+              payload: e.target.value,
+            });
+          }}
+        />
+
+        {uploadFeedback !== "" && (
+          <div
+            className="usa-summary-box width-mobile-lg"
+            role="region"
+            aria-labelledby="summary-box-key-information">
+            <div className="usa-summary-box__text">{uploadFeedback}</div>
+          </div>
+        )}
         <Button
           className="margin-y-4"
           id="upload-button"
