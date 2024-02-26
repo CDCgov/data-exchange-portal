@@ -23,7 +23,7 @@ export function ProtectedRoute({ children }: PropsWithChildren) {
       if (oidcStorage) {
         auth.signinSilent();
       } else {
-        navigate("/", { replace: true });
+        navigate("/login", { replace: true });
       }
     }
   }, [auth, navigate]);

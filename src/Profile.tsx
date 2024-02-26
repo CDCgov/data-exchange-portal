@@ -5,6 +5,7 @@ function Profile() {
 
   return (
     <section style={{ padding: "1rem" }}>
+      <h1>profile</h1>
       {auth.user && <pre>{JSON.stringify(auth.user.profile, null, 2)}</pre>}
     </section>
   );
