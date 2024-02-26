@@ -13,18 +13,26 @@ import { Icons } from "@us-gov-cdc/cdc-react-icons";
 function Submissions() {
   return (
     <section className="bg-grey padding-x-2">
-      <h3 className="padding-top-3">File Submissions</h3>
+      <h3 className="padding-y-3">File Submissions</h3>
       <Table>
         <TableHead>
           <TableRow>
             <TableHeader size="md">
               <Checkbox label="Select all" onChange={() => {}} />
             </TableHeader>
-            <TableHeader>
+            <TableHeader size="lg">
               <React.Fragment key=".0">
                 <Icons.SortArrow className="sort-icon"></Icons.SortArrow>
                 <span className="text-left">File Name</span>
               </React.Fragment>
+            </TableHeader>
+            <TableHeader>
+              <Icons.SortArrow className="sort-icon"></Icons.SortArrow>
+              <span className="text-left">Source</span>
+            </TableHeader>
+            <TableHeader>
+              <Icons.SortArrow className="sort-icon"></Icons.SortArrow>
+              <span className="text-left">Entity</span>
             </TableHeader>
             <TableHeader>
               <Icons.SortArrow className="sort-icon"></Icons.SortArrow>
