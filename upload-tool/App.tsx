@@ -6,7 +6,7 @@ import { Icons } from "@us-gov-cdc/cdc-react-icons";
 
 import * as tus from "tus-js-client";
 
-import { getEnv } from "../src/utils";
+import { getEnv } from "../src/utils/helperFunctions/env";
 
 function App() {
   const fileTypes = [".csv", ".hl7", ".txt"];

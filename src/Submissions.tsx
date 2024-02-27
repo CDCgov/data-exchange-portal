@@ -9,13 +9,26 @@ import {
   TableRow,
 } from "@us-gov-cdc/cdc-react";
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
+import getFileSubmissions from "./utils/api/fileSubmissions";
 
 function Submissions() {
   const [tableData, setTableData] = useState();
 
   useEffect(() => {
-    // make network call
-    // set local state
+    const fetchCall = async () => {
+      const res = await getFileSubmissions();
+
+      if (res.status != 200) return;
+
+      try {
+        const data = await res.json();
+        console.log(data);
+        setTableData(data);
+      } catch (error) {
+        console.error("Failed to parse JSON:", error);
+      }
+    };
+    fetchCall();
   }, []);
 
   return (

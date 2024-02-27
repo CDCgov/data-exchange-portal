@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 import { AuthProvider, AuthProviderProps } from "react-oidc-context";
-import { getEnv } from "./utils.ts";
+import { getEnv } from "./utils/helperFunctions/env";
 
 const oidcConfig: AuthProviderProps = {
   authority: getEnv("VITE_SAMS_AUTHORITY_URL"),
@@ -21,10 +21,25 @@ const oidcConfig: AuthProviderProps = {
   },
 };
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <AuthProvider {...oidcConfig}>
-      <App />
-    </AuthProvider>
-  </React.StrictMode>
-);
+async function enableMocking() {
+  // needs to be based on env var
+  if ("development" !== "development") {
+    return;
+  }
+
+  const { worker } = await import("./mocks/browser");
+
+  // `worker.start()` returns a Promise that resolves
+  // once the Service Worker is up and ready to intercept requests.
+  return worker.start();
+}
+
+enableMocking().then(() => {
+  ReactDOM.createRoot(document.getElementById("root")!).render(
+    <React.StrictMode>
+      <AuthProvider {...oidcConfig}>
+        <App />
+      </AuthProvider>
+    </React.StrictMode>
+  );
+});
