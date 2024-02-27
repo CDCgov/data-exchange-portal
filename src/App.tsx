@@ -16,14 +16,20 @@ import Logout from "./Logout";
 import Profile from "./Profile";
 import Submissions from "./Submissions";
 
-// import { ProtectedRoute } from "./components/ProtectedRoute";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 
 function App() {
   return (
     <Router>
       <Routes>
         {/* Protected Routes */}
-        <Route path="home/*" element={<Shell />}>
+        <Route
+          path="home/*"
+          element={
+            <ProtectedRoute>
+              <Shell />
+            </ProtectedRoute>
+          }>
           <Route path="dashboard" element={<Dashboard />}></Route>
           <Route path="profile" element={<Profile />}></Route>
           <Route path="submissions" element={<Submissions />}></Route>

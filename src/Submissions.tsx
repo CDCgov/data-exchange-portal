@@ -12,7 +12,7 @@ import { Icons } from "@us-gov-cdc/cdc-react-icons";
 
 function Submissions() {
   return (
-    <section className="bg-grey padding-x-2">
+    <section className="submissions_page bg-grey padding-x-2">
       <h3 className="padding-y-3">File Submissions</h3>
       <Table>
         <TableHead>
@@ -20,7 +20,7 @@ function Submissions() {
             <TableHeader size="md">
               <Checkbox label="Select all" onChange={() => {}} />
             </TableHeader>
-            <TableHeader size="lg">
+            <TableHeader>
               <React.Fragment key=".0">
                 <Icons.SortArrow className="sort-icon"></Icons.SortArrow>
                 <span className="text-left">File Name</span>
@@ -30,11 +30,11 @@ function Submissions() {
               <Icons.SortArrow className="sort-icon"></Icons.SortArrow>
               <span className="text-left">Source</span>
             </TableHeader>
-            <TableHeader>
+            <TableHeader size="sm">
               <Icons.SortArrow className="sort-icon"></Icons.SortArrow>
               <span className="text-left">Entity</span>
             </TableHeader>
-            <TableHeader>
+            <TableHeader size="sm">
               <Icons.SortArrow className="sort-icon"></Icons.SortArrow>
               <span className="text-left">Event</span>
             </TableHeader>
@@ -53,237 +53,7 @@ function Submissions() {
         </TableHead>
         <TableBody />
       </Table>
-      <TablePagination
-        data={[
-          {
-            checked: false,
-            details: "detailed info",
-            event: "Test Event Name 1",
-            fileName: "Test File Name 1",
-            id: "0-id",
-            submitted: {
-              timestamp: "3:45pm 11/17/2023",
-              when: "Just Now",
-            },
-            uploadStatus: {
-              color: "busy",
-              label: "Uploading",
-            },
-          },
-          {
-            checked: false,
-            details: "detailed info",
-            event: "Test Event Name 2",
-            fileName: "Test File Name 2",
-            id: "1-id",
-            submitted: {
-              timestamp: "3:45pm 11/17/2023",
-              when: "Just Now",
-            },
-            uploadStatus: {
-              color: "busy",
-              label: "Uploading",
-            },
-          },
-          {
-            checked: false,
-            details: "detailed info",
-            event: "Test Event Name 3",
-            fileName: "Test File Name 3",
-            id: "2-id",
-            submitted: {
-              timestamp: "3:45pm 11/17/2023",
-              when: "Just Now",
-            },
-            uploadStatus: {
-              color: "busy",
-              label: "Uploading",
-            },
-          },
-          {
-            checked: false,
-            details: "detailed info",
-            event: "Test Event Name 1",
-            fileName: "Test File Name 1",
-            id: "0-id",
-            submitted: {
-              timestamp: "3:45pm 11/17/2023",
-              when: "Just Now",
-            },
-            uploadStatus: {
-              color: "busy",
-              label: "Uploading",
-            },
-          },
-          {
-            checked: false,
-            details: "detailed info",
-            event: "Test Event Name 2",
-            fileName: "Test File Name 2",
-            id: "1-id",
-            submitted: {
-              timestamp: "3:45pm 11/17/2023",
-              when: "Just Now",
-            },
-            uploadStatus: {
-              color: "busy",
-              label: "Uploading",
-            },
-          },
-          {
-            checked: false,
-            details: "detailed info",
-            event: "Test Event Name 3",
-            fileName: "Test File Name 3",
-            id: "2-id",
-            submitted: {
-              timestamp: "3:45pm 11/17/2023",
-              when: "Just Now",
-            },
-            uploadStatus: {
-              color: "busy",
-              label: "Uploading",
-            },
-          },
-          {
-            checked: false,
-            details: "detailed info",
-            event: "Test Event Name 1",
-            fileName: "Test File Name 1",
-            id: "0-id",
-            submitted: {
-              timestamp: "3:45pm 11/17/2023",
-              when: "Just Now",
-            },
-            uploadStatus: {
-              color: "busy",
-              label: "Uploading",
-            },
-          },
-          {
-            checked: false,
-            details: "detailed info",
-            event: "Test Event Name 2",
-            fileName: "Test File Name 2",
-            id: "1-id",
-            submitted: {
-              timestamp: "3:45pm 11/17/2023",
-              when: "Just Now",
-            },
-            uploadStatus: {
-              color: "busy",
-              label: "Uploading",
-            },
-          },
-          {
-            checked: false,
-            details: "detailed info",
-            event: "Test Event Name 3",
-            fileName: "Test File Name 3",
-            id: "2-id",
-            submitted: {
-              timestamp: "3:45pm 11/17/2023",
-              when: "Just Now",
-            },
-            uploadStatus: {
-              color: "busy",
-              label: "Uploading",
-            },
-          },
-          {
-            checked: false,
-            details: "detailed info",
-            event: "Test Event Name 1",
-            fileName: "Test File Name 1",
-            id: "0-id",
-            submitted: {
-              timestamp: "3:45pm 11/17/2023",
-              when: "Just Now",
-            },
-            uploadStatus: {
-              color: "busy",
-              label: "Uploading",
-            },
-          },
-          {
-            checked: false,
-            details: "detailed info",
-            event: "Test Event Name 2",
-            fileName: "Test File Name 2",
-            id: "1-id",
-            submitted: {
-              timestamp: "3:45pm 11/17/2023",
-              when: "Just Now",
-            },
-            uploadStatus: {
-              color: "busy",
-              label: "Uploading",
-            },
-          },
-          {
-            checked: false,
-            details: "detailed info",
-            event: "Test Event Name 3",
-            fileName: "Test File Name 3",
-            id: "2-id",
-            submitted: {
-              timestamp: "3:45pm 11/17/2023",
-              when: "Just Now",
-            },
-            uploadStatus: {
-              color: "busy",
-              label: "Uploading",
-            },
-          },
-          {
-            checked: false,
-            details: "detailed info",
-            event: "Test Event Name 1",
-            fileName: "Test File Name 1",
-            id: "0-id",
-            submitted: {
-              timestamp: "3:45pm 11/17/2023",
-              when: "Just Now",
-            },
-            uploadStatus: {
-              color: "busy",
-              label: "Uploading",
-            },
-          },
-          {
-            checked: false,
-            details: "detailed info",
-            event: "Test Event Name 2",
-            fileName: "Test File Name 2",
-            id: "1-id",
-            submitted: {
-              timestamp: "3:45pm 11/17/2023",
-              when: "Just Now",
-            },
-            uploadStatus: {
-              color: "busy",
-              label: "Uploading",
-            },
-          },
-          {
-            checked: false,
-            details: "detailed info",
-            event: "Test Event Name 3",
-            fileName: "Test File Name 3",
-            id: "2-id",
-            submitted: {
-              timestamp: "3:45pm 11/17/2023",
-              when: "Just Now",
-            },
-            uploadStatus: {
-              color: "busy",
-              label: "Uploading",
-            },
-          },
-        ]}
-        pageLimit={10}
-        setPageData={() => {}}
-      />
+      <TablePagination data={[]} pageLimit={10} setPageData={() => {}} />
     </section>
   );
 }
