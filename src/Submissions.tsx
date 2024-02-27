@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import {
   Checkbox,
+  Pill,
   Table,
   TableBody,
+  TableDataCell,
   TableHead,
   TableHeader,
   TablePagination,
@@ -22,8 +24,7 @@ function Submissions() {
 
       try {
         const data = await res.json();
-        console.log(data);
-        setTableData(data);
+        setTableData(data.default); // TODO: Find out why the data is wrapped in a default key/top-level object
       } catch (error) {
         console.error("Failed to parse JSON:", error);
       }
@@ -71,9 +72,46 @@ function Submissions() {
             </TableHeader>
           </TableRow>
         </TableHead>
-        <TableBody>{/* map over the table data */}</TableBody>
+        <TableBody>
+          {tableData &&
+            tableData.map((item, index) => (
+              <TableRow key={`table-row-${index}`}>
+                <TableDataCell size="md" className="flex-justify-center">
+                  <Checkbox />
+                </TableDataCell>
+                <TableDataCell className="text-left">
+                  {item.fileName}
+                </TableDataCell>
+                <TableDataCell>{item.source}</TableDataCell>
+                <TableDataCell size="sm">{item.entity}</TableDataCell>
+                <TableDataCell size="sm" className="text-left">
+                  {item.event}
+                </TableDataCell>
+                <TableDataCell>
+                  <Pill
+                    label={item.uploadStatus}
+                    shape="slot"
+                    outline={false}
+                    inverse={false}
+                  />
+                </TableDataCell>
+                <TableDataCell size="md" className="flex-justify-center">
+                  {item.submitted}
+                </TableDataCell>
+                <TableDataCell size="sm">
+                  <Icons.Dots />
+                </TableDataCell>
+              </TableRow>
+            ))}
+        </TableBody>
       </Table>
-      <TablePagination data={[]} pageLimit={10} setPageData={() => {}} />
+      {tableData && (
+        <TablePagination
+          data={tableData}
+          pageLimit={10}
+          setPageData={() => {}}
+        />
+      )}
     </section>
   );
 }
