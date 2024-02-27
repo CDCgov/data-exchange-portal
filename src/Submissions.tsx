@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Checkbox,
   Table,
@@ -11,6 +11,13 @@ import {
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
 
 function Submissions() {
+  const [tableData, setTableData] = useState();
+
+  useEffect(() => {
+    // make network call
+    // set local state
+  }, []);
+
   return (
     <section className="submissions_page bg-grey padding-x-2">
       <h3 className="padding-y-3">File Submissions</h3>
@@ -51,7 +58,7 @@ function Submissions() {
             </TableHeader>
           </TableRow>
         </TableHead>
-        <TableBody />
+        <TableBody>{/* map over the table data */}</TableBody>
       </Table>
       <TablePagination data={[]} pageLimit={10} setPageData={() => {}} />
     </section>

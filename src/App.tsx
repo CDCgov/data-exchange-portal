@@ -23,13 +23,7 @@ function App() {
     <Router>
       <Routes>
         {/* Protected Routes */}
-        <Route
-          path="home/*"
-          element={
-            <ProtectedRoute>
-              <Shell />
-            </ProtectedRoute>
-          }>
+        <Route path="home/*" element={<Shell />}>
           <Route path="dashboard" element={<Dashboard />}></Route>
           <Route path="profile" element={<Profile />}></Route>
           <Route path="submissions" element={<Submissions />}></Route>
