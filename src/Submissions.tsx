@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   Checkbox,
+  Dropdown,
   Pill,
   Table,
   TableBody,
@@ -118,7 +119,36 @@ function Submissions() {
   return (
     <section className="submissions_page bg-grey padding-x-2">
       <h3 className="padding-y-3">File Submissions</h3>
-      <Table>
+      <div className="padding-bottom-2 display-flex flex-row flex-justify">
+        <div className="display-flex flex-row cdc-submissions-page--filters">
+          <div className="padding-right-2">
+            <Dropdown
+              items={["aims-celr"]}
+              label="Destination: aims-celr"
+              onSelect={() => {}}
+              srText="Destination"
+            />
+          </div>
+          <Dropdown
+            items={["Last 60 Days"]}
+            label="Last 30 Days"
+            labelIcon={<Icons.Calendar />}
+            onSelect={() => {}}
+            srText="Last 30 Days"
+          />
+        </div>
+        <div className="flex-align-end">
+          <Dropdown
+            items={["event"]}
+            label="Event"
+            labelIcon={<Icons.Filter />}
+            onSelect={() => {}}
+            srText="Event"
+          />
+        </div>
+      </div>
+      <div className="text-base font-sans-sm">Showing 1-10 of 21 items</div>
+      <Table className="padding-y-3">
         <TableHead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
@@ -150,7 +180,7 @@ function Submissions() {
           ))}
           {/* <TableRow>
             <TableHeader size="md">
-              <Checkbox label="Select all" onChange={() => {}} />
+              <Checkbox label="" onChange={() => {}} />
             </TableHeader>
             <TableHeader>
               <React.Fragment key=".0">
