@@ -1,3 +1,7 @@
 #file-uploader {
   display: none;
 }
+
+button#choose-file svg {
+  margin-right: 0.35rem;
+}

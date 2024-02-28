@@ -25,6 +25,7 @@ function App() {
     filetype: "",
     meta_username: "",
     meta_ext_filestatus: "",
+    meta_ext_filename: "",
     meta_program: "",
     meta_ext_source: "",
     meta_organization: "",
@@ -33,9 +34,13 @@ function App() {
     reporting_jurisdiction: "",
     system_provider: "",
     original_file_name: "",
+    original_file_timestamp: "",
+    meta_ext_file_timestamp: "",
+    meta_file_timestamp: "",
+    orig_filename: "",
   };
 
-  const [uploadFeedback, setUploadFeedback] = useState("");
+  const [uploadFeedback, setUploadFeedback] = useState<Array<string>>(["", ""]);
   const [eventItems, setEventItems] = useState<Array<string>>([]);
 
   function reducer(state, action) {
@@ -77,38 +82,49 @@ function App() {
   };
 
   const handleUpload = () => {
+    const timestamp: string = new Date()
+      .toISOString()
+      .replace("T", " ")
+      .replace("Z", "");
+
     const upload = new tus.Upload(formState.file, {
       endpoint: getEnv("VITE_UPLOAD_API_ENDPOINT"),
       retryDelays: [0, 3000, 5000, 10000, 20000],
       metadata: {
-        filename: formState.fileName,
+        filename: formState.filename,
         filetype: formState.filetype,
         meta_destination_id: formState.destination,
         meta_ext_event: formState.event,
         meta_username: formState.meta_username,
         meta_ext_filestatus: formState.meta_ext_filestatus,
-        meta_ext_filename: formState.fileName,
+        meta_ext_filename: formState.filename,
+        meta_ext_file_timestamp: timestamp,
+        meta_file_timestamp: timestamp,
         meta_program: formState.meta_program,
         meta_ext_source: formState.meta_ext_source,
         meta_organization: formState.meta_organization,
+        original_file_timestamp: timestamp,
         message_type: formState.message_type,
         route: formState.route,
         reporting_jurisdiction: formState.reporting_jurisdiction,
         system_provider: formState.system_provider,
-        orig_filename: formState.fileName,
-        original_file_name: formState.original_file_name || formState.fileName,
+        orig_filename: formState.filename,
+        original_file_name: formState.filename,
       },
       onError: function (error) {
         console.log("Failed because: " + error);
-        setUploadFeedback(`Upload failed: ${error.message}`);
+        setUploadFeedback([`Upload failed: ${error.message}`, "error"]);
       },
       onProgress: function (bytesUploaded, bytesTotal) {
         const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2);
-        setUploadFeedback(`Uploading: ${percentage}%`);
+        setUploadFeedback([`Uploading: ${percentage}%`, "info"]);
         console.log(bytesUploaded, bytesTotal, percentage + "%");
       },
       onSuccess: function () {
-        setUploadFeedback(`Upload successful: ${upload.file.name}`);
+        setUploadFeedback([
+          `Upload successful: ${upload.file.name}`,
+          "success",
+        ]);
       },
     });
 
@@ -358,28 +374,18 @@ function App() {
             });
           }}
         />
-        <label className="usa-label" htmlFor="original_file_name">
-          original_file_name
-        </label>
-        <input
-          className="usa-input"
-          id="original_file_name"
-          name="original_file_name"
-          onChange={(e) => {
-            dispatch({
-              type: "updateField",
-              field: "original_file_name",
-              payload: e.target.value,
-            });
-          }}
-        />
 
-        {uploadFeedback !== "" && (
+        {uploadFeedback[0] !== "" && (
           <div
             className="usa-summary-box width-mobile-lg"
             role="region"
             aria-labelledby="summary-box-key-information">
-            <div className="usa-summary-box__text">{uploadFeedback}</div>
+            <h3
+              class="usa-summary-box__heading"
+              id="summary-box-key-information">
+              Status:
+            </h3>
+            <div className="usa-summary-box__text">{uploadFeedback[0]}</div>
           </div>
         )}
         <Button
