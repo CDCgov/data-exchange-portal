@@ -49,7 +49,7 @@ const columnHelper = createColumnHelper<FileSubmission>();
 const columns = [
   columnHelper.display({
     id: "actions",
-    header: "Select all",
+    header: "",
     cell: (props) => <Checkbox />,
   }),
   columnHelper.accessor("fileName", {
@@ -58,7 +58,7 @@ const columns = [
   }),
   columnHelper.accessor("source", {
     header: "Source",
-    cell: (info) => info.getValue(),
+    cell: (info) => <span className="text-left">{info.getValue()}</span>,
   }),
   columnHelper.accessor("entity", {
     header: "Entity",
@@ -217,7 +217,7 @@ function Submissions() {
           {table.getRowModel().rows.map((row) => (
             <TableRow key={`table-row-${row.id}`}>
               {row.getVisibleCells().map((cell) => (
-                <TableDataCell key={cell.id} className="text-left">
+                <TableDataCell key={cell.id}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </TableDataCell>
               ))}
