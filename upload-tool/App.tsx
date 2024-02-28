@@ -8,6 +8,11 @@ import * as tus from "tus-js-client";
 
 import { getEnv } from "../src/utils";
 
+const DestionationsAndEvents: { [key: string]: Array<string> } = {
+  "aims-celr": ["csv", "hl7"],
+  daart: ["hl7"],
+};
+
 function App() {
   const fileTypes = [".csv", ".hl7", ".txt"];
 
@@ -31,6 +36,7 @@ function App() {
   };
 
   const [uploadFeedback, setUploadFeedback] = useState("");
+  const [eventItems, setEventItems] = useState<Array<string>>([]);
 
   function reducer(state, action) {
     switch (action.type) {
@@ -81,6 +87,7 @@ function App() {
         meta_ext_event: formState.event,
         meta_username: formState.meta_username,
         meta_ext_filestatus: formState.meta_ext_filestatus,
+        meta_ext_filename: formState.fileName,
         meta_program: formState.meta_program,
         meta_ext_source: formState.meta_ext_source,
         meta_organization: formState.meta_organization,
@@ -88,7 +95,8 @@ function App() {
         route: formState.route,
         reporting_jurisdiction: formState.reporting_jurisdiction,
         system_provider: formState.system_provider,
-        original_file_name: formState.original_file_name,
+        orig_filename: formState.fileName,
+        original_file_name: formState.original_file_name || formState.fileName,
       },
       onError: function (error) {
         console.log("Failed because: " + error);
@@ -166,13 +174,15 @@ function App() {
               id="destination"
               label="Destination"
               srText="Destination"
-              items={["aims-celr"]}
+              items={Object.keys(DestionationsAndEvents)}
               onSelect={(item) => {
                 dispatch({
                   type: "updateField",
                   field: "destination",
                   payload: item,
                 });
+
+                setEventItems(DestionationsAndEvents[item]);
               }}
             />
           </div>
@@ -184,7 +194,7 @@ function App() {
               id="event"
               label="Select Event"
               srText="Select Event"
-              items={["csv", "hl7"]}
+              items={eventItems}
               onSelect={(item) => {
                 dispatch({
                   type: "updateField",
