@@ -23,7 +23,7 @@ function Shell() {
   const menuItems: MenuItemType[] = [
     {
       badgeCount: 5,
-      icon: <Icons.Notifications hasBadge={true} />,
+      icon: <Icons.Bell hasBadge={true} />,
       className: "hide-on-mobile",
       srText: "Notifications button",
     },
@@ -37,14 +37,14 @@ function Shell() {
 
   const userProfilePopupMenuItems: PopupMenuItemType[] = [
     {
-      icon: <Icons.User />,
+      icon: <Icons.Person />,
       iconPosition: "left",
       text: "Your Profile",
       badgeCount: 0,
       onClick: () => navigate("/home/profile"),
     },
     {
-      icon: <Icons.Notifications hasBadge={true} />,
+      icon: <Icons.Bell hasBadge={true} />,
       iconPosition: "left",
       text: "Notifications",
       badgeCount: 1,
@@ -56,7 +56,7 @@ function Shell() {
       badgeCount: 0,
     },
     {
-      icon: <Icons.Logout />,
+      icon: <Icons.SquareHalfArrowRight />,
       iconPosition: "left",
       text: "Logout",
       badgeCount: 0,
@@ -80,19 +80,19 @@ function Shell() {
                 },
                 {
                   componentType: "a",
-                  icon: <Icons.Process />,
+                  icon: <Icons.ZigZag />,
                   text: "Process Status",
                   href: "/",
                 },
                 {
                   componentType: "a",
-                  icon: <Icons.Process />,
+                  icon: <Icons.ZigZag />,
                   text: "File Submissions",
                   href: "/home/submissions",
                 },
                 {
                   componentType: "a",
-                  icon: <Icons.Quality />,
+                  icon: <Icons.Star />,
                   text: "Quality",
                   href: "/",
                 },
@@ -103,7 +103,7 @@ function Shell() {
               items: [
                 {
                   componentType: "a",
-                  icon: <Icons.User />,
+                  icon: <Icons.Person />,
                   text: "Manage Users",
                   href: "/",
                 },
@@ -122,7 +122,7 @@ function Shell() {
                 },
                 {
                   componentType: "a",
-                  icon: <Icons.Logout />,
+                  icon: <Icons.SquareHalfArrowRight />,
                   text: "Logout",
                   href: "/logout",
                 },
