@@ -75,7 +75,9 @@ function Submissions() {
         </p>
       ) : (
         <>
-          <div className="text-base font-sans-sm">Showing 1-10 of 21 items</div>
+          <div className="text-base font-sans-sm">
+            Showing {allData.length} items
+          </div>
           <Table className="padding-y-3">
             <TableHead>
               <TableRow>
