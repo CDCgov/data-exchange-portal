@@ -54,7 +54,7 @@ function App() {
       "",
       "",
     ]);
-    const [events, setEvents] = useState<IEvents>();
+    const [events, setEventsDetail] = useState<IEventsDetail>();
 
     function reducer(state, action) {
       switch (action.type) {
@@ -214,7 +214,7 @@ function App() {
                     events: events,
                   };
 
-                  setEvents(detail);
+                  setEventsDetail(detail);
                 }}
               />
             </div>
