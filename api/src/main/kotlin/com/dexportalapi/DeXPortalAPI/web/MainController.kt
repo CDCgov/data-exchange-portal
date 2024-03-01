@@ -35,28 +35,22 @@ class MainController() {
     @GetMapping("/upload/status")
     suspend fun getDestinationStatusRequest(
             @RequestParam("destination") destination: String,
+            @RequestParam("date_start") date_start: String,
+            @RequestParam("page_number") page_number: String,
             @RequestHeader("Authorization") auth_token: String
     ): String {
-
         val supplemental_api_url: String = System.getenv("SUPPLEMENTAL_API_URL").toString()
-        val currentDate: LocalDate = LocalDate.now()
-        val currentDateMinusThirtyDays: LocalDate = currentDate.minusDays(30)
-
-        val dtf: DateTimeFormatter = DateTimeFormatter.ofPattern("uuu-MM-ddHH:mm:ss")
-        val formattedDate: String =
-                currentDateMinusThirtyDays.atStartOfDay().atOffset(ZoneOffset.UTC).format(dtf)
 
         val response =
                 webClient
                         .get()
                         .uri(
                                 supplemental_api_url +
-                                        "/status/destination/" +
+                                        "/api/upload/" +
                                         destination +
-                                        "?date_start=" +
-                                        formattedDate,
+                                        "?page_number=" + page_number + "&page_size=20"
                         )
-                        .header("Authorization", auth_token)
+                        .header("Authorization", "Bearer " + auth_token)
                         .retrieve()
                         .onStatus({ responseStatus ->
                             responseStatus == HttpStatus.INTERNAL_SERVER_ERROR
