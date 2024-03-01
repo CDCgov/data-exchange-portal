@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import { useAuth } from "react-oidc-context";
 
@@ -41,53 +41,52 @@ function Submissions() {
   const auth = useAuth();
 
   const [submissionsData, setSubmissionsData] = useState<ISubmissionsData>();
-  const [pageNumber, setPageNumber] = useState(1);
-  const [dateStart, setDateStart] = useState(new Date().toISOString());
-  const [destination, setDestination] = useState("dextesting");
+  // const [pageNumber, setPageNumber] = useState(1);
+  // const [dateStart, setDateStart] = useState(new Date().toISOString());
+  // const [destination, setDestination] = useState("");
   const [intialLoad, setIntialLoad] = useState(false);
 
   const submissionsDataEndpoint: string = getEnv("VITE_UPLOAD_STATUS_URL");
 
-  const retrieveSubmissions = async (
-    date_start: string,
-    destination: string,
-    page_number?: number
-  ) => {
-    const response = await fetch(
-      `${submissionsDataEndpoint}?destination=${destination}&date_start=${date_start}&page_number=${page_number}`,
-      {
-        method: "GET",
-        cache: "no-cache",
-        headers: {
-          Authorization: auth.user?.access_token || "",
-        },
-      }
-    );
+  const retrieveSubmissions = useCallback(
+    async (date_start: string, destination: string, page_number?: number) => {
+      const response = await fetch(
+        `${submissionsDataEndpoint}?destination=${destination}&date_start=${date_start}&page_number=${page_number}`,
+        {
+          method: "GET",
+          cache: "no-cache",
+          headers: {
+            Authorization: auth.user?.access_token || "",
+          },
+        }
+      );
 
-    const json: ISubmissionsData = await response.json();
+      const json: ISubmissionsData = await response.json();
 
-    const items = [];
+      // const items = [];
 
-    for (let index = 0; index < json.items.length; index++) {
-      let item = json?.items[index];
-      item.checked = false;
-      items.push(item);
-    }
+      // for (let index = 0; index < json.items.length; index++) {
+      //   let item = json?.items[index];
+      //   item.checked = false;
+      //   items.push(item);
+      // }
 
-    setSubmissionsData({
-      summary: json.summary,
-      items: items,
-    });
-    // setPageNumber(submissionsData?.summary.page_number || 1);
-    setIntialLoad(true);
-  };
+      setSubmissionsData({
+        summary: json.summary,
+        items: [],
+        // items: items || [],
+      });
+      // setPageNumber(submissionsData?.summary.page_number || 1);
+      setIntialLoad(true);
+    },
+    [auth, submissionsDataEndpoint]
+  );
 
   useEffect(() => {
     if (!intialLoad) {
-      retrieveSubmissions(dateStart, destination, pageNumber);
-      setIntialLoad(true);
+      // retrieveSubmissions(dateStart, destination, pageNumber);
     }
-  }, [submissionsData]);
+  }, [submissionsData, intialLoad, retrieveSubmissions]);
 
   return (
     <>
@@ -143,6 +142,7 @@ function Submissions() {
                       code: string;
                       target: { checked: boolean };
                     }) => {
+                      console.log("Accessible keydown", e);
                       // if (e?.code === "Enter") {
                       //   const arr: ISubmissionItem[] = [];
                       //   for (let i = 0; i < transformedData.length; i++) {
