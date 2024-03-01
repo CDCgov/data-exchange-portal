@@ -55,7 +55,7 @@ class DeXPortalApiApplicationTests(@Autowired private val mockMvc: MockMvc) {
     fun `get upload status with auth token`() {
         this.mockMvc
                 .perform(
-                        get("/upload/status?destination=test")
+                        get("/upload/status?destination=test&date_start=test&page_number=1")
                                 .header("Authorization", "testoken")
                                 .content("{}")
                 )
