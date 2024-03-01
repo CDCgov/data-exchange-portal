@@ -72,7 +72,10 @@ function App() {
 
     // This useEffect is to help with development
     useEffect(() => {
-      console.log("formState:", formState);
+      console.log(
+        "FormState(this is the payload that will be sent to the tus endpoint):",
+        formState
+      );
     }, [formState]);
 
     const handleFileSelection = () => {
@@ -207,6 +210,11 @@ function App() {
                     field: "destination",
                     payload: item,
                   });
+                  dispatch({
+                    type: "updateField",
+                    field: "event",
+                    payload: "",
+                  });
 
                   const events: Array<string> = DestionationsAndEvents[item];
                   const detail: IEventsDetail = {
@@ -215,6 +223,11 @@ function App() {
                   };
 
                   setEventsDetail(detail);
+
+                  // Hack to manually update the dropdown label
+                  document.querySelectorAll(
+                    '[aria-label="Select Event"] > .dropdown-label'
+                  )[0].textContent = "Select Events";
                 }}
               />
             </div>
