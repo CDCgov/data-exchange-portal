@@ -111,7 +111,9 @@ function Submissions() {
             </TableHead>
             <TableBody>
               {currentPageData.map((item, index) => (
-                <TableRow key={`table-row-${index}`}>
+                <TableRow key={`table-row-${item.tus_upload_id}`}>
+                  {" "}
+                  {/* Todo: Update this to use a more appropriate id as key */}
                   <TableDataCell size="md" className="flex-justify-center">
                     <Checkbox />
                   </TableDataCell>
