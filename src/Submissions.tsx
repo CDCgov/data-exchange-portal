@@ -38,6 +38,12 @@ function Submissions() {
     fetchCall();
   }, []);
 
+  const uploadStatusColor = (status: string) => {
+    if (status === "Uploading") return "busy";
+    if (status === "Uploaded") return "success";
+    if (status === "Failed") return "error";
+  };
+
   return (
     <section className="submissions_page bg-grey padding-x-2">
       <h3 className="padding-y-3">File Submissions</h3>
@@ -90,19 +96,7 @@ function Submissions() {
                     <span className="text-left">File Name</span>
                   </React.Fragment>
                 </TableHeader>
-                <TableHeader>
-                  <Icons.SortArrow className="sort-icon"></Icons.SortArrow>
-                  <span className="text-left">Source</span>
-                </TableHeader>
                 <TableHeader size="sm">
-                  <Icons.SortArrow className="sort-icon"></Icons.SortArrow>
-                  <span className="text-left">Entity</span>
-                </TableHeader>
-                <TableHeader size="sm">
-                  <Icons.SortArrow className="sort-icon"></Icons.SortArrow>
-                  <span className="text-left">Event</span>
-                </TableHeader>
-                <TableHeader>
                   <Icons.SortArrow className="sort-icon"></Icons.SortArrow>
                   <span className="text-left">Upload Status</span>
                 </TableHeader>
@@ -122,24 +116,18 @@ function Submissions() {
                     <Checkbox />
                   </TableDataCell>
                   <TableDataCell className="text-left">
-                    {item.fileName}
+                    {item.file_name}
                   </TableDataCell>
-                  <TableDataCell>{item.source}</TableDataCell>
-                  <TableDataCell size="sm">{item.entity}</TableDataCell>
-                  <TableDataCell size="sm" className="text-left">
-                    {item.event}
-                  </TableDataCell>
-                  <TableDataCell>
+                  <TableDataCell size="sm">
                     <Pill
-                      label={item.uploadStatus}
+                      label={item.status}
                       shape="slot"
                       outline={false}
                       inverse={false}
+                      color={uploadStatusColor(item.status)}
                     />
                   </TableDataCell>
-                  <TableDataCell size="md" className="flex-justify-center">
-                    {item.submitted}
-                  </TableDataCell>
+                  <TableDataCell size="md">{item.timestamp}</TableDataCell>
                   <TableDataCell size="sm">
                     <Icons.Dots />
                   </TableDataCell>
