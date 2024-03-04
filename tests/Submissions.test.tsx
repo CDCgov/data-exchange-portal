@@ -18,18 +18,16 @@ describe("Submissions page", () => {
   it("should show title", () => {
     render(
       withMockedAuthProvider(
-        withMemoryRouter(<Submissions />, "/home/dashboard", {
-          protected: true,
-        }),
+        withMemoryRouter(<Submissions />, "/dashboard", { protected: true }),
         createMockedAuthContext({ isAuthenticated: true, isLoading: false })
       )
     );
 
     expect(screen.getByText("File Submissions")).toBeInTheDocument();
     expect(screen.getByText("File Name")).toBeInTheDocument();
-    // expect(screen.getByText("Source")).toBeInTheDocument();
-    // expect(screen.getByText("Entity")).toBeInTheDocument();
-    // expect(screen.getByText("Event")).toBeInTheDocument();
+    expect(screen.getByText("Source")).toBeInTheDocument();
+    expect(screen.getByText("Entity")).toBeInTheDocument();
+    expect(screen.getByText("Event")).toBeInTheDocument();
     expect(screen.getByText("Upload Status")).toBeInTheDocument();
     expect(screen.getByText("Submitted")).toBeInTheDocument();
     expect(screen.getByText("Details")).toBeInTheDocument();
