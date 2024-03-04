@@ -110,7 +110,7 @@ function Submissions() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {currentPageData.map((item, index) => (
+              {currentPageData.map((item) => (
                 <TableRow key={`table-row-${item.tus_upload_id}`}>
                   {" "}
                   {/* Todo: Update this to use a more appropriate id as key */}
