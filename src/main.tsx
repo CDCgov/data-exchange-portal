@@ -22,10 +22,9 @@ const oidcConfig: AuthProviderProps = {
 };
 
 async function enableMocking() {
-  // Todo: make the mocking based off an env var
-  // if ("development" !== "development") {
-  //   return;
-  // }
+  if (!getEnv("VITE_DEV_MOCKING_ENABLED")) {
+    return;
+  }
 
   const { worker } = await import("./mocks/browser");
 
