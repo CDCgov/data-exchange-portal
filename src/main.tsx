@@ -22,10 +22,10 @@ const oidcConfig: AuthProviderProps = {
 };
 
 async function enableMocking() {
-  // needs to be based on env var
-  if ("development" !== "development") {
-    return;
-  }
+  // Todo: make the mocking based off an env var
+  // if ("development" !== "development") {
+  //   return;
+  // }
 
   const { worker } = await import("./mocks/browser");
 
