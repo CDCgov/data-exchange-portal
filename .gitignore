@@ -32,5 +32,6 @@ dist-ssr
 /test-results/
 /playwright-report/
 /playwright/.cache/
+vite.config.ts.timestamp*
 
 !.env.example
