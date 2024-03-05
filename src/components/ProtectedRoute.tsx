@@ -1,7 +1,7 @@
 import { PropsWithChildren, useEffect } from "react";
 import { useAuth, hasAuthParams } from "react-oidc-context";
 import { useNavigate } from "react-router-dom";
-import { getEnv } from "../utils";
+import { getEnv } from "../utils/helperFunctions/env";
 
 export function ProtectedRoute({ children }: PropsWithChildren) {
   const auth = useAuth();

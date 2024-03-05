@@ -3,7 +3,7 @@ import { Logo } from "./components/Logo";
 import styles from "./styles/Login.module.css";
 import { Button, Divider } from "@us-gov-cdc/cdc-react";
 import { useAuth } from "react-oidc-context";
-import { getEnv } from "./utils";
+import { getEnv } from "./utils/helperFunctions/env";
 
 export function Login() {
   const auth = useAuth();
