@@ -20,6 +20,9 @@ To set your front end environment variables, first make a file called `.env` in 
 - `VITE_SAMS_USER_INFO_URL` - This is the full URL of the SAMS API endpoint for getting user profile information in JSON format provided a valid authentication token. For our purposes, this is the data the portal uses to populate the user's profile components.
 - `VITE_OAUTH_TOKEN_URL` - This is the full URL of the endpoint that will exchange an auth code for a valid auth token and refresh token.
 - `VITE_OAUTH_CALLBACK_URL` - The URL that the SAMS client will redirect the client after a successful login attempt. It should have `/oauth_callback` set as its path to match the front end routing configuration of this app.
+- `VITE_UPLOAD_API_ENDPOINT` - The URL used by the 'ugly portal'
+- `VITE_API_BASE_URL` - The base URL pointing to the Kotlin api. All api routes will be configured off of this base in `src/config/api.ts`
+- `VITE_DEV_MOCKING_ENABLED` - A boolean that decides if Mock Service Worker (MSW) is enabled or not for local development (see section about MSW below)
 
 To set your backend environment variables, first make a file called `.vars` within the `api` directory. Next, add the following content to the file, filling in the environment variables with the appropriate values:
 
@@ -53,6 +56,14 @@ The backend code is written in Kotlin/Spring MVC. To start the api, run `./gradl
 We encourage TDD while making changes to this app. To run unit tests for the front end, simply run `yarn test` in the project root directory. These tests will be run as part of the acceptance criteria for a PR.
 
 To run unit tests for the back end, simply run `./gradlew test` in the project `api` directory. These tests will be run as part of the acceptance criteria for a PR.
+
+### Using Mock Service Worker for mocks and testing
+
+We are using Mock Service Worker(MSW) for making local development easier and more consistent. MSW is being used for both network call intercepts and mocks in unit/e2e tests.
+
+All of the configuration for MSW is in the `src/mocks/` directory. There is a setup file for the server MSW for testing and one for the browser for intercepting network calls. All mocked data will live in the `src/mocks/data` directory. All of the mocked routes and responses live in the `src/mocks/handlers.ts` file.
+
+To enable mocking of network calls, set the `VITE_DEV_MOCKING_ENABLED` env var to true.
 
 ## Manual Deployments to the Dev Environment
 
