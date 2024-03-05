@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { Login } from "../src/Login";
 import { createMockedAuthContext, withMockedAuthProvider } from "./helpers";
 import { vi } from "vitest";
-import * as Utils from "../src/utils";
+import * as Utils from "../src/utils/helperFunctions/env";
 
 vi.mock("react-oidc-context");
 
