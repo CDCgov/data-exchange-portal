@@ -1,4 +1,4 @@
-import { getEnv } from "../utils/helperFunctions/env";
+import { getEnv } from "src/utils/helperFunctions/env";
 
 const API_URL = getEnv("VITE_API_BASE_URL");
 

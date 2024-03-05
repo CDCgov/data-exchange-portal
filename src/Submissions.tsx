@@ -12,7 +12,7 @@ import {
   TableRow,
 } from "@us-gov-cdc/cdc-react";
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
-import getFileSubmissions from "./utils/api/fileSubmissions";
+import getFileSubmissions from "src/utils/api/fileSubmissions";
 
 function Submissions() {
   const pageLimit = 10;

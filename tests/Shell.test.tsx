@@ -1,11 +1,11 @@
 import { screen, render } from "@testing-library/react";
-import Shell from "../src/Shell";
+import Shell from "src/Shell";
 import { vi } from "vitest";
 import {
   createMockedAuthContext,
   withMemoryRouter,
   withMockedAuthProvider,
-} from "./helpers";
+} from "tests/helpers";
 
 vi.mock("react-oidc-context");
 

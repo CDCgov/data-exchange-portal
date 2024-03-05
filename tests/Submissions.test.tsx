@@ -1,5 +1,5 @@
 import { screen, render } from "@testing-library/react";
-import Submissions from "../src/Submissions";
+import Submissions from "src/Submissions";
 
 describe("Submissions page", () => {
   it("should show title", () => {
