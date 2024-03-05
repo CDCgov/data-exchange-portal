@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { Login } from "src/Login";
+import { Login } from "src/screens/Login";
 import { createMockedAuthContext, withMockedAuthProvider } from "tests/helpers";
 import { vi } from "vitest";
 import * as Utils from "src/utils/helperFunctions/env";

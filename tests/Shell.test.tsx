@@ -1,5 +1,5 @@
 import { screen, render } from "@testing-library/react";
-import Shell from "src/Shell";
+import Shell from "src/screens/Shell";
 import { vi } from "vitest";
 import {
   createMockedAuthContext,
