@@ -6,7 +6,9 @@ type EnvType =
   | "VITE_OAUTH_CALLBACK_URL"
   | "VITE_OAUTH_TOKEN_URL"
   | "VITE_APP_BUILD_NUMBER"
-  | "VITE_UPLOAD_API_ENDPOINT";
+  | "VITE_UPLOAD_API_ENDPOINT"
+  | "VITE_API_BASE_URL"
+  | "VITE_DEV_MOCKING_ENABLED";
 
 export function getEnv(name: EnvType): string {
   return import.meta.env[name] || "";
