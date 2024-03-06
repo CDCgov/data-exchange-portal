@@ -1,9 +1,10 @@
-FROM gradle AS build
+FROM docker.io/library/gradle AS build
+
 COPY ./ /home/gradle/src
 WORKDIR /home/gradle/src
 RUN gradle build
 
-FROM openjdk
+FROM docker.io/library/openjdk
 EXPOSE 4280
 COPY --from=build /home/gradle/src/build/libs/DeXPortalAPI-0.0.1-SNAPSHOT.jar /app/
 
