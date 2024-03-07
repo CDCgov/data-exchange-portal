@@ -39,13 +39,13 @@ class MainController() {
             @RequestParam("page_number") pageNumber: String,
             @RequestHeader("Authorization") authToken: String
     ): String {
-        val processingStatusAPIUrl: String = System.getenv("PROCESSING_STATUS_API_URL").toString()
+        val supplementalAPIUrl: String = System.getenv("SUPPLEMENTAL_API_URL").toString()
 
         val response =
                 webClient
                         .get()
                         .uri(
-                                processingStatusAPIUrl +
+                                supplementalAPIUrl +
                                         "/api/upload/" +
                                         dataStreamId +
                                         "?page_number=" + pageNumber + "&page_size=20"
@@ -67,12 +67,12 @@ class MainController() {
     @GetMapping("/upload/destination")
     suspend fun getDestinationRequest(@RequestHeader("Authorization") authToken: String): String {
 
-        val processingStatusAPIUrl: String = System.getenv("PROCESSING_STATUS_API_URL").toString()
+        val supplementalAPIUrl: String = System.getenv("SUPPLEMENTAL_API_URL").toString()
 
         val response =
                 webClient
                         .get()
-                        .uri(processingStatusAPIUrl + "/destination")
+                        .uri(supplementalAPIUrl + "/destination")
                         .header("Authorization", authToken)
                         .retrieve()
                         .onStatus({ responseStatus ->
