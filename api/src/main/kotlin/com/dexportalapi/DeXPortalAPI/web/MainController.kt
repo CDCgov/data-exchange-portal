@@ -32,25 +32,25 @@ class MainController() {
     }
 
     @CrossOrigin
-    @GetMapping("/upload/status")
+    @GetMapping("/fileSubmissions")
     suspend fun getDestinationStatusRequest(
-            @RequestParam("destination") destination: String,
-            @RequestParam("date_start") date_start: String,
-            @RequestParam("page_number") page_number: String,
-            @RequestHeader("Authorization") auth_token: String
+            @RequestParam("data_stream_id") dataStreamId: String,
+            @RequestParam("date_start") dateStart: String,
+            @RequestParam("page_number") pageNumber: String,
+            @RequestHeader("Authorization") authToken: String
     ): String {
-        val supplemental_api_url: String = System.getenv("SUPPLEMENTAL_API_URL").toString()
+        val supplementalAPIUrl: String = System.getenv("SUPPLEMENTAL_API_URL").toString()
 
         val response =
                 webClient
                         .get()
                         .uri(
-                                supplemental_api_url +
+                                supplementalAPIUrl +
                                         "/api/upload/" +
-                                        destination +
-                                        "?page_number=" + page_number + "&page_size=20"
+                                        dataStreamId +
+                                        "?page_number=" + pageNumber + "&page_size=20"
                         )
-                        .header("Authorization", "Bearer " + auth_token)
+                        .header("Authorization", authToken)
                         .retrieve()
                         .onStatus({ responseStatus ->
                             responseStatus == HttpStatus.INTERNAL_SERVER_ERROR
@@ -65,15 +65,15 @@ class MainController() {
 
     @CrossOrigin
     @GetMapping("/upload/destination")
-    suspend fun getDestinationRequest(@RequestHeader("Authorization") auth_token: String): String {
+    suspend fun getDestinationRequest(@RequestHeader("Authorization") authToken: String): String {
 
-        val supplemental_api_url: String = System.getenv("SUPPLEMENTAL_API_URL").toString()
+        val supplementalAPIUrl: String = System.getenv("SUPPLEMENTAL_API_URL").toString()
 
         val response =
                 webClient
                         .get()
-                        .uri(supplemental_api_url + "/destination")
-                        .header("Authorization", auth_token)
+                        .uri(supplementalAPIUrl + "/destination")
+                        .header("Authorization", authToken)
                         .retrieve()
                         .onStatus({ responseStatus ->
                             responseStatus == HttpStatus.INTERNAL_SERVER_ERROR
@@ -88,26 +88,26 @@ class MainController() {
 
     @CrossOrigin
     @PostMapping("/api/token")
-    suspend fun postAuthTokenRequest(@RequestParam("code") auth_code: String): String {
-        val sams_url: String = System.getenv("SAMS_URL").toString()
-        val client_id: String = System.getenv("SAMS_CLIENT_ID").toString()
-        val client_secret: String = System.getenv("SAMS_CLIENT_SECRET").toString()
-        val redirect_uri: String = System.getenv("SAMS_REDIRECT_URL").toString()
+    suspend fun postAuthTokenRequest(@RequestParam("code") authCode: String): String {
+        val samsUrl: String = System.getenv("SAMS_URL").toString()
+        val clientId: String = System.getenv("SAMS_CLIENT_ID").toString()
+        val clientSecret: String = System.getenv("SAMS_CLIENT_SECRET").toString()
+        val redirectURI: String = System.getenv("SAMS_REDIRECT_URL").toString()
 
-        val grant_type: String = "authorization_code"
+        val grantType: String = "authorization_code"
         val scope: String = "dex:status"
 
         val response =
                 webClient
                         .post()
-                        .uri(sams_url + "/auth/oauth/v2/token")
+                        .uri(samsUrl + "/auth/oauth/v2/token")
                         .contentType(APPLICATION_FORM_URLENCODED)
                         .body(
-                                BodyInserters.fromFormData("grant_type", grant_type)
-                                        .with("code", auth_code)
-                                        .with("client_id", client_id)
-                                        .with("client_secret", client_secret)
-                                        .with("redirect_uri", redirect_uri)
+                                BodyInserters.fromFormData("grant_type", grantType)
+                                        .with("code", authCode)
+                                        .with("client_id", clientId)
+                                        .with("client_secret", clientSecret)
+                                        .with("redirect_uri", redirectURI)
                                         .with("scope", scope)
                         )
                         .retrieve()
