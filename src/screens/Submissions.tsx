@@ -39,17 +39,10 @@ function Submissions() {
     fetchCall();
   }, []);
 
-  const uploadStatusColor = (status: string): string => {
-    switch (status) {
-      case "Uploading":
-        return "busy";
-      case "Uploaded":
-        return "success";
-      case "Failed":
-        return "error";
-      default:
-        return "";
-    }
+  const uploadStatusColor = (status: string) => {
+    if (status === "Uploading") return "busy";
+    if (status === "Uploaded") return "success";
+    if (status === "Failed") return "error";
   };
 
   return (
