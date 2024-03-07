@@ -18,7 +18,9 @@ describe("Shell", () => {
   it("should show sidebar", () => {
     render(
       withMockedAuthProvider(
-        withMemoryRouter(<Shell />, "/dashboard", { protected: true }),
+        withMemoryRouter(<Shell />, "/home/dashboard", {
+          protected: true,
+        }),
         createMockedAuthContext({ isAuthenticated: true, isLoading: false })
       )
     );

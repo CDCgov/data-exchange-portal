@@ -22,7 +22,7 @@ const oidcConfig: AuthProviderProps = {
 };
 
 async function enableMocking() {
-  if (!getEnv("VITE_DEV_MOCKING_ENABLED")) {
+  if (getEnv("VITE_DEV_MOCKING_ENABLED") == "false") {
     return;
   }
 
