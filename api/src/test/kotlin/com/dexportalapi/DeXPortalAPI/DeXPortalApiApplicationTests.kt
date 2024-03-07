@@ -22,7 +22,7 @@ class DeXPortalApiApplicationTests(@Autowired private val mockMvc: MockMvc) {
 
     @Test
     fun `get upload status 400`() {
-        this.mockMvc.get("/upload/status").andExpect { status { isBadRequest() } }
+        this.mockMvc.get("/fileSubmissions").andExpect { status { isBadRequest() } }
     }
 
     @Test
@@ -55,7 +55,7 @@ class DeXPortalApiApplicationTests(@Autowired private val mockMvc: MockMvc) {
     fun `get upload status with auth token`() {
         this.mockMvc
                 .perform(
-                        get("/upload/status?destination=test&date_start=test&page_number=1")
+                        get("/fileSubmissions?data_stream_id=test&date_start=test&page_number=1")
                                 .header("Authorization", "testoken")
                                 .content("{}")
                 )
