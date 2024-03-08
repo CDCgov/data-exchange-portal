@@ -97,13 +97,12 @@ This instance has a dev, staging, and production environment. Eventually, a CD p
 
 3. Finally, use the SWA CLI to execute the deployment to the dev environment. The first piece of information we need here is the deployment token. This is a secret value that validates that the user doing the deployment is authorized to do so. This can be retrieved from the Azure Static Web App instance overview page. Next, run the following command providing the deployment token:
 
-`swa deploy -a ./src -O ./dist -d ***** --env dev -w .`
+`swa deploy ./dist -d ***** --env dev -w .`
 
 Here's the summary of this command:
 
 - `swa deploy` This tells the CLI we are executing a deployment.
-- `-a` This tells the CLI where the source code is for the front-end site.
-- `-O` This is the argument flag for the built front-end code.
+- `./dist` This tells the CLI where the static site assets are for the front end site.
 - `-d` This is the argument flag for the deployment token.
 - `--env` This is the argument flag for the environment that will be deployed to. This must match the name of the environment in the instance.
 - `-w` This is the argument flag for the location of the JSON configuration file for the static web app. It should pick up `staticwebapp.config.json` file in the root of the project.

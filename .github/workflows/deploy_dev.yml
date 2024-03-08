@@ -45,7 +45,7 @@ jobs:
         working-directory: api
         run: npm run build
       - name: Deploy
-        run: swa deploy -a ./src -O ./dist -d ${{ secrets.AZURE_SWA_DEPLOY_TOKEN }} --env dev -w .
+        run: swa deploy ./dist -d ${{ secrets.AZURE_SWA_DEPLOY_TOKEN }} --env dev -w .
   e2e:
     needs: deploy
     name: "Run e2e regression tests"
