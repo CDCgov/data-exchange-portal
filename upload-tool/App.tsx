@@ -41,7 +41,7 @@ function App() {
       route: "",
       reporting_jurisdiction: "",
       system_provider: "",
-      original_file_name: "",
+      original_filename: "",
       original_file_timestamp: "",
       meta_ext_file_timestamp: "",
       meta_ext_objectkey: "",
@@ -112,6 +112,8 @@ function App() {
           meta_ext_filestatus: formState.meta_ext_filestatus,
           meta_ext_filename: formState.filename,
           meta_ext_file_timestamp: timestamp,
+          meta_ext_objectkey: formState.meta_ext_objectkey,
+          meta_ext_uploadid: formState.meta_ext_uploadid,
           meta_file_timestamp: timestamp,
           meta_program: formState.meta_program,
           meta_ext_source: formState.meta_ext_source,
@@ -122,7 +124,7 @@ function App() {
           reporting_jurisdiction: formState.reporting_jurisdiction,
           system_provider: formState.system_provider,
           orig_filename: formState.filename,
-          original_file_name: formState.filename,
+          original_filename: formState.filename,
         },
         onError: function (error) {
           console.log("Failed because: " + error);
