@@ -5,6 +5,8 @@ import "src/index.css";
 import { AuthProvider, AuthProviderProps } from "react-oidc-context";
 import { getEnv } from "src/utils/helperFunctions/env";
 
+import API_ENDPOINTS from "src/config/api";
+
 const oidcConfig: AuthProviderProps = {
   authority: getEnv("VITE_SAMS_AUTHORITY_URL"),
   client_id: getEnv("VITE_SAMS_CLIENT_ID"),
@@ -15,7 +17,7 @@ const oidcConfig: AuthProviderProps = {
   loadUserInfo: true,
   metadata: {
     authorization_endpoint: getEnv("VITE_SAMS_AUTH_URL"),
-    token_endpoint: getEnv("VITE_OAUTH_TOKEN_URL"),
+    token_endpoint: API_ENDPOINTS.tokenCallback,
     issuer: getEnv("VITE_SAMS_AUTHORITY_URL"),
     userinfo_endpoint: getEnv("VITE_SAMS_USER_INFO_URL"),
   },
