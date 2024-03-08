@@ -1,7 +1,7 @@
 import { screen, render } from "@testing-library/react";
 import { vi } from "vitest";
 
-import Submissions from "../src/Submissions";
+import Submissions from "src/screens/Submissions";
 import {
   createMockedAuthContext,
   withMemoryRouter,

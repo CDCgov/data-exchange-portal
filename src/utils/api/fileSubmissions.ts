@@ -1,4 +1,4 @@
-import API_ENDPOINTS from "../../config/api";
+import API_ENDPOINTS from "src/config/api";
 
 export const getFileSubmissions = async (
   access_token?: string,

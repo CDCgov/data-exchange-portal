@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App.tsx";
-import "./index.css";
+import App from "src/App";
+import "src/index.css";
 import { AuthProvider, AuthProviderProps } from "react-oidc-context";
-import { getEnv } from "./utils/helperFunctions/env";
+import { getEnv } from "src/utils/helperFunctions/env";
 
 const oidcConfig: AuthProviderProps = {
   authority: getEnv("VITE_SAMS_AUTHORITY_URL"),

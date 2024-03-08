@@ -3,7 +3,7 @@ import {
   PopupMenuItemType,
 } from "@us-gov-cdc/cdc-react/dist/src/@types";
 
-import dexLogo from "./assets/dex_logo.svg";
+import dexLogo from "src/assets/dex_logo.svg";
 
 import {
   ProfileHeader,

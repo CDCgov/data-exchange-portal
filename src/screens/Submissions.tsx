@@ -12,7 +12,7 @@ import {
   TableRow,
 } from "@us-gov-cdc/cdc-react";
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
-import getFileSubmissions from "./utils/api/fileSubmissions";
+import getFileSubmissions from "src/utils/api/fileSubmissions";
 import { useAuth } from "react-oidc-context";
 
 function Submissions() {
@@ -30,6 +30,7 @@ function Submissions() {
         1
       );
 
+      // TODO: add UI feedback for failed fileSubmission retrieval
       if (res.status != 200) return;
 
       try {

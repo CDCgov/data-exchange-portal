@@ -1,6 +1,6 @@
 import "@us-gov-cdc/cdc-react/dist/style.css";
 
-import "./App.css";
+import "src/App.css";
 
 import {
   BrowserRouter as Router,
@@ -8,15 +8,15 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
-import Shell from "./Shell";
-import Login from "./Login";
-import Callback from "./Callback";
-import Dashboard from "./Dashboard";
-import Logout from "./Logout";
-import Profile from "./Profile";
-import Submissions from "./Submissions";
+import Shell from "src/screens/Shell";
+import Login from "src/screens/Login";
+import Callback from "src/components/Callback";
+import Logout from "src/components/Logout";
+import Dashboard from "src/screens/Dashboard";
+import Profile from "src/screens/Profile";
+import Submissions from "src/screens/Submissions";
 
-import { ProtectedRoute } from "./components/ProtectedRoute";
+import { ProtectedRoute } from "src/components/ProtectedRoute";
 
 function App() {
   return (

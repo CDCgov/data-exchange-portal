@@ -1,9 +1,9 @@
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
-import { Logo } from "./components/Logo";
-import styles from "./styles/Login.module.css";
+import { Logo } from "src/components/Logo";
+import styles from "src/styles/Login.module.css";
 import { Button, Divider } from "@us-gov-cdc/cdc-react";
 import { useAuth } from "react-oidc-context";
-import { getEnv } from "./utils/helperFunctions/env";
+import { getEnv } from "src/utils/helperFunctions/env";
 
 export function Login() {
   const auth = useAuth();

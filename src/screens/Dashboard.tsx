@@ -1,4 +1,4 @@
-import styles from "./styles/Dashboard.module.css";
+import styles from "src/styles/Dashboard.module.css";
 
 import { useAuth } from "react-oidc-context";
 
