@@ -20,9 +20,6 @@ jobs:
         run: yarn global add @azure/static-web-apps-cli
       - name: Install frontend dependencies
         run: yarn install
-      - name: Install API dependencies
-        working-directory: api
-        run: npm install --production
       - name: Generate build number
         id: gen_build_number
         run: |
