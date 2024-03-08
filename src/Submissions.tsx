@@ -13,15 +13,22 @@ import {
 } from "@us-gov-cdc/cdc-react";
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
 import getFileSubmissions from "./utils/api/fileSubmissions";
+import { useAuth } from "react-oidc-context";
 
 function Submissions() {
+  const auth = useAuth();
   const pageLimit = 10;
   const [currentPageData, setCurrentPageData] = useState([]);
   const [allData, setAllData] = useState([]);
 
   useEffect(() => {
     const fetchCall = async () => {
-      const res = await getFileSubmissions();
+      const res = await getFileSubmissions(
+        auth.user?.access_token || "",
+        "",
+        new Date().toISOString(), // TODO: Map to date selection dropdown
+        1
+      );
 
       if (res.status != 200) return;
 
@@ -36,7 +43,7 @@ function Submissions() {
       }
     };
     fetchCall();
-  }, []);
+  }, [auth]);
 
   const uploadStatusColor = (status: string) => {
     if (status === "Uploading") return "busy";
