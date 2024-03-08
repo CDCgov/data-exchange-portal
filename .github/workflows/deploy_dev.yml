@@ -38,9 +38,6 @@ jobs:
           echo VITE_APP_BUILD_NUMBER=${{ steps.gen_build_number.outputs.build_number }} >> .env.dev
       - name: Build frontend
         run: yarn build:dev
-      - name: Build API
-        working-directory: api
-        run: npm run build
       - name: Deploy
         run: swa deploy ./dist -d ${{ secrets.AZURE_SWA_DEPLOY_TOKEN }} --env dev -w .
   e2e:

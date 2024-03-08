@@ -1,3 +1,5 @@
+import { IFileSubmission } from "@types";
+
 import React, { useEffect, useState } from "react";
 import {
   Checkbox,
@@ -12,13 +14,14 @@ import {
   TableRow,
 } from "@us-gov-cdc/cdc-react";
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
+
 import getFileSubmissions from "src/utils/api/fileSubmissions";
 import { useAuth } from "react-oidc-context";
 
 function Submissions() {
   const auth = useAuth();
   const pageLimit = 10;
-  const [currentPageData, setCurrentPageData] = useState([]);
+  const [currentPageData, setCurrentPageData] = useState<IFileSubmission[]>([]);
   const [allData, setAllData] = useState([]);
 
   useEffect(() => {
@@ -118,7 +121,7 @@ function Submissions() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {currentPageData.map((item) => (
+              {currentPageData.map((item: IFileSubmission) => (
                 <TableRow key={`table-row-${item.tus_upload_id}`}>
                   {" "}
                   {/* Todo: Update this to use a more appropriate id as key */}
@@ -145,11 +148,7 @@ function Submissions() {
               ))}
             </TableBody>
           </Table>
-          <TablePagination
-            pageLimit={pageLimit}
-            data={allData}
-            setPageData={setCurrentPageData}
-          />
+          <TablePagination pageLimit={pageLimit} data={allData} />
         </>
       )}
     </section>
