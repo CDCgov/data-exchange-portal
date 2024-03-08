@@ -37,7 +37,7 @@ jobs:
           echo VITE_SAMS_AUTH_URL=https://apigw-stg.cdc.gov:8443/auth/oauth/v2/authorize >> .env.dev
           echo VITE_SAMS_USER_INFO_URL=https://apigw-stg.cdc.gov:8443/openid/connect/v1/userinfo >> .env.dev
           echo VITE_OAUTH_CALLBACK_URL=https://dexdev.cdc.gov/oauth_callback >> .env.dev
-          echo VITE_OAUTH_TOKEN_URL=https://dexdev.cdc.gov/api/token >> .env.dev
+          echo VITE_API_BASE_URL=https://ede-dev-portal-api.azurewebsites.net >> .env.dev
           echo VITE_APP_BUILD_NUMBER=${{ steps.gen_build_number.outputs.build_number }} >> .env.dev
       - name: Build frontend
         run: yarn build:dev
@@ -45,7 +45,7 @@ jobs:
         working-directory: api
         run: npm run build
       - name: Deploy
-        run: swa deploy ./dist --api-location ./api -d ${{ secrets.AZURE_SWA_DEPLOY_TOKEN }} --api-language node --api-version 18 --env dev -w .
+        run: swa deploy -a ./src -O ./dist -d ${{ secrets.AZURE_SWA_DEPLOY_TOKEN }} --env dev -w .
   e2e:
     needs: deploy
     name: "Run e2e regression tests"
