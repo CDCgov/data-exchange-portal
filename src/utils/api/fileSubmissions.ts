@@ -4,7 +4,11 @@ export const getFileSubmissions = async (
   access_token?: string,
   data_stream_id?: string,
   date_start?: string,
-  page_number?: number
+  date_end?: string,
+  sort_by?: string,
+  sort_order?: string,
+  page_number?: number,
+  page_size?: number
 ): Promise<Response> => {
   const response = await fetch(
     `${API_ENDPOINTS.fileSubmissions}?data_stream_id=${data_stream_id}&date_start=${date_start}&page_number=${page_number}`,
