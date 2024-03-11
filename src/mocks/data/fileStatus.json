@@ -16,10 +16,10 @@
         }
       ],
       "percent_complete": 0.65,
-      "file_name": "largefile.csv",
+      "filename": "largefile.csv",
       "file_size_bytes": 190840042,
       "bytes_uploaded": 124046027,
-      "tus_upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
+      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
       "metadata": [{ "key": "string", "value": "string" }]
@@ -34,10 +34,10 @@
         }
       ],
       "percent_complete": 0.65,
-      "file_name": "data123.csv",
+      "filename": "data123.csv",
       "file_size_bytes": 190840042,
       "bytes_uploaded": 124046027,
-      "tus_upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
+      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
       "metadata": [{ "key": "string", "value": "string" }]
@@ -52,10 +52,10 @@
         }
       ],
       "percent_complete": 0.65,
-      "file_name": "bulkdata.csv",
+      "filename": "bulkdata.csv",
       "file_size_bytes": 190840042,
       "bytes_uploaded": 124046027,
-      "tus_upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
+      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
       "metadata": [{ "key": "string", "value": "string" }]
@@ -70,10 +70,10 @@
         }
       ],
       "percent_complete": 0.65,
-      "file_name": "largefile.csv",
+      "filename": "largefile.csv",
       "file_size_bytes": 190840042,
       "bytes_uploaded": 124046027,
-      "tus_upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
+      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
       "metadata": [{ "key": "string", "value": "string" }]
@@ -88,10 +88,10 @@
         }
       ],
       "percent_complete": 0.65,
-      "file_name": "data.csv",
+      "filename": "data.csv",
       "file_size_bytes": 190840042,
       "bytes_uploaded": 124046027,
-      "tus_upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
+      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
       "metadata": [{ "key": "string", "value": "string" }]
@@ -106,10 +106,10 @@
         }
       ],
       "percent_complete": 0.65,
-      "file_name": "dataabc.csv",
+      "filename": "dataabc.csv",
       "file_size_bytes": 190840042,
       "bytes_uploaded": 124046027,
-      "tus_upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
+      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
       "metadata": [{ "key": "string", "value": "string" }]
@@ -124,10 +124,10 @@
         }
       ],
       "percent_complete": 0.65,
-      "file_name": "extra.csv",
+      "filename": "extra.csv",
       "file_size_bytes": 190840042,
       "bytes_uploaded": 124046027,
-      "tus_upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
+      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
       "metadata": [{ "key": "string", "value": "string" }]
@@ -142,10 +142,10 @@
         }
       ],
       "percent_complete": 0.65,
-      "file_name": "batch.csv",
+      "filename": "batch.csv",
       "file_size_bytes": 190840042,
       "bytes_uploaded": 124046027,
-      "tus_upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
+      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
       "metadata": [{ "key": "string", "value": "string" }]
@@ -160,10 +160,10 @@
         }
       ],
       "percent_complete": 0.65,
-      "file_name": "largefile.csv",
+      "filename": "largefile.csv",
       "file_size_bytes": 190840042,
       "bytes_uploaded": 124046027,
-      "tus_upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
+      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
       "metadata": [{ "key": "string", "value": "string" }]
@@ -178,10 +178,10 @@
         }
       ],
       "percent_complete": 0.65,
-      "file_name": "extrabatch.csv",
+      "filename": "extrabatch.csv",
       "file_size_bytes": 190840042,
       "bytes_uploaded": 124046027,
-      "tus_upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
+      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
       "metadata": [{ "key": "string", "value": "string" }]
@@ -196,10 +196,10 @@
         }
       ],
       "percent_complete": 0.65,
-      "file_name": "batch.csv",
+      "filename": "batch.csv",
       "file_size_bytes": 190840042,
       "bytes_uploaded": 124046027,
-      "tus_upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
+      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
       "metadata": [{ "key": "string", "value": "string" }]
@@ -214,10 +214,10 @@
         }
       ],
       "percent_complete": 0.65,
-      "file_name": "file123.csv",
+      "filename": "file123.csv",
       "file_size_bytes": 190840042,
       "bytes_uploaded": 124046027,
-      "tus_upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
+      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
       "metadata": [{ "key": "string", "value": "string" }]
@@ -232,10 +232,10 @@
         }
       ],
       "percent_complete": 0.65,
-      "file_name": "data456.csv",
+      "filename": "data456.csv",
       "file_size_bytes": 190840042,
       "bytes_uploaded": 124046027,
-      "tus_upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
+      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
       "metadata": [{ "key": "string", "value": "string" }]
@@ -250,10 +250,10 @@
         }
       ],
       "percent_complete": 0.65,
-      "file_name": "datalarge.csv",
+      "filename": "datalarge.csv",
       "file_size_bytes": 190840042,
       "bytes_uploaded": 124046027,
-      "tus_upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
+      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
       "metadata": [{ "key": "string", "value": "string" }]
@@ -268,10 +268,10 @@
         }
       ],
       "percent_complete": 0.65,
-      "file_name": "export.csv",
+      "filename": "export.csv",
       "file_size_bytes": 190840042,
       "bytes_uploaded": 124046027,
-      "tus_upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
+      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
       "metadata": [{ "key": "string", "value": "string" }]
@@ -286,10 +286,10 @@
         }
       ],
       "percent_complete": 0.65,
-      "file_name": "results.csv",
+      "filename": "results.csv",
       "file_size_bytes": 190840042,
       "bytes_uploaded": 124046027,
-      "tus_upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
+      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
       "metadata": [{ "key": "string", "value": "string" }]
@@ -304,10 +304,10 @@
         }
       ],
       "percent_complete": 0.65,
-      "file_name": "fieldquery.csv",
+      "filename": "fieldquery.csv",
       "file_size_bytes": 190840042,
       "bytes_uploaded": 124046027,
-      "tus_upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
+      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
       "metadata": [{ "key": "string", "value": "string" }]
@@ -322,10 +322,10 @@
         }
       ],
       "percent_complete": 0.65,
-      "file_name": "largefile.csv",
+      "filename": "largefile.csv",
       "file_size_bytes": 190840042,
       "bytes_uploaded": 124046027,
-      "tus_upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
+      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
       "metadata": [{ "key": "string", "value": "string" }]
@@ -340,10 +340,10 @@
         }
       ],
       "percent_complete": 0.65,
-      "file_name": "medium.csv",
+      "filename": "medium.csv",
       "file_size_bytes": 190840042,
       "bytes_uploaded": 124046027,
-      "tus_upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
+      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
       "metadata": [{ "key": "string", "value": "string" }]
@@ -358,10 +358,10 @@
         }
       ],
       "percent_complete": 0.65,
-      "file_name": "formatted.csv",
+      "filename": "formatted.csv",
       "file_size_bytes": 190840042,
       "bytes_uploaded": 124046027,
-      "tus_upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
+      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
       "metadata": [{ "key": "string", "value": "string" }]
