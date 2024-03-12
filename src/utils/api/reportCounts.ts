@@ -26,5 +26,3 @@ export const getReportCounts = async (
 
   return response;
 };
-
-export default getReportCounts;

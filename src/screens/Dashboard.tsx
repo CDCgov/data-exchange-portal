@@ -5,9 +5,33 @@ import { useAuth } from "react-oidc-context";
 import { Button } from "@us-gov-cdc/cdc-react";
 
 import PieChart from "src/components/PieChart";
+import { useEffect, useState } from "react";
+import { getReportCounts } from "src/utils/api/reportCounts";
 
 function Dashboard() {
   const auth = useAuth();
+  const [countsData, setCountsData] = useState([]);
+
+  useEffect(() => {
+    const fetchCall = async () => {
+      const res = await getReportCounts(
+        auth.user?.access_token || "",
+        "temp_data_stream_id",
+        "temp_data_stream_route"
+      );
+
+      // TODO: add UI feedback for failed report counts retrieval
+      if (res.status != 200) return;
+
+      try {
+        const data = await res.json();
+        setCountsData(data);
+      } catch (error) {
+        console.error("Failed to parse JSON:", error);
+      }
+    };
+    fetchCall();
+  }, [auth]);
 
   return (
     <section className="main_content">
@@ -29,40 +53,7 @@ function Dashboard() {
           Learn more
         </Button>
       </div>
-      <PieChart
-        data={[
-          {
-            id: "hack",
-            label: "hack",
-            value: 274,
-            color: "hsl(88, 70%, 50%)",
-          },
-          {
-            id: "make",
-            label: "make",
-            value: 483,
-            color: "hsl(158, 70%, 50%)",
-          },
-          {
-            id: "elixir",
-            label: "elixir",
-            value: 127,
-            color: "hsl(51, 70%, 50%)",
-          },
-          {
-            id: "go",
-            label: "go",
-            value: 458,
-            color: "hsl(71, 70%, 50%)",
-          },
-          {
-            id: "sass",
-            label: "sass",
-            value: 78,
-            color: "hsl(94, 70%, 50%)",
-          },
-        ]}
-      />
+      <PieChart data={countsData} />
     </section>
   );
 }

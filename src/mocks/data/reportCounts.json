@@ -1,0 +1,22 @@
+[
+  {
+    "id": "upload_complete",
+    "label": "UploadedComplete",
+    "value": 41
+  },
+  {
+    "id": "uploading",
+    "label": "Uploading",
+    "value": 6
+  },
+  {
+    "id": "failed_metadata",
+    "label": "FailedMetadata",
+    "value": 5
+  },
+  {
+    "id": "structural_validation",
+    "label": "StructuralValidation",
+    "value": 5
+  }
+]
