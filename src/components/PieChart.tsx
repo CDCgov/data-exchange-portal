@@ -1,15 +1,27 @@
-import React from "react";
+import { useState } from "react";
 
 import styles from "src/styles/PieChart.module.css";
 
 import { Pie } from "@nivo/pie";
 
-import { Card, Pill } from "@us-gov-cdc/cdc-react";
+import { Pill } from "@us-gov-cdc/cdc-react";
+import { Icons } from "@us-gov-cdc/cdc-react-icons";
 
-function PieChart({ data }) {
-  const CenteredMetric = ({ dataWithArc, centerX, centerY }) => {
+interface PieData {
+  id: string;
+  label: string;
+  value: number;
+}
+
+interface PropTypes {
+  data: PieData[];
+}
+
+function PieChart({ data }: PropTypes) {
+  // Todo: Determine types for dataWithArc, centerX, centerY, datum
+  const CenteredMetric = ({ dataWithArc, centerX, centerY }: any) => {
     let total = 0;
-    dataWithArc.forEach((datum) => {
+    dataWithArc.forEach((datum: any) => {
       total += datum.value;
     });
 
@@ -49,62 +61,22 @@ function PieChart({ data }) {
           <Pie
             data={data}
             height={400}
-            width={460}
-            margin={{ top: 40, right: 80, bottom: 80, left: 100 }}
+            width={500}
+            margin={{ top: 65, right: 80, bottom: 65, left: 80 }}
             innerRadius={0.75}
-            padAngle={0.7}
-            cornerRadius={0}
-            activeOuterRadiusOffset={8}
-            borderWidth={1}
-            borderColor={{
-              from: "color",
-              modifiers: [["darker", 0.2]],
-            }}
-            layers={[
-              "arcs",
-              "arcLabels",
-              "arcLinkLabels",
-              "legends",
-              CenteredMetric,
-            ]}
+            padAngle={0.75}
+            layers={["arcs", "arcLinkLabels", "legends", CenteredMetric]}
+            startAngle={360}
+            endAngle={0}
             enableArcLinkLabels={true}
             isInteractive={true}
-            arcLinkLabelsSkipAngle={10}
-            arcLinkLabelsTextColor="#333333"
-            arcLinkLabelsThickness={2}
-            arcLinkLabelsColor={{ from: "color" }}
-            arcLabelsSkipAngle={10}
-            arcLabelsComponent={({ datum, label, style }) => (
-              <div style={{ pointerEvents: "none" }}>
-                <circle fill={style.textColor} cy={6} r={15} />
-                <circle
-                  fill="#ffffff"
-                  stroke={datum.color}
-                  strokeWidth={2}
-                  r={16}
-                />
-                <text
-                  textAnchor="middle"
-                  dominantBaseline="central"
-                  fill={style.textColor}
-                  style={{
-                    fontSize: 10,
-                    fontWeight: 800,
-                  }}>
-                  Hey
-                </text>
-              </div>
-            )}
-            arcLabelsTextColor={{
-              from: "color",
-              modifiers: [["darker", 2]],
-            }}
+            colors={{ scheme: "purples" }}
             defs={[
               {
                 id: "dots",
                 type: "patternDots",
                 background: "inherit",
-                color: "rgba(255, 255, 255, 0.3)",
+                color: "black",
                 size: 4,
                 padding: 1,
                 stagger: true,
@@ -113,7 +85,7 @@ function PieChart({ data }) {
                 id: "lines",
                 type: "patternLines",
                 background: "inherit",
-                color: "rgba(255, 255, 255, 0.3)",
+                color: "black",
                 rotation: -45,
                 lineWidth: 6,
                 spacing: 10,
@@ -122,127 +94,56 @@ function PieChart({ data }) {
             fill={[
               {
                 match: {
-                  id: "ruby",
-                },
-                id: "dots",
-              },
-              {
-                match: {
-                  id: "c",
-                },
-                id: "dots",
-              },
-              {
-                match: {
-                  id: "go",
-                },
-                id: "dots",
-              },
-              {
-                match: {
-                  id: "python",
-                },
-                id: "dots",
-              },
-              {
-                match: {
-                  id: "scala",
+                  id: "upload_complete",
                 },
                 id: "lines",
               },
               {
                 match: {
-                  id: "lisp",
+                  id: "uploading",
+                },
+                id: "dots",
+              },
+              {
+                match: {
+                  id: "failed_metadata",
                 },
                 id: "lines",
               },
               {
                 match: {
-                  id: "elixir",
+                  id: "structural_validation",
                 },
-                id: "lines",
-              },
-              {
-                match: {
-                  id: "javascript",
-                },
-                id: "lines",
+                id: "dots",
               },
             ]}
           />
           <div className={styles["pie-chart-legend"]}>
-            <table className="Table">
+            <table>
               {/* Todo: Need to figure out Accessibility of tables without table heads */}
               {/* <thead>
                 <tr>
-                  <th>Color</th>
-                  <th>ID</th>
-                  <th>Value</th>
-                  <th>Formatted Value</th>
-                  <th>Label</th>
+                  <th>Status</th>
+                  <th>Count</th>
+                  <th>Percent</th>
+                  <th>Details</th>
                 </tr>
               </thead> */}
               <tbody>
-                <tr key={123}>
-                  <td>
-                    <Pill label="Uploaded" />
-                  </td>
-                  <td>
-                    <em>41</em>
-                  </td>
-                  <td>
-                    <em>71.9%</em>
-                  </td>
-                  <td>...</td>
-                </tr>
-                <tr key={123}>
-                  <td>
-                    <Pill label="Uploaded" />
-                  </td>
-                  <td>
-                    <em>41</em>
-                  </td>
-                  <td>
-                    <em>71.9%</em>
-                  </td>
-                  <td>...</td>
-                </tr>
-                <tr key={123}>
-                  <td>
-                    <Pill label="Uploaded" />
-                  </td>
-                  <td>
-                    <em>41</em>
-                  </td>
-                  <td>
-                    <em>71.9%</em>
-                  </td>
-                  <td>...</td>
-                </tr>
-                <tr key={123}>
-                  <td>
-                    <Pill label="Uploaded" />
-                  </td>
-                  <td>
-                    <em>41</em>
-                  </td>
-                  <td>
-                    <em>71.9%</em>
-                  </td>
-                  <td>...</td>
-                </tr>
-                <tr key={123}>
-                  <td>
-                    <Pill label="Uploaded" />
-                  </td>
-                  <td>
-                    <em>41</em>
-                  </td>
-                  <td>
-                    <em>71.9%</em>
-                  </td>
-                  <td>...</td>
-                </tr>
+                {data.map((item) => {
+                  return (
+                    <tr key={item.id}>
+                      <td>
+                        <Pill label="Uploaded" />
+                      </td>
+                      <td>{item.value}</td>
+                      <td>{item.label}</td>
+                      <td>
+                        <Icons.Dots />
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

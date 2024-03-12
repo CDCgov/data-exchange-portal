@@ -21,13 +21,19 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-bottom: 2rem;
+}
+
+.pie-chart-legend {
 }
 
 .pie-chart-legend table {
   border-collapse: collapse;
+  width: 400px;
 }
-.pie-chart-legend table tbody tr {
-  padding: 12px, 0px, 12px, 0px;
+.pie-chart-legend table tbody tr td {
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .pie-chart-legend table tbody tr:not(:last-child) {
