@@ -7,12 +7,10 @@ export const handlers = [
     const url = new URL(request.url);
     const dataStreamId = url.searchParams.get("data_stream_id");
 
-    // bad request wihtout data_stream_id
     if (!dataStreamId) {
       return new HttpResponse(null, { status: 400 });
     }
 
-    // call successful
     return HttpResponse.json(mockFileSubmissions);
   }),
 ];
