@@ -2,8 +2,8 @@ import API_ENDPOINTS from "src/config/api";
 
 export const getReportCounts = async (
   access_token: string,
-  data_stream_id?: string,
-  data_stream_route?: string,
+  data_stream_id: string,
+  data_stream_route: string,
   date_start?: string,
   date_end?: string
 ): Promise<Response> => {
