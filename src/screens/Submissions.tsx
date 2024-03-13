@@ -16,6 +16,8 @@ import {
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
 
 import { getFileSubmissions } from "src/utils/api/fileSubmissions";
+import { getCounts } from "src/utils/api/counts";
+
 import { useAuth } from "react-oidc-context";
 
 function Submissions() {
@@ -25,10 +27,10 @@ function Submissions() {
   const [allData, setAllData] = useState([]);
 
   useEffect(() => {
-    const fetchCall = async () => {
+    const fetchCallFileSubmissions = async () => {
       const res = await getFileSubmissions(
         auth.user?.access_token || "",
-        "",
+        "dextesting",
         new Date().toISOString(), // TODO: Map to date selection dropdown
         1
       );
@@ -46,7 +48,32 @@ function Submissions() {
         console.error("Failed to parse JSON:", error);
       }
     };
-    fetchCall();
+
+    const fetchCallCounts = async () => {
+      const res = await getCounts(
+        auth.user?.access_token || "",
+        "dextesting",
+        "routineImmunization",
+        new Date().toISOString(), // TODO: Map to date selection dropdown
+        "test-event1"
+      );
+
+      // TODO: add UI feedback for failed fileSubmission retrieval
+      if (res.status != 200) return;
+
+      try {
+        const data = await res.json();
+        // This needs to be set for initial data to be displayed in table
+        setCurrentPageData(data.slice(0, pageLimit));
+        setAllData(data);
+        console.log("data:", data);
+      } catch (error) {
+        console.error("Failed to parse JSON:", error);
+      }
+    };
+
+    fetchCallFileSubmissions();
+    fetchCallCounts();
   }, [auth]);
 
   const uploadStatusColor = (status: string) => {
