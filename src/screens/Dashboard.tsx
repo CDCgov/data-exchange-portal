@@ -6,11 +6,14 @@ import { Button } from "@us-gov-cdc/cdc-react";
 
 import PieChart from "src/components/PieChart";
 import { useEffect, useState } from "react";
-import { getReportCounts } from "src/utils/api/reportCounts";
+import { getReportCounts, ReportCounts } from "src/utils/api/reportCounts";
 
 function Dashboard() {
   const auth = useAuth();
-  const [countsData, setCountsData] = useState([]);
+  const [countsData, setCountsData] = useState<ReportCounts>({
+    totalCounts: 0,
+    reportCounts: [],
+  });
 
   useEffect(() => {
     const fetchCall = async () => {
@@ -24,7 +27,7 @@ function Dashboard() {
       if (res.status != 200) return;
 
       try {
-        const data = await res.json();
+        const data: ReportCounts = (await res.json()) as ReportCounts;
         setCountsData(data);
       } catch (error) {
         console.error("Failed to parse JSON:", error);

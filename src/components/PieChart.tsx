@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import styles from "src/styles/PieChart.module.css";
 
 import { Pie } from "@nivo/pie";
@@ -7,43 +5,34 @@ import { patternSquaresDef } from "@nivo/core";
 
 import { Pill } from "@us-gov-cdc/cdc-react";
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
+import { ReportCounts } from "src/utils/api/reportCounts";
+import getStatusDisplayValuesById from "src/utils/helperFunctions/statusDisplayValues";
 
 interface PieData {
   id: string;
+  pillColor: string;
+  color: string;
   label: string;
+  percent: string;
   value: number;
-  color?: string;
-  type?: string;
 }
 
 interface PropTypes {
-  data: PieData[];
+  data: ReportCounts;
 }
-
-interface Map {
-  [key: string]: {
-    color: string | undefined;
-    type: string | undefined;
-  };
-}
-
-const computedStatusValues: Map = {
-  upload_complete: { color: "#84BC49", type: "success" },
-  uploading: { color: "#88C3EA", type: "busy" },
-  failed_metadata: { color: "#E57373", type: "error" },
-  structural_validation: { color: "#E57373", type: "error" },
-};
 
 function PieChart({ data }: PropTypes) {
-  // Todo: Need to determine a way to get total so we can compute percents correctly
-  const totalAttempts = 98;
+  const { totalCounts, reportCounts } = data;
 
-  const dataWithComputedValues = data.map((item) => {
+  const piechartData: PieData[] = reportCounts.map((item) => {
+    const { pillColor, color, label } = getStatusDisplayValuesById(item.id);
     return {
-      ...item,
-      color: computedStatusValues[item.id].color,
-      type: computedStatusValues[item.id].type,
-      percent: ((item.value / totalAttempts) * 100).toFixed(1),
+      id: item.id,
+      pillColor,
+      color,
+      label,
+      percent: ((item.count / totalCounts) * 100).toFixed(1),
+      value: item.count,
     };
   });
 
@@ -88,7 +77,7 @@ function PieChart({ data }: PropTypes) {
         <h2 className={styles["pie-chart-header"]}>Submission Statuses</h2>
         <div className={styles["pie-chart-content"]}>
           <Pie
-            data={dataWithComputedValues}
+            data={piechartData}
             height={400}
             width={500}
             margin={{ top: 65, right: 80, bottom: 65, left: 80 }}
@@ -166,11 +155,11 @@ function PieChart({ data }: PropTypes) {
                 </tr>
               </thead> */}
               <tbody>
-                {dataWithComputedValues.map((item) => {
+                {piechartData.map((item) => {
                   return (
                     <tr key={item.id}>
                       <td>
-                        <Pill label={item.label} color={item.type} />
+                        <Pill label={item.label} color={item.pillColor} />
                       </td>
                       <td>{item.value}</td>
                       <td>{item.percent}%</td>

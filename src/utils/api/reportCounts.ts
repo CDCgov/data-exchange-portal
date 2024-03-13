@@ -1,5 +1,15 @@
 import API_ENDPOINTS from "src/config/api";
 
+interface ReportCount {
+  id: string;
+  count: number;
+}
+
+export interface ReportCounts {
+  totalCounts: number;
+  reportCounts: ReportCount[];
+}
+
 export const getReportCounts = async (
   access_token: string,
   data_stream_id: string,
