@@ -24,7 +24,6 @@ function Submissions() {
   const auth = useAuth();
   const pageLimit = 10;
   const [currentPageData, setCurrentPageData] = useState<IFileSubmission[]>([]);
-  // const isMocked = getEnv("VITE_DEV_MOCKING_ENABLED") === "true";
 
   useEffect(() => {
     const fetchCall = async () => {
