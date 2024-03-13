@@ -12,7 +12,7 @@ import {
   TableDataCell,
   TableHead,
   TableHeader,
-  TablePagination,
+  // TablePagination,
   TableRow,
 } from "@us-gov-cdc/cdc-react";
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
@@ -30,9 +30,13 @@ function Submissions() {
     const fetchCallFileSubmissions = async () => {
       const res = await getFileSubmissions(
         auth.user?.access_token || "",
-        "dextesting",
-        convertDate(new Date()), // TODO: Map to date selection dropdown
-        1
+        "dextesting", // TODO: Map to data stream selection
+        new Date().toISOString(), // TODO: Map (date_start) to date selection dropdown
+        new Date().toISOString(), // TODO: Map (date_end) to date selection dropdown
+        "descending", // TODO: Map to sort_order
+        "date", // TODO: Map to sort_by
+        1, // TODO: Map to onClick of page number from pagination, this represent page_number
+        10 // TODO: Map to page_size
       );
 
       // TODO: add UI feedback for failed fileSubmission retrieval
@@ -40,8 +44,9 @@ function Submissions() {
 
       try {
         const data = await res.json();
+
+        setCurrentPageData(data.items.slice(0, pageLimit));
         // This needs to be set for initial data to be displayed in table
-        setCurrentPageData(data.slice(0, pageLimit));
         console.log("data:", data);
       } catch (error) {
         console.error("Failed to parse JSON:", error);
@@ -88,9 +93,9 @@ function Submissions() {
           <div className="padding-right-2">
             <Dropdown
               items={["aims-celr"]}
-              label="Destination: aims-celr"
+              label="Data Stream: aims-celr"
               onSelect={() => {}}
-              srText="Destination"
+              srText="Data Stream"
             />
           </div>
           <Dropdown
@@ -118,7 +123,8 @@ function Submissions() {
       ) : (
         <>
           <div className="text-base font-sans-sm">
-            Showing {currentPageData.length} items
+            Showing {currentPageData.length} items{" "}
+            {/* TODO: Map to summary.total_items */}
           </div>
           <Table className="padding-y-3">
             <TableHead>
@@ -147,14 +153,13 @@ function Submissions() {
             </TableHead>
             <TableBody>
               {currentPageData.map((item: IFileSubmission) => (
-                <TableRow key={`table-row-${item.tus_upload_id}`}>
-                  {" "}
+                <TableRow key={`table-row-${item.upload_id}`}>
                   {/* Todo: Update this to use a more appropriate id as key */}
                   <TableDataCell size="md" className="flex-justify-center">
                     <Checkbox />
                   </TableDataCell>
                   <TableDataCell className="text-left">
-                    {item.file_name}
+                    {item.filename}
                   </TableDataCell>
                   <TableDataCell size="sm">
                     <Pill
@@ -165,7 +170,9 @@ function Submissions() {
                       color={uploadStatusColor(item.status)}
                     />
                   </TableDataCell>
-                  <TableDataCell size="md">{item.timestamp}</TableDataCell>
+                  <TableDataCell size="md">
+                    {new Date(item.timestamp).toLocaleString()}
+                  </TableDataCell>
                   <TableDataCell size="sm">
                     <Icons.Dots />
                   </TableDataCell>
@@ -173,7 +180,7 @@ function Submissions() {
               ))}
             </TableBody>
           </Table>
-          {/* <TablePagination pageLimit={pageLimit} data={allData} /> */}
+          {/* <TablePagination pageLimit={pageLimit} data={currentPageData} /> */}
         </>
       )}
     </section>
