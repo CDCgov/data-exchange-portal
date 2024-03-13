@@ -4,7 +4,6 @@ const API_URL = getEnv("VITE_API_BASE_URL");
 
 const API_ENDPOINTS = {
   fileSubmissions: `${API_URL}/fileSubmissions`,
-  counts: `${API_URL}/counts`,
   tokenCallback: `${API_URL}/api/token`,
 };
 

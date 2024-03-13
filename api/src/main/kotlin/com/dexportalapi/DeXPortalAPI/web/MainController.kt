@@ -65,8 +65,8 @@ class MainController() {
 
     
     @CrossOrigin
-    @GetMapping("/counts")
-    suspend fun getCountsRequest(
+    @GetMapping("/reportCounts")
+    suspend fun getReportCountsRequest(
             @RequestParam("data_stream_id") dataStreamId: String,
             @RequestParam("data_stream_route") dataStreamRoute: String,
             @RequestParam("date_start") dateStart: String,

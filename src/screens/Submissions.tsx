@@ -1,7 +1,6 @@
 import { IFileSubmission } from "@types";
 
 import React, { useEffect, useState } from "react";
-import { useAuth } from "react-oidc-context";
 
 import {
   Checkbox,
@@ -18,8 +17,8 @@ import {
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
 
 import { getFileSubmissions } from "src/utils/api/fileSubmissions";
-import { getCounts } from "src/utils/api/counts";
-import { convertDate } from "src/utils/helperFunctions/date";
+
+import { useAuth } from "react-oidc-context";
 
 function Submissions() {
   const auth = useAuth();
@@ -27,7 +26,7 @@ function Submissions() {
   const [currentPageData, setCurrentPageData] = useState<IFileSubmission[]>([]);
 
   useEffect(() => {
-    const fetchCallFileSubmissions = async () => {
+    const fetchCall = async () => {
       const res = await getFileSubmissions(
         auth.user?.access_token || "",
         "dextesting", // TODO: Map to data stream selection
@@ -52,31 +51,7 @@ function Submissions() {
         console.error("Failed to parse JSON:", error);
       }
     };
-
-    const fetchCallCounts = async () => {
-      const res = await getCounts(
-        auth.user?.access_token || "",
-        "dex-testing", // data_stream_id
-        "routineImmunization", // data_stream_route
-        convertDate(new Date()), // TODO: Map to date selection dropdown (date_start)
-        convertDate(new Date()), // TODO: Map to date selection dropdown (date_end)
-        "test-event1" // ext_event
-      );
-
-      // TODO: add UI feedback for failed fileSubmission retrieval
-      if (res.status != 200) return;
-
-      try {
-        const data = await res.json();
-        // This needs to be set for initial data to be displayed in table
-        console.log("data:", data);
-      } catch (error) {
-        console.error("Failed to parse JSON:", error);
-      }
-    };
-
-    fetchCallFileSubmissions();
-    fetchCallCounts();
+    fetchCall();
   }, [auth]);
 
   const uploadStatusColor = (status: string) => {
@@ -154,6 +129,7 @@ function Submissions() {
             <TableBody>
               {currentPageData.map((item: IFileSubmission) => (
                 <TableRow key={`table-row-${item.upload_id}`}>
+                  {" "}
                   {/* Todo: Update this to use a more appropriate id as key */}
                   <TableDataCell size="md" className="flex-justify-center">
                     <Checkbox />
