@@ -3,6 +3,7 @@ import { useState } from "react";
 import styles from "src/styles/PieChart.module.css";
 
 import { Pie } from "@nivo/pie";
+import { patternSquaresDef } from "@nivo/core";
 
 import { Pill } from "@us-gov-cdc/cdc-react";
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
@@ -11,13 +12,41 @@ interface PieData {
   id: string;
   label: string;
   value: number;
+  color?: string;
+  type?: string;
 }
 
 interface PropTypes {
   data: PieData[];
 }
 
+interface Map {
+  [key: string]: {
+    color: string | undefined;
+    type: string | undefined;
+  };
+}
+
+const computedStatusValues: Map = {
+  upload_complete: { color: "#84BC49", type: "success" },
+  uploading: { color: "#88C3EA", type: "busy" },
+  failed_metadata: { color: "#E57373", type: "error" },
+  structural_validation: { color: "#E57373", type: "error" },
+};
+
 function PieChart({ data }: PropTypes) {
+  // Todo: Need to determine a way to get total so we can compute percents correctly
+  const totalAttempts = 98;
+
+  const dataWithComputedValues = data.map((item) => {
+    return {
+      ...item,
+      color: computedStatusValues[item.id].color,
+      type: computedStatusValues[item.id].type,
+      percent: ((item.value / totalAttempts) * 100).toFixed(1),
+    };
+  });
+
   // Todo: Determine types for dataWithArc, centerX, centerY, datum
   const CenteredMetric = ({ dataWithArc, centerX, centerY }: any) => {
     let total = 0;
@@ -59,7 +88,7 @@ function PieChart({ data }: PropTypes) {
         <h2 className={styles["pie-chart-header"]}>Submission Statuses</h2>
         <div className={styles["pie-chart-content"]}>
           <Pie
-            data={data}
+            data={dataWithComputedValues}
             height={400}
             width={500}
             margin={{ top: 65, right: 80, bottom: 65, left: 80 }}
@@ -70,13 +99,13 @@ function PieChart({ data }: PropTypes) {
             endAngle={0}
             enableArcLinkLabels={true}
             isInteractive={true}
-            colors={{ scheme: "purples" }}
+            colors={{ datum: "data.color" }}
             defs={[
               {
                 id: "dots",
                 type: "patternDots",
                 background: "inherit",
-                color: "black",
+                color: "white",
                 size: 4,
                 padding: 1,
                 stagger: true,
@@ -85,36 +114,43 @@ function PieChart({ data }: PropTypes) {
                 id: "lines",
                 type: "patternLines",
                 background: "inherit",
-                color: "black",
+                color: "white",
                 rotation: -45,
                 lineWidth: 6,
                 spacing: 10,
               },
+              patternSquaresDef("squares", {
+                background: "inherit",
+                color: "white",
+                size: 3,
+                padding: 1,
+                stagger: true,
+              }),
             ]}
             fill={[
               {
                 match: {
                   id: "upload_complete",
                 },
-                id: "lines",
+                id: "solid",
               },
               {
                 match: {
                   id: "uploading",
                 },
-                id: "dots",
+                id: "solid",
               },
               {
                 match: {
                   id: "failed_metadata",
                 },
-                id: "lines",
+                id: "solid",
               },
               {
                 match: {
                   id: "structural_validation",
                 },
-                id: "dots",
+                id: "solid",
               },
             ]}
           />
@@ -130,14 +166,14 @@ function PieChart({ data }: PropTypes) {
                 </tr>
               </thead> */}
               <tbody>
-                {data.map((item) => {
+                {dataWithComputedValues.map((item) => {
                   return (
                     <tr key={item.id}>
                       <td>
-                        <Pill label="Uploaded" />
+                        <Pill label={item.label} color={item.type} />
                       </td>
                       <td>{item.value}</td>
-                      <td>{item.label}</td>
+                      <td>{item.percent}%</td>
                       <td>
                         <Icons.Dots />
                       </td>
