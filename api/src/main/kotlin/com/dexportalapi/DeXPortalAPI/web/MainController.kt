@@ -70,6 +70,7 @@ class MainController() {
             @RequestParam("data_stream_id") dataStreamId: String,
             @RequestParam("data_stream_route") dataStreamRoute: String,
             @RequestParam("date_start") dateStart: String,
+            @RequestParam("date_end") dateEnd: String,
             @RequestParam("ext_event") extEvent: String,
             @RequestHeader("Authorization") authToken: String
     ): String {
@@ -82,7 +83,7 @@ class MainController() {
                                 psAPIUrl +
                                         "/api/report/counts?data_stream_id=" +
                                         dataStreamId + "&data_stream_route=" + dataStreamRoute + 
-                                        "&date_start=" + dateStart + "&ext_event=" + extEvent
+                                        "&date_start=" + dateStart + "&date_end=" + dateEnd + "&ext_event=" + extEvent
                         )
                         .header("Authorization", authToken)
                         .retrieve()

@@ -1,6 +1,8 @@
 import { IFileSubmission } from "@types";
 
 import React, { useEffect, useState } from "react";
+import { useAuth } from "react-oidc-context";
+
 import {
   Checkbox,
   Dropdown,
@@ -17,21 +19,19 @@ import { Icons } from "@us-gov-cdc/cdc-react-icons";
 
 import { getFileSubmissions } from "src/utils/api/fileSubmissions";
 import { getCounts } from "src/utils/api/counts";
-
-import { useAuth } from "react-oidc-context";
+import { convertDate } from "src/utils/helperFunctions/date";
 
 function Submissions() {
   const auth = useAuth();
   const pageLimit = 10;
   const [currentPageData, setCurrentPageData] = useState<IFileSubmission[]>([]);
-  const [allData, setAllData] = useState([]);
 
   useEffect(() => {
     const fetchCallFileSubmissions = async () => {
       const res = await getFileSubmissions(
         auth.user?.access_token || "",
         "dextesting",
-        new Date().toISOString(), // TODO: Map to date selection dropdown
+        convertDate(new Date()), // TODO: Map to date selection dropdown
         1
       );
 
@@ -42,7 +42,6 @@ function Submissions() {
         const data = await res.json();
         // This needs to be set for initial data to be displayed in table
         setCurrentPageData(data.slice(0, pageLimit));
-        setAllData(data);
         console.log("data:", data);
       } catch (error) {
         console.error("Failed to parse JSON:", error);
@@ -52,10 +51,11 @@ function Submissions() {
     const fetchCallCounts = async () => {
       const res = await getCounts(
         auth.user?.access_token || "",
-        "dextesting",
-        "routineImmunization",
-        new Date().toISOString(), // TODO: Map to date selection dropdown
-        "test-event1"
+        "dex-testing", // data_stream_id
+        "routineImmunization", // data_stream_route
+        convertDate(new Date()), // TODO: Map to date selection dropdown (date_start)
+        convertDate(new Date()), // TODO: Map to date selection dropdown (date_end)
+        "test-event1" // ext_event
       );
 
       // TODO: add UI feedback for failed fileSubmission retrieval
@@ -64,8 +64,6 @@ function Submissions() {
       try {
         const data = await res.json();
         // This needs to be set for initial data to be displayed in table
-        setCurrentPageData(data.slice(0, pageLimit));
-        setAllData(data);
         console.log("data:", data);
       } catch (error) {
         console.error("Failed to parse JSON:", error);
@@ -120,7 +118,7 @@ function Submissions() {
       ) : (
         <>
           <div className="text-base font-sans-sm">
-            Showing {allData.length} items
+            Showing {currentPageData.length} items
           </div>
           <Table className="padding-y-3">
             <TableHead>
@@ -175,7 +173,7 @@ function Submissions() {
               ))}
             </TableBody>
           </Table>
-          <TablePagination pageLimit={pageLimit} data={allData} />
+          {/* <TablePagination pageLimit={pageLimit} data={allData} /> */}
         </>
       )}
     </section>
