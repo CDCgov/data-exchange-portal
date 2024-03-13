@@ -11,5 +11,11 @@ type EnvType =
   | "VITE_DEV_MOCKING_ENABLED";
 
 export function getEnv(name: EnvType): string {
-  return import.meta.env[name] || "";
+  const envVar = import.meta.env[name] || "";
+
+  try {
+    return JSON.parse(envVar);
+  } catch (_) {
+    return envVar;
+  }
 }
