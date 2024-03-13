@@ -1,7 +1,6 @@
 import { IFileSubmission } from "@types";
 
 import React, { useEffect, useState } from "react";
-import { useAuth } from "react-oidc-context";
 
 import {
   Checkbox,
@@ -17,7 +16,9 @@ import {
 } from "@us-gov-cdc/cdc-react";
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
 
-import getFileSubmissions from "src/utils/api/fileSubmissions";
+import { getFileSubmissions } from "src/utils/api/fileSubmissions";
+
+import { useAuth } from "react-oidc-context";
 
 function Submissions() {
   const auth = useAuth();
