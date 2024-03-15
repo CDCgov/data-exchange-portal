@@ -24,6 +24,8 @@ interface PropTypes {
 function PieChart({ data }: PropTypes) {
   const { totalCounts, reportCounts } = data;
 
+  reportCounts.sort((a, b) => b.count - a.count);
+
   const piechartData: PieData[] = reportCounts.map((item) => {
     const { pillColor, color, label } = getStatusDisplayValuesById(item.id);
     return {
