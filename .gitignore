@@ -7,6 +7,8 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+**/.DS_Store
+public/fonts
 node_modules
 dist
 dist-ssr
@@ -30,3 +32,6 @@ dist-ssr
 /test-results/
 /playwright-report/
 /playwright/.cache/
+vite.config.ts.timestamp*
+
+!.env.example

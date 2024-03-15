@@ -7,7 +7,7 @@ import {
 } from "react-oidc-context";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 import { vi } from "vitest";
-import { ProtectedRoute } from "../src/components/ProtectedRoute";
+import { ProtectedRoute } from "src/components/ProtectedRoute";
 
 interface TestRouterOptions {
   protected: boolean;
