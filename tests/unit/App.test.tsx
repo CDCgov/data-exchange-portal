@@ -1,6 +1,9 @@
 import { render, screen } from "@testing-library/react";
 import App from "src/App";
-import { createMockedAuthContext, withMockedAuthProvider } from "tests/helpers";
+import {
+  createMockedAuthContext,
+  withMockedAuthProvider,
+} from "tests/utility/helpers";
 import { vi } from "vitest";
 
 vi.mock("react-oidc-context");

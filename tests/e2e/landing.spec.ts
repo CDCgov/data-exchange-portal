@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { getEnv } from "tests/e2e/utils";
+import { getEnv } from "tests/utility/utils";
 
 test.describe("Landing Page", () => {
   test.beforeEach(async ({ page }) => {
