@@ -28,7 +28,7 @@ function App() {
           <Route path="profile" element={<Profile />}></Route>
           <Route path="submissions" element={<Submissions />}></Route>
 
-          <Route path="*" element={<Navigate replace to="home/dashboard" />} />
+          <Route path="*" element={<Navigate replace to="dashboard" />} />
         </Route>
 
         {/* Public Routes */}
