@@ -9,6 +9,8 @@ src/main/resources/application.properties
 vars.sh
 api/src/main/resources/static
 
+!.env.example
+
 ### STS ###
 .apt_generated
 .classpath

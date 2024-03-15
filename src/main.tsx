@@ -1,9 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App.tsx";
-import "./index.css";
+import App from "src/App";
+import "src/index.css";
 import { AuthProvider, AuthProviderProps } from "react-oidc-context";
-import { getEnv } from "./utils.ts";
+import { getEnv } from "src/utils/helperFunctions/env";
+
+import API_ENDPOINTS from "src/config/api";
 
 const oidcConfig: AuthProviderProps = {
   authority: getEnv("VITE_SAMS_AUTHORITY_URL"),
@@ -15,20 +17,30 @@ const oidcConfig: AuthProviderProps = {
   loadUserInfo: true,
   metadata: {
     authorization_endpoint: getEnv("VITE_SAMS_AUTH_URL"),
-    token_endpoint: getEnv("VITE_OAUTH_TOKEN_URL"),
+    token_endpoint: API_ENDPOINTS.tokenCallback,
     issuer: getEnv("VITE_SAMS_AUTHORITY_URL"),
     userinfo_endpoint: getEnv("VITE_SAMS_USER_INFO_URL"),
   },
 };
 
-function onSigninCallback() {
-  window.location.href = "/dashboard";
+async function enableMocking() {
+  if (!getEnv("VITE_DEV_MOCKING_ENABLED")) {
+    return;
+  }
+
+  const { worker } = await import("./mocks/browser");
+
+  // `worker.start()` returns a Promise that resolves
+  // once the Service Worker is up and ready to intercept requests.
+  return worker.start();
 }
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <AuthProvider {...oidcConfig} onSigninCallback={onSigninCallback}>
-      <App />
-    </AuthProvider>
-  </React.StrictMode>
-);
+enableMocking().then(() => {
+  ReactDOM.createRoot(document.getElementById("root")!).render(
+    <React.StrictMode>
+      <AuthProvider {...oidcConfig}>
+        <App />
+      </AuthProvider>
+    </React.StrictMode>
+  );
+});

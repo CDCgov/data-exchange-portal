@@ -1,15 +1,15 @@
 import { screen, render } from "@testing-library/react";
-import Dashboard from "../src/Dashboard";
+import Shell from "src/screens/Shell";
 import { vi } from "vitest";
 import {
   createMockedAuthContext,
   withMemoryRouter,
   withMockedAuthProvider,
-} from "./helpers";
+} from "tests/helpers";
 
 vi.mock("react-oidc-context");
 
-describe("Dashboard", () => {
+describe("Shell", () => {
   afterEach(() => {
     vi.clearAllMocks();
     vi.restoreAllMocks();
@@ -18,7 +18,9 @@ describe("Dashboard", () => {
   it("should show sidebar", () => {
     render(
       withMockedAuthProvider(
-        withMemoryRouter(<Dashboard />, "/dashboard", { protected: true }),
+        withMemoryRouter(<Shell />, "/home/dashboard", {
+          protected: true,
+        }),
         createMockedAuthContext({ isAuthenticated: true, isLoading: false })
       )
     );
@@ -29,7 +31,7 @@ describe("Dashboard", () => {
   it("should not show sidebar when not authenticated", () => {
     render(
       withMockedAuthProvider(
-        withMemoryRouter(<Dashboard />, "/dashboard", { protected: true }),
+        withMemoryRouter(<Shell />, "/", { protected: true }),
         createMockedAuthContext({ isAuthenticated: false, isLoading: false })
       )
     );

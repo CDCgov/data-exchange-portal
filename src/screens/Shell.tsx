@@ -3,23 +3,19 @@ import {
   PopupMenuItemType,
 } from "@us-gov-cdc/cdc-react/dist/src/@types";
 
-import styles from "./styles/Dashboard.module.css";
-
-import dexLogo from "./assets/dex_logo.svg";
+import dexLogo from "src/assets/dex_logo.svg";
 
 import {
-  Button,
   ProfileHeader,
   ProfileHeaderLogo,
   Sidebar,
 } from "@us-gov-cdc/cdc-react";
 
-import { useAuth } from "react-oidc-context";
 import { Outlet, useNavigate } from "react-router-dom";
+
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
 
-function Dashboard() {
-  const auth = useAuth();
+function Shell() {
   const navigate = useNavigate();
 
   const logo = <ProfileHeaderLogo image={dexLogo} classNames={["dex-logo"]} />;
@@ -27,7 +23,7 @@ function Dashboard() {
   const menuItems: MenuItemType[] = [
     {
       badgeCount: 5,
-      icon: <Icons.Notifications hasBadge={true} />,
+      icon: <Icons.Bell hasBadge={true} />,
       className: "hide-on-mobile",
       srText: "Notifications button",
     },
@@ -41,14 +37,14 @@ function Dashboard() {
 
   const userProfilePopupMenuItems: PopupMenuItemType[] = [
     {
-      icon: <Icons.User />,
+      icon: <Icons.Person />,
       iconPosition: "left",
       text: "Your Profile",
       badgeCount: 0,
-      onClick: () => navigate("/dashboard/profile"),
+      onClick: () => navigate("/home/profile"),
     },
     {
-      icon: <Icons.Notifications hasBadge={true} />,
+      icon: <Icons.Bell hasBadge={true} />,
       iconPosition: "left",
       text: "Notifications",
       badgeCount: 1,
@@ -60,7 +56,7 @@ function Dashboard() {
       badgeCount: 0,
     },
     {
-      icon: <Icons.Logout />,
+      icon: <Icons.SquareHalfArrowRight />,
       iconPosition: "left",
       text: "Logout",
       badgeCount: 0,
@@ -80,17 +76,23 @@ function Dashboard() {
                   componentType: "a",
                   icon: <Icons.Dashboard />,
                   text: "Dashboard",
-                  href: "/dashboard",
+                  href: "/home/dashboard",
                 },
                 {
                   componentType: "a",
-                  icon: <Icons.Process />,
+                  icon: <Icons.ZigZag />,
                   text: "Process Status",
                   href: "/",
                 },
                 {
                   componentType: "a",
-                  icon: <Icons.Quality />,
+                  icon: <Icons.ZigZag />,
+                  text: "File Submissions",
+                  href: "/home/submissions",
+                },
+                {
+                  componentType: "a",
+                  icon: <Icons.Star />,
                   text: "Quality",
                   href: "/",
                 },
@@ -101,7 +103,7 @@ function Dashboard() {
               items: [
                 {
                   componentType: "a",
-                  icon: <Icons.User />,
+                  icon: <Icons.Person />,
                   text: "Manage Users",
                   href: "/",
                 },
@@ -120,7 +122,7 @@ function Dashboard() {
                 },
                 {
                   componentType: "a",
-                  icon: <Icons.Logout />,
+                  icon: <Icons.SquareHalfArrowRight />,
                   text: "Logout",
                   href: "/logout",
                 },
@@ -138,33 +140,10 @@ function Dashboard() {
             userProfilePopupMenuItems={userProfilePopupMenuItems}
           />
         </section>
-        {location.pathname.includes("profile") ? (
-          <Outlet />
-        ) : (
-          <section className="main_content">
-            <div className="box">
-              <p>Welcome {auth.user?.profile.email}</p>
-            </div>
-            <div className="box">
-              <h2>New to DEX?</h2>
-              <Button
-                className={styles["request-access-btn"]}
-                ariaLabel="take a tour"
-                variation="outline">
-                Take a tour
-              </Button>
-              <Button
-                className={styles["learn-more-btn"]}
-                ariaLabel="learn more"
-                variation="outline">
-                Learn more
-              </Button>
-            </div>
-          </section>
-        )}
+        <Outlet />
       </div>
     </div>
   );
 }
 
-export default Dashboard;
+export default Shell;

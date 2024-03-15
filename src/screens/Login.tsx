@@ -1,11 +1,11 @@
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
-import { Logo } from "./components/Logo";
-import styles from "./styles/Landing.module.css";
+import { Logo } from "src/components/Logo";
+import styles from "src/styles/Login.module.css";
 import { Button, Divider } from "@us-gov-cdc/cdc-react";
 import { useAuth } from "react-oidc-context";
-import { getEnv } from "./utils";
+import { getEnv } from "src/utils/helperFunctions/env";
 
-export function Landing() {
+export function Login() {
   const auth = useAuth();
   const buildNumber = getEnv("VITE_APP_BUILD_NUMBER");
 
@@ -77,3 +77,5 @@ export function Landing() {
     </div>
   );
 }
+
+export default Login;
