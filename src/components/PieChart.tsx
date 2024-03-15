@@ -1,7 +1,6 @@
 import styles from "src/styles/PieChart.module.css";
 
 import { Pie } from "@nivo/pie";
-import { patternSquaresDef } from "@nivo/core";
 
 import { Pill } from "@us-gov-cdc/cdc-react";
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
@@ -93,55 +92,56 @@ function PieChart({ data }: PropTypes) {
             colors={{ datum: "data.color" }}
             defs={[
               {
-                id: "dots",
+                id: "dots-red",
                 type: "patternDots",
+                size: 5,
+                padding: 10,
+                stagger: false,
                 background: "inherit",
-                color: "white",
-                size: 4,
-                padding: 1,
-                stagger: true,
+                color: "#ac5755",
               },
               {
-                id: "lines",
+                id: "lines-green",
                 type: "patternLines",
+                spacing: 11,
+                rotation: -145,
+                lineWidth: 2,
                 background: "inherit",
-                color: "white",
-                rotation: -45,
-                lineWidth: 6,
-                spacing: 10,
+                color: "#638d37",
               },
-              patternSquaresDef("squares", {
-                background: "inherit",
-                color: "white",
+              {
+                id: "squares-blue",
+                type: "patternSquares",
                 size: 3,
-                padding: 1,
-                stagger: true,
-              }),
+                padding: 5,
+                background: "inherit",
+                color: "#6692af",
+              },
             ]}
             fill={[
               {
                 match: {
                   id: "upload_complete",
                 },
-                id: "solid",
+                id: "lines-green",
               },
               {
                 match: {
                   id: "uploading",
                 },
-                id: "solid",
+                id: "squares-blue",
               },
               {
                 match: {
                   id: "failed_metadata",
                 },
-                id: "solid",
+                id: "dots-red",
               },
               {
                 match: {
                   id: "structural_validation",
                 },
-                id: "solid",
+                id: "dots-red",
               },
             ]}
           />
