@@ -4,8 +4,37 @@ import { useAuth } from "react-oidc-context";
 
 import { Button } from "@us-gov-cdc/cdc-react";
 
+import PieChart from "src/components/PieChart";
+import { useEffect, useState } from "react";
+import { getReportCounts, ReportCounts } from "src/utils/api/reportCounts";
+
 function Dashboard() {
   const auth = useAuth();
+  const [countsData, setCountsData] = useState<ReportCounts>({
+    totalCounts: 0,
+    reportCounts: [],
+  });
+
+  useEffect(() => {
+    const fetchCall = async () => {
+      const res = await getReportCounts(
+        auth.user?.access_token || "",
+        "temp_data_stream_id",
+        "temp_data_stream_route"
+      );
+
+      // TODO: add UI feedback for failed report counts retrieval
+      if (res.status != 200) return;
+
+      try {
+        const data: ReportCounts = (await res.json()) as ReportCounts;
+        setCountsData(data);
+      } catch (error) {
+        console.error("Failed to parse JSON:", error);
+      }
+    };
+    fetchCall();
+  }, [auth]);
 
   return (
     <section className="main_content">
@@ -27,6 +56,7 @@ function Dashboard() {
           Learn more
         </Button>
       </div>
+      <PieChart data={countsData} />
     </section>
   );
 }

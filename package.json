@@ -16,6 +16,8 @@
     "e2e": "npx playwright test"
   },
   "dependencies": {
+    "@nivo/core": "^0.85.1",
+    "@nivo/pie": "^0.85.1",
     "@us-gov-cdc/cdc-react": "^1.4.0",
     "@us-gov-cdc/cdc-react-icons": "^2.2.0",
     "oidc-client-ts": "^2.2.4",

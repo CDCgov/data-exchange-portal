@@ -1,0 +1,21 @@
+{
+  "totalCounts": 57,
+  "reportCounts": [
+    {
+      "id": "upload_complete",
+      "count": 41
+    },
+    {
+      "id": "uploading",
+      "count": 6
+    },
+    {
+      "id": "failed_metadata",
+      "count": 5
+    },
+    {
+      "id": "structural_validation",
+      "count": 5
+    }
+  ]
+}
