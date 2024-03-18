@@ -36,6 +36,30 @@ body {
       margin-left: 0.75rem;
     }
   }
+
+  .submissions_page {
+    .cdc-react.table tbody {
+      width: 100%;
+      background: #ffffff;
+    }
+    .checkbox-row.width-10 {
+      max-width: 7rem;
+      text-align: center;
+    }
+    .cdc-react.checkbox-container .checkbox-content {
+      display: none;
+    }
+  }
+
+  .left {
+    .cdc-react {
+      .sidebar,
+      .sidebar-wrap {
+        background: none;
+      }
+    }
+    background: linear-gradient(225deg, #005eaa 0%, #26418f 100%);
+  }
 }
 
 .bg-grey {

@@ -51,4 +51,15 @@ describe("Login", () => {
     expect(getEnvSpy).toHaveBeenCalled();
     expect(screen.queryByText("Build")).toBeNull();
   });
+
+  it("should render login page when no user session active", () => {
+    render(
+      withMockedAuthProvider(
+        <Login />,
+        createMockedAuthContext({ isAuthenticated: false, isLoading: false })
+      )
+    );
+
+    expect(screen.getByText("Login With SAMS")).toBeInTheDocument();
+  });
 });

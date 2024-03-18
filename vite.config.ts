@@ -34,6 +34,7 @@ export default defineConfig({
     globals: true,
     environment: "jsdom",
     setupFiles: "./tests/setup.ts",
+    include: ["**/*.{test,spec}.?(c|m)[jt]s?(x)"],
     exclude: [...configDefaults.exclude, "./tests/e2e/**", "./api/**"],
   },
 } as UserConfig);
