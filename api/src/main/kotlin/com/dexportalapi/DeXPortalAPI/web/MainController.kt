@@ -33,22 +33,57 @@ class MainController() {
 
     @CrossOrigin
     @GetMapping("/fileSubmissions")
-    suspend fun getDestinationStatusRequest(
+    suspend fun getFileSubmissionsRequest(
             @RequestParam("data_stream_id") dataStreamId: String,
             @RequestParam("date_start") dateStart: String,
             @RequestParam("page_number") pageNumber: String,
             @RequestHeader("Authorization") authToken: String
     ): String {
-        val supplementalAPIUrl: String = System.getenv("SUPPLEMENTAL_API_URL").toString()
+        val psAPIUrl: String = System.getenv("PS_API_URL").toString()
 
         val response =
                 webClient
                         .get()
                         .uri(
-                                supplementalAPIUrl +
+                                psAPIUrl +
                                         "/api/upload/" +
                                         dataStreamId +
                                         "?page_number=" + pageNumber + "&page_size=20"
+                        )
+                        .header("Authorization", authToken)
+                        .retrieve()
+                        .onStatus({ responseStatus ->
+                            responseStatus == HttpStatus.INTERNAL_SERVER_ERROR
+                        }) { throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR) }
+                        .onStatus({ responseStatus -> responseStatus == HttpStatus.BAD_REQUEST }) {
+                            throw ResponseStatusException(HttpStatus.BAD_REQUEST)
+                        }
+                        .awaitBody<String>()
+
+        return response
+    }
+
+    
+    @CrossOrigin
+    @GetMapping("/reportCounts")
+    suspend fun getReportCountsRequest(
+            @RequestParam("data_stream_id") dataStreamId: String,
+            @RequestParam("data_stream_route") dataStreamRoute: String,
+            @RequestParam("date_start") dateStart: String,
+            @RequestParam("date_end") dateEnd: String,
+            @RequestParam("ext_event") extEvent: String,
+            @RequestHeader("Authorization") authToken: String
+    ): String {
+        val psAPIUrl: String = System.getenv("PS_API_URL").toString()
+
+        val response =
+                webClient
+                        .get()
+                        .uri(
+                                psAPIUrl +
+                                        "/api/report/counts?data_stream_id=" +
+                                        dataStreamId + "&data_stream_route=" + dataStreamRoute + 
+                                        "&date_start=" + dateStart + "&date_end=" + dateEnd + "&ext_event=" + extEvent
                         )
                         .header("Authorization", authToken)
                         .retrieve()
@@ -67,12 +102,12 @@ class MainController() {
     @GetMapping("/upload/destination")
     suspend fun getDestinationRequest(@RequestHeader("Authorization") authToken: String): String {
 
-        val supplementalAPIUrl: String = System.getenv("SUPPLEMENTAL_API_URL").toString()
+        val psAPIUrl: String = System.getenv("PS_API_URL").toString()
 
         val response =
                 webClient
                         .get()
-                        .uri(supplementalAPIUrl + "/destination")
+                        .uri(psAPIUrl + "/destination")
                         .header("Authorization", authToken)
                         .retrieve()
                         .onStatus({ responseStatus ->
