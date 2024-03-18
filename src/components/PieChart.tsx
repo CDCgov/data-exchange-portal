@@ -20,6 +20,11 @@ interface PropTypes {
   data: ReportCounts;
 }
 
+interface CenteredMetricProps {
+  centerX: number;
+  centerY: number;
+}
+
 function PieChart({ data }: PropTypes) {
   const { totalCounts, reportCounts } = data;
 
@@ -38,12 +43,7 @@ function PieChart({ data }: PropTypes) {
   });
 
   // Todo: Determine types for dataWithArc, centerX, centerY, datum
-  const CenteredMetric = ({ dataWithArc, centerX, centerY }) => {
-    let total = 0;
-    dataWithArc.forEach((datum: any) => {
-      total += datum.value;
-    });
-
+  const CenteredMetric = ({ centerX, centerY }: CenteredMetricProps) => {
     return (
       <>
         <text
@@ -66,7 +66,7 @@ function PieChart({ data }: PropTypes) {
             fontSize: "2rem",
             fontWeight: 600,
           }}>
-          {`${total}`}
+          {`${totalCounts}`}
         </text>
       </>
     );
@@ -114,6 +114,7 @@ function PieChart({ data }: PropTypes) {
                 type: "patternSquares",
                 size: 3,
                 padding: 5,
+                stagger: false,
                 background: "inherit",
                 color: "#6692af",
               },
