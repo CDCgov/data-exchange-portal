@@ -38,7 +38,7 @@ function PieChart({ data }: PropTypes) {
   });
 
   // Todo: Determine types for dataWithArc, centerX, centerY, datum
-  const CenteredMetric = ({ dataWithArc, centerX, centerY }: any) => {
+  const CenteredMetric = ({ dataWithArc, centerX, centerY }) => {
     let total = 0;
     dataWithArc.forEach((datum: any) => {
       total += datum.value;
@@ -52,18 +52,18 @@ function PieChart({ data }: PropTypes) {
           textAnchor="middle"
           dominantBaseline="central"
           style={{
-            fontSize: "0.8rem",
+            fontSize: "1rem",
             color: "#555",
           }}>
           Total Attempts
         </text>
         <text
           x={centerX}
-          y={centerY + 10}
+          y={centerY + 15}
           textAnchor="middle"
           dominantBaseline="central"
           style={{
-            fontSize: "1.6rem",
+            fontSize: "2rem",
             fontWeight: 600,
           }}>
           {`${total}`}
@@ -84,7 +84,7 @@ function PieChart({ data }: PropTypes) {
             margin={{ top: 65, right: 80, bottom: 65, left: 80 }}
             innerRadius={0.75}
             padAngle={0.75}
-            layers={["arcs", "arcLinkLabels", "legends", CenteredMetric]}
+            layers={["arcs", "legends", CenteredMetric]}
             startAngle={360}
             endAngle={0}
             enableArcLinkLabels={true}
