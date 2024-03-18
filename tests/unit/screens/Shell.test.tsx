@@ -5,7 +5,7 @@ import {
   createMockedAuthContext,
   withMemoryRouter,
   withMockedAuthProvider,
-} from "tests/helpers";
+} from "tests/utility/helpers";
 
 vi.mock("react-oidc-context");
 
