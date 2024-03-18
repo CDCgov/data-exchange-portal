@@ -104,7 +104,9 @@ function Submissions() {
           <Table className="padding-y-3">
             <TableHead>
               <TableRow>
-                <TableHeader size="md">
+                <TableHeader
+                  size="sm"
+                  className="flex-justify-center checkbox-row">
                   <Checkbox label="" onChange={() => {}} />
                 </TableHeader>
                 <TableHeader>
@@ -131,7 +133,9 @@ function Submissions() {
                 <TableRow key={`table-row-${item.upload_id}`}>
                   {" "}
                   {/* Todo: Update this to use a more appropriate id as key */}
-                  <TableDataCell size="md" className="flex-justify-center">
+                  <TableDataCell
+                    size="sm"
+                    className="flex-justify-center checkbox-row">
                     <Checkbox />
                   </TableDataCell>
                   <TableDataCell className="text-left">

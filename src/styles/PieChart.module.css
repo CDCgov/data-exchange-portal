@@ -32,8 +32,9 @@
   width: 460px;
 }
 .pie-chart-legend table tbody tr td {
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  padding-left: 1.5rem;
 }
 
 .pie-chart-legend table tbody tr:not(:last-child) {
