@@ -39,11 +39,13 @@ function PieChart({ data }: PropTypes) {
 
   // Todo: Determine types for dataWithArc, centerX, centerY, datum
   /* eslint-disable react/prop-types */
+  /* eslint-disable @typescript-eslint/ban-ts-comment */
   // @ts-ignore
   const CenteredMetric = ({ dataWithArc, centerX, centerY }) => {
     let total = 0;
 
     /* eslint-disable @typescript-eslint/no-explicit-any */
+    /* eslint-disable @typescript-eslint/ban-ts-comment */
     // @ts-ignore
     dataWithArc.forEach((datum: any) => {
       total += datum.value;
