@@ -1,8 +1,4 @@
-import styles from "src/styles/Dashboard.module.css";
-
 import { useAuth } from "react-oidc-context";
-
-import { Button } from "@us-gov-cdc/cdc-react";
 
 import PieChart from "src/components/PieChart";
 import { useEffect, useState } from "react";
@@ -38,6 +34,7 @@ function Dashboard() {
 
   return (
     <section className="main_content">
+      {/*
       <div className="box">
         <p>Welcome {auth.user?.profile.email}</p>
       </div>
@@ -56,6 +53,7 @@ function Dashboard() {
           Learn more
         </Button>
       </div>
+      */}
       <PieChart data={countsData} />
     </section>
   );
