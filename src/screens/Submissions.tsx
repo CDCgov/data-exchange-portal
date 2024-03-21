@@ -62,7 +62,7 @@ function Submissions() {
 
   return (
     <section className="submissions_page bg-grey padding-x-2">
-      <h3 className="padding-y-3">File Submissions</h3>
+      <h1 className="cdc-page-header padding-y-3 margin-0">File Submissions</h1>
       <div className="padding-bottom-2 display-flex flex-row flex-justify">
         <div className="display-flex flex-row cdc-submissions-page--filters">
           <div className="padding-right-2">

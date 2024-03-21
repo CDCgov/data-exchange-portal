@@ -5,6 +5,8 @@ import { useAuth } from "react-oidc-context";
 import { Button } from "@us-gov-cdc/cdc-react";
 
 import PieChart from "src/components/PieChart";
+import StatusBoxes from "src/components/StatusBoxes";
+
 import { useEffect, useState } from "react";
 import { getReportCounts, ReportCounts } from "src/utils/api/reportCounts";
 
@@ -37,27 +39,31 @@ function Dashboard() {
   }, [auth]);
 
   return (
-    <section className="main_content">
-      <div className="box">
-        <p>Welcome {auth.user?.profile.email}</p>
-      </div>
-      <div className="box">
-        <h2>New to DEX?</h2>
-        <Button
-          className={styles["request-access-btn"]}
-          ariaLabel="take a tour"
-          variation="outline">
-          Take a tour
-        </Button>
-        <Button
-          className={styles["learn-more-btn"]}
-          ariaLabel="learn more"
-          variation="outline">
-          Learn more
-        </Button>
-      </div>
-      <PieChart data={countsData} />
-    </section>
+    <>
+      <section className="main_content padding-x-2">
+        <h1 className="cdc-page-header padding-y-3 margin-0">Dashboard</h1>
+        <StatusBoxes data={countsData} />
+        <div className="box">
+          <p>Welcome {auth.user?.profile.email}</p>
+        </div>
+        <div className="box">
+          <h2>New to DEX?</h2>
+          <Button
+            className={styles["request-access-btn"]}
+            ariaLabel="take a tour"
+            variation="outline">
+            Take a tour
+          </Button>
+          <Button
+            className={styles["learn-more-btn"]}
+            ariaLabel="learn more"
+            variation="outline">
+            Learn more
+          </Button>
+        </div>
+        <PieChart data={countsData} />
+      </section>
+    </>
   );
 }
 
