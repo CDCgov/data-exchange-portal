@@ -26,7 +26,7 @@ describe("Submissions page", () => {
       )
     );
 
-    expect(screen.getByText("File Submissions")).toBeInTheDocument();
+    expect(screen.getByText("Track Submissions")).toBeInTheDocument();
   });
 
   // Todo: Update to handle MSW/mocking
