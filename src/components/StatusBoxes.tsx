@@ -18,7 +18,7 @@ interface PropTypes {
 }
 
 function PieChart({ data }: PropTypes) {
-  const { totalCounts, reportCounts } = data;
+  const { reportCounts } = data;
 
   reportCounts.sort((a, b) => b.count - a.count);
 
@@ -36,14 +36,10 @@ function PieChart({ data }: PropTypes) {
     <div className={styles["status-boxes-container"]}>
       {statusBoxData.map((item) => {
         return (
-          <div className={styles["status-boxes-box"]}>
+          <div key={item.id} className={styles["status-boxes-box"]}>
             <Pill label={item.label} color={item.pillColor} />
-            {/* Todo: need to figure out the semantics of the value. */}
-            <div
-              className={styles["status-boxes-box-value"]}
-              aria-label={item.value}>
-              {item.value}
-            </div>
+            {/* Todo: need to figure out the a11y/semantics of the value. */}
+            <div className={styles["status-boxes-box-value"]}>{item.value}</div>
           </div>
         );
       })}
