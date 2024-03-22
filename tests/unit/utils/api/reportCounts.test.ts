@@ -1,4 +1,4 @@
-import { getReportCounts } from "src/utils/api/reportCounts";
+import getReportCounts from "src/utils/api/reportCounts";
 import mockReportCounts from "src/mocks/data/reportCounts.json";
 
 describe("reportCounts", () => {

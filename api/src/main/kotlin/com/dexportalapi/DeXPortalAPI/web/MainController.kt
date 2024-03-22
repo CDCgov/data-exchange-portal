@@ -69,7 +69,7 @@ class MainController() {
         return response
     }
 
-    
+
     @CrossOrigin
     @GetMapping("/reportCounts")
     suspend fun getReportCountsRequest(
