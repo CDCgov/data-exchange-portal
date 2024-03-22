@@ -7,8 +7,12 @@ import { getReportCounts, ReportCounts } from "src/utils/api/reportCounts";
 function Dashboard() {
   const auth = useAuth();
   const [countsData, setCountsData] = useState<ReportCounts>({
-    totalCounts: 0,
-    reportCounts: [],
+    total_counts: 0,
+    status_counts: {
+      failed: { counts: 0 },
+      uploaded: { counts: 0 },
+      uploading: { counts: 0 },
+    },
   });
 
   useEffect(() => {
@@ -24,6 +28,7 @@ function Dashboard() {
 
       try {
         const data: ReportCounts = (await res.json()) as ReportCounts;
+        console.log(data);
         setCountsData(data);
       } catch (error) {
         console.error("Failed to parse JSON:", error);

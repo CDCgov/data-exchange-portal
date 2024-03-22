@@ -1,21 +1,17 @@
 {
-  "totalCounts": 57,
-  "reportCounts": [
-    {
-      "id": "upload_complete",
-      "count": 41
+  "total_counts": 413732,
+  "status_counts": {
+    "uploading": {
+      "counts": 46
     },
-    {
-      "id": "uploading",
-      "count": 6
+    "failed": {
+      "counts": 233311,
+      "reasons": {
+        "metadata": 233311
+      }
     },
-    {
-      "id": "failed_metadata",
-      "count": 5
-    },
-    {
-      "id": "structural_validation",
-      "count": 5
+    "uploaded": {
+      "counts": 180375
     }
-  ]
+  }
 }

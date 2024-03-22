@@ -1,13 +1,21 @@
 import API_ENDPOINTS from "src/config/api";
 
-interface ReportCount {
-  id: string;
-  count: number;
+interface StatusReason {}
+
+interface CountsDetails {
+  counts: number;
+  reasons?: StatusReason;
+}
+
+interface StatusCounts {
+  failed: CountsDetails;
+  uploaded: CountsDetails;
+  uploading: CountsDetails;
 }
 
 export interface ReportCounts {
-  totalCounts: number;
-  reportCounts: ReportCount[];
+  total_counts: number;
+  status_counts: StatusCounts;
 }
 
 export const getReportCounts = async (
