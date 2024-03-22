@@ -94,8 +94,6 @@ class MainController() {
             uri = uri + "&ext_event=" + extEvent
         }
 
-        print(uri)
-
         val response =
                 webClient
                         .get()
@@ -138,41 +136,37 @@ class MainController() {
 
     @CrossOrigin
     @PostMapping("/api/token")
-    suspend fun postAuthTokenRequest(@RequestParam("code") authCode: String? = ""): String {
-        if (authCode != null && authCode.length > 0) {
-            val samsUrl: String = System.getenv("SAMS_URL").toString()
-            val clientId: String = System.getenv("SAMS_CLIENT_ID").toString()
-            val clientSecret: String = System.getenv("SAMS_CLIENT_SECRET").toString()
-            val redirectURI: String = System.getenv("SAMS_REDIRECT_URL").toString()
+    suspend fun postAuthTokenRequest(@RequestParam("code") authCode: String): String {
+        val samsUrl: String = System.getenv("SAMS_URL").toString()
+        val clientId: String = System.getenv("SAMS_CLIENT_ID").toString()
+        val clientSecret: String = System.getenv("SAMS_CLIENT_SECRET").toString()
+        val redirectURI: String = System.getenv("SAMS_REDIRECT_URL").toString()
 
-            val grantType: String = "authorization_code"
-            val scope: String = "dex:status"
+        val grantType: String = "authorization_code"
+        val scope: String = "dex:status"
 
-            val response =
-                    webClient
-                            .post()
-                            .uri(samsUrl + "/auth/oauth/v2/token")
-                            .contentType(APPLICATION_FORM_URLENCODED)
-                            .body(
-                                    BodyInserters.fromFormData("grant_type", grantType)
-                                            .with("code", authCode)
-                                            .with("client_id", clientId)
-                                            .with("client_secret", clientSecret)
-                                            .with("redirect_uri", redirectURI)
-                                            .with("scope", scope)
-                            )
-                            .retrieve()
-                            .onStatus({ responseStatus ->
-                                responseStatus == HttpStatus.INTERNAL_SERVER_ERROR
-                            }) { throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR) }
-                            .onStatus({ responseStatus -> responseStatus == HttpStatus.BAD_REQUEST }) {
-                                throw ResponseStatusException(HttpStatus.BAD_REQUEST)
-                            }
-                            .awaitBody<String>()
+        val response =
+                webClient
+                        .post()
+                        .uri(samsUrl + "/auth/oauth/v2/token")
+                        .contentType(APPLICATION_FORM_URLENCODED)
+                        .body(
+                                BodyInserters.fromFormData("grant_type", grantType)
+                                        .with("code", authCode)
+                                        .with("client_id", clientId)
+                                        .with("client_secret", clientSecret)
+                                        .with("redirect_uri", redirectURI)
+                                        .with("scope", scope)
+                        )
+                        .retrieve()
+                        .onStatus({ responseStatus ->
+                            responseStatus == HttpStatus.INTERNAL_SERVER_ERROR
+                        }) { throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR) }
+                        .onStatus({ responseStatus -> responseStatus == HttpStatus.BAD_REQUEST }) {
+                            throw ResponseStatusException(HttpStatus.BAD_REQUEST)
+                        }
+                        .awaitBody<String>()
 
-            return response
-        } else {
-            return "No Auth Code Present"
-        }
+        return response
     }
 }
