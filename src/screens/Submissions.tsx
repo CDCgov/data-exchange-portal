@@ -125,7 +125,7 @@ function Submissions() {
                   <Icons.SortArrow className="sort-icon"></Icons.SortArrow>
                   <span className="text-left">Submitted</span>
                 </TableHeader>
-                <TableHeader size="sm">
+                <TableHeader size="sm" className="details-row">
                   <span className="text-center">Details</span>
                 </TableHeader>
               </TableRow>
@@ -155,7 +155,7 @@ function Submissions() {
                   <TableDataCell size="md">
                     {new Date(item.timestamp).toLocaleString()}
                   </TableDataCell>
-                  <TableDataCell size="sm">
+                  <TableDataCell size="sm" className="details-row">
                     <Icons.Dots />
                   </TableDataCell>
                 </TableRow>
