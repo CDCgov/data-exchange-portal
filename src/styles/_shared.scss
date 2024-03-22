@@ -11,12 +11,9 @@ body {
   display: grid;
   grid-template-columns: auto 1fr;
   .right {
-    display: grid;
-    grid-template-rows: auto 1fr;
+    background-color: #f5f5f5;
     .main_content {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      padding: 2.4rem;
+      padding: 0 1rem;
       gap: 2.4rem;
     }
     .box {
@@ -38,6 +35,7 @@ body {
   }
 
   .submissions_page {
+    height: 100%;
     .cdc-react.table tbody {
       width: 100%;
       background: #ffffff;
@@ -61,7 +59,6 @@ body {
     background: linear-gradient(225deg, #005eaa 0%, #26418f 100%);
   }
 }
-
-.bg-grey {
-  background-color: #f5f5f5;
+.cdc-page-header {
+  font-size: 1.6rem;
 }

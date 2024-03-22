@@ -1,0 +1,19 @@
+.status-boxes-container {
+  display: flex;
+  gap: 1.7rem;
+  margin-bottom: 1.7rem;
+}
+
+.status-boxes-box {
+  border: 0.1rem solid var(--cdc-gray-light);
+  border-radius: 0.4rem;
+  background-color: white;
+  padding: 0.7rem;
+  min-width: 16.36rem;
+}
+
+.status-boxes-box-value {
+  margin-top: 0.7rem;
+  font-size: 1.26rem;
+  font-weight: 500;
+}
