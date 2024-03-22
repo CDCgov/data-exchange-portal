@@ -1,10 +1,12 @@
 .pie-chart-container {
-  border: 0.1rem solid #e0e0e0;
+  background-color: white;
+  border: 0.1rem solid var(--cdc-gray-light);
   border-radius: 0.4rem;
+  max-width: 500px;
   overflow: hidden;
 }
 .pie-chart-body {
-  border-top: 0.3rem solid #005eaa;
+  border-top: 0.3rem solid var(--cdc-primary-blue);
   box-sizing: border-box;
   height: 100%;
   width: 100%;
@@ -39,5 +41,5 @@
 }
 
 .pie-chart-legend table tbody tr:not(:last-child) {
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--cdc-gray-light);
 }

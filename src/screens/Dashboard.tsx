@@ -1,19 +1,18 @@
 import { useAuth } from "react-oidc-context";
 
 import PieChart from "src/components/PieChart";
+import StatusBoxes from "src/components/StatusBoxes";
+
 import { useEffect, useState } from "react";
-import { getReportCounts, ReportCounts } from "src/utils/api/reportCounts";
+import getReportCounts, {
+  defaultReportCounts,
+  ReportCounts,
+} from "src/utils/api/reportCounts";
 
 function Dashboard() {
   const auth = useAuth();
-  const [countsData, setCountsData] = useState<ReportCounts>({
-    total_counts: 0,
-    status_counts: {
-      failed: { counts: 0 },
-      uploaded: { counts: 0 },
-      uploading: { counts: 0 },
-    },
-  });
+  const [countsData, setCountsData] =
+    useState<ReportCounts>(defaultReportCounts);
 
   useEffect(() => {
     const fetchCall = async () => {
@@ -28,7 +27,6 @@ function Dashboard() {
 
       try {
         const data: ReportCounts = (await res.json()) as ReportCounts;
-        console.log(data);
         setCountsData(data);
       } catch (error) {
         console.error("Failed to parse JSON:", error);
@@ -38,27 +36,9 @@ function Dashboard() {
   }, [auth]);
 
   return (
-    <section className="main_content">
-      {/*
-      <div className="box">
-        <p>Welcome {auth.user?.profile.email}</p>
-      </div>
-      <div className="box">
-        <h2>New to DEX?</h2>
-        <Button
-          className={styles["request-access-btn"]}
-          ariaLabel="take a tour"
-          variation="outline">
-          Take a tour
-        </Button>
-        <Button
-          className={styles["learn-more-btn"]}
-          ariaLabel="learn more"
-          variation="outline">
-          Learn more
-        </Button>
-      </div>
-      */}
+    <section className="main_content padding-x-2">
+      <h1 className="cdc-page-header padding-y-3 margin-0">Dashboard</h1>
+      <StatusBoxes data={countsData} />
       <PieChart data={countsData} />
     </section>
   );

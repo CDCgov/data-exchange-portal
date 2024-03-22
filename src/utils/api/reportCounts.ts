@@ -1,13 +1,14 @@
 import API_ENDPOINTS from "src/config/api";
 
-interface StatusReason {}
-
 interface CountsDetails {
   counts: number;
-  reasons?: StatusReason;
+  reasons?: {
+    [key: string]: number;
+  };
 }
 
 interface StatusCounts {
+  [key: string]: CountsDetails;
   failed: CountsDetails;
   uploaded: CountsDetails;
   uploading: CountsDetails;
@@ -18,7 +19,16 @@ export interface ReportCounts {
   status_counts: StatusCounts;
 }
 
-export const getReportCounts = async (
+export const defaultReportCounts: ReportCounts = {
+  total_counts: 0,
+  status_counts: {
+    failed: { counts: 0, reasons: {} },
+    uploaded: { counts: 0 },
+    uploading: { counts: 0 },
+  },
+};
+
+const getReportCounts = async (
   access_token: string,
   data_stream_id: string,
   data_stream_route: string,
@@ -44,3 +54,5 @@ export const getReportCounts = async (
 
   return response;
 };
+
+export default getReportCounts;
