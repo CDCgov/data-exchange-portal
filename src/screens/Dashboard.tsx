@@ -4,14 +4,15 @@ import PieChart from "src/components/PieChart";
 import StatusBoxes from "src/components/StatusBoxes";
 
 import { useEffect, useState } from "react";
-import { getReportCounts, ReportCounts } from "src/utils/api/reportCounts";
+import getReportCounts, {
+  defaultReportCounts,
+  ReportCounts,
+} from "src/utils/api/reportCounts";
 
 function Dashboard() {
   const auth = useAuth();
-  const [countsData, setCountsData] = useState<ReportCounts>({
-    totalCounts: 0,
-    reportCounts: [],
-  });
+  const [countsData, setCountsData] =
+    useState<ReportCounts>(defaultReportCounts);
 
   useEffect(() => {
     const fetchCall = async () => {
