@@ -63,7 +63,7 @@ class MainController() {
         return response
     }
 
-    
+
     @CrossOrigin
     @GetMapping("/reportCounts")
     suspend fun getReportCountsRequest(
@@ -81,8 +81,8 @@ class MainController() {
                         .get()
                         .uri(
                                 psAPIUrl +
-                                        "/api/report/counts?data_stream_id=" +
-                                        dataStreamId + "&data_stream_route=" + dataStreamRoute + 
+                                        "/api/report/counts/submissions/summary?data_stream_id=" +
+                                        dataStreamId + "&data_stream_route=" + dataStreamRoute +
                                         "&date_start=" + dateStart + "&date_end=" + dateEnd + "&ext_event=" + extEvent
                         )
                         .header("Authorization", authToken)
