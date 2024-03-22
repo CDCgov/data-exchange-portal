@@ -3,6 +3,7 @@ import { IFileSubmission } from "@types";
 import React, { useEffect, useState } from "react";
 
 import {
+  Button,
   Checkbox,
   Dropdown,
   Pill,
@@ -18,12 +19,16 @@ import { Icons } from "@us-gov-cdc/cdc-react-icons";
 
 import { getFileSubmissions } from "src/utils/api/fileSubmissions";
 
+import DetailsModal from "src/components/DetailsModal";
+
 import { useAuth } from "react-oidc-context";
 
 function Submissions() {
   const auth = useAuth();
   const pageLimit = 10;
   const [currentPageData, setCurrentPageData] = useState<IFileSubmission[]>([]);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchCall = async () => {
@@ -58,6 +63,10 @@ function Submissions() {
     if (status === "Uploading") return "busy";
     if (status === "Uploaded") return "success";
     if (status === "Failed") return "error";
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -156,13 +165,25 @@ function Submissions() {
                     {new Date(item.timestamp).toLocaleString()}
                   </TableDataCell>
                   <TableDataCell size="sm">
-                    <Icons.Dots />
+                    {/* Todo: Instead of using a span here, we should update Icons to allow an onClick */}
+                    <span
+                      onClick={() => {
+                        setIsModalOpen(true);
+                      }}>
+                      <Icons.Dots />
+                    </span>
                   </TableDataCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
           {/* <TablePagination pageLimit={pageLimit} data={currentPageData} /> */}
+          <>
+            <DetailsModal
+              isModalOpen={isModalOpen}
+              handleModalClose={handleModalClose}
+            />
+          </>
         </>
       )}
     </section>
