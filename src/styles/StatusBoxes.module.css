@@ -5,9 +5,9 @@
 }
 
 .status-boxes-box {
-  border: 0.1rem solid #e0e0e0;
+  border: 0.1rem solid var(--cdc-gray-light);
   border-radius: 0.4rem;
-  background-color: #fff;
+  background-color: white;
   padding: 0.7rem;
   min-width: 16.36rem;
 }
