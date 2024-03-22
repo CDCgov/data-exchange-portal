@@ -15,7 +15,7 @@ const defaultComputedValue: StatusDisplayValues = {
 };
 
 const computedStatusValues: StatusDisplayValuesMap = {
-  upload_complete: {
+  uploaded: {
     pillColor: "success",
     color: "#84BC49",
     label: "Upload Complete",
@@ -25,15 +25,10 @@ const computedStatusValues: StatusDisplayValuesMap = {
     color: "#88C3EA",
     label: "Uploading",
   },
-  failed_metadata: {
+  failed: {
     pillColor: "error",
     color: "#E57373",
-    label: "Failed Metadata",
-  },
-  structural_validation: {
-    pillColor: "error",
-    color: "#E57373",
-    label: "Structural Validation",
+    label: "Failed",
   },
 };
 

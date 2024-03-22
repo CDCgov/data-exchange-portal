@@ -18,11 +18,18 @@ interface PropTypes {
 }
 
 function PieChart({ data }: PropTypes) {
-  const { reportCounts } = data;
+  const { status_counts } = data;
 
-  reportCounts.sort((a, b) => b.count - a.count);
+  const statusCountsArray = Object.entries(status_counts).map(
+    ([id, { counts }]) => ({
+      id,
+      count: counts,
+    })
+  );
 
-  const statusBoxData: StatusBoxData[] = reportCounts.map((item) => {
+  statusCountsArray.sort((a, b) => b.count - a.count);
+
+  const statusBoxData: StatusBoxData[] = statusCountsArray.map((item) => {
     const { pillColor, label } = getStatusDisplayValuesById(item.id);
     return {
       id: item.id,
