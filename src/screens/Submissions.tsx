@@ -167,6 +167,7 @@ function Submissions() {
                   <TableDataCell size="sm" className="details-row">
                     {/* Todo: Instead of using a span here, we should update Icons to allow an onClick */}
                     <span
+                      className="cursor-pointer"
                       onClick={() => {
                         setIsModalOpen(true);
                       }}>

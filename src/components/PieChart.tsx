@@ -45,7 +45,7 @@ function PieChart({ data }: PropTypes) {
       pillColor,
       color,
       label,
-      percent: ((item.count / total_counts) * 100).toFixed(1),
+      percent: ((item.count / total_counts || 0) * 100).toFixed(1),
       value: item.count,
     };
   });
@@ -130,7 +130,7 @@ function PieChart({ data }: PropTypes) {
             fill={[
               {
                 match: {
-                  id: "upload_complete",
+                  id: "uploaded",
                 },
                 id: "lines-green",
               },
@@ -142,13 +142,7 @@ function PieChart({ data }: PropTypes) {
               },
               {
                 match: {
-                  id: "failed_metadata",
-                },
-                id: "dots-red",
-              },
-              {
-                match: {
-                  id: "structural_validation",
+                  id: "failed",
                 },
                 id: "dots-red",
               },
