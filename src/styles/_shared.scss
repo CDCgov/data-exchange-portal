@@ -47,6 +47,10 @@ body {
     .cdc-react.checkbox-container .checkbox-content {
       display: none;
     }
+    .details-row.width-10 {
+      max-width: 7rem;
+      text-align: center;
+    }
   }
 
   .left {

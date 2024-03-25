@@ -26,18 +26,26 @@ interface CenteredMetricProps {
 }
 
 function PieChart({ data }: PropTypes) {
-  const { totalCounts, reportCounts } = data;
+  const { total_counts, status_counts } = data;
 
-  reportCounts.sort((a, b) => b.count - a.count);
+  const statusCountsArray = Object.entries(status_counts).map(
+    ([id, { counts, reasons }]) => ({
+      id,
+      count: counts,
+      reasons, // include reasons for later use
+    })
+  );
 
-  const piechartData: PieData[] = reportCounts.map((item) => {
+  statusCountsArray.sort((a, b) => b.count - a.count);
+
+  const piechartData: PieData[] = statusCountsArray.map((item) => {
     const { pillColor, color, label } = getStatusDisplayValuesById(item.id);
     return {
       id: item.id,
       pillColor,
       color,
       label,
-      percent: ((item.count / totalCounts) * 100).toFixed(1),
+      percent: ((item.count / total_counts) * 100).toFixed(1),
       value: item.count,
     };
   });
@@ -66,7 +74,7 @@ function PieChart({ data }: PropTypes) {
             fontSize: "2rem",
             fontWeight: 600,
           }}>
-          {`${totalCounts}`}
+          {`${total_counts}`}
         </text>
       </>
     );
