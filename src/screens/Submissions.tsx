@@ -29,6 +29,7 @@ function Submissions() {
   const [currentPageData, setCurrentPageData] = useState<IFileSubmission[]>([]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentUploadId, setCurrentUploadId] = useState();
 
   useEffect(() => {
     const fetchCall = async () => {
@@ -115,11 +116,6 @@ function Submissions() {
           <Table className="padding-y-3">
             <TableHead>
               <TableRow>
-                <TableHeader
-                  size="sm"
-                  className="flex-justify-center checkbox-row">
-                  <Checkbox label="" onChange={() => {}} />
-                </TableHeader>
                 <TableHeader>
                   <React.Fragment key=".0">
                     <Icons.SortArrow className="sort-icon"></Icons.SortArrow>
@@ -142,13 +138,7 @@ function Submissions() {
             <TableBody>
               {currentPageData.map((item: IFileSubmission) => (
                 <TableRow key={`table-row-${item.upload_id}`}>
-                  {" "}
                   {/* Todo: Update this to use a more appropriate id as key */}
-                  <TableDataCell
-                    size="sm"
-                    className="flex-justify-center checkbox-row">
-                    <Checkbox />
-                  </TableDataCell>
                   <TableDataCell className="text-left">
                     {item.filename}
                   </TableDataCell>
@@ -170,6 +160,7 @@ function Submissions() {
                       className="cursor-pointer"
                       onClick={() => {
                         setIsModalOpen(true);
+                        setCurrentUploadId(item.upload_id);
                       }}>
                       <Icons.Dots />
                     </span>
@@ -181,6 +172,7 @@ function Submissions() {
           {/* <TablePagination pageLimit={pageLimit} data={currentPageData} /> */}
           <>
             <DetailsModal
+              uploadId={currentUploadId}
               isModalOpen={isModalOpen}
               handleModalClose={handleModalClose}
             />
