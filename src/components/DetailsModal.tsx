@@ -39,17 +39,25 @@ function DetailsModal({ uploadId, isModalOpen, handleModalClose }: PropTypes) {
           </div>
         </Alert>
         <Divider className="margin-y-2" height={4} stroke="#E0E0E0" />
-        <div className="display-flex flex-justify margin-y-1">
-          <strong>Uploaded by</strong>
-          <div>MarylandStateSender123 Jurisdiction Parter</div>
+        <div className="grid-row margin-y-1">
+          <div className="grid-col-4">
+            <strong>Uploaded by</strong>
+          </div>
+          <div className="grid-col-8">
+            MarylandStateSender123 Jurisdiction Parter
+          </div>
         </div>
-        <div className="display-flex flex-justify margin-y-1">
-          <strong>Upload date</strong>
-          <div>Tuesday, March 5, 2024 | 3:45 pm</div>
+        <div className="grid-row margin-y-1">
+          <div className="grid-col-4">
+            <strong>Upload date</strong>
+          </div>
+          <div className="grid-col-8">Tuesday, March 5, 2024 | 3:45 pm</div>
         </div>
-        <div className="display-flex flex-justify margin-y-1">
-          <strong>Upload ID</strong>
-          <div>{uploadId}</div>
+        <div className="grid-row margin-y-1">
+          <div className="grid-col-4">
+            <strong>Upload ID</strong>
+          </div>
+          <div className="grid-col-8">{uploadId}</div>
         </div>
       </ModalBody>
       <ModalFooter>
