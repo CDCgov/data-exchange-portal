@@ -2,6 +2,7 @@ import { http, HttpResponse } from "msw";
 import API_ENDPOINTS from "src/config/api";
 import mockFileSubmissions from "src/mocks/data/fileStatus.json";
 import mockReportCounts from "src/mocks/data/reportCounts.json";
+import mockSubmissionDetails from "src/mocks/data/submissionDetails.json";
 
 export const handlers = [
   http.get(API_ENDPOINTS.fileSubmissions, ({ request }) => {
@@ -27,5 +28,15 @@ export const handlers = [
     }
 
     return HttpResponse.json(mockReportCounts);
+  }),
+  http.get(API_ENDPOINTS.submissionDetails, ({ request }) => {
+    const url = new URL(request.url);
+    const upload_id = url.searchParams.get("upload_id");
+
+    if (!upload_id) {
+      return new HttpResponse(null, { status: 400 });
+    }
+
+    return HttpResponse.json(mockSubmissionDetails);
   }),
 ];
