@@ -8,6 +8,7 @@ import getReportCounts, {
   defaultReportCounts,
   ReportCounts,
 } from "src/utils/api/reportCounts";
+import { convertDate } from "src/utils/helperFunctions/date";
 
 function Dashboard() {
   const auth = useAuth();
@@ -20,7 +21,8 @@ function Dashboard() {
         auth.user?.access_token || "",
         "temp_data_stream_id",
         "temp_data_stream_route",
-        "30"
+        "",
+        convertDate(new Date())
       );
 
       // TODO: add UI feedback for failed report counts retrieval

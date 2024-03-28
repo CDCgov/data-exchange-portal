@@ -19,6 +19,7 @@ import { Icons } from "@us-gov-cdc/cdc-react-icons";
 import { getFileSubmissions } from "src/utils/api/fileSubmissions";
 
 import { useAuth } from "react-oidc-context";
+import { convertDate } from "src/utils/helperFunctions/date";
 
 function Submissions() {
   const auth = useAuth();
@@ -30,8 +31,8 @@ function Submissions() {
       const res = await getFileSubmissions(
         auth.user?.access_token || "",
         "temp_data_stream_id", // TODO: Map to data stream selection
-        new Date().toISOString(), // TODO: Map (date_start) to date selection dropdown
-        new Date().toISOString(), // TODO: Map (date_end) to date selection dropdown
+        convertDate(new Date()), // TODO: Map (date_start) to date selection dropdown
+        convertDate(new Date()), // TODO: Map (date_end) to date selection dropdown
         "descending", // TODO: Map to sort_order
         "date", // TODO: Map to sort_by
         1, // TODO: Map to onClick of page number from pagination, this represent page_number
