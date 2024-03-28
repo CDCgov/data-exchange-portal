@@ -1,17 +1,17 @@
 {
-  "total_counts": 388732,
+  "total_counts": 87,
   "status_counts": {
-    "uploading": {
-      "counts": 25046
+    "completed": {
+      "counts": 44
     },
     "failed": {
-      "counts": 183311,
+      "counts": 18,
       "reasons": {
-        "metadata": 133311
+        "metadata": 18
       }
     },
-    "uploaded": {
-      "counts": 180375
+    "processing": {
+      "counts": 25
     }
   }
 }

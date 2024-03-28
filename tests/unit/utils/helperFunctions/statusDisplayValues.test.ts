@@ -2,9 +2,9 @@ import getStatusDisplayValuesById from "src/utils/helperFunctions/statusDisplayV
 
 describe("Status Display Values", () => {
   it("should return a status display value object for valid status id", async () => {
-    const validId = "uploaded";
+    const validId = "completed";
     const statusDisplay = getStatusDisplayValuesById(validId);
-    expect(statusDisplay.label).toStrictEqual("Upload Complete");
+    expect(statusDisplay.label).toStrictEqual("Completed");
     expect(statusDisplay.color).toStrictEqual("#84BC49");
   });
   it("should return default display values object for invalid status id", async () => {

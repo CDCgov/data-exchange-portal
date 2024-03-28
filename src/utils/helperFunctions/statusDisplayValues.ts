@@ -15,20 +15,20 @@ const defaultComputedValue: StatusDisplayValues = {
 };
 
 const computedStatusValues: StatusDisplayValuesMap = {
-  uploaded: {
+  completed: {
     pillColor: "success",
     color: "#84BC49",
-    label: "Upload Complete",
-  },
-  uploading: {
-    pillColor: "busy",
-    color: "#88C3EA",
-    label: "Uploading",
+    label: "Completed",
   },
   failed: {
     pillColor: "error",
     color: "#E57373",
     label: "Failed",
+  },
+  processing: {
+    pillColor: "busy",
+    color: "#88C3EA",
+    label: "Processing",
   },
 };
 
