@@ -3,8 +3,6 @@ import { IFileSubmission } from "@types";
 import React, { useEffect, useState } from "react";
 
 import {
-  Button,
-  Checkbox,
   Dropdown,
   Pill,
   Table,
@@ -29,7 +27,7 @@ function Submissions() {
   const [currentPageData, setCurrentPageData] = useState<IFileSubmission[]>([]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentUploadId, setCurrentUploadId] = useState();
+  const [currentUploadId, setCurrentUploadId] = useState<IFileSubmission>();
 
   useEffect(() => {
     const fetchCall = async () => {
@@ -61,9 +59,9 @@ function Submissions() {
   }, [auth]);
 
   const uploadStatusColor = (status: string) => {
-    if (status === "Uploading") return "busy";
-    if (status === "Uploaded") return "success";
+    if (status === "Completed") return "success";
     if (status === "Failed") return "error";
+    if (status === "Processing") return "busy";
   };
 
   const handleModalClose = () => {
@@ -160,7 +158,7 @@ function Submissions() {
                       className="cursor-pointer"
                       onClick={() => {
                         setIsModalOpen(true);
-                        setCurrentUploadId(item.upload_id);
+                        setCurrentUploadId(item);
                       }}>
                       <Icons.Dots />
                     </span>
@@ -172,7 +170,7 @@ function Submissions() {
           {/* <TablePagination pageLimit={pageLimit} data={currentPageData} /> */}
           <>
             <DetailsModal
-              uploadId={currentUploadId}
+              uploadId="hello"
               isModalOpen={isModalOpen}
               handleModalClose={handleModalClose}
             />
