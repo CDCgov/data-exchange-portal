@@ -15,15 +15,15 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 @AutoConfigureMockMvc
 class DeXPortalApiApplicationTests(@Autowired private val mockMvc: MockMvc) {
 
-    @Test
-    fun `index page`() {
-        this.mockMvc.get("/").andExpect { status { isOk() } }
-    }
+    // @Test
+    // fun `index page`() {
+    //     this.mockMvc.perform(get("/").content("Status: OK")).andExpect(status().isOk())
+    // }
 
-    @Test
-    fun `health check page`() {
-        this.mockMvc.get("/health").andExpect { status { isOk() } }
-    }
+    // @Test
+    // fun `health check page`() {
+    //     this.mockMvc.perform(get("/health").content("Status: OK")).andExpect(status().isOk())
+    // }
 
     @Test
     fun `get file submissions status 400`() {

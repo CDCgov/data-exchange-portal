@@ -19,7 +19,8 @@ function Dashboard() {
       const res = await getReportCounts(
         auth.user?.access_token || "",
         "temp_data_stream_id",
-        "temp_data_stream_route"
+        "temp_data_stream_route",
+        "30"
       );
 
       // TODO: add UI feedback for failed report counts retrieval

@@ -29,7 +29,7 @@ function Submissions() {
     const fetchCall = async () => {
       const res = await getFileSubmissions(
         auth.user?.access_token || "",
-        "dextesting", // TODO: Map to data stream selection
+        "temp_data_stream_id", // TODO: Map to data stream selection
         new Date().toISOString(), // TODO: Map (date_start) to date selection dropdown
         new Date().toISOString(), // TODO: Map (date_end) to date selection dropdown
         "descending", // TODO: Map to sort_order
