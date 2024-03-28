@@ -139,7 +139,6 @@ class MainController() {
                 uri = uri + "&ext_event=" + extEvent
             }
 
-            print(uri)
             val response =
                     webClient
                             .get()
