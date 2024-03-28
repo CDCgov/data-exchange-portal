@@ -23,7 +23,7 @@ function PieChart({ data }: PropTypes) {
   const statusCountsArray = Object.entries(status_counts).map(
     ([id, { counts }]) => ({
       id,
-      count: counts,
+      count: counts || 0,
     })
   );
 

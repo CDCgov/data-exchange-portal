@@ -74,7 +74,7 @@ function PieChart({ data }: PropTypes) {
             fontSize: "2rem",
             fontWeight: 600,
           }}>
-          {`${total_counts}`}
+          {`${total_counts || 0}`}
         </text>
       </>
     );
