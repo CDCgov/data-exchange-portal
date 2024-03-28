@@ -52,25 +52,13 @@ class MainController() {
     @CrossOrigin
     @GetMapping("/")
     fun index(): String {
-        val isConfigured: Boolean = setupEnv()
-
-        if (isConfigured) {
-            return "Status: OK"
-        }
-
-        return "Service not configured"
+        return "Status: OK"
     }
 
     @CrossOrigin
     @GetMapping("/health")
     fun health(): String {
-        val isConfigured: Boolean = setupEnv()
-
-        if (isConfigured) {
-            return "Status: OK"
-        }
-
-        return "Service not configured"
+        return "Status: OK"
     }
 
     @CrossOrigin
