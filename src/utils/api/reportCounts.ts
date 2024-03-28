@@ -32,6 +32,7 @@ const getReportCounts = async (
   access_token: string,
   data_stream_id: string,
   data_stream_route: string,
+  days_interval?: string,
   date_start?: string,
   date_end?: string
 ): Promise<Response> => {
@@ -39,6 +40,7 @@ const getReportCounts = async (
 
   if (data_stream_id) params.append("data_stream_id", data_stream_id);
   if (data_stream_route) params.append("data_stream_route", data_stream_route);
+  if (days_interval) params.append("days_interval", days_interval);
   if (date_start) params.append("date_start", date_start);
   if (date_end) params.append("date_end", date_end);
 

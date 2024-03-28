@@ -1,4 +1,4 @@
-export const convertDate = (date: Date) => {
+const convertDate = (date: Date) => {
   const convertedDate: string = `${date
     .toISOString()
     .replace(/-/g, "")
@@ -8,3 +8,5 @@ export const convertDate = (date: Date) => {
 
   return convertedDate;
 };
+
+export default convertDate;
