@@ -7,27 +7,40 @@ import {
   ModalFooter,
   Pill,
 } from "@us-gov-cdc/cdc-react";
+import { IFileSubmission } from "@types";
+import getStatusDisplayValuesById, {
+  StatusDisplayValues,
+} from "src/utils/helperFunctions/statusDisplayValues";
 
 interface PropTypes {
-  uploadId: string;
+  submission: IFileSubmission;
   isModalOpen: boolean;
   handleModalClose: () => void;
 }
 
-function DetailsModal({ uploadId, isModalOpen, handleModalClose }: PropTypes) {
-  console.log(uploadId);
+function DetailsModal({
+  submission,
+  isModalOpen,
+  handleModalClose,
+}: PropTypes) {
+  const displayValues: StatusDisplayValues = getStatusDisplayValuesById(
+    submission.status
+  );
+
   return (
     <Modal
       isOpen={isModalOpen}
       modalTitle="Submission Details"
       onClose={handleModalClose}>
       <ModalBody>
-        <h2 className="font-sans-md text-normal">MonthlyReport_MD-12345.hl7</h2>
-        {/* Todo: update cdc-react to allow className on <Pill> so we can avoid this extra span */}
-        <span className="padding-top-1 padding-bottom-2">
-          <Pill label="FailedMetadata" color="error"></Pill>
+        <h2 className="font-sans-md text-bold">{submission.filename}</h2>
+        <span className="padding-top-2 padding-bottom-2">
+          <Pill
+            label={displayValues.label}
+            color={displayValues.pillColor}></Pill>
         </span>
-        <Alert heading="FailedMetadata" type="error">
+        {/* Todo: update cdc-react to allow className on <Pill> so we can avoid this extra span */}
+        <Alert heading="Failed Metadata" type="error">
           2 Errors were detected
           {/* Todo: rework this since the alert body is a <p> and you can't have a <div> nested inside a <p> */}
           <div className="border-1px radius-md border-secondary-light margin-y-2 padding-105">
@@ -57,7 +70,7 @@ function DetailsModal({ uploadId, isModalOpen, handleModalClose }: PropTypes) {
           <div className="grid-col-4">
             <strong>Upload ID</strong>
           </div>
-          <div className="grid-col-8">{uploadId}</div>
+          <div className="grid-col-8">{submission.upload_id}</div>
         </div>
       </ModalBody>
       <ModalFooter>

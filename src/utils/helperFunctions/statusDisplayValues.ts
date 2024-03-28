@@ -1,4 +1,4 @@
-interface StatusDisplayValues {
+export interface StatusDisplayValues {
   pillColor: string;
   color: string;
   label: string;

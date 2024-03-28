@@ -16,6 +16,7 @@ import {
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
 
 import { getFileSubmissions } from "src/utils/api/fileSubmissions";
+import getStatusDisplayValuesById from "src/utils/helperFunctions/statusDisplayValues";
 
 import DetailsModal from "src/components/DetailsModal";
 
@@ -27,7 +28,14 @@ function Submissions() {
   const [currentPageData, setCurrentPageData] = useState<IFileSubmission[]>([]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentUploadId, setCurrentUploadId] = useState<IFileSubmission>();
+  const [selectedSubmission, setSelectedSubmission] = useState<IFileSubmission>(
+    {
+      upload_id: "",
+      filename: "",
+      status: "",
+      timestamp: "",
+    }
+  );
 
   useEffect(() => {
     const fetchCall = async () => {
@@ -57,12 +65,6 @@ function Submissions() {
     };
     fetchCall();
   }, [auth]);
-
-  const uploadStatusColor = (status: string) => {
-    if (status === "Completed") return "success";
-    if (status === "Failed") return "error";
-    if (status === "Processing") return "busy";
-  };
 
   const handleModalClose = () => {
     setIsModalOpen(false);
@@ -142,11 +144,11 @@ function Submissions() {
                   </TableDataCell>
                   <TableDataCell size="sm">
                     <Pill
-                      label={item.status}
+                      label={getStatusDisplayValuesById(item.status).label}
                       shape="slot"
                       outline={false}
                       inverse={false}
-                      color={uploadStatusColor(item.status)}
+                      color={getStatusDisplayValuesById(item.status).pillColor}
                     />
                   </TableDataCell>
                   <TableDataCell size="md">
@@ -158,7 +160,7 @@ function Submissions() {
                       className="cursor-pointer"
                       onClick={() => {
                         setIsModalOpen(true);
-                        setCurrentUploadId(item);
+                        setSelectedSubmission(item);
                       }}>
                       <Icons.Dots />
                     </span>
@@ -170,7 +172,7 @@ function Submissions() {
           {/* <TablePagination pageLimit={pageLimit} data={currentPageData} /> */}
           <>
             <DetailsModal
-              uploadId="hello"
+              submission={selectedSubmission}
               isModalOpen={isModalOpen}
               handleModalClose={handleModalClose}
             />
