@@ -4,11 +4,13 @@ import PieChart from "src/components/PieChart";
 import StatusBoxes from "src/components/StatusBoxes";
 
 import { useEffect, useState } from "react";
+
 import getReportCounts, {
   defaultReportCounts,
   ReportCounts,
 } from "src/utils/api/reportCounts";
-import { convertDate } from "src/utils/helperFunctions/date";
+
+import convertDate from "src/utils/helperFunctions/date";
 
 function Dashboard() {
   const auth = useAuth();

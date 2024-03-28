@@ -19,7 +19,7 @@ import { Icons } from "@us-gov-cdc/cdc-react-icons";
 import { getFileSubmissions } from "src/utils/api/fileSubmissions";
 
 import { useAuth } from "react-oidc-context";
-import { convertDate } from "src/utils/helperFunctions/date";
+import convertDate from "src/utils/helperFunctions/date";
 
 function Submissions() {
   const auth = useAuth();
