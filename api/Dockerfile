@@ -4,10 +4,6 @@ WORKDIR /home/gradle/src
 RUN gradle build
 
 FROM docker.io/library/openjdk:23-jdk-oraclelinux9
-ARG DOCKER_USER=default_user
-RUN addgroup -S docker && adduser -S $DOCKER_USER -G docker
-USER $DOCKER_USER
-
 EXPOSE 8080
 COPY --from=build /home/gradle/src/build/libs/DeXPortalAPI-0.0.1-SNAPSHOT.jar /app/
 
