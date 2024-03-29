@@ -45,7 +45,7 @@ function PieChart({ data }: PropTypes) {
       pillColor,
       color,
       label,
-      percent: ((item.count / total_counts) * 100).toFixed(1),
+      percent: ((item.count / total_counts || 0) * 100).toFixed(1),
       value: item.count,
     };
   });
@@ -74,7 +74,7 @@ function PieChart({ data }: PropTypes) {
             fontSize: "2rem",
             fontWeight: 600,
           }}>
-          {`${total_counts}`}
+          {`${total_counts || 0}`}
         </text>
       </>
     );
