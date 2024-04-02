@@ -28,6 +28,7 @@ class MainController() {
     @CrossOrigin
     @GetMapping("/")
     fun index(): String {
+        print("Testing branch")
         return "Status: OK"
     }
 

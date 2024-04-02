@@ -1,0 +1,54 @@
+name: "Deploy Specific Branch to Dev"
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Specify branch"
+        required: true
+        type: string
+
+jobs:
+  deploy-backend:
+    name: "Deploy Backend to Dev"
+    if: ${{inputs.branch}}
+    uses: ./.github/workflows/remote-trigger-template.yml
+    with:
+      WORKFLOW: app-service-dev.yml
+      REF: ${{ inputs.branch }}
+    secrets: inherit
+  deploy-frontend:
+    name: "Deploy Frontend to Dev"
+    runs-on: ubuntu-latest
+    if: ${{inputs.branch}}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install SWA CL
+        run: yarn global add @azure/static-web-apps-cli
+      - name: Install frontend dependencies
+        run: yarn install
+      - name: Generate build number
+        id: gen_build_number
+        run: |
+          PACKAGE_VERSION=$(node -e "console.log(require(\"./package.json\").version)")
+          SHORT_SHA=$(git rev-parse --short HEAD)
+          echo "build_number=${PACKAGE_VERSION}_${SHORT_SHA}" >> $GITHUB_OUTPUT
+      - name: Create dev environment variables
+        run: |
+          touch .env.dev
+          echo VITE_SAMS_AUTHORITY_URL=https://apigw-stg.cdc.gov >> .env.dev
+          echo VITE_SAMS_CLIENT_ID=${{ secrets.SAMS_CLIENT_ID }} >> .env.dev
+          echo VITE_SAMS_AUTH_URL=https://apigw-stg.cdc.gov:8443/auth/oauth/v2/authorize >> .env.dev
+          echo VITE_SAMS_USER_INFO_URL=https://apigw-stg.cdc.gov:8443/openid/connect/v1/userinfo >> .env.dev
+          echo VITE_OAUTH_CALLBACK_URL=https://dexdev.cdc.gov/oauth_callback >> .env.dev
+          echo VITE_API_BASE_URL=https://ede-dev-portal-api.azurewebsites.net >> .env.dev
+          echo VITE_APP_BUILD_NUMBER=${{ steps.gen_build_number.outputs.build_number }} >> .env.dev
+          echo VITE_DEV_MOCKING_ENABLED=false >> env.dev
+      - name: Build frontend
+        run: yarn build:dev
+      - name: Deploy
+        run: swa deploy ./dist -d ${{ secrets.AZURE_SWA_DEPLOY_TOKEN }} --env dev -w .

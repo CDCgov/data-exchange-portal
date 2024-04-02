@@ -19,6 +19,8 @@ import Submissions from "src/screens/Submissions";
 import { ProtectedRoute } from "src/components/ProtectedRoute";
 
 function App() {
+  console.log("Testing branch");
+
   return (
     <Router>
       <Routes>
