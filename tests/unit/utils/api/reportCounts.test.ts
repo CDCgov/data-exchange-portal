@@ -2,7 +2,7 @@ import getReportCounts from "src/utils/api/reportCounts";
 import mockReportCounts from "src/mocks/data/reportCounts.json";
 
 describe("reportCounts", () => {
-  it("should fetch file submissions", async () => {
+  it("should fetch report counts", async () => {
     const payload = mockReportCounts;
     const res = await getReportCounts(
       "mock_auth_token",
