@@ -1,4 +1,5 @@
 import {
+  Accordion,
   Alert,
   Button,
   Divider,
@@ -13,6 +14,8 @@ import { IFileSubmission } from "@types";
 import getStatusDisplayValuesById, {
   StatusDisplayValues,
 } from "src/utils/helperFunctions/statusDisplayValues";
+import jsonPrettyPrint from "src/utils/helperFunctions/jsonPrettyPrint";
+import submissionDetailsJson from "src/mocks/data/submissionDetails.json";
 
 interface PropTypes {
   submission: IFileSubmission;
@@ -111,6 +114,18 @@ function DetailsModal({
             <strong>Upload ID</strong>
           </div>
           <div className="grid-col-8">{submission.upload_id}</div>
+        </div>
+        <div className="grid-row margin-top-3">
+          {/* TODO: replace with real data from useEffect submissionDetails calls */}
+          <Accordion
+            items={[
+              {
+                id: "1",
+                title: "Submitted details",
+                content: jsonPrettyPrint(submissionDetailsJson),
+              },
+            ]}
+          />
         </div>
       </ModalBody>
       <ModalFooter>

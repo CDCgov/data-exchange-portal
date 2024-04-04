@@ -18,7 +18,7 @@ interface PropTypes {
   data: ReportCounts;
 }
 
-function PieChart({ data }: PropTypes) {
+function StatusBoxes({ data }: PropTypes) {
   const { status_counts } = data;
 
   const statusCountsArray = Object.entries(status_counts).map(
@@ -62,4 +62,4 @@ function PieChart({ data }: PropTypes) {
   );
 }
 
-export default PieChart;
+export default StatusBoxes;
