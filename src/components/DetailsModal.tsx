@@ -77,8 +77,12 @@ function DetailsModal({
         <span className="padding-bottom-3">
           {/* TODO: update cdc-react to allow className on <Pill> so we can avoid this extra span */}
           <Pill
+            variation="info"
+            altText={displayValues.label}
             label={displayValues.label}
-            color={displayValues.pillColor}></Pill>
+            color={displayValues.pillColor}
+            icon={displayValues.pillIcon}
+          />
         </span>
         <div className="grid-row flex-row flex-align-center padding-bottom-3">
           <Icons.PaperLines />

@@ -145,9 +145,6 @@ function Submissions() {
                   <TableDataCell size="sm">
                     <Pill
                       label={getStatusDisplayValuesById(item.status).label}
-                      shape="slot"
-                      outline={false}
-                      inverse={false}
                       color={getStatusDisplayValuesById(item.status).pillColor}
                     />
                   </TableDataCell>

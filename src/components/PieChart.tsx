@@ -10,6 +10,7 @@ import getStatusDisplayValuesById from "src/utils/helperFunctions/statusDisplayV
 interface PieData {
   id: string;
   pillColor: string;
+  pillIcon: JSX.Element;
   color: string;
   label: string;
   percent: string;
@@ -39,10 +40,13 @@ function PieChart({ data }: PropTypes) {
   statusCountsArray.sort((a, b) => b.count - a.count);
 
   const piechartData: PieData[] = statusCountsArray.map((item) => {
-    const { pillColor, color, label } = getStatusDisplayValuesById(item.id);
+    const { pillColor, pillIcon, color, label } = getStatusDisplayValuesById(
+      item.id
+    );
     return {
       id: item.id,
       pillColor,
+      pillIcon,
       color,
       label,
       percent: ((item.count / total_counts || 0) * 100).toFixed(1),
@@ -164,7 +168,13 @@ function PieChart({ data }: PropTypes) {
                   return (
                     <tr key={item.id}>
                       <td>
-                        <Pill label={item.label} color={item.pillColor} />
+                        <Pill
+                          variation="info"
+                          altText={item.label}
+                          label={item.label}
+                          color={item.pillColor}
+                          icon={item.pillIcon}
+                        />
                       </td>
                       <td>{item.value}</td>
                       <td>{item.percent}%</td>
