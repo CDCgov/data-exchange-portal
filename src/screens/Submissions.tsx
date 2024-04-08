@@ -3,6 +3,7 @@ import { IFileSubmission } from "@types";
 import React, { useEffect, useState } from "react";
 
 import {
+  Button,
   Dropdown,
   Pill,
   Table,
@@ -153,14 +154,17 @@ function Submissions() {
                   </TableDataCell>
                   <TableDataCell size="sm" className="details-row">
                     {/* Todo: Instead of using a span here, we should update Icons to allow an onClick */}
-                    <span
-                      className="cursor-pointer"
+                    <Button
+                      ariaLabel="Submission Details"
                       onClick={() => {
                         setIsModalOpen(true);
                         setSelectedSubmission(item);
-                      }}>
-                      <Icons.Dots />
-                    </span>
+                      }}
+                      variation="text"
+                      icon={<Icons.Dots />}
+                      iconOnly
+                      size="default"
+                    />
                   </TableDataCell>
                 </TableRow>
               ))}

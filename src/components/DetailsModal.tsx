@@ -49,7 +49,7 @@ function DetailsModal({
 
       try {
         // TODO: replace any with correct object structure
-        const data: any = await res.json();
+        const data = await res.json();
         setDetails(data);
       } catch (error) {
         console.error("Failed to parse JSON:", error);
@@ -68,11 +68,11 @@ function DetailsModal({
         <Alert heading="Failed Metadata" type="error">
           2 Errors were detected
           <p className="border-1px radius-md border-secondary-light margin-y-2 padding-105">
-            Missing required metadata field, 'meta_field1.'
+            Missing required metadata field, meta_field1.
           </p>
           <p className="border-1px radius-md border-secondary-light margin-y-2 padding-105">
-            Metadata field, 'meta_field2,' is set to 'value3' and does not
-            contain one of the allowed values: ['value1', 'value2']
+            Metadata field, meta_field2, is set to value3 and does not contain
+            one of the allowed values: [value1, value2]
           </p>
         </Alert>
       );
