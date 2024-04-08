@@ -15,6 +15,7 @@ export const handlers = [
 
     return HttpResponse.json(mockFileSubmissions);
   }),
+
   http.get(API_ENDPOINTS.reportCounts, ({ request }) => {
     const url = new URL(request.url);
     const dataStreamId = url.searchParams.get("data_stream_id");
@@ -29,6 +30,7 @@ export const handlers = [
 
     return HttpResponse.json(mockReportCounts);
   }),
+
   http.get(API_ENDPOINTS.submissionDetails, ({ request }) => {
     const url = new URL(request.url);
     const upload_id = url.searchParams.get("upload_id");

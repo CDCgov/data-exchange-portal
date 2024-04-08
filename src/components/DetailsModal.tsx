@@ -1,3 +1,6 @@
+import { useEffect, useState } from "react";
+import { useAuth } from "react-oidc-context";
+
 import {
   Accordion,
   Alert,
@@ -9,13 +12,14 @@ import {
   Pill,
   ProgressTracker,
 } from "@us-gov-cdc/cdc-react";
+
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
 import { IFileSubmission } from "@types";
 import getStatusDisplayValuesById, {
   StatusDisplayValues,
 } from "src/utils/helperFunctions/statusDisplayValues";
 import jsonPrettyPrint from "src/utils/helperFunctions/jsonPrettyPrint";
-import submissionDetailsJson from "src/mocks/data/submissionDetails.json";
+import getSubmissionDetails from "src/utils/api/submissionDetails";
 
 interface PropTypes {
   submission: IFileSubmission;
@@ -31,6 +35,28 @@ function DetailsModal({
   const displayValues: StatusDisplayValues = getStatusDisplayValuesById(
     submission.status
   );
+  const auth = useAuth();
+  const [details, setDetails] = useState();
+
+  useEffect(() => {
+    const fetchCall = async () => {
+      const res = await getSubmissionDetails(
+        auth.user?.access_token || "",
+        submission.upload_id
+      );
+
+      if (res.status != 200) return;
+
+      try {
+        // TODO: replace any with correct object structure
+        const data: any = await res.json();
+        setDetails(data);
+      } catch (error) {
+        console.error("Failed to parse JSON:", error);
+      }
+    };
+    fetchCall();
+  }, [auth, submission]);
 
   const getContent = () => {
     if (submission.status == "failed") {
@@ -122,7 +148,7 @@ function DetailsModal({
               {
                 id: "1",
                 title: "Submitted details",
-                content: jsonPrettyPrint(submissionDetailsJson),
+                content: jsonPrettyPrint(details),
               },
             ]}
           />

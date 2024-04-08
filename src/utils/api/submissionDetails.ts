@@ -6,7 +6,7 @@ export const getSubmissionDetails = async (
 ): Promise<Response> => {
   const params = new URLSearchParams();
 
-  if (upload_id) params.append("data_stream_id", upload_id);
+  if (upload_id) params.append("upload_id", upload_id);
 
   const url = `${API_ENDPOINTS.submissionDetails}?${params.toString()}`;
 
@@ -20,3 +20,5 @@ export const getSubmissionDetails = async (
 
   return response;
 };
+
+export default getSubmissionDetails;
