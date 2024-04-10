@@ -153,7 +153,6 @@ function Submissions() {
                     {new Date(item.timestamp).toLocaleString()}
                   </TableDataCell>
                   <TableDataCell size="sm" className="details-row">
-                    {/* Todo: Instead of using a span here, we should update Icons to allow an onClick */}
                     <Button
                       ariaLabel="Submission Details"
                       onClick={() => {

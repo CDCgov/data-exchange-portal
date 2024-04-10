@@ -48,7 +48,6 @@ function DetailsModal({
       if (res.status != 200) return;
 
       try {
-        // TODO: replace any with correct object structure
         const data = await res.json();
         setDetails(data);
       } catch (error) {
@@ -60,10 +59,7 @@ function DetailsModal({
 
   const getContent = () => {
     if (submission.status == "failed") {
-      /*
-      TODO: parse file details for failed alert data
-      Use a useEffect to make the submissionDetails call to continually update
-      */
+      // TODO: parse file details from useEffect for failed alert data
       return (
         <Alert heading="Failed Metadata" type="error">
           2 Errors were detected
@@ -83,10 +79,7 @@ function DetailsModal({
     }
 
     if (submission.status == "processing") {
-      /*
-      TODO: parse file details for stage, current upload amount, total upload amount, etc.
-      Use a useEffect to make the submissionDetails call to continually update
-      */
+      // TODO: parse file details for stage, current upload amount, total upload amount, etc. from useEffect
       return (
         <ProgressTracker
           label="Stage: Uploading"
