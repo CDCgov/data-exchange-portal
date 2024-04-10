@@ -9,6 +9,7 @@ import getStatusDisplayValuesById from "src/utils/helperFunctions/statusDisplayV
 interface StatusBoxData {
   id: string;
   pillColor: string;
+  pillIcon: JSX.Element;
   label: string;
   value: number;
 }
@@ -17,7 +18,7 @@ interface PropTypes {
   data: ReportCounts;
 }
 
-function PieChart({ data }: PropTypes) {
+function StatusBoxes({ data }: PropTypes) {
   const { status_counts } = data;
 
   const statusCountsArray = Object.entries(status_counts).map(
@@ -30,10 +31,11 @@ function PieChart({ data }: PropTypes) {
   statusCountsArray.sort((a, b) => b.count - a.count);
 
   const statusBoxData: StatusBoxData[] = statusCountsArray.map((item) => {
-    const { pillColor, label } = getStatusDisplayValuesById(item.id);
+    const { pillColor, pillIcon, label } = getStatusDisplayValuesById(item.id);
     return {
       id: item.id,
       pillColor,
+      pillIcon,
       label,
       value: item.count,
     };
@@ -44,7 +46,13 @@ function PieChart({ data }: PropTypes) {
       {statusBoxData.map((item) => {
         return (
           <div key={item.id} className={styles["status-boxes-box"]}>
-            <Pill label={item.label} color={item.pillColor} />
+            <Pill
+              variation="info"
+              altText={item.label}
+              label={item.label}
+              color={item.pillColor}
+              icon={item.pillIcon}
+            />
             {/* Todo: need to figure out the a11y/semantics of the value. */}
             <div className={styles["status-boxes-box-value"]}>{item.value}</div>
           </div>
@@ -54,4 +62,4 @@ function PieChart({ data }: PropTypes) {
   );
 }
 
-export default PieChart;
+export default StatusBoxes;
