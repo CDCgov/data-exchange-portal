@@ -3,7 +3,7 @@ import { IFileSubmission } from "@types";
 import React, { useEffect, useState } from "react";
 
 import {
-  Checkbox,
+  Button,
   Dropdown,
   Pill,
   Table,
@@ -17,6 +17,9 @@ import {
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
 
 import { getFileSubmissions } from "src/utils/api/fileSubmissions";
+import getStatusDisplayValuesById from "src/utils/helperFunctions/statusDisplayValues";
+
+import DetailsModal from "src/components/DetailsModal";
 
 import { useAuth } from "react-oidc-context";
 import convertDate from "src/utils/helperFunctions/date";
@@ -25,6 +28,16 @@ function Submissions() {
   const auth = useAuth();
   const pageLimit = 10;
   const [currentPageData, setCurrentPageData] = useState<IFileSubmission[]>([]);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedSubmission, setSelectedSubmission] = useState<IFileSubmission>(
+    {
+      upload_id: "",
+      filename: "",
+      status: "",
+      timestamp: "",
+    }
+  );
 
   useEffect(() => {
     const fetchCall = async () => {
@@ -55,10 +68,8 @@ function Submissions() {
     fetchCall();
   }, [auth]);
 
-  const uploadStatusColor = (status: string) => {
-    if (status === "Uploading") return "busy";
-    if (status === "Uploaded") return "success";
-    if (status === "Failed") return "error";
+  const handleModalClose = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -107,11 +118,6 @@ function Submissions() {
           <Table className="padding-y-3">
             <TableHead>
               <TableRow>
-                <TableHeader
-                  size="sm"
-                  className="flex-justify-center checkbox-row">
-                  <Checkbox label="" onChange={() => {}} />
-                </TableHeader>
                 <TableHeader>
                   <React.Fragment key=".0">
                     <Icons.SortArrow className="sort-icon"></Icons.SortArrow>
@@ -134,36 +140,44 @@ function Submissions() {
             <TableBody>
               {currentPageData.map((item: IFileSubmission) => (
                 <TableRow key={`table-row-${item.upload_id}`}>
-                  {" "}
                   {/* Todo: Update this to use a more appropriate id as key */}
-                  <TableDataCell
-                    size="sm"
-                    className="flex-justify-center checkbox-row">
-                    <Checkbox />
-                  </TableDataCell>
                   <TableDataCell className="text-left">
                     {item.filename}
                   </TableDataCell>
                   <TableDataCell size="sm">
                     <Pill
-                      label={item.status}
-                      shape="slot"
-                      outline={false}
-                      inverse={false}
-                      color={uploadStatusColor(item.status)}
+                      label={getStatusDisplayValuesById(item.status).label}
+                      color={getStatusDisplayValuesById(item.status).pillColor}
                     />
                   </TableDataCell>
                   <TableDataCell size="md">
                     {new Date(item.timestamp).toLocaleString()}
                   </TableDataCell>
                   <TableDataCell size="sm" className="details-row">
-                    <Icons.Dots />
+                    <Button
+                      ariaLabel="Submission Details"
+                      onClick={() => {
+                        setIsModalOpen(true);
+                        setSelectedSubmission(item);
+                      }}
+                      variation="text"
+                      icon={<Icons.Dots />}
+                      iconOnly
+                      size="default"
+                    />
                   </TableDataCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
           {/* <TablePagination pageLimit={pageLimit} data={currentPageData} /> */}
+          <>
+            <DetailsModal
+              submission={selectedSubmission}
+              isModalOpen={isModalOpen}
+              handleModalClose={handleModalClose}
+            />
+          </>
         </>
       )}
     </section>

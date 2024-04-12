@@ -7,7 +7,7 @@
   },
   "items": [
     {
-      "status": "Uploading",
+      "status": "processing",
       "tracing": [
         {
           "stage": "dex-upload",
@@ -19,13 +19,13 @@
       "filename": "largefile.csv",
       "file_size_bytes": 190840042,
       "bytes_uploaded": 124046027,
-      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
+      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e1",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
       "metadata": [{ "key": "string", "value": "string" }]
     },
     {
-      "status": "Uploaded",
+      "status": "completed",
       "tracing": [
         {
           "stage": "dex-upload",
@@ -37,13 +37,13 @@
       "filename": "data123.csv",
       "file_size_bytes": 190840042,
       "bytes_uploaded": 124046027,
-      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
+      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e2",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
       "metadata": [{ "key": "string", "value": "string" }]
     },
     {
-      "status": "Failed",
+      "status": "failed",
       "tracing": [
         {
           "stage": "dex-upload",
@@ -55,13 +55,13 @@
       "filename": "bulkdata.csv",
       "file_size_bytes": 190840042,
       "bytes_uploaded": 124046027,
-      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
+      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e3",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
       "metadata": [{ "key": "string", "value": "string" }]
     },
     {
-      "status": "Uploaded",
+      "status": "completed",
       "tracing": [
         {
           "stage": "dex-upload",
@@ -73,13 +73,13 @@
       "filename": "largefile.csv",
       "file_size_bytes": 190840042,
       "bytes_uploaded": 124046027,
-      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
+      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e4",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
       "metadata": [{ "key": "string", "value": "string" }]
     },
     {
-      "status": "Uploading",
+      "status": "processing",
       "tracing": [
         {
           "stage": "dex-upload",
@@ -91,13 +91,13 @@
       "filename": "data.csv",
       "file_size_bytes": 190840042,
       "bytes_uploaded": 124046027,
-      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
+      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e5",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
       "metadata": [{ "key": "string", "value": "string" }]
     },
     {
-      "status": "Uploading",
+      "status": "processing",
       "tracing": [
         {
           "stage": "dex-upload",
@@ -115,7 +115,7 @@
       "metadata": [{ "key": "string", "value": "string" }]
     },
     {
-      "status": "Failed",
+      "status": "failed",
       "tracing": [
         {
           "stage": "dex-upload",
@@ -127,13 +127,13 @@
       "filename": "extra.csv",
       "file_size_bytes": 190840042,
       "bytes_uploaded": 124046027,
-      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
+      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e7",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
       "metadata": [{ "key": "string", "value": "string" }]
     },
     {
-      "status": "Failed",
+      "status": "failed",
       "tracing": [
         {
           "stage": "dex-upload",
@@ -145,13 +145,13 @@
       "filename": "batch.csv",
       "file_size_bytes": 190840042,
       "bytes_uploaded": 124046027,
-      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
+      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e8",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
       "metadata": [{ "key": "string", "value": "string" }]
     },
     {
-      "status": "Uploaded",
+      "status": "completed",
       "tracing": [
         {
           "stage": "dex-upload",
@@ -163,13 +163,13 @@
       "filename": "largefile.csv",
       "file_size_bytes": 190840042,
       "bytes_uploaded": 124046027,
-      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
+      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e9",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
       "metadata": [{ "key": "string", "value": "string" }]
     },
     {
-      "status": "Uploaded",
+      "status": "completed",
       "tracing": [
         {
           "stage": "dex-upload",
@@ -181,13 +181,13 @@
       "filename": "extrabatch.csv",
       "file_size_bytes": 190840042,
       "bytes_uploaded": 124046027,
-      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
+      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047f1",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
       "metadata": [{ "key": "string", "value": "string" }]
     },
     {
-      "status": "Uploaded",
+      "status": "completed",
       "tracing": [
         {
           "stage": "dex-upload",
@@ -199,13 +199,13 @@
       "filename": "batch.csv",
       "file_size_bytes": 190840042,
       "bytes_uploaded": 124046027,
-      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
+      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047f2",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
       "metadata": [{ "key": "string", "value": "string" }]
     },
     {
-      "status": "Uploaded",
+      "status": "completed",
       "tracing": [
         {
           "stage": "dex-upload",
@@ -217,13 +217,13 @@
       "filename": "file123.csv",
       "file_size_bytes": 190840042,
       "bytes_uploaded": 124046027,
-      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
+      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047f3",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
       "metadata": [{ "key": "string", "value": "string" }]
     },
     {
-      "status": "Uploaded",
+      "status": "completed",
       "tracing": [
         {
           "stage": "dex-upload",
@@ -235,13 +235,13 @@
       "filename": "data456.csv",
       "file_size_bytes": 190840042,
       "bytes_uploaded": 124046027,
-      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
+      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047f4",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
       "metadata": [{ "key": "string", "value": "string" }]
     },
     {
-      "status": "Failed",
+      "status": "failed",
       "tracing": [
         {
           "stage": "dex-upload",
@@ -253,13 +253,13 @@
       "filename": "datalarge.csv",
       "file_size_bytes": 190840042,
       "bytes_uploaded": 124046027,
-      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
+      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047f5",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
       "metadata": [{ "key": "string", "value": "string" }]
     },
     {
-      "status": "Uploading",
+      "status": "processing",
       "tracing": [
         {
           "stage": "dex-upload",
@@ -271,13 +271,13 @@
       "filename": "export.csv",
       "file_size_bytes": 190840042,
       "bytes_uploaded": 124046027,
-      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
+      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047f6",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
       "metadata": [{ "key": "string", "value": "string" }]
     },
     {
-      "status": "Uploading",
+      "status": "processing",
       "tracing": [
         {
           "stage": "dex-upload",
@@ -289,13 +289,13 @@
       "filename": "results.csv",
       "file_size_bytes": 190840042,
       "bytes_uploaded": 124046027,
-      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
+      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047f7",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
       "metadata": [{ "key": "string", "value": "string" }]
     },
     {
-      "status": "Uploading",
+      "status": "processing",
       "tracing": [
         {
           "stage": "dex-upload",
@@ -307,13 +307,13 @@
       "filename": "fieldquery.csv",
       "file_size_bytes": 190840042,
       "bytes_uploaded": 124046027,
-      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
+      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047f8",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
       "metadata": [{ "key": "string", "value": "string" }]
     },
     {
-      "status": "Uploading",
+      "status": "processing",
       "tracing": [
         {
           "stage": "dex-upload",
@@ -325,13 +325,13 @@
       "filename": "largefile.csv",
       "file_size_bytes": 190840042,
       "bytes_uploaded": 124046027,
-      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
+      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047f9",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
       "metadata": [{ "key": "string", "value": "string" }]
     },
     {
-      "status": "Uploading",
+      "status": "processing",
       "tracing": [
         {
           "stage": "dex-upload",
@@ -343,13 +343,13 @@
       "filename": "medium.csv",
       "file_size_bytes": 190840042,
       "bytes_uploaded": 124046027,
-      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
+      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047g1",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
       "metadata": [{ "key": "string", "value": "string" }]
     },
     {
-      "status": "Uploaded",
+      "status": "completed",
       "tracing": [
         {
           "stage": "dex-upload",
@@ -361,7 +361,7 @@
       "filename": "formatted.csv",
       "file_size_bytes": 190840042,
       "bytes_uploaded": 124046027,
-      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e6",
+      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047g2",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
       "metadata": [{ "key": "string", "value": "string" }]
