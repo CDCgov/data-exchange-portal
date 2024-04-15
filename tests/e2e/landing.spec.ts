@@ -1,24 +1,23 @@
 import { test, expect } from "@playwright/test";
 import { getEnv } from "tests/utility/utils";
 
-import AxeBuilder from "@axe-core/playwright";
+import { Check508Compliance } from "../utility/utils";
 
 test.describe("Landing Page", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(getEnv("DEX_URL"));
   });
 
-  test("wcag2aa accessibility check", async ({ page }) => {
+  test("Check 508 Compliance", async ({ page }) => {
     try {
-      const results = await new AxeBuilder({ page }).analyze();
-      const { violations } = results;
+      const violations = await Check508Compliance(page);
 
-      if (violations.length > 0) {
+      if (violations?.length > 0) {
         console.log("PAGE URL: " + page.url());
         console.log(violations);
-
-        expect(violations.length).toEqual(0);
       }
+
+      expect(violations.length).toEqual(0);
     } catch (e) {
       console.log(e);
     }
