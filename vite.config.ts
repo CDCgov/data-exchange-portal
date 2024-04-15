@@ -24,6 +24,9 @@ export default defineConfig({
       },
     },
   },
+  optimizeDeps: {
+    exclude: ["@us-gov-cdc"],
+  },
   resolve: {
     alias: {
       src: path.resolve(__dirname, "./src"),
