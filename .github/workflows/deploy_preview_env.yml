@@ -1,4 +1,4 @@
-name: Azure Static Web Apps CI/CD
+name: Azure Static Web Apps CI/CD For Preview Environments
 
 on:
   pull_request:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   deploy_preview_environment:
-    name: "Deploy to Dev"
+    name: "Deploy to Preview Environment"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -26,18 +26,18 @@ jobs:
           PACKAGE_VERSION=$(node -e "console.log(require(\"./package.json\").version)")
           SHORT_SHA=$(git rev-parse --short HEAD)
           echo "build_number=${PACKAGE_VERSION}_${SHORT_SHA}" >> $GITHUB_OUTPUT
-      - name: Create ${{ github.base_ref }} environment variables
+      - name: Create ${{ github.ref_name }} environment variables
         run: |
-          touch .env.${{ github.base_ref }}
-          echo VITE_SAMS_AUTHORITY_URL=https://apigw-stg.cdc.gov >> .env.${{ github.base_ref }}
-          echo VITE_SAMS_CLIENT_ID=${{ secrets.SAMS_CLIENT_ID }} >> .env.${{ github.base_ref }}
-          echo VITE_SAMS_AUTH_URL=https://apigw-stg.cdc.gov:8443/auth/oauth/v2/authorize >> .env.${{ github.base_ref }}
-          echo VITE_SAMS_USER_INFO_URL=https://apigw-stg.cdc.gov:8443/openid/connect/v1/userinfo >> .env.${{ github.base_ref }}
-          echo VITE_OAUTH_CALLBACK_URL=https://dexdev.cdc.gov/oauth_callback >> .env.${{ github.base_ref }}
-          echo VITE_API_BASE_URL=https://ede-dev-portal-api.azurewebsites.net >> .env.${{ github.base_ref }}
-          echo VITE_APP_BUILD_NUMBER=${{ steps.gen_build_number.outputs.build_number }} >> .env.${{ github.base_ref }}
-          echo VITE_DEV_MOCKING_ENABLED=false >> env.${{ github.base_ref }}
+          touch .env.${{ github.ref_name }}
+          echo VITE_SAMS_AUTHORITY_URL=https://apigw-stg.cdc.gov >> .env.${{ github.ref_name }}
+          echo VITE_SAMS_CLIENT_ID=${{ secrets.SAMS_CLIENT_ID }} >> .env.${{ github.ref_name }}
+          echo VITE_SAMS_AUTH_URL=https://apigw-stg.cdc.gov:8443/auth/oauth/v2/authorize >> .env.${{ github.ref_name }}
+          echo VITE_SAMS_USER_INFO_URL=https://apigw-stg.cdc.gov:8443/openid/connect/v1/userinfo >> .env.${{ github.ref_name }}
+          echo VITE_OAUTH_CALLBACK_URL=https://dexdev.cdc.gov/oauth_callback >> .env.${{ github.ref_name }}
+          echo VITE_API_BASE_URL=https://ede-dev-portal-api.azurewebsites.net >> .env.${{ github.ref_name }}
+          echo VITE_APP_BUILD_NUMBER=${{ steps.gen_build_number.outputs.build_number }} >> .env.${{ github.ref_name }}
+          echo VITE_DEV_MOCKING_ENABLED=false >> env.${{ github.ref_name }}
       - name: Build frontend
-        run: tsc && vite build --mode ${{ github.base_ref }}
+        run: tsc && vite build --mode ${{ github.ref_name }}
       - name: Deploy
-        run: swa deploy ./dist -d ${{ secrets.AZURE_SWA_DEPLOY_TOKEN }} --env ${{ github.base_ref }} -w .
+        run: swa deploy ./dist -d ${{ secrets.AZURE_SWA_DEPLOY_TOKEN }} --env ${{ github.ref_name }} -w .
