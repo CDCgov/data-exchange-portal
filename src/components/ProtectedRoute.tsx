@@ -8,6 +8,9 @@ export function ProtectedRoute({ children }: PropsWithChildren) {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // ignore Auth if running locally with mocked data
+    if (getEnv("VITE_DEV_MOCKING_ENABLED")) return;
+
     if (
       !hasAuthParams() &&
       !auth.isAuthenticated &&
