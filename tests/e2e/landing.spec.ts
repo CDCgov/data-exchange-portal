@@ -1,9 +1,26 @@
 import { test, expect } from "@playwright/test";
 import { getEnv } from "tests/utility/utils";
 
+import { Check508Compliance } from "../utility/utils";
+
 test.describe("Landing Page", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(getEnv("DEX_URL"));
+  });
+
+  test("Check 508 Compliance", async ({ page }) => {
+    try {
+      const violations = await Check508Compliance(page);
+
+      if (violations?.length > 0) {
+        console.log("PAGE URL: " + page.url());
+        console.log(violations);
+      }
+
+      expect(violations.length).toEqual(0);
+    } catch (e) {
+      console.log(e);
+    }
   });
 
   test("has title", async ({ page }) => {
