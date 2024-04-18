@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@axe-core/playwright": "^4.8.5",
+    "@azure/app-configuration": "^1.6.0",
     "@nivo/core": "^0.85.1",
     "@nivo/pie": "^0.85.1",
     "@us-gov-cdc/cdc-react": "^1.7.0",
