@@ -8,11 +8,7 @@ export function getEnv(name: EnvType): string {
   return process.env[name] || "";
 }
 
-export async function Check508Compliance(page: Page): Promise<
-  Array<{
-    [key: string]: string;
-  }>
-> {
+export async function Check508Compliance(page: Page) {
   const results = await new AxeBuilder({ page })
     .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
     .analyze();
