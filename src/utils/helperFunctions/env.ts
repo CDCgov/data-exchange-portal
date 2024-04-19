@@ -8,7 +8,8 @@ type EnvType =
   | "VITE_APP_BUILD_NUMBER"
   | "VITE_UPLOAD_API_ENDPOINT"
   | "VITE_API_BASE_URL"
-  | "VITE_DEV_MOCKING_ENABLED";
+  | "VITE_DEV_MOCKING_ENABLED"
+  | "VITE_APP_CONFIG_CONNECTION_STRING";
 
 export function getEnv(name: EnvType): string {
   const envVar = import.meta.env[name] || "";
