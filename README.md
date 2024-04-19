@@ -79,7 +79,7 @@ This instance has a dev, staging, and production environment. Eventually, a CD p
 
 - Install Docker Desktop [download](https://www.docker.com/products/docker-desktop/)
 
-This should install docker desktop along with docker/docker-compose cmdline/terminal commands. Make sure you have your `./api/.env` file populated. Then run `docker-compose build` in the root directory. This will create the container for the api. Then you will be able to start the api by running `docker-compose up`.
+This should install docker desktop along with docker/docker-compose cmdline/terminal commands. Make sure you have your `./api/.env` file populated. Then run `docker-compose(.exe) build` in the root directory. This will create the container for the api. Then you will be able to start the api by running `docker-compose(.exe) up`.
 
 ### Using the SWA CLI command
 
