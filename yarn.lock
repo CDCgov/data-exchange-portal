@@ -20,6 +20,13 @@
     "@jridgewell/gen-mapping" "^0.3.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
+"@axe-core/playwright@^4.8.5":
+  version "4.8.5"
+  resolved "https://registry.npmjs.org/@axe-core/playwright/-/playwright-4.8.5.tgz#85975b4dce114120c79a248897570a5ee757e155"
+  integrity sha512-GFdXXAEn9uk0Vyzgl2eEP+VwvgGzas0YSnacoJ/0U237G83zWZ1PhbP/RDymm0cqevoA+xRjMo+ONzh9Q711nw==
+  dependencies:
+    axe-core "~4.8.4"
+
 "@azure/abort-controller@^1.0.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@azure/abort-controller/-/abort-controller-1.1.0.tgz#788ee78457a55af8a1ad342acb182383d2119249"
@@ -1609,12 +1616,12 @@
 
 "@us-gov-cdc/cdc-react-icons@^2.4.0":
   version "2.4.0"
-  resolved "https://registry.npmjs.org/@us-gov-cdc/cdc-react-icons/-/cdc-react-icons-2.4.0.tgz#f31f8f2dd4284b1874eda8b9e0c671286344344b"
+  resolved "https://registry.yarnpkg.com/@us-gov-cdc/cdc-react-icons/-/cdc-react-icons-2.4.0.tgz#f31f8f2dd4284b1874eda8b9e0c671286344344b"
   integrity sha512-FCP4vAUjztBGEouhyxrZTBd8M0VGJTOwcJxvba2IfGQDCtesZqaVSRbk/wv+CpD1cma1bXunM3Gt81mEOiTRng==
 
 "@us-gov-cdc/cdc-react@^1.7.0":
   version "1.7.0"
-  resolved "https://registry.npmjs.org/@us-gov-cdc/cdc-react/-/cdc-react-1.7.0.tgz#415a14ae0852c5d118dc69e50a899eac94cc8d7a"
+  resolved "https://registry.yarnpkg.com/@us-gov-cdc/cdc-react/-/cdc-react-1.7.0.tgz#415a14ae0852c5d118dc69e50a899eac94cc8d7a"
   integrity sha512-0BIoQXN/Mk/joZDiaA4Yi7Fy0NNKPyXSaRnn8gG2L0QNtlAbVodiEXm8ZwBYKmTH/1ZJvT8pDxvIFA45SR4M/A==
   dependencies:
     "@us-gov-cdc/cdc-react-icons" "^2.4.0"
@@ -1901,6 +1908,11 @@ axe-core@^4.6.2:
   version "4.8.2"
   resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.8.2.tgz#2f6f3cde40935825cf4465e3c1c9e77b240ff6ae"
   integrity sha512-/dlp0fxyM3R8YW7MFzaHWXrf4zzbr0vaYb23VBFCl83R7nWNPg/yaQw2Dc8jzCMmDVLhSdzH8MjrsuIUuvX+6g==
+
+axe-core@~4.8.4:
+  version "4.8.4"
+  resolved "https://registry.npmjs.org/axe-core/-/axe-core-4.8.4.tgz#90db39a2b316f963f00196434d964e6e23648643"
+  integrity sha512-CZLSKisu/bhJ2awW4kJndluz2HLZYIHh5Uy1+ZwDRkJi69811xgIXXfdU9HSLX0Th+ILrHj8qfL/5wzamsFtQg==
 
 axios@^0.25.0:
   version "0.25.0"
@@ -5967,10 +5979,10 @@ vite-plugin-static-copy@^1.0.0:
   optionalDependencies:
     fsevents "~2.3.3"
 
-vite@^4.5.2:
-  version "4.5.2"
-  resolved "https://registry.yarnpkg.com/vite/-/vite-4.5.2.tgz#d6ea8610e099851dad8c7371599969e0f8b97e82"
-  integrity sha512-tBCZBNSBbHQkaGyhGCDUGqeo2ph8Fstyp6FMSvTtsXeZSPpSMGlviAOav2hxVTqFcx8Hj/twtWKsMJXNY0xI8w==
+vite@^4.5.3:
+  version "4.5.3"
+  resolved "https://registry.yarnpkg.com/vite/-/vite-4.5.3.tgz#d88a4529ea58bae97294c7e2e6f0eab39a50fb1a"
+  integrity sha512-kQL23kMeX92v3ph7IauVkXkikdDRsYMGTVl5KY2E9OY4ONLvkHf04MDTbnfo6NKxZiDLWzVpP5oTa8hQD8U3dg==
   dependencies:
     esbuild "^0.18.10"
     postcss "^8.4.27"

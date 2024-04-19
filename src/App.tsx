@@ -1,3 +1,4 @@
+import React from "react";
 import "@us-gov-cdc/cdc-react/dist/style.css";
 
 import "src/App.css";
@@ -17,8 +18,14 @@ import Profile from "src/screens/Profile";
 import Submissions from "src/screens/Submissions";
 
 import { ProtectedRoute } from "src/components/ProtectedRoute";
+import { getEnv } from "src/utils/helperFunctions/env";
 
 function App() {
+  // ignore Auth if running locally with mocked data
+  const AuthWrapper = getEnv("VITE_DEV_MOCKING_ENABLED")
+    ? React.Fragment
+    : ProtectedRoute;
+
   return (
     <Router>
       <Routes>
@@ -26,9 +33,9 @@ function App() {
         <Route
           path="home/*"
           element={
-            <ProtectedRoute>
+            <AuthWrapper>
               <Shell />
-            </ProtectedRoute>
+            </AuthWrapper>
           }>
           <Route path="dashboard" element={<Dashboard />}></Route>
           <Route path="profile" element={<Profile />}></Route>

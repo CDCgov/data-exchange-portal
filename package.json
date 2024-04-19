@@ -16,6 +16,7 @@
     "e2e": "npx playwright test"
   },
   "dependencies": {
+    "@axe-core/playwright": "^4.8.5",
     "@nivo/core": "^0.85.1",
     "@nivo/pie": "^0.85.1",
     "@us-gov-cdc/cdc-react": "^1.7.0",
@@ -52,7 +53,7 @@
     "prettier": "^3.0.1",
     "sass": "^1.65.1",
     "typescript": "^5.0.2",
-    "vite": "^4.5.2",
+    "vite": "^4.5.3",
     "vite-plugin-static-copy": "^1.0.0",
     "vitest": "^0.34.1"
   }
