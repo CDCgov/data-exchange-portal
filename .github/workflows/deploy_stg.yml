@@ -8,6 +8,7 @@ on:
 jobs:
   create-rc:
     name: "Create Release Candidate"
+    environment: Stage
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -39,6 +40,7 @@ jobs:
         echo VITE_OAUTH_CALLBACK_URL=https://dexstg.cdc.gov/oauth_callback >> .env.stg
         echo VITE_OAUTH_TOKEN_URL=https://dexstg.cdc.gov/api/token >> .env.stg
         echo VITE_APP_BUILD_NUMBER=${{ steps.gen_build_number.outputs.build_number }} >> .env.stg
+        echo VITE_APP_CONFIG_CONNECTION_STRING=${{ secrets.APP_CONFIG_CONNECTION_STRING }} >> env.stg
     - name: Build frontend
       run: yarn build:stg
     - name: Build API
@@ -48,7 +50,7 @@ jobs:
       run: zip -r ${{ github.ref_name }}.zip dist api/dist
     - name: Create Github Draft Release
       id: create_draft_release
-      uses: actions/create-release@v1 
+      uses: actions/create-release@v1
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
@@ -67,7 +69,7 @@ jobs:
         asset_content_type: application/zip
     - name: Deploy
       run: swa deploy ./dist --api-location ./api -d ${{ secrets.AZURE_SWA_DEPLOY_TOKEN }} --api-language node --api-version 18 --env stg -w .
-  
+
   e2e:
     needs: create-rc
     name: "Run e2e regression tests"
