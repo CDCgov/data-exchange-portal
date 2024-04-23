@@ -17,12 +17,12 @@ class DeXPortalApiApplicationTests(@Autowired private val mockMvc: MockMvc) {
 
     @Test
     fun `index page`() {
-        this.mockMvc.get("/").andExpect { status { isOk() } }
+        this.mockMvc.perform(get("/").content("Status: OK")).andExpect(status().isOk())
     }
 
     @Test
     fun `health check page`() {
-        this.mockMvc.get("/health").andExpect { status { isOk() } }
+        this.mockMvc.perform(get("/health").content("Status: OK")).andExpect(status().isOk())
     }
 
     @Test
