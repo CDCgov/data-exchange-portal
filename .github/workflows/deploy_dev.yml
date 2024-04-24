@@ -44,7 +44,7 @@ jobs:
           echo VITE_API_BASE_URL=https://ede-dev-portal-api.azurewebsites.net >> .env.dev
           echo VITE_APP_BUILD_NUMBER=${{ steps.gen_build_number.outputs.build_number }} >> .env.dev
           echo VITE_DEV_MOCKING_ENABLED=false >> .env.dev
-          echo VITE_APP_CONFIG_CONNECTION_STRING=${{ secrets.APP_CONFIG_CONNECTION_STRING }} >> .env.dev
+          echo VITE_APP_CONFIG_CONNECTION_STRING="${{ secrets.APP_CONFIG_CONNECTION_STRING }}" >> .env.dev
       - name: Build frontend
         run: yarn build:dev
       - name: Deploy
