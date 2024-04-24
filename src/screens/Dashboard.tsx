@@ -11,11 +11,22 @@ import getReportCounts, {
 } from "src/utils/api/reportCounts";
 
 import convertDate from "src/utils/helperFunctions/date";
+import { useFeatureFlag } from "src/utils/hooks/useFeatureFlag";
 
 function Dashboard() {
   const auth = useAuth();
   const [countsData, setCountsData] =
     useState<ReportCounts>(defaultReportCounts);
+
+  const { enabled: enableRBAC } = useFeatureFlag("EnableRBAC");
+
+  useEffect(() => {
+    console.log(
+      enableRBAC
+        ? "RBAC feature flag is enabled"
+        : "RBAC feature flag is disabled"
+    );
+  }, [enableRBAC]);
 
   useEffect(() => {
     const fetchCall = async () => {
