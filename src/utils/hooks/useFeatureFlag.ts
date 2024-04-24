@@ -2,10 +2,6 @@ import { AppConfigurationClient } from "@azure/app-configuration";
 import { useMemo, useState } from "react";
 import { getEnv } from "src/utils/helperFunctions/env";
 
-const client = new AppConfigurationClient(
-  getEnv("VITE_APP_CONFIG_CONNECTION_STRING")
-);
-
 /**
  * Retrieves the specified feature flag from Azure App Configuration.
  * This is used to toggle full features.
@@ -18,6 +14,10 @@ const useFeatureFlag = (flagKey: string = "") => {
       console.error("A feature flag key must be supplied.");
     } else {
       try {
+        const client = new AppConfigurationClient(
+          getEnv("VITE_APP_CONFIG_CONNECTION_STRING")
+        );
+
         const result = await client.getConfigurationSetting({
           key: `.appconfig.featureflag/${flagKey.toString().trim()}`,
         });
@@ -49,6 +49,10 @@ const useConfiguration = (configKey: string = "") => {
       console.error("A config key must be supplied.");
     } else {
       try {
+        const client = new AppConfigurationClient(
+          getEnv("VITE_APP_CONFIG_CONNECTION_STRING")
+        );
+
         const result = await client.getConfigurationSetting({
           key: configKey.toString().trim(),
         });
