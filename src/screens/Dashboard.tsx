@@ -18,13 +18,15 @@ function Dashboard() {
   const [countsData, setCountsData] =
     useState<ReportCounts>(defaultReportCounts);
 
-  const { enabled: enableSuperUser } = useFeatureFlag("EnableSuperUser");
+  const { enabled: enableRBAC } = useFeatureFlag("EnableRBAC");
 
   useEffect(() => {
     console.log(
-      enableSuperUser ? "Super User is enabled" : "Super User is disabled"
+      enableRBAC
+        ? "RBAC feature flag is enabled"
+        : "RBAC feature flag is disabled"
     );
-  }, [enableSuperUser]);
+  }, [enableRBAC]);
 
   useEffect(() => {
     const fetchCall = async () => {
