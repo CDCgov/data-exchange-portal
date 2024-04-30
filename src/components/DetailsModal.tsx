@@ -96,6 +96,12 @@ function DetailsModal({
       modalTitle="Submission Details"
       onClose={handleModalClose}>
       <ModalBody>
+        <div className="grid-row flex-row flex-align-center padding-bottom-3">
+          <Icons.PaperLines />
+          <h2 className="font-sans-md text-bold padding-left-1">
+            {submission.filename}
+          </h2>
+        </div>
         <span className="padding-bottom-3">
           {/* TODO: update cdc-react to allow className on <Pill> so we can avoid this extra span */}
           <Pill
@@ -106,12 +112,6 @@ function DetailsModal({
             icon={displayValues.pillIcon}
           />
         </span>
-        <div className="grid-row flex-row flex-align-center padding-bottom-3">
-          <Icons.PaperLines />
-          <h2 className="font-sans-md text-bold padding-left-1">
-            {submission.filename}
-          </h2>
-        </div>
         {getContent()}
         <Divider className="margin-y-2" height={4} stroke="#E0E0E0" />
         <div className="grid-row margin-y-1">
