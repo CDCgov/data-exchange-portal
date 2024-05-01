@@ -103,7 +103,6 @@ function DetailsModal({
           </h2>
         </div>
         <span className="padding-bottom-3">
-          {/* TODO: update cdc-react to allow className on <Pill> so we can avoid this extra span */}
           <Pill
             variation="info"
             altText={displayValues.label}
