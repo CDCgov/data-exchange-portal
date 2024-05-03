@@ -89,7 +89,6 @@ function DetailsModal({
       );
     }
   };
-
   return (
     <Modal
       isOpen={isModalOpen}
@@ -144,6 +143,19 @@ function DetailsModal({
               },
             ]}
           />
+          {/* Todo: This logic is for purposes of showing a mock validation report and should be revisited
+            once the data structure is finalized.  */}
+          {(submission.validationReport || submission.status === "failed") && (
+            <Accordion
+              items={[
+                {
+                  id: "2",
+                  title: "Validation report",
+                  content: jsonPrettyPrint(submission.validationReport),
+                },
+              ]}
+            />
+          )}
         </div>
       </ModalBody>
       <ModalFooter>
