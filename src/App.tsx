@@ -18,13 +18,14 @@ import Profile from "src/screens/Profile";
 import Submissions from "src/screens/Submissions";
 
 import { ProtectedRoute } from "src/components/ProtectedRoute";
-import { getEnv } from "src/utils/helperFunctions/env";
 
 function App() {
-  // ignore Auth if running locally with mocked data
-  const AuthWrapper = getEnv("VITE_DEV_MOCKING_ENABLED")
-    ? React.Fragment
-    : ProtectedRoute;
+  // ignore Auth if running locally
+  const AuthWrapper =
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1"
+      ? React.Fragment
+      : ProtectedRoute;
 
   return (
     <Router>
