@@ -28,6 +28,486 @@
       "status": "completed",
       "tracing": [
         {
+          "stage": "hl7",
+          "timestamp": "2024-03-04T14:48:13.092Z",
+          "tags": [{ "key": "string", "value": "string" }]
+        }
+      ],
+      "percent_complete": 0.65,
+      "filename": "hl7validation.hl7",
+      "file_size_bytes": 190840042,
+      "bytes_uploaded": 124046027,
+      "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e1",
+      "time_uploading_sec": 34.4,
+      "timestamp": "2024-03-04T14:48:13.092Z",
+      "metadata": [{ "key": "string", "value": "string" }],
+      "validationReport": {
+        "upload_id": "6f8010917c0acc4dd329d21625ce1144",
+        "data_stream_id": "aims-celr",
+        "data_stream_route": "hl7",
+        "reports": [
+          {
+            "report_id": "f5e1dc10-0dee-44af-a364-855ea8e2b03c",
+            "stage_name": "dex-file-copy",
+            "timestamp": "2024-03-23T12:24:35.105Z",
+            "content": {
+              "result": "success",
+              "schema_version": "0.0.1",
+              "file_destination_blob_url": "https://url-to-file-location.hl7",
+              "file_source_blob_url": "https://url-to-file-source.hl7",
+              "schema_name": "dex-file-copy"
+            }
+          },
+          {
+            "report_id": "42706537-e742-4afc-9ab3-dbd195825dcd",
+            "stage_name": "dex-metadata-verify",
+            "timestamp": "2024-03-23T12:24:35.239Z",
+            "content": {
+              "schema_version": "0.0.1",
+              "metadata": {
+                "filename": "filename.hl7",
+                "meta_destination_id": "aims-celr",
+                "meta_ext_entity": "DD2",
+                "meta_ext_event": "hl7",
+                "meta_ext_file_timestamp": "1711196673654",
+                "meta_ext_filename": "filename.hl7",
+                "meta_ext_filestatus": "Succeeded",
+                "meta_ext_objectkey": "479540ba-9507-4fa3-b02f-f391846b8332",
+                "meta_ext_source": "AIMS_TRANSPORT",
+                "meta_ext_sourceversion": "V2022-12-31",
+                "meta_ext_submissionperiod": "1",
+                "meta_ext_uploadid": "32904941",
+                "meta_organization": "DC",
+                "meta_username": "APHL"
+              },
+              "filename": "filename.hl7",
+              "schema_name": "dex-metadata-verify",
+              "issues": [],
+              "timestamp": "2024-03-23T12:24:35.195076"
+            }
+          },
+          {
+            "report_id": "805fae5c-e8fb-4271-9b74-15bf3660299f",
+            "stage_name": "dex-routing",
+            "timestamp": "2024-03-23T12:24:35.421Z",
+            "content": {
+              "result": "success",
+              "schema_version": "0.0.1",
+              "file_destination_blob_url": "https://url-to-file-location.hl7",
+              "file_source_blob_url": "https://url-to-file-location.hl7",
+              "schema_name": "dex-file-copy",
+              "timestamp": "2024-03-23T12:24:35.391+0000"
+            }
+          },
+          {
+            "report_id": "019fe6a4-c4a7-4c78-bb76-33c7b06dc089",
+            "stage_name": "RECEIVER",
+            "timestamp": "2024-03-23T12:24:35.783Z",
+            "content": {
+              "schema_version": "2.0.0",
+              "stage": {
+                "stage_name": "RECEIVER",
+                "stage_version": "0.0.41-SNAPSHOT",
+                "event_timestamp": "2024-03-23T12:24:35.3632655Z",
+                "start_processing_time": "2024-03-23T12:24:35.715+00:00",
+                "end_processing_time": "2024-03-23T12:24:35.738+00:00",
+                "report": {
+                  "single_or_batch": "SINGLE",
+                  "number_of_messages": 1,
+                  "number_of_messages_not_propagated": 0,
+                  "error_messages": []
+                }
+              },
+              "schema_name": "DEX HL7v2 RECEIVER",
+              "routing_metadata": {
+                "ingested_file_path": "https://url-to-file-location.hl7",
+                "ingested_file_timestamp": "2024-03-23T12:24:35+00:00",
+                "ingested_file_size": "4667",
+                "data_producer_id": "",
+                "jurisdiction": "DC",
+                "upload_id": "6f8010917c0acc4dd329d21625ce1144",
+                "data_stream_id": "aims-celr",
+                "data_stream_route": "hl7",
+                "trace_id": "TracingDisabled",
+                "span_id": "TracingDisabled",
+                "supporting_metadata": {
+                  "meta_ext_filename": "filename.hl7",
+                  "meta_ext_filestatus": "Succeeded",
+                  "system_provider": "DEX-ROUTING",
+                  "meta_ext_sourceversion": "V2022-12-31",
+                  "meta_ext_uploadid": "32904941",
+                  "meta_ext_objectkey": "479540ba-9507-4fa3-b02f-f391846b8332",
+                  "received_filename": "filename.hl7",
+                  "meta_ext_source": "AIMS_TRANSPORT",
+                  "meta_ext_entity": "DD2",
+                  "meta_ext_file_timestamp": "1711196673654",
+                  "meta_ext_submissionperiod": "1",
+                  "message_type": "ELR",
+                  "version": "2.0",
+                  "route": "COVID19_ELR"
+                }
+              }
+            }
+          },
+          {
+            "report_id": "303b1eb8-add8-48d5-836f-55729d57773e",
+            "stage_name": "REDACTOR",
+            "timestamp": "2024-03-23T12:24:35.856Z",
+            "content": {
+              "schema_version": "2.0.0",
+              "summary": {
+                "current_status": "REDACTED"
+              },
+              "stage": {
+                "report": {
+                  "entries": [
+                    {
+                      "path": "PID-3.1",
+                      "rule": "Redacted PID-3.1 with value 'REDACTED' when PID-3.5 !IN (PT;PI;MB;PN;SR;PHC;PH;AN)",
+                      "lineNumber": 3
+                    }
+                  ],
+                  "status": "SUCCESS"
+                },
+                "stage_name": "REDACTOR",
+                "stage_version": "0.0.41-SNAPSHOT",
+                "status": "SUCCESS",
+                "configs": ["AIMS-CELR-config.txt"],
+                "event_timestamp": "2024-03-23T12:24:35.765",
+                "eventhub_offset": 532577298688,
+                "eventhub_sequence_number": 46173,
+                "start_processing_time": "2024-03-23T12:24:35.797+00:00",
+                "end_processing_time": "2024-03-23T12:24:35.812+00:00"
+              },
+              "schema_name": "DEX HL7v2 REDACTOR",
+              "routing_metadata": {
+                "ingested_file_path": "https://url-to-file-location.hl7",
+                "ingested_file_timestamp": "2024-03-23T12:24:35+00:00",
+                "ingested_file_size": "4667",
+                "data_producer_id": "",
+                "jurisdiction": "DC",
+                "upload_id": "6f8010917c0acc4dd329d21625ce1144",
+                "data_stream_id": "aims-celr",
+                "data_stream_route": "hl7",
+                "trace_id": "TracingDisabled",
+                "span_id": "TracingDisabled",
+                "supporting_metadata": {
+                  "meta_ext_filename": "filename.hl7",
+                  "meta_ext_filestatus": "Succeeded",
+                  "system_provider": "DEX-ROUTING",
+                  "meta_ext_sourceversion": "V2022-12-31",
+                  "meta_ext_uploadid": "32904941",
+                  "meta_ext_objectkey": "479540ba-9507-4fa3-b02f-f391846b8332",
+                  "received_filename": "filename.hl7",
+                  "meta_ext_source": "AIMS_TRANSPORT",
+                  "meta_ext_entity": "DD2",
+                  "meta_ext_file_timestamp": "1711196673654",
+                  "meta_ext_submissionperiod": "1",
+                  "message_type": "ELR",
+                  "version": "2.0",
+                  "route": "COVID19_ELR"
+                }
+              },
+              "message_metadata": {
+                "message_uuid": "edba002f-bc27-4c91-9799-d0d42ef5aa3e",
+                "single_or_batch": "SINGLE",
+                "message_index": 1,
+                "message_hash": "bde251dea53a93e8d060c46c9c9684de"
+              }
+            }
+          },
+          {
+            "report_id": "53dcc6ee-7063-47fb-9714-d508553a4ff1",
+            "stage_name": "STRUCTURE-VALIDATOR",
+            "timestamp": "2024-03-23T12:24:35.947Z",
+            "content": {
+              "schema_version": "2.0.0",
+              "summary": {
+                "current_status": "VALID_MESSAGE"
+              },
+              "stage": {
+                "report": {
+                  "entries": {
+                    "structure": [],
+                    "content": [],
+                    "value-set": []
+                  },
+                  "error-count": {
+                    "structure": 0,
+                    "value-set": 0,
+                    "content": 0
+                  },
+                  "warning-count": {
+                    "structure": 0,
+                    "value-set": 0,
+                    "content": 0
+                  },
+                  "status": "VALID_MESSAGE"
+                },
+                "stage_name": "STRUCTURE-VALIDATOR",
+                "stage_version": "0.0.41-SNAPSHOT",
+                "status": "SUCCESS",
+                "configs": ["AIMS-CELR-2.5.1"],
+                "event_timestamp": "2024-03-23T12:24:35.85",
+                "eventhub_offset": 532577266512,
+                "eventhub_sequence_number": 47023,
+                "start_processing_time": "2024-03-23T12:24:35.882+00:00",
+                "end_processing_time": "2024-03-23T12:24:35.903+00:00"
+              },
+              "schema_name": "DEX HL7v2 STRUCTURE-VALIDATOR",
+              "routing_metadata": {
+                "ingested_file_path": "https://url-to-file-location.hl7",
+                "ingested_file_timestamp": "2024-03-23T12:24:35+00:00",
+                "ingested_file_size": "4667",
+                "data_producer_id": "",
+                "jurisdiction": "DC",
+                "upload_id": "6f8010917c0acc4dd329d21625ce1144",
+                "data_stream_id": "aims-celr",
+                "data_stream_route": "hl7",
+                "trace_id": "TracingDisabled",
+                "span_id": "TracingDisabled",
+                "supporting_metadata": {
+                  "meta_ext_filename": "filename.hl7",
+                  "meta_ext_filestatus": "Succeeded",
+                  "system_provider": "DEX-ROUTING",
+                  "meta_ext_sourceversion": "V2022-12-31",
+                  "meta_ext_uploadid": "32904941",
+                  "meta_ext_objectkey": "479540ba-9507-4fa3-b02f-f391846b8332",
+                  "received_filename": "filename.hl7",
+                  "meta_ext_source": "AIMS_TRANSPORT",
+                  "meta_ext_entity": "DD2",
+                  "meta_ext_file_timestamp": "1711196673654",
+                  "meta_ext_submissionperiod": "1",
+                  "message_type": "ELR",
+                  "version": "2.0",
+                  "route": "COVID19_ELR"
+                }
+              },
+              "message_metadata": {
+                "message_uuid": "edba002f-bc27-4c91-9799-d0d42ef5aa3e",
+                "single_or_batch": "SINGLE",
+                "message_index": 1,
+                "message_hash": "bde251dea53a93e8d060c46c9c9684de"
+              }
+            }
+          },
+          {
+            "report_id": "358f4523-9e87-4f4d-a0f4-e32a00909d5e",
+            "stage_name": "dex-upload",
+            "timestamp": "2024-03-23T12:24:36.020Z",
+            "content": {
+              "schema_version": "1.0",
+              "metadata": {
+                "filename": "filename.hl7",
+                "meta_data_stream_id": "aims-celr",
+                "meta_ext_entity": "DD2",
+                "meta_ext_event": "hl7",
+                "meta_ext_file_timestamp": "1711196673654",
+                "meta_ext_filename": "filename.hl7",
+                "meta_ext_filestatus": "Succeeded",
+                "meta_ext_objectkey": "479540ba-9507-4fa3-b02f-f391846b8332",
+                "meta_ext_source": "AIMS_TRANSPORT",
+                "meta_ext_sourceversion": "V2022-12-31",
+                "meta_ext_submissionperiod": "1",
+                "meta_ext_uploadid": "32904941",
+                "meta_organization": "DC",
+                "meta_username": "APHL"
+              },
+              "filename": "filename.hl7",
+              "offset": 4667,
+              "size": 4667,
+              "meta_ext_event": "hl7",
+              "schema_name": "upload",
+              "meta_data_stream_id": "aims-celr",
+              "tguid": "6f8010917c0acc4dd329d21625ce1144"
+            }
+          },
+          {
+            "report_id": "c49df79a-ebfa-459c-8edf-8983d80f3f4b",
+            "stage_name": "HL7-JSON-LAKE-TRANSFORMER",
+            "timestamp": "2024-03-23T12:24:36.042Z",
+            "content": {
+              "schema_version": "2.0.0",
+              "summary": {
+                "current_status": "HL7-JSON-LAKE-TRANSFORMED"
+              },
+              "stage": {
+                "stage_name": "HL7-JSON-LAKE-TRANSFORMER",
+                "stage_version": "0.0.40-SNAPSHOT",
+                "status": "SUCCESS",
+                "configs": ["PhinGuideProfile_v2.json"],
+                "event_timestamp": "2024-03-23T12:24:35.928",
+                "eventhub_offset": 682901124424,
+                "eventhub_sequence_number": 46249,
+                "start_processing_time": "2024-03-23T12:24:35.966+00:00",
+                "end_processing_time": "2024-03-23T12:24:35.992+00:00"
+              },
+              "schema_name": "DEX HL7v2 HL7-JSON-LAKE-TRANSFORMER",
+              "routing_metadata": {
+                "ingested_file_path": "https://url-to-file-location.hl7",
+                "ingested_file_timestamp": "2024-03-23T12:24:35+00:00",
+                "ingested_file_size": "4667",
+                "data_producer_id": "",
+                "jurisdiction": "DC",
+                "upload_id": "6f8010917c0acc4dd329d21625ce1144",
+                "data_stream_id": "aims-celr",
+                "data_stream_route": "hl7",
+                "trace_id": "TracingDisabled",
+                "span_id": "TracingDisabled",
+                "supporting_metadata": {
+                  "meta_ext_filename": "filename.hl7",
+                  "meta_ext_filestatus": "Succeeded",
+                  "system_provider": "DEX-ROUTING",
+                  "meta_ext_sourceversion": "V2022-12-31",
+                  "meta_ext_uploadid": "32904941",
+                  "meta_ext_objectkey": "479540ba-9507-4fa3-b02f-f391846b8332",
+                  "received_filename": "filename.hl7",
+                  "meta_ext_source": "AIMS_TRANSPORT",
+                  "meta_ext_entity": "DD2",
+                  "meta_ext_file_timestamp": "1711196673654",
+                  "meta_ext_submissionperiod": "1",
+                  "message_type": "ELR",
+                  "version": "2.0",
+                  "route": "COVID19_ELR"
+                }
+              },
+              "message_metadata": {
+                "message_uuid": "edba002f-bc27-4c91-9799-d0d42ef5aa3e",
+                "single_or_batch": "SINGLE",
+                "message_index": 1,
+                "message_hash": "bde251dea53a93e8d060c46c9c9684de"
+              }
+            }
+          },
+          {
+            "report_id": "68478b27-68f9-45da-9596-b2a5e5be782b",
+            "stage_name": "LAKE-SEGMENTS-TRANSFORMER",
+            "timestamp": "2024-03-23T12:24:36.028Z",
+            "content": {
+              "schema_version": "2.0.0",
+              "summary": {
+                "current_status": "LAKE-SEGMENTS-TRANSFORMED"
+              },
+              "stage": {
+                "stage_name": "LAKE-SEGMENTS-TRANSFORMER",
+                "stage_version": "0.0.40-SNAPSHOT",
+                "status": "SUCCESS",
+                "configs": ["/basicProfile.json"],
+                "event_timestamp": "2024-03-23T12:24:35.928",
+                "eventhub_offset": 682901124424,
+                "eventhub_sequence_number": 46249,
+                "start_processing_time": "2024-03-23T12:24:35.965+00:00",
+                "end_processing_time": "2024-03-23T12:24:35.968+00:00"
+              },
+              "schema_name": "DEX HL7v2 LAKE-SEGMENTS-TRANSFORMER",
+              "routing_metadata": {
+                "ingested_file_path": "https://url-to-file-location.hl7",
+                "ingested_file_timestamp": "2024-03-23T12:24:35+00:00",
+                "ingested_file_size": "4667",
+                "data_producer_id": "",
+                "jurisdiction": "DC",
+                "upload_id": "6f8010917c0acc4dd329d21625ce1144",
+                "data_stream_id": "aims-celr",
+                "data_stream_route": "hl7",
+                "trace_id": "TracingDisabled",
+                "span_id": "TracingDisabled",
+                "supporting_metadata": {
+                  "meta_ext_filename": "filename.hl7",
+                  "meta_ext_filestatus": "Succeeded",
+                  "system_provider": "DEX-ROUTING",
+                  "meta_ext_sourceversion": "V2022-12-31",
+                  "meta_ext_uploadid": "32904941",
+                  "meta_ext_objectkey": "479540ba-9507-4fa3-b02f-f391846b8332",
+                  "received_filename": "filename.hl7",
+                  "meta_ext_source": "AIMS_TRANSPORT",
+                  "meta_ext_entity": "DD2",
+                  "meta_ext_file_timestamp": "1711196673654",
+                  "meta_ext_submissionperiod": "1",
+                  "message_type": "ELR",
+                  "version": "2.0",
+                  "route": "COVID19_ELR"
+                }
+              },
+              "message_metadata": {
+                "message_uuid": "edba002f-bc27-4c91-9799-d0d42ef5aa3e",
+                "single_or_batch": "SINGLE",
+                "message_index": 1,
+                "message_hash": "bde251dea53a93e8d060c46c9c9684de"
+              }
+            }
+          },
+          {
+            "report_id": "a9c632ca-6614-4bd0-9f3a-03fe23466c35",
+            "stage_name": "dex-routing",
+            "timestamp": "2024-03-23T12:24:36.448Z",
+            "content": {
+              "result": "success",
+              "schema_version": "0.0.1",
+              "file_destination_blob_url": "https://url-to-file-location.txt",
+              "file_source_blob_url": "https://url-to-file-source.txt",
+              "schema_name": "dex-file-copy",
+              "timestamp": "2024-03-23T12:24:36.431+0000"
+            }
+          },
+          {
+            "report_id": "5d6db745-be55-4bee-a811-a8c360480cf1",
+            "stage_name": "dex-routing",
+            "timestamp": "2024-03-23T12:24:36.451Z",
+            "content": {
+              "result": "success",
+              "schema_version": "0.0.1",
+              "file_destination_blob_url": "https://url-to-file-location.txt",
+              "file_source_blob_url": "https://url-to-file-source.txt",
+              "schema_name": "dex-file-copy",
+              "timestamp": "2024-03-23T12:24:36.433+0000"
+            }
+          },
+          {
+            "report_id": "a66e7cec-cec8-4b76-9cbf-f1939794464a",
+            "stage_name": "dex-routing",
+            "timestamp": "2024-03-23T12:24:36.481Z",
+            "content": {
+              "result": "success",
+              "schema_version": "0.0.1",
+              "file_destination_blob_url": "https://url-to-file-location.txt",
+              "file_source_blob_url": "https://url-to-file-source.txt",
+              "schema_name": "dex-file-copy",
+              "timestamp": "2024-03-23T12:24:36.448+0000"
+            }
+          },
+          {
+            "report_id": "ceed597c-4523-4762-8090-79d41537fe5e",
+            "stage_name": "dex-routing",
+            "timestamp": "2024-03-23T12:24:36.491Z",
+            "content": {
+              "result": "success",
+              "schema_version": "0.0.1",
+              "file_destination_blob_url": "https://url-to-file-location.txt",
+              "file_source_blob_url": "https://url-to-file-source.txt",
+              "schema_name": "dex-file-copy",
+              "timestamp": "2024-03-23T12:24:36.449+0000"
+            }
+          },
+          {
+            "report_id": "0d0ac9e4-5df1-41c6-a550-41678d5c977f",
+            "stage_name": "dex-routing",
+            "timestamp": "2024-03-23T12:24:36.473Z",
+            "content": {
+              "result": "success",
+              "schema_version": "0.0.1",
+              "file_destination_blob_url": "https://url-to-file-location.txt",
+              "file_source_blob_url": "https://url-to-source-location.txt",
+              "schema_name": "dex-file-copy",
+              "timestamp": "2024-03-23T12:24:36.448+0000"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "status": "completed",
+      "tracing": [
+        {
           "stage": "dex-upload",
           "timestamp": "2024-03-04T14:48:13.092Z",
           "tags": [{ "key": "string", "value": "string" }]
@@ -58,7 +538,27 @@
       "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e3",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
-      "metadata": [{ "key": "string", "value": "string" }]
+      "metadata": [{ "key": "string", "value": "string" }],
+      "validationReport": {
+        "upload_id": "6f8010917c0acc4dd329d21625ce1144",
+        "data_stream_id": "aims-celr",
+        "data_stream_route": "hl7",
+        "reports": [
+          {
+            "report_id": "a9c632ca-6614-4bd0-9f3a-03fe23466c35",
+            "stage_name": "dex-routing",
+            "timestamp": "2024-03-23T12:24:36.448Z",
+            "content": {
+              "result": "success",
+              "schema_version": "0.0.1",
+              "file_destination_blob_url": "https://url-to-file-location.txt",
+              "file_source_blob_url": "https://url-to-file-source.txt",
+              "schema_name": "dex-file-copy",
+              "timestamp": "2024-03-23T12:24:36.431+0000"
+            }
+          }
+        ]
+      }
     },
     {
       "status": "completed",
@@ -130,7 +630,27 @@
       "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e7",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
-      "metadata": [{ "key": "string", "value": "string" }]
+      "metadata": [{ "key": "string", "value": "string" }],
+      "validationReport": {
+        "upload_id": "6f8010917c0acc4dd329d21625ce1144",
+        "data_stream_id": "aims-celr",
+        "data_stream_route": "hl7",
+        "reports": [
+          {
+            "report_id": "a9c632ca-6614-4bd0-9f3a-03fe23466c35",
+            "stage_name": "dex-routing",
+            "timestamp": "2024-03-23T12:24:36.448Z",
+            "content": {
+              "result": "success",
+              "schema_version": "0.0.1",
+              "file_destination_blob_url": "https://url-to-file-location.txt",
+              "file_source_blob_url": "https://url-to-file-source.txt",
+              "schema_name": "dex-file-copy",
+              "timestamp": "2024-03-23T12:24:36.431+0000"
+            }
+          }
+        ]
+      }
     },
     {
       "status": "failed",
@@ -148,7 +668,27 @@
       "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047e8",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
-      "metadata": [{ "key": "string", "value": "string" }]
+      "metadata": [{ "key": "string", "value": "string" }],
+      "validationReport": {
+        "upload_id": "6f8010917c0acc4dd329d21625ce1144",
+        "data_stream_id": "aims-celr",
+        "data_stream_route": "hl7",
+        "reports": [
+          {
+            "report_id": "a9c632ca-6614-4bd0-9f3a-03fe23466c35",
+            "stage_name": "dex-routing",
+            "timestamp": "2024-03-23T12:24:36.448Z",
+            "content": {
+              "result": "success",
+              "schema_version": "0.0.1",
+              "file_destination_blob_url": "https://url-to-file-location.txt",
+              "file_source_blob_url": "https://url-to-file-source.txt",
+              "schema_name": "dex-file-copy",
+              "timestamp": "2024-03-23T12:24:36.431+0000"
+            }
+          }
+        ]
+      }
     },
     {
       "status": "completed",
@@ -256,7 +796,27 @@
       "upload_id": "8923c9ff-6afa-42b2-a67b-89cb37e047f5",
       "time_uploading_sec": 34.4,
       "timestamp": "2024-03-04T14:48:13.092Z",
-      "metadata": [{ "key": "string", "value": "string" }]
+      "metadata": [{ "key": "string", "value": "string" }],
+      "validationReport": {
+        "upload_id": "6f8010917c0acc4dd329d21625ce1144",
+        "data_stream_id": "aims-celr",
+        "data_stream_route": "hl7",
+        "reports": [
+          {
+            "report_id": "a9c632ca-6614-4bd0-9f3a-03fe23466c35",
+            "stage_name": "dex-routing",
+            "timestamp": "2024-03-23T12:24:36.448Z",
+            "content": {
+              "result": "success",
+              "schema_version": "0.0.1",
+              "file_destination_blob_url": "https://url-to-file-location.txt",
+              "file_source_blob_url": "https://url-to-file-source.txt",
+              "schema_name": "dex-file-copy",
+              "timestamp": "2024-03-23T12:24:36.431+0000"
+            }
+          }
+        ]
+      }
     },
     {
       "status": "processing",

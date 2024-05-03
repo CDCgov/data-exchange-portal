@@ -3,4 +3,5 @@ export type IFileSubmission = {
   readonly filename: string;
   readonly status: string;
   readonly timestamp: string;
+  readonly validationReport?: object;
 };
