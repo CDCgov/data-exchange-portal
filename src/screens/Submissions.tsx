@@ -25,7 +25,7 @@ import getStatusDisplayValuesById from "src/utils/helperFunctions/statusDisplayV
 import DetailsModal from "src/components/DetailsModal";
 
 import { useAuth } from "react-oidc-context";
-import convertDate, { getPastDate } from "src/utils/helperFunctions/date";
+import { getPastDate } from "src/utils/helperFunctions/date";
 import timeframes, { Timeframe } from "src/types/timeframes";
 import getDataStreams, { DataStream } from "src/utils/api/dataStreams";
 import {
@@ -80,7 +80,7 @@ function Submissions() {
         dataStream,
         dataRoute != "All" ? dataRoute : "",
         getPastDate(timeframe),
-        convertDate(new Date()),
+        new Date().toISOString(),
         "descending", // TODO: Map to sort_order
         "date", // TODO: Map to sort_by
         1, // TODO: Map to onClick of page number from pagination, this represent page_number

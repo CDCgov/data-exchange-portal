@@ -12,7 +12,7 @@ import getReportCounts, {
   ReportCounts,
 } from "src/utils/api/reportCounts";
 
-import convertDate, { getPastDate } from "src/utils/helperFunctions/date";
+import { getPastDate } from "src/utils/helperFunctions/date";
 import timeframes, { Timeframe } from "src/types/timeframes";
 import getDataStreams, { DataStream } from "src/utils/api/dataStreams";
 import {
@@ -57,7 +57,7 @@ function Dashboard() {
         dataStream,
         dataRoute != "All" ? dataRoute : "",
         getPastDate(timeframe),
-        convertDate(new Date())
+        new Date().toISOString()
       );
 
       // TODO: add UI feedback for failed report counts retrieval
