@@ -112,15 +112,6 @@ function Submissions() {
             srText="Timeframe"
           />
         </div>
-        <div className="flex-align-end">
-          <Dropdown
-            items={["event"]}
-            label="Event"
-            labelIcon={<Icons.Filter />}
-            onSelect={() => {}}
-            srText="Event"
-          />
-        </div>
       </div>
       {currentPageData.length === 0 ? (
         <p className="text-base font-sans-sm padding-top-3">
