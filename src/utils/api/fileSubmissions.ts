@@ -3,6 +3,7 @@ import API_ENDPOINTS from "src/config/api";
 export const getFileSubmissions = async (
   access_token: string,
   data_stream_id: string,
+  data_stream_route?: string,
   date_start?: string,
   date_end?: string,
   sort_by?: string,
@@ -13,6 +14,7 @@ export const getFileSubmissions = async (
   const params = new URLSearchParams();
 
   if (data_stream_id) params.append("data_stream_id", data_stream_id);
+  if (data_stream_route) params.append("data_stream_route", data_stream_route);
   if (date_start) params.append("date_start", date_start);
   if (date_end) params.append("date_end", date_end);
   if (sort_by) params.append("sort_by", sort_by);

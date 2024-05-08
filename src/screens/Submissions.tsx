@@ -22,12 +22,17 @@ import getStatusDisplayValuesById from "src/utils/helperFunctions/statusDisplayV
 import DetailsModal from "src/components/DetailsModal";
 
 import { useAuth } from "react-oidc-context";
-import convertDate from "src/utils/helperFunctions/date";
+import convertDate, { getPastDate } from "src/utils/helperFunctions/date";
+import timeframes, { Timeframe } from "src/types/timeframes";
 
 function Submissions() {
   const auth = useAuth();
   const pageLimit = 10;
   const [currentPageData, setCurrentPageData] = useState<IFileSubmission[]>([]);
+
+  const [dataStream, setDataStream] = useState("aims-celr");
+  const [dataRoute, setDataRoute] = useState("csv");
+  const [timeframe, setTimeframe] = useState<Timeframe>(Timeframe.Last30Days);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSubmission, setSelectedSubmission] = useState<IFileSubmission>(
@@ -43,9 +48,10 @@ function Submissions() {
     const fetchCall = async () => {
       const res = await getFileSubmissions(
         auth.user?.access_token || "",
-        "temp_data_stream_id", // TODO: Map to data stream selection
-        convertDate(new Date()), // TODO: Map (date_start) to date selection dropdown
-        convertDate(new Date()), // TODO: Map (date_end) to date selection dropdown
+        dataStream,
+        dataRoute,
+        getPastDate(timeframe),
+        convertDate(new Date()),
         "descending", // TODO: Map to sort_order
         "date", // TODO: Map to sort_by
         1, // TODO: Map to onClick of page number from pagination, this represent page_number
@@ -66,10 +72,15 @@ function Submissions() {
       }
     };
     fetchCall();
-  }, [auth]);
+  }, [auth, dataStream, dataRoute, timeframe]);
 
   const handleModalClose = () => {
     setIsModalOpen(false);
+  };
+
+  const handleTimeframe = (time: string) => {
+    const timeframe = time as Timeframe;
+    setTimeframe(timeframe);
   };
 
   return (
@@ -79,29 +90,26 @@ function Submissions() {
       </h1>
       <div className="padding-bottom-2 display-flex flex-row flex-justify">
         <div className="display-flex flex-row cdc-submissions-page--filters">
-          <div className="padding-right-2">
-            <Dropdown
-              items={["aims-celr"]}
-              label="Data Stream: aims-celr"
-              onSelect={() => {}}
-              srText="Data Stream"
-            />
-          </div>
           <Dropdown
-            items={["Last 60 Days"]}
-            label="Last 30 Days"
-            labelIcon={<Icons.Calendar />}
-            onSelect={() => {}}
-            srText="Last 30 Days"
+            className="padding-right-2"
+            items={["aims-celr", "daart"]}
+            label="Data Stream"
+            onSelect={setDataStream}
+            srText="Data Stream"
           />
-        </div>
-        <div className="flex-align-end">
           <Dropdown
-            items={["event"]}
-            label="Event"
-            labelIcon={<Icons.Filter />}
-            onSelect={() => {}}
-            srText="Event"
+            className="padding-right-2"
+            items={["csv", "hl7"]}
+            label="Route"
+            onSelect={setDataRoute}
+            srText="Data Route"
+          />
+          <Dropdown
+            items={timeframes}
+            label="Timeframe"
+            labelIcon={<Icons.Calendar />}
+            onSelect={handleTimeframe}
+            srText="Timeframe"
           />
         </div>
       </div>
