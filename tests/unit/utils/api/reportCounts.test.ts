@@ -22,13 +22,4 @@ describe("reportCounts", () => {
     );
     expect(res.status).toStrictEqual(400);
   });
-
-  it("should return 400 without data_stream_route", async () => {
-    const res = await getReportCounts(
-      "mock_auth_token",
-      "mock_data_stream_id",
-      ""
-    );
-    expect(res.status).toStrictEqual(400);
-  });
 });

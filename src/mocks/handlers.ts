@@ -24,12 +24,8 @@ export const handlers = [
   http.get(API_ENDPOINTS.reportCounts, ({ request }) => {
     const url = new URL(request.url);
     const dataStreamId = url.searchParams.get("data_stream_id");
-    const dataStreamRoute = url.searchParams.get("data_stream_route");
 
     if (!dataStreamId) {
-      return new HttpResponse(null, { status: 400 });
-    }
-    if (!dataStreamRoute) {
       return new HttpResponse(null, { status: 400 });
     }
 

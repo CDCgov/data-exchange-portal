@@ -24,14 +24,19 @@ import DetailsModal from "src/components/DetailsModal";
 import { useAuth } from "react-oidc-context";
 import convertDate, { getPastDate } from "src/utils/helperFunctions/date";
 import timeframes, { Timeframe } from "src/types/timeframes";
+import getDataStreams, { DataStream } from "src/utils/api/dataStreams";
+import {
+  getDataRoutes,
+  getDataStreamIds,
+} from "src/utils/helperFunctions/dataStreams";
 
 function Submissions() {
   const auth = useAuth();
   const pageLimit = 10;
   const [currentPageData, setCurrentPageData] = useState<IFileSubmission[]>([]);
 
-  const [dataStream, setDataStream] = useState("aims-celr");
-  const [dataRoute, setDataRoute] = useState("csv");
+  const [dataStream, setDataStream] = useState("");
+  const [dataRoute, setDataRoute] = useState("");
   const [timeframe, setTimeframe] = useState<Timeframe>(Timeframe.Last30Days);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -43,6 +48,24 @@ function Submissions() {
       timestamp: "",
     }
   );
+
+  // TODO: Replace with global state
+  const [dataStreams, setDataStreams] = useState<DataStream[]>([]);
+  useEffect(() => {
+    const fetchCall = async () => {
+      const res = await getDataStreams(auth.user?.access_token || "");
+
+      try {
+        const data = await res.json();
+        const dataStreams = data?.dataStreams as DataStream[];
+        setDataStreams(dataStreams);
+        setDataStream(dataStreams[0].dataStreamId);
+      } catch (error) {
+        console.error("Failed to parse JSON:", error);
+      }
+    };
+    fetchCall();
+  }, [auth]);
 
   useEffect(() => {
     const fetchCall = async () => {
@@ -71,11 +94,17 @@ function Submissions() {
         console.error("Failed to parse JSON:", error);
       }
     };
-    fetchCall();
+
+    if (dataStream) fetchCall();
   }, [auth, dataStream, dataRoute, timeframe]);
 
   const handleModalClose = () => {
     setIsModalOpen(false);
+  };
+
+  const handleDataStream = (dataStreamId: string) => {
+    setDataStream(dataStreamId);
+    setDataRoute("");
   };
 
   const handleTimeframe = (time: string) => {
@@ -92,17 +121,19 @@ function Submissions() {
         <div className="display-flex flex-row cdc-submissions-page--filters">
           <Dropdown
             className="padding-right-2"
-            items={["aims-celr", "daart"]}
+            items={getDataStreamIds(dataStreams)}
             label="Data Stream"
-            onSelect={setDataStream}
+            onSelect={handleDataStream}
             srText="Data Stream"
+            defaultValue={dataStream}
           />
           <Dropdown
             className="padding-right-2"
-            items={["csv", "hl7"]}
+            items={getDataRoutes(dataStreams, dataStream)}
             label="Route"
             onSelect={setDataRoute}
             srText="Data Route"
+            defaultValue={dataRoute}
           />
           <Dropdown
             items={timeframes}
@@ -110,6 +141,7 @@ function Submissions() {
             labelIcon={<Icons.Calendar />}
             onSelect={handleTimeframe}
             srText="Timeframe"
+            defaultValue={timeframe}
           />
         </div>
       </div>
