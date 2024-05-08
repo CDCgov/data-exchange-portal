@@ -1,9 +1,9 @@
 import API_ENDPOINTS from "src/config/api";
 
 export interface DataStream {
-  id: number | string
-  dataStreamId: string
-  routes: string[]
+  id: number | string;
+  dataStreamId: string;
+  routes: string[];
 }
 
 const getDataStreams = async (access_token: string): Promise<Response> => {
