@@ -1,0 +1,19 @@
+{
+  "dataStreams": [
+    {
+      "id": 1,
+      "entity": "aims-celr",
+      "route": "csv"
+    },
+    {
+      "id": 2,
+      "entity": "aims-celr",
+      "route": "hl7"
+    },
+    {
+      "id": 3,
+      "entity": "daart",
+      "route": "hl7"
+    }
+  ]
+}
