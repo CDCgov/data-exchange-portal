@@ -1,0 +1,17 @@
+{
+  "total_counts": 75,
+  "status_counts": {
+    "completed": {
+      "counts": 55
+    },
+    "failed": {
+      "counts": 12,
+      "reasons": {
+        "metadata": 12
+      }
+    },
+    "processing": {
+      "counts": 8
+    }
+  }
+}

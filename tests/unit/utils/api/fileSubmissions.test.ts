@@ -1,5 +1,5 @@
 import { getFileSubmissions } from "src/utils/api/fileSubmissions";
-import mockFileSubmissions from "src/mocks/data/fileStatus.json";
+import mockFileSubmissions from "src/mocks/data/fileSubmissions.json";
 
 describe("fileSubmissions", () => {
   it("should fetch file submissions", async () => {
