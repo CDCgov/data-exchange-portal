@@ -60,9 +60,12 @@ function Submissions() {
 
       try {
         const data = await res.json();
-        const dataStreams = data?.dataStreams as DataStream[];
-        setDataStreams(dataStreams);
-        setDataStream(dataStreams[0].dataStreamId);
+        const streams = data?.dataStreams as DataStream[];
+        const dataStreamId = streams[0].dataStreamId;
+        setDataStreams(streams);
+        setDataStream(dataStreamId);
+        const route = getDataRoutes(streams, dataStreamId)[0];
+        setDataRoute(route);
       } catch (error) {
         console.error("Failed to parse JSON:", error);
       }
@@ -75,7 +78,7 @@ function Submissions() {
       const res = await getFileSubmissions(
         auth.user?.access_token || "",
         dataStream,
-        dataRoute,
+        dataRoute != "All" ? dataRoute : "",
         getPastDate(timeframe),
         convertDate(new Date()),
         "descending", // TODO: Map to sort_order
@@ -89,6 +92,7 @@ function Submissions() {
 
       try {
         const data = (await res.json()) as FileSubmissions;
+        // TODO: Pagination should handle this logic
         setCurrentPageData(data.items.slice(0, pageLimit));
       } catch (error) {
         console.error("Failed to parse JSON:", error);
@@ -104,7 +108,8 @@ function Submissions() {
 
   const handleDataStream = (dataStreamId: string) => {
     setDataStream(dataStreamId);
-    setDataRoute("");
+    const route = getDataRoutes(dataStreams, dataStreamId)[0];
+    setDataRoute(route);
   };
 
   const handleTimeframe = (time: string) => {
@@ -153,7 +158,6 @@ function Submissions() {
         <>
           <div className="text-base font-sans-sm">
             Showing {currentPageData.length} items{" "}
-            {/* TODO: Map to summary.total_items */}
           </div>
           <Table className="padding-y-3">
             <TableHead>

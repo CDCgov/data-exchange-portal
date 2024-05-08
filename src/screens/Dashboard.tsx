@@ -37,9 +37,12 @@ function Dashboard() {
 
       try {
         const data = await res.json();
-        const dataStreams = data?.dataStreams as DataStream[];
-        setDataStreams(dataStreams);
-        setDataStream(dataStreams[0].dataStreamId);
+        const streams = data?.dataStreams as DataStream[];
+        const dataStreamId = streams[0].dataStreamId;
+        setDataStreams(streams);
+        setDataStream(dataStreamId);
+        const route = getDataRoutes(streams, dataStreamId)[0];
+        setDataRoute(route);
       } catch (error) {
         console.error("Failed to parse JSON:", error);
       }
@@ -52,7 +55,7 @@ function Dashboard() {
       const res = await getReportCounts(
         auth.user?.access_token || "",
         dataStream,
-        dataRoute,
+        dataRoute != "All" ? dataRoute : "",
         getPastDate(timeframe),
         convertDate(new Date())
       );
@@ -72,9 +75,9 @@ function Dashboard() {
   }, [auth, dataStream, dataRoute, timeframe]);
 
   const handleDataStream = (dataStreamId: string) => {
-    // TODO: if only one route, prepopulate, otherwise list "ALL"
     setDataStream(dataStreamId);
-    setDataRoute("");
+    const route = getDataRoutes(dataStreams, dataStreamId)[0];
+    setDataRoute(route);
   };
 
   const handleTimeframe = (time: string) => {
