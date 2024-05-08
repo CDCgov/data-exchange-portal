@@ -16,7 +16,10 @@ import {
 } from "@us-gov-cdc/cdc-react";
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
 
-import { getFileSubmissions } from "src/utils/api/fileSubmissions";
+import {
+  FileSubmissions,
+  getFileSubmissions,
+} from "src/utils/api/fileSubmissions";
 import getStatusDisplayValuesById from "src/utils/helperFunctions/statusDisplayValues";
 
 import DetailsModal from "src/components/DetailsModal";
@@ -85,7 +88,7 @@ function Submissions() {
       if (res.status != 200) return;
 
       try {
-        const data = await res.json();
+        const data = (await res.json()) as FileSubmissions;
 
         setCurrentPageData(data.items.slice(0, pageLimit));
         // This needs to be set for initial data to be displayed in table
