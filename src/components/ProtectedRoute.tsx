@@ -14,7 +14,7 @@ export function ProtectedRoute({ children }: PropsWithChildren) {
       !auth.activeNavigator &&
       !auth.isLoading
     ) {
-      const oidcStorage = sessionStorage.getItem(
+      const oidcStorage = window.localStorage.getItem(
         `oidc.user:${getEnv("VITE_SAMS_AUTHORITY_URL")}:${getEnv(
           "VITE_SAMS_CLIENT_ID"
         )}`
