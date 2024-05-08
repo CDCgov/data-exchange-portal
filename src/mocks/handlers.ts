@@ -1,14 +1,14 @@
 import { http, HttpResponse } from "msw";
 import API_ENDPOINTS from "src/config/api";
 
+import { ReportCounts } from "src/utils/api/reportCounts";
+
+import mockCounts, {
+  getDaysInThePast,
+  reduceCounts,
+} from "src/mocks/data/reportCounts";
 import mockDataStreams from "src/mocks/data/dataStreams.json";
 import mockFileSubmissions from "src/mocks/data/fileSubmissions.json";
-
-import mockReportCountsAimsAll from "src/mocks/data/reportCounts/reportCountsAimsAll.json";
-import mockReportCountsAimsCsv from "src/mocks/data/reportCounts/reportCountsAimsCsv.json";
-import mockReportCountsAimsHl7 from "src/mocks/data/reportCounts/reportCountsAimsHl7.json";
-import mockReportCountsDaartHl7 from "src/mocks/data/reportCounts/reportCountsDaartHl7.json";
-
 import mockSubmissionDetails from "src/mocks/data/submissionDetails.json";
 
 export const handlers = [
@@ -31,18 +31,27 @@ export const handlers = [
     const url = new URL(request.url);
     const dataStreamId = url.searchParams.get("data_stream_id");
     const dataRoute = url.searchParams.get("data_stream_route");
+    const startDate =
+      url.searchParams.get("date_start") ||
+      new Date("2021-01-01T05:00:00Z").toISOString();
+
+    const countsResponse = (counts: ReportCounts) => {
+      return HttpResponse.json(
+        reduceCounts(counts, getDaysInThePast(startDate))
+      );
+    };
 
     if (!dataStreamId) {
       return new HttpResponse(null, { status: 400 });
     }
 
     if (dataStreamId == "aims-celr") {
-      if (dataRoute == "csv") return HttpResponse.json(mockReportCountsAimsCsv);
-      if (dataRoute == "hl7") return HttpResponse.json(mockReportCountsAimsHl7);
-      return HttpResponse.json(mockReportCountsAimsAll);
+      if (dataRoute == "csv") return countsResponse(mockCounts.aimsCsv);
+      if (dataRoute == "hl7") return countsResponse(mockCounts.aimsHl7);
+      return countsResponse(mockCounts.aimsAll);
     }
 
-    return HttpResponse.json(mockReportCountsDaartHl7);
+    return countsResponse(mockCounts.daartHl7);
   }),
 
   http.get(API_ENDPOINTS.submissionDetails, ({ request }) => {

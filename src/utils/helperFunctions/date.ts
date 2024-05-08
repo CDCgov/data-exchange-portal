@@ -1,14 +1,14 @@
 import { Timeframe } from "src/types/timeframes";
 
 const convertDate = (date: Date): string => {
-  const convertedDate: string = `${date
-    .toISOString()
-    .replace(/-/g, "")
-    .replace(/:/g, "")
-    .replace(/\./g, "")
-    .slice(0, -4)}Z`;
+  // const convertedDate: string = `${date
+  //   .toISOString()
+  //   .replace(/-/g, "")
+  //   .replace(/:/g, "")
+  //   .replace(/\./g, "")
+  //   .slice(0, -4)}Z`;
 
-  return convertedDate;
+  return date.toISOString();
 };
 
 export const getPastDate = (daysBefore: Timeframe): string => {
@@ -24,7 +24,7 @@ export const getPastDate = (daysBefore: Timeframe): string => {
     case Timeframe.LastDay:
       return convertDate(new Date(new Date().setDate(today.getDate() - 1)));
     default:
-      return convertDate(today);
+      return convertDate(new Date("2021-01-01T05:00:00Z"));
   }
 };
 

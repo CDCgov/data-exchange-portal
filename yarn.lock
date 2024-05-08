@@ -1717,10 +1717,10 @@
   resolved "https://registry.yarnpkg.com/@us-gov-cdc/cdc-react-icons/-/cdc-react-icons-2.5.0.tgz#cb36cbe356c33a8d44cff0addea4e448de021912"
   integrity sha512-pOVV7qh/wcbpTcvWL1CnCXafiLa4vapjJpQmHmFvu6Eb3iI9wxIRDahhwn5voXunDiUxVyjQV7RsFR7T4dz9pw==
 
-"@us-gov-cdc/cdc-react@^1.10.0":
-  version "1.10.0"
-  resolved "https://registry.yarnpkg.com/@us-gov-cdc/cdc-react/-/cdc-react-1.10.0.tgz#b537737fe4f39bbe71d5c25e9ac3c22c2868e0bd"
-  integrity sha512-fKyyoJVoRmQsH0+lAmkrpG96VW1W1DM41Ma2OnWQB4eDZXH7hgWQz6NatrAH6ZZ435OPE89x2xvtI2Zm/pFKng==
+"@us-gov-cdc/cdc-react@^1.11.0":
+  version "1.11.0"
+  resolved "https://registry.yarnpkg.com/@us-gov-cdc/cdc-react/-/cdc-react-1.11.0.tgz#5119eb2cd438bddcc57d1daca0a4e1a6c65fb99f"
+  integrity sha512-e+BiRE5D5Y0ilSKccBOByrSC6OI60TlRAKGmjIA859enMxZTKZhm9R4+6TT/U9+h89MB9KSC+d3irLt4tkWi0A==
   dependencies:
     "@us-gov-cdc/cdc-react-icons" "^2.4.0"
     "@uswds/uswds" "^3.5.0"

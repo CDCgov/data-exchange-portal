@@ -37,7 +37,7 @@ function Submissions() {
 
   const [dataStream, setDataStream] = useState("");
   const [dataRoute, setDataRoute] = useState("");
-  const [timeframe, setTimeframe] = useState<Timeframe>(Timeframe.Last30Days);
+  const [timeframe, setTimeframe] = useState<Timeframe>(Timeframe.All);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSubmission, setSelectedSubmission] = useState<IFileSubmission>(

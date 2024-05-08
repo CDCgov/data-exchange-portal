@@ -27,7 +27,7 @@ function Dashboard() {
 
   const [dataStream, setDataStream] = useState("");
   const [dataRoute, setDataRoute] = useState("");
-  const [timeframe, setTimeframe] = useState<Timeframe>(Timeframe.Last30Days);
+  const [timeframe, setTimeframe] = useState<Timeframe>(Timeframe.All);
 
   // TODO: Replace with global state
   const [dataStreams, setDataStreams] = useState<DataStream[]>([]);
