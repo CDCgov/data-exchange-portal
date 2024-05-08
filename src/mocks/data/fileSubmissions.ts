@@ -5,6 +5,16 @@ import {
   FileSubmissionsSummary,
 } from "src/utils/api/fileSubmissions";
 
+const weightedStatuses = [
+  "completed",
+  "completed",
+  "completed",
+  "completed",
+  "failed",
+  "failed",
+  "processing",
+];
+
 const defaultSummary: FileSubmissionsSummary = {
   number_of_pages: 1,
   page_number: 1,
@@ -19,7 +29,7 @@ const generateFileSubmission = (
   const submission: FileSubmission = {
     upload_id: faker.string.uuid(),
     filename: faker.system.commonFileName(route),
-    status: faker.helpers.arrayElement(["completed", "failed", "processing"]),
+    status: faker.helpers.arrayElement(weightedStatuses),
     timestamp: faker.date.recent({ days: 40 }).toISOString(),
     metadata: [
       { key: "data_stream_id", value: dataStream },
@@ -78,3 +88,34 @@ export const submissionsAimsAll: FileSubmissions = {
     ...submissionsAimsHl7.items,
   ]),
 };
+
+export const dateFilter = (
+  submissions: FileSubmissions,
+  date: string
+): FileSubmissions => {
+  const newSubmissions: FileSubmissions = JSON.parse(
+    JSON.stringify(submissions)
+  );
+
+  newSubmissions.items = submissions.items.filter(
+    (el: FileSubmission) => new Date(el.timestamp) > new Date(date)
+  );
+
+  return newSubmissions;
+};
+
+interface MockSubmissions {
+  aimsCsv: FileSubmissions;
+  aimsHl7: FileSubmissions;
+  aimsAll: FileSubmissions;
+  daartHl7: FileSubmissions;
+}
+
+const mockSubmissions: MockSubmissions = {
+  aimsCsv: submissionsAimsCsv,
+  aimsHl7: submissionsAimsHl7,
+  aimsAll: submissionsAimsAll,
+  daartHl7: submissionsDaartHl7,
+};
+
+export default mockSubmissions;

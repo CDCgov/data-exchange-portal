@@ -89,10 +89,7 @@ function Submissions() {
 
       try {
         const data = (await res.json()) as FileSubmissions;
-
         setCurrentPageData(data.items.slice(0, pageLimit));
-        // This needs to be set for initial data to be displayed in table
-        console.log("data:", data);
       } catch (error) {
         console.error("Failed to parse JSON:", error);
       }

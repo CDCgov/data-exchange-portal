@@ -1,4 +1,4 @@
-import { defaultReportCounts, ReportCounts } from "src/utils/api/reportCounts";
+import { ReportCounts } from "src/utils/api/reportCounts";
 
 const countsAimsCsv: ReportCounts = {
   total_counts: 57,

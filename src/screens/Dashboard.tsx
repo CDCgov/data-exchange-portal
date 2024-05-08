@@ -72,6 +72,7 @@ function Dashboard() {
   }, [auth, dataStream, dataRoute, timeframe]);
 
   const handleDataStream = (dataStreamId: string) => {
+    // TODO: if only one route, prepopulate, otherwise list "ALL"
     setDataStream(dataStreamId);
     setDataRoute("");
   };
