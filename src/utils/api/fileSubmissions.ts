@@ -25,6 +25,13 @@ export interface FileSubmissions {
   items: FileSubmission[];
 }
 
+export const defaultSummary: FileSubmissionsSummary = {
+  number_of_pages: 0,
+  page_number: 1,
+  page_size: 10,
+  total_items: 0,
+};
+
 export const getFileSubmissions = async (
   access_token: string,
   data_stream_id: string,

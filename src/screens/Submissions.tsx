@@ -22,6 +22,8 @@ import { Icons } from "@us-gov-cdc/cdc-react-icons";
 import { IFileSubmission } from "@types";
 import {
   FileSubmissions,
+  FileSubmissionsSummary,
+  defaultSummary,
   getFileSubmissions,
 } from "src/utils/api/fileSubmissions";
 import getStatusDisplayValuesById from "src/utils/helperFunctions/statusDisplayValues";
@@ -36,6 +38,8 @@ function Submissions() {
   const auth = useAuth();
   const pageLimit = 10;
   const [currentPageData, setCurrentPageData] = useState<IFileSubmission[]>([]);
+  const [dataSummary, setDataSummary] =
+    useState<FileSubmissionsSummary>(defaultSummary);
 
   const dataStreamId = useRecoilValue(dataStreamIdAtom);
   const dataRoute = useRecoilValue(dataRouteAtom);
@@ -71,6 +75,7 @@ function Submissions() {
       try {
         const data = (await res.json()) as FileSubmissions;
         // TODO: Pagination should handle this logic
+        setDataSummary(data.summary);
         setCurrentPageData(data.items.slice(0, pageLimit));
       } catch (error) {
         console.error("Failed to parse JSON:", error);
@@ -97,7 +102,7 @@ function Submissions() {
       ) : (
         <>
           <div className="text-base font-sans-sm">
-            Showing {currentPageData.length} items{" "}
+            Showing {currentPageData.length} items of {dataSummary.total_items}
           </div>
           <Table className="padding-y-3">
             <TableHead>
