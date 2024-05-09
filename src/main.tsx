@@ -4,6 +4,7 @@ import App from "src/App";
 import "src/index.css";
 import { AuthProvider, AuthProviderProps } from "react-oidc-context";
 import { WebStorageStateStore } from "oidc-client-ts";
+import { RecoilRoot } from "recoil";
 import { getEnv } from "src/utils/helperFunctions/env";
 
 import API_ENDPOINTS from "src/config/api";
@@ -41,7 +42,9 @@ enableMocking().then(() => {
   ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
       <AuthProvider {...oidcConfig}>
-        <App />
+        <RecoilRoot>
+          <App />
+        </RecoilRoot>
       </AuthProvider>
     </React.StrictMode>
   );

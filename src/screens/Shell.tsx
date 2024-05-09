@@ -1,9 +1,16 @@
+import { useEffect } from "react";
+import { useAuth } from "react-oidc-context";
 import {
   MenuItemType,
   PopupMenuItemType,
 } from "@us-gov-cdc/cdc-react/dist/src/@types";
 
 import dexLogo from "src/assets/dex_logo.svg";
+import { useSetRecoilState } from "recoil";
+import { dataRouteAtom, dataStreamIdAtom } from "src/state/searchParams";
+import { dataStreamsAtom } from "src/state/dataStreams";
+import getDataStreams, { DataStream } from "src/utils/api/dataStreams";
+import { getDataRoutes } from "src/utils/helperFunctions/dataStreams";
 
 import {
   ProfileHeader,
@@ -17,8 +24,35 @@ import { Icons } from "@us-gov-cdc/cdc-react-icons";
 
 function Shell() {
   const navigate = useNavigate();
+  const auth = useAuth();
 
   const logo = <ProfileHeaderLogo image={dexLogo} classNames={["dex-logo"]} />;
+
+  const setDataStreams = useSetRecoilState(dataStreamsAtom);
+  const setDataStreamId = useSetRecoilState(dataStreamIdAtom);
+  const setDataRoute = useSetRecoilState(dataRouteAtom);
+
+  useEffect(() => {
+    const fetchCall = async () => {
+      const res = await getDataStreams(auth.user?.access_token || "");
+
+      try {
+        const data = await res.json();
+        const streams = data?.dataStreams as DataStream[];
+        setDataStreams(streams);
+
+        const dataStreamId = streams[0].dataStreamId;
+        setDataStreamId(dataStreamId);
+
+        const route = getDataRoutes(streams, dataStreamId)[0];
+        setDataRoute(route);
+      } catch (error) {
+        console.error("Failed to parse JSON:", error);
+      }
+    };
+    fetchCall();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [auth]);
 
   const menuItems: MenuItemType[] = [
     {
@@ -118,7 +152,7 @@ function Shell() {
                   componentType: "a",
                   icon: <Icons.SquareHalfArrowRight />,
                   text: "Logout",
-                  href: "/logout", // Todo: Migrate logout to use an onClick
+                  href: "/logout", // TODO: Migrate logout to use an onClick
                 },
               ],
             },

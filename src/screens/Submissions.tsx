@@ -1,10 +1,13 @@
-import { IFileSubmission } from "@types";
-
 import React, { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
+import {
+  dataRouteAtom,
+  dataStreamIdAtom,
+  timeFrameAtom,
+} from "src/state/searchParams";
 
 import {
   Button,
-  Dropdown,
   Pill,
   Table,
   TableBody,
@@ -16,6 +19,7 @@ import {
 } from "@us-gov-cdc/cdc-react";
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
 
+import { IFileSubmission } from "@types";
 import {
   FileSubmissions,
   getFileSubmissions,
@@ -23,24 +27,19 @@ import {
 import getStatusDisplayValuesById from "src/utils/helperFunctions/statusDisplayValues";
 
 import DetailsModal from "src/components/DetailsModal";
+import SearchOptions from "src/components/SearchOptions";
 
 import { useAuth } from "react-oidc-context";
 import { getPastDate } from "src/utils/helperFunctions/date";
-import timeframes, { Timeframe } from "src/types/timeframes";
-import getDataStreams, { DataStream } from "src/utils/api/dataStreams";
-import {
-  getDataRoutes,
-  getDataStreamIds,
-} from "src/utils/helperFunctions/dataStreams";
 
 function Submissions() {
   const auth = useAuth();
   const pageLimit = 10;
   const [currentPageData, setCurrentPageData] = useState<IFileSubmission[]>([]);
 
-  const [dataStream, setDataStream] = useState("");
-  const [dataRoute, setDataRoute] = useState("");
-  const [timeframe, setTimeframe] = useState<Timeframe>(Timeframe.All);
+  const dataStreamId = useRecoilValue(dataStreamIdAtom);
+  const dataRoute = useRecoilValue(dataRouteAtom);
+  const timeframe = useRecoilValue(timeFrameAtom);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSubmission, setSelectedSubmission] = useState<IFileSubmission>(
@@ -52,32 +51,11 @@ function Submissions() {
     }
   );
 
-  // TODO: Replace with global state
-  const [dataStreams, setDataStreams] = useState<DataStream[]>([]);
-  useEffect(() => {
-    const fetchCall = async () => {
-      const res = await getDataStreams(auth.user?.access_token || "");
-
-      try {
-        const data = await res.json();
-        const streams = data?.dataStreams as DataStream[];
-        const dataStreamId = streams[0].dataStreamId;
-        setDataStreams(streams);
-        setDataStream(dataStreamId);
-        const route = getDataRoutes(streams, dataStreamId)[0];
-        setDataRoute(route);
-      } catch (error) {
-        console.error("Failed to parse JSON:", error);
-      }
-    };
-    fetchCall();
-  }, [auth]);
-
   useEffect(() => {
     const fetchCall = async () => {
       const res = await getFileSubmissions(
         auth.user?.access_token || "",
-        dataStream,
+        dataStreamId,
         dataRoute != "All" ? dataRoute : "",
         getPastDate(timeframe),
         new Date().toISOString(),
@@ -99,22 +77,11 @@ function Submissions() {
       }
     };
 
-    if (dataStream) fetchCall();
-  }, [auth, dataStream, dataRoute, timeframe]);
+    if (dataStreamId) fetchCall();
+  }, [auth, dataStreamId, dataRoute, timeframe]);
 
   const handleModalClose = () => {
     setIsModalOpen(false);
-  };
-
-  const handleDataStream = (dataStreamId: string) => {
-    setDataStream(dataStreamId);
-    const route = getDataRoutes(dataStreams, dataStreamId)[0];
-    setDataRoute(route);
-  };
-
-  const handleTimeframe = (time: string) => {
-    const timeframe = time as Timeframe;
-    setTimeframe(timeframe);
   };
 
   return (
@@ -122,34 +89,7 @@ function Submissions() {
       <h1 className="cdc-page-header padding-y-3 margin-0">
         Track Submissions
       </h1>
-      <div className="padding-bottom-2 display-flex flex-row flex-justify">
-        <div className="display-flex flex-row cdc-submissions-page--filters">
-          <Dropdown
-            className="padding-right-2"
-            items={getDataStreamIds(dataStreams)}
-            label="Data Stream"
-            onSelect={handleDataStream}
-            srText="Data Stream"
-            defaultValue={dataStream}
-          />
-          <Dropdown
-            className="padding-right-2"
-            items={getDataRoutes(dataStreams, dataStream)}
-            label="Route"
-            onSelect={setDataRoute}
-            srText="Data Route"
-            defaultValue={dataRoute}
-          />
-          <Dropdown
-            items={timeframes}
-            label="Timeframe"
-            labelIcon={<Icons.Calendar />}
-            onSelect={handleTimeframe}
-            srText="Timeframe"
-            defaultValue={timeframe}
-          />
-        </div>
-      </div>
+      <SearchOptions />
       {currentPageData.length === 0 ? (
         <p className="text-base font-sans-sm padding-top-3">
           No items found. Try expanding the timeframe or modifying the filters.
