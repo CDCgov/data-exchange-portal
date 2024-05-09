@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useAuth } from "react-oidc-context";
 import {
   MenuItemType,
@@ -25,6 +26,7 @@ import { Icons } from "@us-gov-cdc/cdc-react-icons";
 function Shell() {
   const navigate = useNavigate();
   const auth = useAuth();
+  const [searchParams, _] = useSearchParams();
 
   const logo = <ProfileHeaderLogo image={dexLogo} classNames={["dex-logo"]} />;
 
@@ -41,11 +43,21 @@ function Shell() {
         const streams = data?.dataStreams as DataStream[];
         setDataStreams(streams);
 
-        const dataStreamId = streams[0].dataStreamId;
-        setDataStreamId(dataStreamId);
+        const streamId = searchParams.get("data_stream_id");
+        const route = searchParams.get("data_route");
+        const userHasDataStream = streams.find(
+          (stream: DataStream) => stream.dataStreamId == streamId
+        );
+        const dataStreamHasRoute = userHasDataStream?.routes.find(
+          (r: string) => r == route
+        );
 
-        const route = getDataRoutes(streams, dataStreamId)[0];
-        setDataRoute(route);
+        if (!userHasDataStream || !dataStreamHasRoute) {
+          const dataStreamId = streams[0].dataStreamId;
+          setDataStreamId(dataStreamId);
+          const route = getDataRoutes(streams, dataStreamId)[0];
+          setDataRoute(route);
+        }
       } catch (error) {
         console.error("Failed to parse JSON:", error);
       }
