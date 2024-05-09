@@ -1,6 +1,11 @@
-import { IFileSubmission } from "@types";
-
 import React, { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
+import {
+  dataRouteAtom,
+  dataStreamIdAtom,
+  timeFrameAtom,
+} from "src/state/searchParams";
+import { dataStreamsAtom } from "src/state/dataStreams";
 
 import {
   Button,
@@ -16,6 +21,7 @@ import {
 } from "@us-gov-cdc/cdc-react";
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
 
+import { IFileSubmission } from "@types";
 import {
   FileSubmissions,
   getFileSubmissions,
@@ -38,9 +44,9 @@ function Submissions() {
   const pageLimit = 10;
   const [currentPageData, setCurrentPageData] = useState<IFileSubmission[]>([]);
 
-  const [dataStream, setDataStream] = useState("");
-  const [dataRoute, setDataRoute] = useState("");
-  const [timeframe, setTimeframe] = useState<Timeframe>(Timeframe.All);
+  const [dataStream, setDataStream] = useRecoilState(dataStreamIdAtom);
+  const [dataRoute, setDataRoute] = useRecoilState(dataRouteAtom);
+  const [timeframe, setTimeframe] = useRecoilState(timeFrameAtom);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSubmission, setSelectedSubmission] = useState<IFileSubmission>(
@@ -53,7 +59,7 @@ function Submissions() {
   );
 
   // TODO: Replace with global state
-  const [dataStreams, setDataStreams] = useState<DataStream[]>([]);
+  const [dataStreams, setDataStreams] = useRecoilState(dataStreamsAtom);
   useEffect(() => {
     const fetchCall = async () => {
       const res = await getDataStreams(auth.user?.access_token || "");

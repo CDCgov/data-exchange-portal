@@ -1,11 +1,18 @@
+import { useEffect, useState } from "react";
 import { useAuth } from "react-oidc-context";
+
+import { useRecoilState } from "recoil";
+import {
+  dataRouteAtom,
+  dataStreamIdAtom,
+  timeFrameAtom,
+} from "src/state/searchParams";
+import { dataStreamsAtom } from "src/state/dataStreams";
 
 import { Dropdown } from "@us-gov-cdc/cdc-react";
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
 import PieChart from "src/components/PieChart";
 import StatusBoxes from "src/components/StatusBoxes";
-
-import { useEffect, useState } from "react";
 
 import getReportCounts, {
   defaultReportCounts,
@@ -25,12 +32,12 @@ function Dashboard() {
   const [countsData, setCountsData] =
     useState<ReportCounts>(defaultReportCounts);
 
-  const [dataStream, setDataStream] = useState("");
-  const [dataRoute, setDataRoute] = useState("");
-  const [timeframe, setTimeframe] = useState<Timeframe>(Timeframe.All);
+  const [dataStream, setDataStream] = useRecoilState(dataStreamIdAtom);
+  const [dataRoute, setDataRoute] = useRecoilState(dataRouteAtom);
+  const [timeframe, setTimeframe] = useRecoilState(timeFrameAtom);
 
   // TODO: Replace with global state
-  const [dataStreams, setDataStreams] = useState<DataStream[]>([]);
+  const [dataStreams, setDataStreams] = useRecoilState(dataStreamsAtom);
   useEffect(() => {
     const fetchCall = async () => {
       const res = await getDataStreams(auth.user?.access_token || "");
