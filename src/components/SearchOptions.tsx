@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
   dataRouteAtom,
@@ -16,13 +17,17 @@ import {
 import timeframes, { Timeframe } from "src/types/timeframes";
 
 function SearchOptions() {
-  const [dataStream, setDataStream] = useRecoilState(dataStreamIdAtom);
+  const [dataStreamId, setDataStreamId] = useRecoilState(dataStreamIdAtom);
   const [dataRoute, setDataRoute] = useRecoilState(dataRouteAtom);
   const [timeframe, setTimeframe] = useRecoilState(timeFrameAtom);
   const dataStreams = useRecoilValue(dataStreamsAtom);
 
+  useEffect(() => {
+    // TODO: gather query params and check against users datastreams
+  }, []);
+
   const handleDataStream = (dataStreamId: string) => {
-    setDataStream(dataStreamId);
+    setDataStreamId(dataStreamId);
     const route = getDataRoutes(dataStreams, dataStreamId)[0];
     setDataRoute(route);
   };
@@ -41,11 +46,11 @@ function SearchOptions() {
           label="Data Stream"
           onSelect={handleDataStream}
           srText="Data Stream"
-          defaultValue={dataStream}
+          defaultValue={dataStreamId}
         />
         <Dropdown
           className="padding-right-2"
-          items={getDataRoutes(dataStreams, dataStream)}
+          items={getDataRoutes(dataStreams, dataStreamId)}
           label="Route"
           onSelect={setDataRoute}
           srText="Data Route"

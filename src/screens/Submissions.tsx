@@ -37,7 +37,7 @@ function Submissions() {
   const pageLimit = 10;
   const [currentPageData, setCurrentPageData] = useState<IFileSubmission[]>([]);
 
-  const dataStream = useRecoilValue(dataStreamIdAtom);
+  const dataStreamId = useRecoilValue(dataStreamIdAtom);
   const dataRoute = useRecoilValue(dataRouteAtom);
   const timeframe = useRecoilValue(timeFrameAtom);
 
@@ -55,7 +55,7 @@ function Submissions() {
     const fetchCall = async () => {
       const res = await getFileSubmissions(
         auth.user?.access_token || "",
-        dataStream,
+        dataStreamId,
         dataRoute != "All" ? dataRoute : "",
         getPastDate(timeframe),
         new Date().toISOString(),
@@ -77,8 +77,8 @@ function Submissions() {
       }
     };
 
-    if (dataStream) fetchCall();
-  }, [auth, dataStream, dataRoute, timeframe]);
+    if (dataStreamId) fetchCall();
+  }, [auth, dataStreamId, dataRoute, timeframe]);
 
   const handleModalClose = () => {
     setIsModalOpen(false);

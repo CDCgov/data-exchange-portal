@@ -23,7 +23,7 @@ function Dashboard() {
   const [countsData, setCountsData] =
     useState<ReportCounts>(defaultReportCounts);
 
-  const dataStream = useRecoilValue(dataStreamIdAtom);
+  const dataStreamId = useRecoilValue(dataStreamIdAtom);
   const dataRoute = useRecoilValue(dataRouteAtom);
   const timeframe = useRecoilValue(timeFrameAtom);
 
@@ -31,7 +31,7 @@ function Dashboard() {
     const fetchCall = async () => {
       const res = await getReportCounts(
         auth.user?.access_token || "",
-        dataStream,
+        dataStreamId,
         dataRoute != "All" ? dataRoute : "",
         getPastDate(timeframe),
         new Date().toISOString()
@@ -48,8 +48,8 @@ function Dashboard() {
       }
     };
 
-    if (dataStream) fetchCall();
-  }, [auth, dataStream, dataRoute, timeframe]);
+    if (dataStreamId) fetchCall();
+  }, [auth, dataStreamId, dataRoute, timeframe]);
 
   return (
     <section className="main_content padding-x-2">

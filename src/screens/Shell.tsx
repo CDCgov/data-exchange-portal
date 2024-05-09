@@ -29,8 +29,9 @@ function Shell() {
   const logo = <ProfileHeaderLogo image={dexLogo} classNames={["dex-logo"]} />;
 
   const setDataStreams = useSetRecoilState(dataStreamsAtom);
-  const setDataStream = useSetRecoilState(dataStreamIdAtom);
+  const setDataStreamId = useSetRecoilState(dataStreamIdAtom);
   const setDataRoute = useSetRecoilState(dataRouteAtom);
+
   useEffect(() => {
     const fetchCall = async () => {
       const res = await getDataStreams(auth.user?.access_token || "");
@@ -38,9 +39,11 @@ function Shell() {
       try {
         const data = await res.json();
         const streams = data?.dataStreams as DataStream[];
-        const dataStreamId = streams[0].dataStreamId;
         setDataStreams(streams);
-        setDataStream(dataStreamId);
+
+        const dataStreamId = streams[0].dataStreamId;
+        setDataStreamId(dataStreamId);
+
         const route = getDataRoutes(streams, dataStreamId)[0];
         setDataRoute(route);
       } catch (error) {
@@ -48,6 +51,7 @@ function Shell() {
       }
     };
     fetchCall();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth]);
 
   const menuItems: MenuItemType[] = [
@@ -148,7 +152,7 @@ function Shell() {
                   componentType: "a",
                   icon: <Icons.SquareHalfArrowRight />,
                   text: "Logout",
-                  href: "/logout", // Todo: Migrate logout to use an onClick
+                  href: "/logout", // TODO: Migrate logout to use an onClick
                 },
               ],
             },
