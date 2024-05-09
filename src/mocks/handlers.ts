@@ -1,13 +1,9 @@
 import { http, HttpResponse } from "msw";
 import API_ENDPOINTS from "src/config/api";
 
-import { ReportCounts } from "src/utils/api/reportCounts";
 import { FileSubmissions } from "src/utils/api/fileSubmissions";
 
-import mockCounts, {
-  getDaysInThePast,
-  reduceCounts,
-} from "src/mocks/data/reportCounts";
+import { generateCounts } from "src/mocks/data/reportCounts";
 import mockSubmissions, { dateFilter } from "src/mocks/data/fileSubmissions";
 import mockDataStreams from "src/mocks/data/dataStreams.json";
 import mockSubmissionDetails from "src/mocks/data/submissionDetails.json";
@@ -50,9 +46,9 @@ export const handlers = [
     const dataRoute = url.searchParams.get("data_stream_route");
     const startDate = url.searchParams.get("date_start") || earliestDate;
 
-    const countsResponse = (counts: ReportCounts) => {
+    const countsResponse = (submissions: FileSubmissions) => {
       return HttpResponse.json(
-        reduceCounts(counts, getDaysInThePast(startDate))
+        generateCounts(dateFilter(submissions, startDate))
       );
     };
 
@@ -61,12 +57,12 @@ export const handlers = [
     }
 
     if (dataStreamId == "aims-celr") {
-      if (dataRoute == "csv") return countsResponse(mockCounts.aimsCsv);
-      if (dataRoute == "hl7") return countsResponse(mockCounts.aimsHl7);
-      return countsResponse(mockCounts.aimsAll);
+      if (dataRoute == "csv") return countsResponse(mockSubmissions.aimsCsv);
+      if (dataRoute == "hl7") return countsResponse(mockSubmissions.aimsHl7);
+      return countsResponse(mockSubmissions.aimsAll);
     }
 
-    return countsResponse(mockCounts.daartHl7);
+    return countsResponse(mockSubmissions.daartHl7);
   }),
 
   http.get(API_ENDPOINTS.submissionDetails, ({ request }) => {
