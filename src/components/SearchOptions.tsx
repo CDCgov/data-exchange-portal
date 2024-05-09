@@ -32,11 +32,12 @@ function SearchOptions() {
     if (streamId) setDataStreamId(streamId);
     if (route) setDataRoute(route);
     if (timeframe) setTimeframe(timeframe);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     setSearchParams({ data_stream_id, data_route, timeframe });
-  }, [data_stream_id, data_route, timeframe]);
+  }, [data_stream_id, data_route, timeframe, setSearchParams]);
 
   const handleDataStreamId = (dataStreamId: string) => {
     setDataStreamId(dataStreamId);
