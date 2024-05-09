@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "react-oidc-context";
 
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import {
   dataRouteAtom,
   dataStreamIdAtom,
   timeFrameAtom,
 } from "src/state/searchParams";
-import { dataStreamsAtom } from "src/state/dataStreams";
 
 import PieChart from "src/components/PieChart";
 import SearchOptions from "src/components/SearchOptions";
@@ -17,40 +16,16 @@ import getReportCounts, {
   defaultReportCounts,
   ReportCounts,
 } from "src/utils/api/reportCounts";
-
 import { getPastDate } from "src/utils/helperFunctions/date";
-import getDataStreams, { DataStream } from "src/utils/api/dataStreams";
-import { getDataRoutes } from "src/utils/helperFunctions/dataStreams";
 
 function Dashboard() {
   const auth = useAuth();
   const [countsData, setCountsData] =
     useState<ReportCounts>(defaultReportCounts);
 
-  const [dataStream, setDataStream] = useRecoilState(dataStreamIdAtom);
-  const [dataRoute, setDataRoute] = useRecoilState(dataRouteAtom);
+  const dataStream = useRecoilValue(dataStreamIdAtom);
+  const dataRoute = useRecoilValue(dataRouteAtom);
   const timeframe = useRecoilValue(timeFrameAtom);
-
-  // TODO: Replace with global state
-  const setDataStreams = useSetRecoilState(dataStreamsAtom);
-  useEffect(() => {
-    const fetchCall = async () => {
-      const res = await getDataStreams(auth.user?.access_token || "");
-
-      try {
-        const data = await res.json();
-        const streams = data?.dataStreams as DataStream[];
-        const dataStreamId = streams[0].dataStreamId;
-        setDataStreams(streams);
-        setDataStream(dataStreamId);
-        const route = getDataRoutes(streams, dataStreamId)[0];
-        setDataRoute(route);
-      } catch (error) {
-        console.error("Failed to parse JSON:", error);
-      }
-    };
-    fetchCall();
-  }, [auth]);
 
   useEffect(() => {
     const fetchCall = async () => {

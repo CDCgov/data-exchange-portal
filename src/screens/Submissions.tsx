@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import {
   dataRouteAtom,
   dataStreamIdAtom,
   timeFrameAtom,
 } from "src/state/searchParams";
-import { dataStreamsAtom } from "src/state/dataStreams";
 
 import {
   Button,
@@ -32,16 +31,14 @@ import SearchOptions from "src/components/SearchOptions";
 
 import { useAuth } from "react-oidc-context";
 import { getPastDate } from "src/utils/helperFunctions/date";
-import getDataStreams, { DataStream } from "src/utils/api/dataStreams";
-import { getDataRoutes } from "src/utils/helperFunctions/dataStreams";
 
 function Submissions() {
   const auth = useAuth();
   const pageLimit = 10;
   const [currentPageData, setCurrentPageData] = useState<IFileSubmission[]>([]);
 
-  const [dataStream, setDataStream] = useRecoilState(dataStreamIdAtom);
-  const [dataRoute, setDataRoute] = useRecoilState(dataRouteAtom);
+  const dataStream = useRecoilValue(dataStreamIdAtom);
+  const dataRoute = useRecoilValue(dataRouteAtom);
   const timeframe = useRecoilValue(timeFrameAtom);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -53,27 +50,6 @@ function Submissions() {
       timestamp: "",
     }
   );
-
-  // TODO: Replace with global state
-  const setDataStreams = useSetRecoilState(dataStreamsAtom);
-  useEffect(() => {
-    const fetchCall = async () => {
-      const res = await getDataStreams(auth.user?.access_token || "");
-
-      try {
-        const data = await res.json();
-        const streams = data?.dataStreams as DataStream[];
-        const dataStreamId = streams[0].dataStreamId;
-        setDataStreams(streams);
-        setDataStream(dataStreamId);
-        const route = getDataRoutes(streams, dataStreamId)[0];
-        setDataRoute(route);
-      } catch (error) {
-        console.error("Failed to parse JSON:", error);
-      }
-    };
-    fetchCall();
-  }, [auth]);
 
   useEffect(() => {
     const fetchCall = async () => {
