@@ -1,5 +1,6 @@
 package com.dexportalapi.DeXPortalAPI
 
+import com.dexportalapi.DeXPortalAPI.utils.processDateString
 import java.time.LocalDate
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
@@ -46,6 +47,7 @@ class MainController() {
             @RequestHeader("Authorization") authToken: String
     ): String {
         val psAPIUrl = System.getenv("PS_API_URL").toString()
+        val cleanedDateStart: String? = processDateString(dateStart)
 
         val response =
                 webClient
@@ -54,6 +56,7 @@ class MainController() {
                                 psAPIUrl +
                                         "/api/upload/" + dataStreamId +
                                         "?page_number=" + pageNumber + "&page_size=20"
+                                        + "&date_start=$cleanedDateStart"
                         )
                         .header("Authorization", authToken)
                         .retrieve()
@@ -88,10 +91,12 @@ class MainController() {
             uri = uri + "&days_interval=" + daysInterval
         }
         if (dateStart != null && dateStart.length > 0) {
-            uri = uri + "&date_start=" + dateStart
+            val cleanedDateStart: String? = processDateString(dateStart)
+            uri = uri + "&date_start=" + cleanedDateStart
         }
         if (dateEnd != null && dateEnd.length > 0) {
-            uri = uri + "&date_end=" + dateEnd
+            val cleanedDateEnd: String? = processDateString(dateEnd)
+            uri = uri + "&date_end=" + cleanedDateEnd
         }
         if (extEvent != null && extEvent.length > 0) {
             uri = uri + "&ext_event=" + extEvent
