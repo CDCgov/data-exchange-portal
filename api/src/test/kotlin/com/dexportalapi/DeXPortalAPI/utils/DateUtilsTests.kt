@@ -1,11 +1,11 @@
-package com.dexportalapi.DeXPortalAPI
 
-import org.junit.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNull
+import com.dexportalapi.DeXPortalAPI.utils.processDateString
+
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 
 class DateUtilsTest {
-
     @Test
     fun testProcessDateString_ValidInput() {
         val inputDate = "2024-04-09T17:42:42.343Z"
