@@ -1,9 +1,13 @@
 import API_ENDPOINTS from "src/config/api";
 
-const getDataStreams = async (access_token: string): Promise<Response> => {
-  const params = new URLSearchParams();
+export interface DataStream {
+  id: number | string;
+  dataStreamId: string;
+  routes: string[];
+}
 
-  const url = `${API_ENDPOINTS.dataStreams}?${params.toString()}`;
+const getDataStreams = async (access_token: string): Promise<Response> => {
+  const url = `${API_ENDPOINTS.dataStreams}`;
 
   const response = await fetch(url, {
     method: "GET",

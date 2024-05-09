@@ -11,6 +11,7 @@ function Logout() {
 
   useEffect(() => {
     auth.removeUser();
+    // TODO: delete dataStreams from global state
     navigate(from, { replace: true });
   }, [auth, from, navigate]);
 

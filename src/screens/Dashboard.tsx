@@ -12,35 +12,52 @@ import getReportCounts, {
   ReportCounts,
 } from "src/utils/api/reportCounts";
 
-import convertDate, { getPastDate } from "src/utils/helperFunctions/date";
+import { getPastDate } from "src/utils/helperFunctions/date";
 import timeframes, { Timeframe } from "src/types/timeframes";
-import { useFeatureFlag } from "src/utils/hooks/useFeatureFlag";
+import getDataStreams, { DataStream } from "src/utils/api/dataStreams";
+import {
+  getDataRoutes,
+  getDataStreamIds,
+} from "src/utils/helperFunctions/dataStreams";
 
 function Dashboard() {
   const auth = useAuth();
   const [countsData, setCountsData] =
     useState<ReportCounts>(defaultReportCounts);
 
-  const { enabled: enableSuperUser } = useFeatureFlag("EnableSuperUser");
+  const [dataStream, setDataStream] = useState("");
+  const [dataRoute, setDataRoute] = useState("");
+  const [timeframe, setTimeframe] = useState<Timeframe>(Timeframe.All);
 
-  const [dataStream, setDataStream] = useState("aims-celr");
-  const [dataRoute, setDataRoute] = useState("csv");
-  const [timeframe, setTimeframe] = useState<Timeframe>(Timeframe.Last30Days);
-
+  // TODO: Replace with global state
+  const [dataStreams, setDataStreams] = useState<DataStream[]>([]);
   useEffect(() => {
-    console.log(
-      enableSuperUser ? "Super User is enabled" : "Super User is disabled"
-    );
-  }, [enableSuperUser]);
+    const fetchCall = async () => {
+      const res = await getDataStreams(auth.user?.access_token || "");
+
+      try {
+        const data = await res.json();
+        const streams = data?.dataStreams as DataStream[];
+        const dataStreamId = streams[0].dataStreamId;
+        setDataStreams(streams);
+        setDataStream(dataStreamId);
+        const route = getDataRoutes(streams, dataStreamId)[0];
+        setDataRoute(route);
+      } catch (error) {
+        console.error("Failed to parse JSON:", error);
+      }
+    };
+    fetchCall();
+  }, [auth]);
 
   useEffect(() => {
     const fetchCall = async () => {
       const res = await getReportCounts(
         auth.user?.access_token || "",
         dataStream,
-        dataRoute,
+        dataRoute != "All" ? dataRoute : "",
         getPastDate(timeframe),
-        convertDate(new Date())
+        new Date().toISOString()
       );
 
       // TODO: add UI feedback for failed report counts retrieval
@@ -53,8 +70,15 @@ function Dashboard() {
         console.error("Failed to parse JSON:", error);
       }
     };
-    fetchCall();
+
+    if (dataStream) fetchCall();
   }, [auth, dataStream, dataRoute, timeframe]);
+
+  const handleDataStream = (dataStreamId: string) => {
+    setDataStream(dataStreamId);
+    const route = getDataRoutes(dataStreams, dataStreamId)[0];
+    setDataRoute(route);
+  };
 
   const handleTimeframe = (time: string) => {
     const timeframe = time as Timeframe;
@@ -68,17 +92,19 @@ function Dashboard() {
         <div className="display-flex flex-row cdc-submissions-page--filters">
           <Dropdown
             className="padding-right-2"
-            items={["aims-celr", "daart"]}
+            items={getDataStreamIds(dataStreams)}
             label="Data Stream"
-            onSelect={setDataStream}
+            onSelect={handleDataStream}
             srText="Data Stream"
+            defaultValue={dataStream}
           />
           <Dropdown
             className="padding-right-2"
-            items={["csv", "hl7"]}
+            items={getDataRoutes(dataStreams, dataStream)}
             label="Route"
             onSelect={setDataRoute}
             srText="Data Route"
+            defaultValue={dataRoute}
           />
           <Dropdown
             items={timeframes}
@@ -86,6 +112,7 @@ function Dashboard() {
             labelIcon={<Icons.Calendar />}
             onSelect={handleTimeframe}
             srText="Timeframe"
+            defaultValue={timeframe}
           />
         </div>
       </div>

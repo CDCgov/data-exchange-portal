@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import App from "src/App";
 import "src/index.css";
 import { AuthProvider, AuthProviderProps } from "react-oidc-context";
+import { WebStorageStateStore } from "oidc-client-ts";
 import { getEnv } from "src/utils/helperFunctions/env";
 
 import API_ENDPOINTS from "src/config/api";
@@ -15,6 +16,7 @@ const oidcConfig: AuthProviderProps = {
   scope: "openid profile email dex:status",
   disablePKCE: true,
   loadUserInfo: true,
+  userStore: new WebStorageStateStore({ store: window.localStorage }),
   metadata: {
     authorization_endpoint: getEnv("VITE_SAMS_AUTH_URL"),
     token_endpoint: API_ENDPOINTS.tokenCallback,
