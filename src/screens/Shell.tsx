@@ -26,7 +26,7 @@ import { Icons } from "@us-gov-cdc/cdc-react-icons";
 function Shell() {
   const navigate = useNavigate();
   const auth = useAuth();
-  const [searchParams, _] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   const logo = <ProfileHeaderLogo image={dexLogo} classNames={["dex-logo"]} />;
 
