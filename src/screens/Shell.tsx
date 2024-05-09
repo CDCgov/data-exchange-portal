@@ -82,7 +82,6 @@ function Shell() {
                   componentType: "a",
                   icon: <Icons.ArrowUp />,
                   text: "Uploaded Files",
-                  href: "/",
                   onClick: () => navigate("/"),
                 },
                 {
