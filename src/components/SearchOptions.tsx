@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
   dataRouteAtom,
@@ -17,19 +18,35 @@ import {
 import timeframes, { Timeframe } from "src/types/timeframes";
 
 function SearchOptions() {
-  const [dataStreamId, setDataStreamId] = useRecoilState(dataStreamIdAtom);
-  const [dataRoute, setDataRoute] = useRecoilState(dataRouteAtom);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [data_stream_id, setDataStreamId] = useRecoilState(dataStreamIdAtom);
+  const [data_route, setDataRoute] = useRecoilState(dataRouteAtom);
   const [timeframe, setTimeframe] = useRecoilState(timeFrameAtom);
   const dataStreams = useRecoilValue(dataStreamsAtom);
 
   useEffect(() => {
-    // TODO: gather query params and check against users datastreams
+    const streamId = searchParams.get("data_stream_id");
+    const route = searchParams.get("data_route");
+    const timeframe = searchParams.get("timeframe") as Timeframe;
+
+    if (streamId) setDataStreamId(streamId);
+    if (route) setDataRoute(route);
+    if (timeframe) setTimeframe(timeframe);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleDataStream = (dataStreamId: string) => {
+  useEffect(() => {
+    setSearchParams({ data_stream_id, data_route, timeframe });
+  }, [data_stream_id, data_route, timeframe, setSearchParams]);
+
+  const handleDataStreamId = (dataStreamId: string) => {
     setDataStreamId(dataStreamId);
     const route = getDataRoutes(dataStreams, dataStreamId)[0];
     setDataRoute(route);
+  };
+
+  const handleDataRoute = (dataRoute: string) => {
+    setDataRoute(dataRoute);
   };
 
   const handleTimeframe = (time: string) => {
@@ -44,17 +61,17 @@ function SearchOptions() {
           className="padding-right-2"
           items={getDataStreamIds(dataStreams)}
           label="Data Stream"
-          onSelect={handleDataStream}
+          onSelect={handleDataStreamId}
           srText="Data Stream"
-          defaultValue={dataStreamId}
+          defaultValue={data_stream_id}
         />
         <Dropdown
           className="padding-right-2"
-          items={getDataRoutes(dataStreams, dataStreamId)}
+          items={getDataRoutes(dataStreams, data_stream_id)}
           label="Route"
-          onSelect={setDataRoute}
+          onSelect={handleDataRoute}
           srText="Data Route"
-          defaultValue={dataRoute}
+          defaultValue={data_route}
         />
         <Dropdown
           items={timeframes}
