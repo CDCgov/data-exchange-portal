@@ -15,13 +15,6 @@ const weightedStatuses = [
   "processing",
 ];
 
-const defaultSummary: FileSubmissionsSummary = {
-  number_of_pages: 1,
-  page_number: 1,
-  page_size: 10,
-  total_items: 10,
-};
-
 const generateFileSubmission = (
   dataStream: string,
   route: string
@@ -49,8 +42,15 @@ const generateSubmissions = (
     items.push(generateFileSubmission(dataStream, route));
   }
 
+  const summary: FileSubmissionsSummary = {
+    total_items: amount,
+    page_number: 1,
+    page_size: 10,
+    number_of_pages: Math.floor(amount / 10),
+  };
+
   return {
-    summary: defaultSummary,
+    summary,
     items,
   };
 };
@@ -66,22 +66,29 @@ function shuffleArray(array: FileSubmission[]) {
 
 export const submissionsAimsCsv: FileSubmissions = generateSubmissions(
   "aims-celr",
-  "csv"
+  "csv",
+  47
 );
 export const submissionsAimsHl7: FileSubmissions = generateSubmissions(
   "aims-celr",
-  "hl7"
+  "hl7",
+  35
 );
 export const submissionsDaartHl7: FileSubmissions = generateSubmissions(
   "daart",
-  "hl7"
+  "hl7",
+  62
 );
 export const submissionsAimsAll: FileSubmissions = {
   summary: {
-    number_of_pages: 2,
+    number_of_pages:
+      submissionsAimsCsv.summary.number_of_pages +
+      submissionsAimsHl7.summary.number_of_pages,
     page_number: 1,
     page_size: 10,
-    total_items: 20,
+    total_items:
+      submissionsAimsCsv.summary.total_items +
+      submissionsAimsHl7.summary.total_items,
   },
   items: shuffleArray([
     ...submissionsAimsCsv.items,
@@ -100,6 +107,8 @@ export const dateFilter = (
   newSubmissions.items = submissions.items.filter(
     (el: FileSubmission) => new Date(el.timestamp) > new Date(date)
   );
+
+  newSubmissions.summary.total_items = newSubmissions.items.length;
 
   return newSubmissions;
 };

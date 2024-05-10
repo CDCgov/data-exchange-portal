@@ -1,112 +1,34 @@
 import { ReportCounts } from "src/utils/api/reportCounts";
+import mockSubmissions from "src/mocks/data/fileSubmissions";
+import { FileSubmissions, FileSubmission } from "src/utils/api/fileSubmissions";
 
-const countsAimsCsv: ReportCounts = {
-  total_counts: 57,
-  status_counts: {
-    completed: {
-      counts: 40,
-    },
-    failed: {
-      counts: 10,
-      reasons: {},
-    },
-    processing: {
-      counts: 7,
-    },
-  },
-};
+export const generateCounts = (submissions: FileSubmissions): ReportCounts => {
+  const total = submissions.summary.total_items;
+  const completed = submissions.items.filter(
+    (el: FileSubmission) => el.status == "completed"
+  );
+  const failed = submissions.items.filter(
+    (el: FileSubmission) => el.status == "failed"
+  );
+  const processing = submissions.items.filter(
+    (el: FileSubmission) => el.status == "processing"
+  );
 
-const countsAimsHl7: ReportCounts = {
-  total_counts: 30,
-  status_counts: {
-    completed: {
-      counts: 14,
-    },
-    failed: {
-      counts: 8,
-      reasons: {},
-    },
-    processing: {
-      counts: 8,
-    },
-  },
-};
-
-const countsAimsAll: ReportCounts = {
-  total_counts: 87,
-  status_counts: {
-    completed: {
-      counts: 54,
-    },
-    failed: {
-      counts: 18,
-      reasons: {},
-    },
-    processing: {
-      counts: 15,
-    },
-  },
-};
-
-const countsDaartHl7: ReportCounts = {
-  total_counts: 75,
-  status_counts: {
-    completed: {
-      counts: 55,
-    },
-    failed: {
-      counts: 12,
-      reasons: {},
-    },
-    processing: {
-      counts: 8,
-    },
-  },
-};
-
-export const getDaysInThePast = (date: string) => {
-  const today = new Date();
-  const startDate = new Date(date);
-
-  const diff = Math.abs(today.getTime() - startDate.getTime());
-
-  const days = diff / (1000 * 60 * 60 * 24);
-
-  return Math.floor(days);
-};
-
-export const reduceCounts = (counts: ReportCounts, daysInPast: number) => {
-  let factor: number;
-
-  if (daysInPast <= 1) {
-    factor = 0.1;
-  } else if (daysInPast <= 7) {
-    factor = 0.25;
-  } else if (daysInPast <= 15) {
-    factor = 0.5;
-  } else if (daysInPast <= 30) {
-    factor = 0.75;
-  } else {
-    factor = 1;
-  }
-
-  const applyFactor = (count: number) => Math.floor(count * factor);
-
-  const newCounts: ReportCounts = {
-    total_counts: applyFactor(counts.total_counts),
+  return {
+    total_counts: total,
     status_counts: {
-      completed: { counts: applyFactor(counts.status_counts.completed.counts) },
+      completed: {
+        counts: completed.length,
+      },
       failed: {
-        counts: applyFactor(counts.status_counts.failed.counts),
+        counts: failed.length,
         reasons: {},
       },
       processing: {
-        counts: applyFactor(counts.status_counts.processing.counts),
+        counts: processing.length,
       },
     },
   };
-
-  return newCounts;
 };
 
 interface MockCounts {
@@ -117,10 +39,10 @@ interface MockCounts {
 }
 
 const reportCounts: MockCounts = {
-  aimsCsv: countsAimsCsv,
-  aimsHl7: countsAimsHl7,
-  aimsAll: countsAimsAll,
-  daartHl7: countsDaartHl7,
+  aimsCsv: generateCounts(mockSubmissions.aimsCsv),
+  aimsHl7: generateCounts(mockSubmissions.aimsHl7),
+  aimsAll: generateCounts(mockSubmissions.aimsAll),
+  daartHl7: generateCounts(mockSubmissions.daartHl7),
 };
 
 export default reportCounts;
