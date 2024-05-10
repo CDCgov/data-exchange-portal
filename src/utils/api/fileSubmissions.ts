@@ -1,10 +1,5 @@
 import API_ENDPOINTS from "src/config/api";
 
-export interface FileSubmissionMetadata {
-  key: string;
-  value: string;
-}
-
 export interface FileSubmissionsSummary {
   number_of_pages: number;
   page_number: number;
@@ -17,7 +12,8 @@ export interface FileSubmission {
   filename: string;
   status: string;
   timestamp: string;
-  metadata: FileSubmissionMetadata[];
+  data_stream_id: string;
+  data_stream_route: string;
 }
 
 export interface FileSubmissions {
