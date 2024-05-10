@@ -6,7 +6,7 @@ import { FileSubmissions } from "src/utils/api/fileSubmissions";
 import { generateCounts } from "src/mocks/data/reportCounts";
 import mockSubmissions, { dateFilter } from "src/mocks/data/fileSubmissions";
 import mockDataStreams from "src/mocks/data/dataStreams.json";
-import mockSubmissionDetails from "src/mocks/data/submissionDetails.json";
+import { mockSubmissionDetails } from "src/mocks/data/submissionDetails";
 
 const earliestDate: string = new Date("2021-01-01T05:00:00Z").toISOString();
 

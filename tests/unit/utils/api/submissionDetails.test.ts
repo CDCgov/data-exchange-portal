@@ -1,5 +1,5 @@
 import getSubmissionDetails from "src/utils/api/submissionDetails";
-import mockSubmissionDetails from "src/mocks/data/submissionDetails.json";
+import { mockSubmissionDetails } from "src/mocks/data/submissionDetails";
 
 describe("submissionDetails", () => {
   it("should fetch submission details", async () => {

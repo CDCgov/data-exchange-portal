@@ -20,6 +20,8 @@ import getStatusDisplayValuesById, {
 } from "src/utils/helperFunctions/statusDisplayValues";
 import jsonPrettyPrint from "src/utils/helperFunctions/jsonPrettyPrint";
 import getSubmissionDetails from "src/utils/api/submissionDetails";
+// TODO: replace with mocks from useEffect
+import { mockValidationReports } from "src/mocks/data/submissionDetails";
 
 interface PropTypes {
   submission: IFileSubmission;
@@ -145,13 +147,13 @@ function DetailsModal({
           />
           {/* Todo: This logic is for purposes of showing a mock validation report and should be revisited
             once the data structure is finalized.  */}
-          {(submission.validationReport || submission.status === "failed") && (
+          {submission.status === "failed" && (
             <Accordion
               items={[
                 {
                   id: "2",
                   title: "Validation report",
-                  content: jsonPrettyPrint(submission.validationReport),
+                  content: jsonPrettyPrint(mockValidationReports),
                 },
               ]}
             />
