@@ -109,7 +109,8 @@ function DetailsModal({
       );
       return (
         <ProgressTracker
-          label="Stage: Uploading"
+          label={`Stage: ${details.info.stage_name}`}
+          isIndeterminate={details.info.stage_name === "dex-hl7-validation"}
           currentAmount={currentAmount}
           totalAmount={total}
         />
