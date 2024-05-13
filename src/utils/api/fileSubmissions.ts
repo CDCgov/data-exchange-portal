@@ -21,11 +21,20 @@ export interface FileSubmissions {
   items: FileSubmission[];
 }
 
-export const defaultSummary: FileSubmissionsSummary = {
+export const defaultSubmissionSummary: FileSubmissionsSummary = {
   number_of_pages: 0,
   page_number: 1,
   page_size: 10,
   total_items: 0,
+};
+
+export const defaultSubmissionItem: FileSubmission = {
+  upload_id: "",
+  filename: "",
+  status: "",
+  timestamp: "",
+  data_stream_id: "",
+  data_stream_route: "",
 };
 
 export const getFileSubmissions = async (

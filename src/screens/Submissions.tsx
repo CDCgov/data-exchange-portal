@@ -19,11 +19,12 @@ import {
 } from "@us-gov-cdc/cdc-react";
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
 
-import { IFileSubmission } from "@types";
 import {
+  FileSubmission,
   FileSubmissions,
   FileSubmissionsSummary,
-  defaultSummary,
+  defaultSubmissionItem,
+  defaultSubmissionSummary,
   getFileSubmissions,
 } from "src/utils/api/fileSubmissions";
 import getStatusDisplayValuesById from "src/utils/helperFunctions/statusDisplayValues";
@@ -37,22 +38,18 @@ import { getPastDate } from "src/utils/helperFunctions/date";
 function Submissions() {
   const auth = useAuth();
   const pageLimit = 10;
-  const [currentPageData, setCurrentPageData] = useState<IFileSubmission[]>([]);
-  const [dataSummary, setDataSummary] =
-    useState<FileSubmissionsSummary>(defaultSummary);
+  const [currentPageData, setCurrentPageData] = useState<FileSubmission[]>([]);
+  const [dataSummary, setDataSummary] = useState<FileSubmissionsSummary>(
+    defaultSubmissionSummary
+  );
 
   const dataStreamId = useRecoilValue(dataStreamIdAtom);
   const dataRoute = useRecoilValue(dataRouteAtom);
   const timeframe = useRecoilValue(timeFrameAtom);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedSubmission, setSelectedSubmission] = useState<IFileSubmission>(
-    {
-      upload_id: "",
-      filename: "",
-      status: "",
-      timestamp: "",
-    }
+  const [selectedSubmission, setSelectedSubmission] = useState<FileSubmission>(
+    defaultSubmissionItem
   );
 
   useEffect(() => {
@@ -127,7 +124,7 @@ function Submissions() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {currentPageData.map((item: IFileSubmission) => (
+              {currentPageData.map((item: FileSubmission) => (
                 <TableRow key={`table-row-${item.upload_id}`}>
                   {/* Todo: Update this to use a more appropriate id as key */}
                   <TableDataCell className="text-left">
