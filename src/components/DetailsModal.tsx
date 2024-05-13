@@ -72,7 +72,6 @@ function DetailsModal({
 
       try {
         const data = (await res.json()) as SubmissionDetails;
-        console.log(data);
         setDetails(data);
       } catch (error) {
         console.error("Failed to parse JSON:", error);
