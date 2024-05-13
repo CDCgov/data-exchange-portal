@@ -12,6 +12,7 @@ import {
   Pill,
   ProgressTracker,
 } from "@us-gov-cdc/cdc-react";
+import { format, parseISO } from "date-fns";
 
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
 import getStatusDisplayValuesById, {
@@ -55,6 +56,11 @@ function DetailsModal({
     reports: [],
   });
 
+  const formatDate = (date?: string) => {
+    if (!date) return "";
+    return format(parseISO(date), "EEEE, MMMM d, yyyy ' | ' h:mm a");
+  };
+
   useEffect(() => {
     const fetchCall = async () => {
       const res = await getSubmissionDetails(
@@ -66,6 +72,7 @@ function DetailsModal({
 
       try {
         const data = (await res.json()) as SubmissionDetails;
+        console.log(data);
         setDetails(data);
       } catch (error) {
         console.error("Failed to parse JSON:", error);
@@ -143,7 +150,7 @@ function DetailsModal({
           <div className="grid-col-4">
             <strong>Upload date</strong>
           </div>
-          <div className="grid-col-8">{details.info.timestamp}</div>
+          <div className="grid-col-8">{formatDate(submission.timestamp)}</div>
         </div>
         <div className="grid-row margin-y-1">
           <div className="grid-col-4">
