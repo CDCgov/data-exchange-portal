@@ -56,8 +56,10 @@ function DetailsModal({
         console.error("Failed to parse JSON:", error);
       }
     };
-    fetchCall();
-  }, [auth, submission]);
+    if (isModalOpen) {
+      fetchCall();
+    }
+  }, [auth, submission, isModalOpen]);
 
   const getContent = () => {
     if (submission.status == "failed") {
