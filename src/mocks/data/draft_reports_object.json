@@ -1,0 +1,16 @@
+{
+  "status": "compolete",
+  "stage_name": "uploading",
+  "file_name": "test.txt",
+  "upload_id": "unique_guid",
+  "timestamp": "12-12-2023",
+  "data_stream_id": "aims-celr",
+  "data_stream_route": "csv",
+  "issues": [
+    {
+      "stage": "uploading",
+      "message": "THere was a problem",
+      "actionItem": "Try to upload again with better stuff"
+    }
+  ]
+}
