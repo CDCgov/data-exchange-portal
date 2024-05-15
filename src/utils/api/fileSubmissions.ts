@@ -1,10 +1,5 @@
 import API_ENDPOINTS from "src/config/api";
 
-export interface FileSubmissionMetadata {
-  key: string;
-  value: string;
-}
-
 export interface FileSubmissionsSummary {
   number_of_pages: number;
   page_number: number;
@@ -17,7 +12,8 @@ export interface FileSubmission {
   filename: string;
   status: string;
   timestamp: string;
-  metadata: FileSubmissionMetadata[];
+  data_stream_id: string;
+  data_stream_route: string;
 }
 
 export interface FileSubmissions {
@@ -25,11 +21,20 @@ export interface FileSubmissions {
   items: FileSubmission[];
 }
 
-export const defaultSummary: FileSubmissionsSummary = {
+export const defaultSubmissionSummary: FileSubmissionsSummary = {
   number_of_pages: 0,
   page_number: 1,
   page_size: 10,
   total_items: 0,
+};
+
+export const defaultSubmissionItem: FileSubmission = {
+  upload_id: "",
+  filename: "",
+  status: "",
+  timestamp: "",
+  data_stream_id: "",
+  data_stream_route: "",
 };
 
 export const getFileSubmissions = async (
