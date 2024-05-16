@@ -1,16 +1,36 @@
+submission_details_structure:
+
 {
-  "status": "compolete",
-  "stage_name": "uploading",
+  "status": "complete",
+  "current_stage": "uploading",
   "file_name": "test.txt",
   "upload_id": "unique_guid",
-  "timestamp": "12-12-2023",
+  "timestamp": "12-12-2023", -- first initial timestamp
   "data_stream_id": "aims-celr",
   "data_stream_route": "csv",
-  "issues": [
+  "reports": [ -- stack reports in chrono order
     {
       "stage": "uploading",
-      "message": "THere was a problem",
+      "message": "There was a problem",
       "actionItem": "Try to upload again with better stuff"
     }
   ]
+}
+
+report_structure:
+
+{
+  "stage": "uploading",
+  "timestamp_complete": "12-12-2024",
+  "message": "There was a problem",
+  "errors": [
+    {
+      "type": "validation failed",
+      "level": "Error | Warning",
+      "message": "There was a problem",
+      "action_item": "Try to upload again with better stuff",
+      "details": {-- specifics to the error --},
+    }
+  ],
+  "data": { unique data to the report },
 }
