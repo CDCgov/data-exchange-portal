@@ -1,13 +1,13 @@
 import { DataStream } from "src/utils/api/dataStreams";
 
 export const getDataStreamIds = (data: DataStream[]) => {
-  const dataStreamIds: string[] = data.map((el: DataStream) => el.dataStreamId);
+  const dataStreamIds: string[] = data.map((el: DataStream) => el.name);
   return dataStreamIds;
 };
 
-export const getDataRoutes = (data: DataStream[], dataStreamId: string) => {
+export const getDataRoutes = (data: DataStream[], dataStreamName: string) => {
   const dataStream: DataStream | undefined = data.find(
-    (el: DataStream) => el.dataStreamId == dataStreamId
+    (el: DataStream) => el.name == dataStreamName
   );
 
   if (!dataStream) return [];

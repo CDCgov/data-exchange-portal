@@ -1,11 +1,12 @@
 import { http, HttpResponse } from "msw";
 import API_ENDPOINTS from "src/config/api";
 
+import { CreateDataStreamBody, DataStream } from "src/utils/api/dataStreams";
 import { FileSubmissions } from "src/utils/api/fileSubmissions";
 
 import { generateCounts } from "src/mocks/data/reportCounts";
 import mockSubmissions, { dateFilter } from "src/mocks/data/fileSubmissions";
-import mockDataStreams from "src/mocks/data/dataStreams.json";
+import mockDataStreams from "src/mocks/data/dataStreams";
 import getMockDetails from "src/mocks/data/submissionDetails";
 
 const earliestDate: string = new Date("2021-01-01T05:00:00Z").toISOString();
@@ -13,6 +14,23 @@ const earliestDate: string = new Date("2021-01-01T05:00:00Z").toISOString();
 export const handlers = [
   http.get(API_ENDPOINTS.dataStreams, () => {
     return HttpResponse.json(mockDataStreams);
+  }),
+  http.get(API_ENDPOINTS.dataStream, ({ request }) => {
+    const url = new URL(request.url);
+    const dataStreamId = url.searchParams.get("data_stream_id");
+    const dataStream = mockDataStreams.find(
+      (el: DataStream) => el.id == dataStreamId
+    );
+    return HttpResponse.json(dataStream);
+  }),
+  http.post(API_ENDPOINTS.dataStream, async ({ request }) => {
+    const { name } = (await request.json()) as CreateDataStreamBody;
+
+    if (!name) {
+      return new HttpResponse(null, { status: 400 });
+    }
+
+    return HttpResponse.json({ id: 1, name });
   }),
 
   http.get(API_ENDPOINTS.fileSubmissions, ({ request }) => {
