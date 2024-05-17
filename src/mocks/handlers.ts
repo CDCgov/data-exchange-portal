@@ -2,11 +2,13 @@ import { http, HttpResponse } from "msw";
 import API_ENDPOINTS from "src/config/api";
 
 import { CreateDataStreamBody, DataStream } from "src/utils/api/dataStreams";
+import { CreateEntityBody, Entity } from "src/utils/api/entities";
 import { FileSubmissions } from "src/utils/api/fileSubmissions";
 
 import { generateCounts } from "src/mocks/data/reportCounts";
 import mockSubmissions, { dateFilter } from "src/mocks/data/fileSubmissions";
 import mockDataStreams from "src/mocks/data/dataStreams";
+import mockEntities from "src/mocks/data/entities";
 import getMockDetails from "src/mocks/data/submissionDetails";
 
 const earliestDate: string = new Date("2021-01-01T05:00:00Z").toISOString();
@@ -25,6 +27,25 @@ export const handlers = [
   }),
   http.post(API_ENDPOINTS.dataStream, async ({ request }) => {
     const { name } = (await request.json()) as CreateDataStreamBody;
+
+    if (!name) {
+      return new HttpResponse(null, { status: 400 });
+    }
+
+    return HttpResponse.json({ id: 1, name });
+  }),
+
+  http.get(API_ENDPOINTS.entities, () => {
+    return HttpResponse.json(mockEntities);
+  }),
+  http.get(API_ENDPOINTS.entity, ({ request }) => {
+    const url = new URL(request.url);
+    const entityId = url.searchParams.get("entity_id");
+    const entity = mockEntities.find((el: Entity) => el.id == entityId);
+    return HttpResponse.json(entity);
+  }),
+  http.post(API_ENDPOINTS.entity, async ({ request }) => {
+    const { name } = (await request.json()) as CreateEntityBody;
 
     if (!name) {
       return new HttpResponse(null, { status: 400 });

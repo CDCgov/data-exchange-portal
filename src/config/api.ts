@@ -6,7 +6,7 @@ const API_ENDPOINTS = {
   // mms routes
   dataStream: `${API_URL}/dataStream`,
   dataStreams: `${API_URL}/dataStreams`,
-  entitie: `${API_URL}/entitie`,
+  entity: `${API_URL}/entity`,
   entities: `${API_URL}/entities`,
   manifest: `${API_URL}/manifest`,
   manifests: `${API_URL}/manifests`,
