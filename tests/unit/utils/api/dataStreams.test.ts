@@ -26,8 +26,9 @@ describe("dataStream", () => {
   });
   it("should return new data stream", async () => {
     const name = "test_name";
-    const payload = { id: 1, name };
-    const res = await createDataStream("mock_auth_token", name);
+    const programId = 1;
+    const payload = { id: 1, name, programId };
+    const res = await createDataStream("mock_auth_token", name, 1);
     const data = await res.json();
 
     expect(data).toStrictEqual(payload);

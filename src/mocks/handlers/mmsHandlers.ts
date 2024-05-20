@@ -27,13 +27,13 @@ export const mmsHandlers = [
     return HttpResponse.json(dataStream);
   }),
   http.post(API_ENDPOINTS.dataStream, async ({ request }) => {
-    const { name } = (await request.json()) as CreateDataStreamBody;
+    const { name, programId } = (await request.json()) as CreateDataStreamBody;
 
     if (!name) {
       return new HttpResponse(null, { status: 400 });
     }
 
-    return HttpResponse.json({ id: 1, name });
+    return HttpResponse.json({ id: 1, name, programId });
   }),
 
   // --> Entities
