@@ -1,8 +1,31 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useAuth } from "react-oidc-context";
 
 import { Button } from "@us-gov-cdc/cdc-react";
+import jsonPrettyPrint from "src/utils/helperFunctions/jsonPrettyPrint";
+
+import {
+  getDataStreams,
+  getDataStream,
+  createDataStream,
+} from "src/utils/api/dataStreams";
+import { getEntities, getEntity, createEntity } from "src/utils/api/entities";
+import {
+  getManifests,
+  getManifest,
+  createManifest,
+} from "src/utils/api/manifests";
+import { getPrograms, getProgram, createProgram } from "src/utils/api/programs";
+import { getRoutes, getRoute, createRoute } from "src/utils/api/routes";
 
 function MetadataManagement() {
+  const auth = useAuth();
+  const [authToken, setAuthToken] = useState("");
+
+  useEffect(() => {
+    setAuthToken(auth.user?.access_token ?? "");
+  }, [auth]);
+
   const [entityName, setEntityName] = useState("");
   const [entityId, setEntityId] = useState("");
 
@@ -19,35 +42,65 @@ function MetadataManagement() {
 
   const [apiResponse, setApiResponse] = useState("example api response");
 
-  const handleCreateEntity = () => {
+  const handleCreateDatastream = async () => {
     console.log("entity name");
   };
-  const handleCreateProgram = () => {
+  const handleCreateRoute = async () => {
     console.log("entity name");
   };
-  const handleCreateDatastream = () => {
-    console.log("entity name");
-  };
-  const handleCreateRoute = () => {
-    console.log("entity name");
-  };
-  const handleCreateManifest = () => {
+  const handleCreateManifest = async () => {
     console.log("entity name");
   };
 
-  const handleGetEntity = () => {
+  // Entities
+  const handleGetEntity = async () => {
+    const res = await getEntities(authToken);
+    const json = await res.json();
+    setApiResponse(json);
+  };
+  const handleCreateEntity = async () => {
+    const res = await createEntity(authToken, entityName);
+
+    if (res.status != 200) {
+      setApiResponse("Bad request: entity name is required");
+      return;
+    }
+
+    const json = await res.json();
+    setApiResponse(json);
+  };
+
+  // Programs
+  const handleGetProgram = async () => {
+    const res = await getPrograms(authToken, parseInt(entityId));
+
+    if (res.status != 200) {
+      setApiResponse("Bad request: entity id is required");
+      return;
+    }
+
+    const json = await res.json();
+    setApiResponse(json);
+  };
+  const handleCreateProgram = async () => {
+    const res = await createProgram(authToken, parseInt(entityId), programName);
+
+    if (res.status != 200) {
+      setApiResponse("Bad request: entity id and program name are required");
+      return;
+    }
+
+    const json = await res.json();
+    setApiResponse(json);
+  };
+
+  const handleGetDatastream = async () => {
     console.log("entity name");
   };
-  const handleGetProgram = () => {
+  const handleGetRoute = async () => {
     console.log("entity name");
   };
-  const handleGetDatastream = () => {
-    console.log("entity name");
-  };
-  const handleGetRoute = () => {
-    console.log("entity name");
-  };
-  const handleGetManifest = () => {
+  const handleGetManifest = async () => {
     console.log("entity name");
   };
 
@@ -225,7 +278,7 @@ function MetadataManagement() {
         <div className="width-full margin-4">
           <p className="margin-bottom-2">Api Response</p>
           <p className="height-full width-full border radius-md padding-2">
-            {apiResponse}
+            {jsonPrettyPrint(apiResponse)}
           </p>
         </div>
       </div>

@@ -15,7 +15,10 @@ export const getPrograms = async (
   access_token: string,
   entity_id: number
 ): Promise<Response> => {
-  const url = `${API_ENDPOINTS.programs}?entity_id=${entity_id}`;
+  const params = new URLSearchParams();
+  if (entity_id) params.append("entity_id", entity_id.toString());
+
+  const url = `${API_ENDPOINTS.programs}?${params.toString()}`;
 
   const response = await fetch(url, {
     method: "GET",
@@ -33,7 +36,11 @@ export const getProgram = async (
   entity_id: number,
   program_id: number
 ): Promise<Response> => {
-  const url = `${API_ENDPOINTS.program}?entity_id=${entity_id}&program_id=${program_id}`;
+  const params = new URLSearchParams();
+  if (entity_id) params.append("entity_id", entity_id.toString());
+  if (program_id) params.append("program_id", program_id.toString());
+
+  const url = `${API_ENDPOINTS.program}?${params.toString()}`;
 
   const response = await fetch(url, {
     method: "GET",

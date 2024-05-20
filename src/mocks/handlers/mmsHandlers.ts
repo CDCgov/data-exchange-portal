@@ -93,6 +93,11 @@ export const mmsHandlers = [
   http.get(API_ENDPOINTS.programs, ({ request }) => {
     const url = new URL(request.url);
     const entityId = url.searchParams.get("entity_id");
+
+    if (!entityId) {
+      return new HttpResponse(null, { status: 400 });
+    }
+
     const programs = mockPrograms.filter(
       (el: Program) => el.entityId == entityId
     );
@@ -102,6 +107,11 @@ export const mmsHandlers = [
     const url = new URL(request.url);
     const entityId = url.searchParams.get("entity_id");
     const programId = url.searchParams.get("program_id");
+
+    if (!entityId || !programId) {
+      return new HttpResponse(null, { status: 400 });
+    }
+
     const program = mockPrograms.find(
       (el: Program) => el.id == programId && el.entityId == entityId
     );
