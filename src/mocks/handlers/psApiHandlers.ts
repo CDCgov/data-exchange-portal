@@ -14,7 +14,7 @@ export const psApiHandlers = [
     const url = new URL(request.url);
     const dataStreamId = url.searchParams.get("data_stream_id");
     const dataRoute = url.searchParams.get("data_stream_route");
-    const startDate = url.searchParams.get("date_start") || earliestDate;
+    const startDate = url.searchParams.get("date_start") ?? earliestDate;
 
     const submissionsResponse = (submissions: FileSubmissions) => {
       return HttpResponse.json(dateFilter(submissions, startDate));
@@ -39,7 +39,7 @@ export const psApiHandlers = [
     const url = new URL(request.url);
     const dataStreamId = url.searchParams.get("data_stream_id");
     const dataRoute = url.searchParams.get("data_stream_route");
-    const startDate = url.searchParams.get("date_start") || earliestDate;
+    const startDate = url.searchParams.get("date_start") ?? earliestDate;
 
     const countsResponse = (submissions: FileSubmissions) => {
       return HttpResponse.json(
