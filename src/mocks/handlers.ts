@@ -3,12 +3,14 @@ import API_ENDPOINTS from "src/config/api";
 
 import { CreateDataStreamBody, DataStream } from "src/utils/api/dataStreams";
 import { CreateEntityBody, Entity } from "src/utils/api/entities";
+import { CreateProgramBody, Program } from "src/utils/api/programs";
 import { FileSubmissions } from "src/utils/api/fileSubmissions";
 
 import { generateCounts } from "src/mocks/data/reportCounts";
 import mockSubmissions, { dateFilter } from "src/mocks/data/fileSubmissions";
 import mockDataStreams from "src/mocks/data/dataStreams";
 import mockEntities from "src/mocks/data/entities";
+import mockPrograms from "src/mocks/data/programs";
 import getMockDetails from "src/mocks/data/submissionDetails";
 
 const earliestDate: string = new Date("2021-01-01T05:00:00Z").toISOString();
@@ -52,6 +54,36 @@ export const handlers = [
     }
 
     return HttpResponse.json({ id: 1, name });
+  }),
+
+  http.get(API_ENDPOINTS.programs, ({ request }) => {
+    const url = new URL(request.url);
+    const entityId = url.searchParams.get("entity_id");
+    const programs = mockPrograms.filter(
+      (el: Program) => el.entityId == entityId
+    );
+    return HttpResponse.json(programs);
+  }),
+  http.get(API_ENDPOINTS.program, ({ request }) => {
+    const url = new URL(request.url);
+    const entityId = url.searchParams.get("entity_id");
+    const programId = url.searchParams.get("program_id");
+    const program = mockPrograms.find(
+      (el: Program) => el.id == programId && el.entityId == entityId
+    );
+    return HttpResponse.json(program);
+  }),
+  http.post(API_ENDPOINTS.program, async ({ request }) => {
+    const { entityId, name } = (await request.json()) as CreateProgramBody;
+
+    if (!entityId) {
+      return new HttpResponse(null, { status: 400 });
+    }
+    if (!name) {
+      return new HttpResponse(null, { status: 400 });
+    }
+
+    return HttpResponse.json({ id: 1, entityId, name });
   }),
 
   http.get(API_ENDPOINTS.fileSubmissions, ({ request }) => {
