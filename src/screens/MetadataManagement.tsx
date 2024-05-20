@@ -4,19 +4,11 @@ import { useAuth } from "react-oidc-context";
 import { Button } from "@us-gov-cdc/cdc-react";
 import jsonPrettyPrint from "src/utils/helperFunctions/jsonPrettyPrint";
 
-import {
-  getDataStreams,
-  getDataStream,
-  createDataStream,
-} from "src/utils/api/dataStreams";
-import { getEntities, getEntity, createEntity } from "src/utils/api/entities";
-import {
-  getManifests,
-  getManifest,
-  createManifest,
-} from "src/utils/api/manifests";
-import { getPrograms, getProgram, createProgram } from "src/utils/api/programs";
-import { getRoutes, getRoute, createRoute } from "src/utils/api/routes";
+import { getDataStreams, createDataStream } from "src/utils/api/dataStreams";
+import { getEntities, createEntity } from "src/utils/api/entities";
+import { getManifests, createManifest } from "src/utils/api/manifests";
+import { getPrograms, createProgram } from "src/utils/api/programs";
+import { getRoutes, createRoute } from "src/utils/api/routes";
 
 function MetadataManagement() {
   const auth = useAuth();
@@ -42,18 +34,8 @@ function MetadataManagement() {
 
   const [apiResponse, setApiResponse] = useState("example api response");
 
-  const handleCreateDatastream = async () => {
-    console.log("entity name");
-  };
-  const handleCreateRoute = async () => {
-    console.log("entity name");
-  };
-  const handleCreateManifest = async () => {
-    console.log("entity name");
-  };
-
   // Entities
-  const handleGetEntity = async () => {
+  const handleGetEntities = async () => {
     const res = await getEntities(authToken);
     const json = await res.json();
     setApiResponse(json);
@@ -71,7 +53,7 @@ function MetadataManagement() {
   };
 
   // Programs
-  const handleGetProgram = async () => {
+  const handleGetPrograms = async () => {
     const res = await getPrograms(authToken, parseInt(entityId));
 
     if (res.status != 200) {
@@ -94,14 +76,87 @@ function MetadataManagement() {
     setApiResponse(json);
   };
 
-  const handleGetDatastream = async () => {
-    console.log("entity name");
+  // Datastreams
+  const handleGetDatastreams = async () => {
+    const res = await getDataStreams(authToken);
+    const json = await res.json();
+    setApiResponse(json);
   };
-  const handleGetRoute = async () => {
-    console.log("entity name");
+  const handleCreateDatastream = async () => {
+    const res = await createDataStream(
+      authToken,
+      datastreamName,
+      parseInt(programId)
+    );
+
+    if (res.status != 200) {
+      setApiResponse(
+        "Bad request: programId id and datastream name are required"
+      );
+      return;
+    }
+
+    const json = await res.json();
+    setApiResponse(json);
   };
+
+  // Routes
+  const handleGetRoutes = async () => {
+    const res = await getRoutes(authToken, parseInt(datastreamId));
+
+    if (res.status != 200) {
+      setApiResponse("Bad request: datastream id is required");
+      return;
+    }
+
+    const json = await res.json();
+    setApiResponse(json);
+  };
+  const handleCreateRoute = async () => {
+    const res = await createRoute(authToken, parseInt(datastreamId), routeName);
+
+    if (res.status != 200) {
+      setApiResponse("Bad request: datastream id and route name are required");
+      return;
+    }
+
+    const json = await res.json();
+    setApiResponse(json);
+  };
+
+  // Manifests
   const handleGetManifest = async () => {
-    console.log("entity name");
+    const res = await getManifests(
+      authToken,
+      parseInt(datastreamId),
+      parseInt(routeId)
+    );
+
+    if (res.status != 200) {
+      setApiResponse("Bad request: datastream id and route id are required");
+      return;
+    }
+
+    const json = await res.json();
+    setApiResponse(json);
+  };
+  const handleCreateManifest = async () => {
+    const res = await createManifest(
+      authToken,
+      parseInt(datastreamId),
+      parseInt(routeId),
+      manifestJson
+    );
+
+    if (res.status != 200) {
+      setApiResponse(
+        "Bad request: datastream id, route id, and manifestJson are required"
+      );
+      return;
+    }
+
+    const json = await res.json();
+    setApiResponse(json);
   };
 
   return (
@@ -126,7 +181,7 @@ function MetadataManagement() {
               <Button ariaLabel="Create Entity" onClick={handleCreateEntity}>
                 Create Entity
               </Button>
-              <Button ariaLabel="Get Entities" onClick={handleGetEntity}>
+              <Button ariaLabel="Get Entities" onClick={handleGetEntities}>
                 Get Entities
               </Button>
             </div>
@@ -158,7 +213,7 @@ function MetadataManagement() {
               <Button ariaLabel="Create Program" onClick={handleCreateProgram}>
                 Create Program
               </Button>
-              <Button ariaLabel="Get Programs" onClick={handleGetProgram}>
+              <Button ariaLabel="Get Programs" onClick={handleGetPrograms}>
                 Get Programs
               </Button>
             </div>
@@ -192,7 +247,9 @@ function MetadataManagement() {
                 onClick={handleCreateDatastream}>
                 Create Datastream
               </Button>
-              <Button ariaLabel="Get Datastreams" onClick={handleGetDatastream}>
+              <Button
+                ariaLabel="Get Datastreams"
+                onClick={handleGetDatastreams}>
                 Get Datastreams
               </Button>
             </div>
@@ -224,7 +281,7 @@ function MetadataManagement() {
               <Button ariaLabel="Create Route" onClick={handleCreateRoute}>
                 Create Route
               </Button>
-              <Button ariaLabel="Get Routes" onClick={handleGetRoute}>
+              <Button ariaLabel="Get Routes" onClick={handleGetRoutes}>
                 Get Routes
               </Button>
             </div>
@@ -275,7 +332,7 @@ function MetadataManagement() {
             </div>
           </div>
         </div>
-        <div className="width-full margin-4">
+        <div className="width-full margin-4 overflow-auto">
           <p className="margin-bottom-2">Api Response</p>
           <p className="height-full width-full border radius-md padding-2">
             {jsonPrettyPrint(apiResponse)}
