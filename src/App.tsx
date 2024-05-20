@@ -14,6 +14,7 @@ import Login from "src/screens/Login";
 import Callback from "src/components/Callback";
 import Logout from "src/components/Logout";
 import Dashboard from "src/screens/Dashboard";
+import MetadataManagement from "./screens/MetadataManagement";
 import Profile from "src/screens/Profile";
 import Submissions from "src/screens/Submissions";
 
@@ -39,6 +40,9 @@ function App() {
             </AuthWrapper>
           }>
           <Route path="dashboard" element={<Dashboard />}></Route>
+          <Route
+            path="metadata-management"
+            element={<MetadataManagement />}></Route>
           <Route path="profile" element={<Profile />}></Route>
           <Route path="submissions" element={<Submissions />}></Route>
 
