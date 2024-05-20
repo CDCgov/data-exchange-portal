@@ -1,19 +1,16 @@
 import API_ENDPOINTS from "src/config/api";
 
-export interface CreateDataStreamBody {
+export interface CreateEntityBody {
   name: string;
 }
 
-export interface DataStream {
+export interface Entity {
   id: number | string;
   name: string;
-  routes: string[];
 }
 
-export const getDataStreams = async (
-  access_token: string
-): Promise<Response> => {
-  const url = `${API_ENDPOINTS.dataStreams}`;
+export const getEntities = async (access_token: string): Promise<Response> => {
+  const url = `${API_ENDPOINTS.entities}`;
 
   const response = await fetch(url, {
     method: "GET",
@@ -26,11 +23,11 @@ export const getDataStreams = async (
   return response;
 };
 
-export const getDataStream = async (
+export const getEntity = async (
   access_token: string,
-  data_stream_id: number
+  entity_id: number
 ): Promise<Response> => {
-  const url = `${API_ENDPOINTS.dataStream}?data_stream_id=${data_stream_id}`;
+  const url = `${API_ENDPOINTS.entity}?entity_id=${entity_id}`;
 
   const response = await fetch(url, {
     method: "GET",
@@ -43,14 +40,14 @@ export const getDataStream = async (
   return response;
 };
 
-export const createDataStream = async (
+export const createEntity = async (
   access_token: string,
-  data_stream_name: string
+  entity_name: string
 ): Promise<Response> => {
-  const url = `${API_ENDPOINTS.dataStream}`;
+  const url = `${API_ENDPOINTS.entity}`;
 
   const body = JSON.stringify({
-    name: data_stream_name,
+    name: entity_name,
   });
 
   const response = await fetch(url, {

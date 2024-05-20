@@ -10,7 +10,7 @@ import dexLogo from "src/assets/dex_logo.svg";
 import { useSetRecoilState } from "recoil";
 import { dataRouteAtom, dataStreamIdAtom } from "src/state/searchParams";
 import { dataStreamsAtom } from "src/state/dataStreams";
-import getDataStreams, { DataStream } from "src/utils/api/dataStreams";
+import { getDataStreams, DataStream } from "src/utils/api/dataStreams";
 import { getDataRoutes } from "src/utils/helperFunctions/dataStreams";
 
 import {
@@ -40,20 +40,20 @@ function Shell() {
 
       try {
         const data = await res.json();
-        const streams = data?.dataStreams as DataStream[];
+        const streams = data as DataStream[];
         setDataStreams(streams);
 
         const streamId = searchParams.get("data_stream_id");
         const route = searchParams.get("data_route");
         const userHasDataStream = streams.find(
-          (stream: DataStream) => stream.dataStreamId == streamId
+          (stream: DataStream) => stream.name == streamId
         );
         const dataStreamHasRoute = userHasDataStream?.routes.find(
           (r: string) => r == route
         );
 
         if (!userHasDataStream || !dataStreamHasRoute) {
-          const dataStreamId = streams[0].dataStreamId;
+          const dataStreamId = streams[0].name;
           setDataStreamId(dataStreamId);
           const route = getDataRoutes(streams, dataStreamId)[0];
           setDataRoute(route);

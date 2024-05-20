@@ -1,19 +1,21 @@
 import API_ENDPOINTS from "src/config/api";
 
-export interface CreateDataStreamBody {
+export interface CreateProgramBody {
+  entityId: number | string;
   name: string;
 }
 
-export interface DataStream {
+export interface Program {
   id: number | string;
+  entityId: number | string;
   name: string;
-  routes: string[];
 }
 
-export const getDataStreams = async (
-  access_token: string
+export const getPrograms = async (
+  access_token: string,
+  entity_id: number
 ): Promise<Response> => {
-  const url = `${API_ENDPOINTS.dataStreams}`;
+  const url = `${API_ENDPOINTS.programs}?entity_id=${entity_id}`;
 
   const response = await fetch(url, {
     method: "GET",
@@ -26,11 +28,12 @@ export const getDataStreams = async (
   return response;
 };
 
-export const getDataStream = async (
+export const getProgram = async (
   access_token: string,
-  data_stream_id: number
+  entity_id: number,
+  program_id: number
 ): Promise<Response> => {
-  const url = `${API_ENDPOINTS.dataStream}?data_stream_id=${data_stream_id}`;
+  const url = `${API_ENDPOINTS.program}?entity_id=${entity_id}&program_id=${program_id}`;
 
   const response = await fetch(url, {
     method: "GET",
@@ -43,14 +46,16 @@ export const getDataStream = async (
   return response;
 };
 
-export const createDataStream = async (
+export const createProgram = async (
   access_token: string,
-  data_stream_name: string
+  entity_id: number,
+  program_name: string
 ): Promise<Response> => {
-  const url = `${API_ENDPOINTS.dataStream}`;
+  const url = `${API_ENDPOINTS.program}`;
 
   const body = JSON.stringify({
-    name: data_stream_name,
+    entityId: entity_id,
+    name: program_name,
   });
 
   const response = await fetch(url, {
