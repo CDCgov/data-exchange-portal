@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "react-oidc-context";
 
-import { Button } from "@us-gov-cdc/cdc-react";
+import { Button, Dropdown } from "@us-gov-cdc/cdc-react";
 import jsonPrettyPrint from "src/utils/helperFunctions/jsonPrettyPrint";
 
 import { getDataStreams, createDataStream } from "src/utils/api/dataStreams";
@@ -13,6 +13,14 @@ import { getRoutes, createRoute } from "src/utils/api/routes";
 function MetadataManagement() {
   const auth = useAuth();
   const [authToken, setAuthToken] = useState("");
+  const formTypes = [
+    "Entities",
+    "Programs",
+    "Datastreams",
+    "Routes",
+    "Manifests",
+  ];
+  const [formType, setFormType] = useState(formTypes[0]);
 
   useEffect(() => {
     setAuthToken(auth.user?.access_token ?? "");
@@ -32,7 +40,9 @@ function MetadataManagement() {
 
   const [manifestJson, setManifestJson] = useState("");
 
-  const [apiResponse, setApiResponse] = useState("example api response");
+  const [apiResponse, setApiResponse] = useState(
+    "API response will display here"
+  );
 
   // Entities
   const handleGetEntities = async () => {
@@ -159,13 +169,10 @@ function MetadataManagement() {
     setApiResponse(json);
   };
 
-  return (
-    <section className="main_content padding-x-2">
-      <h1 className="cdc-page-header padding-y-3 margin-0">
-        Metadata Management
-      </h1>
-      <div className="display-flex flex-justify-start">
-        <div className="width-tablet">
+  const renderFormType = () => {
+    switch (formType) {
+      case formTypes[0]:
+        return (
           <div className="margin-bottom-8">
             <label className="usa-label" htmlFor="entity_name">
               Entity Name
@@ -186,7 +193,9 @@ function MetadataManagement() {
               </Button>
             </div>
           </div>
-
+        );
+      case formTypes[1]:
+        return (
           <div className="margin-bottom-8">
             <label className="usa-label" htmlFor="entity_id">
               Entity ID
@@ -218,7 +227,9 @@ function MetadataManagement() {
               </Button>
             </div>
           </div>
-
+        );
+      case formTypes[2]:
+        return (
           <div className="margin-bottom-8">
             <label className="usa-label" htmlFor="program_id">
               Program ID
@@ -254,7 +265,9 @@ function MetadataManagement() {
               </Button>
             </div>
           </div>
-
+        );
+      case formTypes[3]:
+        return (
           <div className="margin-bottom-8">
             <label className="usa-label" htmlFor="datastream_id">
               Datastream ID
@@ -286,7 +299,9 @@ function MetadataManagement() {
               </Button>
             </div>
           </div>
-
+        );
+      case formTypes[4]:
+        return (
           <div className="margin-bottom-8">
             <label className="usa-label" htmlFor="datastream_id">
               Datastream ID
@@ -331,12 +346,29 @@ function MetadataManagement() {
               </Button>
             </div>
           </div>
-        </div>
-        <div className="width-full margin-4 overflow-auto">
-          <p className="margin-bottom-2">Api Response</p>
-          <p className="height-full width-full border radius-md padding-2">
-            {jsonPrettyPrint(apiResponse)}
-          </p>
+        );
+      default:
+        return;
+    }
+  };
+
+  return (
+    <section className="main_content padding-x-2">
+      <h1 className="cdc-page-header padding-y-3 margin-0">
+        Metadata Management
+      </h1>
+      <Dropdown
+        className="padding-right-2"
+        items={["Entities", "Programs", "Datastreams", "Routes", "Manifests"]}
+        label="Meta Data Object"
+        onSelect={setFormType}
+        srText="Meta Data Object"
+        defaultValue={formType}
+      />
+      <div className="display-flex flex-justify-start">
+        <div className="width-mobile-lg">{renderFormType()}</div>
+        <div className="width-tablet-lg margin-left-6 overflow-auto minh-mobile-lg border radius-md padding-2">
+          {jsonPrettyPrint(apiResponse)}
         </div>
       </div>
     </section>
