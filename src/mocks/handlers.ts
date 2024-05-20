@@ -4,6 +4,7 @@ import API_ENDPOINTS from "src/config/api";
 import { CreateDataStreamBody, DataStream } from "src/utils/api/dataStreams";
 import { CreateEntityBody, Entity } from "src/utils/api/entities";
 import { CreateProgramBody, Program } from "src/utils/api/programs";
+import { CreateRouteBody, Route } from "src/utils/api/routes";
 import { FileSubmissions } from "src/utils/api/fileSubmissions";
 
 import { generateCounts } from "src/mocks/data/reportCounts";
@@ -11,6 +12,7 @@ import mockSubmissions, { dateFilter } from "src/mocks/data/fileSubmissions";
 import mockDataStreams from "src/mocks/data/dataStreams";
 import mockEntities from "src/mocks/data/entities";
 import mockPrograms from "src/mocks/data/programs";
+import mockRoutes from "src/mocks/data/routes";
 import getMockDetails from "src/mocks/data/submissionDetails";
 
 const earliestDate: string = new Date("2021-01-01T05:00:00Z").toISOString();
@@ -84,6 +86,36 @@ export const handlers = [
     }
 
     return HttpResponse.json({ id: 1, entityId, name });
+  }),
+
+  http.get(API_ENDPOINTS.routes, ({ request }) => {
+    const url = new URL(request.url);
+    const datastreamId = url.searchParams.get("datastream_id");
+    const routes = mockRoutes.filter(
+      (el: Route) => el.datastreamId == datastreamId
+    );
+    return HttpResponse.json(routes);
+  }),
+  http.get(API_ENDPOINTS.route, ({ request }) => {
+    const url = new URL(request.url);
+    const datastreamId = url.searchParams.get("datastream_id");
+    const routeId = url.searchParams.get("route_id");
+    const route = mockRoutes.find(
+      (el: Route) => el.id == routeId && el.datastreamId == datastreamId
+    );
+    return HttpResponse.json(route);
+  }),
+  http.post(API_ENDPOINTS.route, async ({ request }) => {
+    const { datastreamId, name } = (await request.json()) as CreateRouteBody;
+
+    if (!datastreamId) {
+      return new HttpResponse(null, { status: 400 });
+    }
+    if (!name) {
+      return new HttpResponse(null, { status: 400 });
+    }
+
+    return HttpResponse.json({ id: 1, datastreamId, name });
   }),
 
   http.get(API_ENDPOINTS.fileSubmissions, ({ request }) => {

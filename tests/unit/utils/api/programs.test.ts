@@ -28,7 +28,7 @@ describe("program", () => {
   it("should return new program", async () => {
     const entityId = 1;
     const name = "test_name";
-    const payload = { id: 1, entityId, name };
+    const payload: Program = { id: 1, entityId, name };
     const res = await createProgram("mock_auth_token", entityId, name);
     const data = await res.json();
 

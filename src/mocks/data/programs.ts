@@ -1,26 +1,26 @@
 import { Program } from "src/utils/api/programs";
 
-const mockEntities: Program[] = [
+const mockPrograms: Program[] = [
   {
     id: 1,
     entityId: 1,
-    name: "entity_1",
+    name: "program_1",
   },
   {
     id: 2,
     entityId: 1,
-    name: "entity_2",
+    name: "program_2",
   },
   {
     id: 3,
     entityId: 2,
-    name: "entity_3",
+    name: "program_3",
   },
   {
     id: 4,
     entityId: 2,
-    name: "entity_4",
+    name: "program_4",
   },
 ];
 
-export default mockEntities;
+export default mockPrograms;
