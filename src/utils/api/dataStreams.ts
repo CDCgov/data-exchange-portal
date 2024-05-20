@@ -30,9 +30,12 @@ export const getDataStreams = async (
 
 export const getDataStream = async (
   access_token: string,
-  data_stream_id: number
+  datastream_id: number
 ): Promise<Response> => {
-  const url = `${API_ENDPOINTS.dataStream}?data_stream_id=${data_stream_id}`;
+  const params = new URLSearchParams();
+  if (datastream_id) params.append("datastream_id", datastream_id.toString());
+
+  const url = `${API_ENDPOINTS.dataStream}?${params.toString()}`;
 
   const response = await fetch(url, {
     method: "GET",

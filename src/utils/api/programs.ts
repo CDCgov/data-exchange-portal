@@ -17,7 +17,6 @@ export const getPrograms = async (
 ): Promise<Response> => {
   const params = new URLSearchParams();
   if (entity_id) params.append("entity_id", entity_id.toString());
-
   const url = `${API_ENDPOINTS.programs}?${params.toString()}`;
 
   const response = await fetch(url, {

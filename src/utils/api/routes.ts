@@ -15,7 +15,9 @@ export const getRoutes = async (
   access_token: string,
   datastream_id: number
 ): Promise<Response> => {
-  const url = `${API_ENDPOINTS.routes}?datastream_id=${datastream_id}`;
+  const params = new URLSearchParams();
+  if (datastream_id) params.append("datastream_id", datastream_id.toString());
+  const url = `${API_ENDPOINTS.routes}?${params.toString()}`;
 
   const response = await fetch(url, {
     method: "GET",
@@ -33,7 +35,10 @@ export const getRoute = async (
   datastream_id: number,
   route_id: number
 ): Promise<Response> => {
-  const url = `${API_ENDPOINTS.route}?datastream_id=${datastream_id}&route_id=${route_id}`;
+  const params = new URLSearchParams();
+  if (datastream_id) params.append("datastream_id", datastream_id.toString());
+  if (route_id) params.append("route_id", route_id.toString());
+  const url = `${API_ENDPOINTS.route}?${params.toString()}`;
 
   const response = await fetch(url, {
     method: "GET",
