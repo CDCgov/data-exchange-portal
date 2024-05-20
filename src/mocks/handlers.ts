@@ -3,6 +3,7 @@ import API_ENDPOINTS from "src/config/api";
 
 import { CreateDataStreamBody, DataStream } from "src/utils/api/dataStreams";
 import { CreateEntityBody, Entity } from "src/utils/api/entities";
+import { CreateManifestBody, Manifest } from "src/utils/api/manifests";
 import { CreateProgramBody, Program } from "src/utils/api/programs";
 import { CreateRouteBody, Route } from "src/utils/api/routes";
 import { FileSubmissions } from "src/utils/api/fileSubmissions";
@@ -11,6 +12,7 @@ import { generateCounts } from "src/mocks/data/reportCounts";
 import mockSubmissions, { dateFilter } from "src/mocks/data/fileSubmissions";
 import mockDataStreams from "src/mocks/data/dataStreams";
 import mockEntities from "src/mocks/data/entities";
+import mockManifests from "src/mocks/data/manifests";
 import mockPrograms from "src/mocks/data/programs";
 import mockRoutes from "src/mocks/data/routes";
 import getMockDetails from "src/mocks/data/submissionDetails";
@@ -58,6 +60,38 @@ export const handlers = [
     return HttpResponse.json({ id: 1, name });
   }),
 
+  http.get(API_ENDPOINTS.manifests, ({ request }) => {
+    const url = new URL(request.url);
+    const datastreamId = url.searchParams.get("datastream_id");
+    const routeId = url.searchParams.get("route_id");
+    const manifests = mockManifests.filter(
+      (el: Manifest) => el.datastreamId == datastreamId && el.routeId == routeId
+    );
+    return HttpResponse.json(manifests);
+  }),
+  http.get(API_ENDPOINTS.manifest, ({ request }) => {
+    const url = new URL(request.url);
+    const datastreamId = url.searchParams.get("datastream_id");
+    const routeId = url.searchParams.get("route_id");
+    const manifestId = url.searchParams.get("manifest_id");
+    const route = mockManifests.find(
+      (el: Manifest) =>
+        el.id == routeId &&
+        el.datastreamId == datastreamId &&
+        el.id == manifestId
+    );
+    return HttpResponse.json(route);
+  }),
+  http.post(API_ENDPOINTS.manifest, async ({ request }) => {
+    const { datastreamId, routeId, manifestJson } =
+      (await request.json()) as CreateManifestBody;
+
+    if (!datastreamId || !routeId || !manifestJson) {
+      return new HttpResponse(null, { status: 400 });
+    }
+    return HttpResponse.json({ id: 1, datastreamId, routeId, manifestJson });
+  }),
+
   http.get(API_ENDPOINTS.programs, ({ request }) => {
     const url = new URL(request.url);
     const entityId = url.searchParams.get("entity_id");
@@ -78,13 +112,9 @@ export const handlers = [
   http.post(API_ENDPOINTS.program, async ({ request }) => {
     const { entityId, name } = (await request.json()) as CreateProgramBody;
 
-    if (!entityId) {
+    if (!entityId || !name) {
       return new HttpResponse(null, { status: 400 });
     }
-    if (!name) {
-      return new HttpResponse(null, { status: 400 });
-    }
-
     return HttpResponse.json({ id: 1, entityId, name });
   }),
 
@@ -108,13 +138,9 @@ export const handlers = [
   http.post(API_ENDPOINTS.route, async ({ request }) => {
     const { datastreamId, name } = (await request.json()) as CreateRouteBody;
 
-    if (!datastreamId) {
+    if (!datastreamId || !name) {
       return new HttpResponse(null, { status: 400 });
     }
-    if (!name) {
-      return new HttpResponse(null, { status: 400 });
-    }
-
     return HttpResponse.json({ id: 1, datastreamId, name });
   }),
 
