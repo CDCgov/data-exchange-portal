@@ -1,0 +1,12 @@
+query CharactersQuery {
+    allPeople {
+        people {
+            name
+        }
+    }
+    allStarships {
+        starships {
+            name
+        }
+    }
+}
