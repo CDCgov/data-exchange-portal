@@ -3,10 +3,10 @@ version: "2.4"
 services:
   dexportalapi:
     build:
-      context: ./api
+      context: ./dex-portal-api
       dockerfile: Dockerfile
     container_name: dex-portal-api
     ports:
       - 8080:8080
     env_file:
-      - ./api/.env
+      - ./dex-portal-api/.env
