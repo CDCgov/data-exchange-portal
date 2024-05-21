@@ -144,8 +144,8 @@ function Shell() {
                 {
                   componentType: "a",
                   icon: <Icons.Person />,
-                  text: "Manage Users",
-                  onClick: () => navigate("/"),
+                  text: "Metadata Management",
+                  onClick: () => navigate("/home/metadata-management"),
                 },
               ],
             },

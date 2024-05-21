@@ -20,20 +20,25 @@ export const mmsHandlers = [
   }),
   http.get(API_ENDPOINTS.dataStream, ({ request }) => {
     const url = new URL(request.url);
-    const dataStreamId = url.searchParams.get("data_stream_id");
+    const dataStreamId = url.searchParams.get("datastream_id");
+
+    if (!dataStreamId) {
+      return new HttpResponse(null, { status: 400 });
+    }
+
     const dataStream = mockDataStreams.find(
       (el: DataStream) => el.id == dataStreamId
     );
     return HttpResponse.json(dataStream);
   }),
   http.post(API_ENDPOINTS.dataStream, async ({ request }) => {
-    const { name } = (await request.json()) as CreateDataStreamBody;
+    const { name, programId } = (await request.json()) as CreateDataStreamBody;
 
-    if (!name) {
+    if (!name || !programId) {
       return new HttpResponse(null, { status: 400 });
     }
 
-    return HttpResponse.json({ id: 1, name });
+    return HttpResponse.json({ id: 1, name, programId });
   }),
 
   // --> Entities
@@ -43,6 +48,11 @@ export const mmsHandlers = [
   http.get(API_ENDPOINTS.entity, ({ request }) => {
     const url = new URL(request.url);
     const entityId = url.searchParams.get("entity_id");
+
+    if (!entityId) {
+      return new HttpResponse(null, { status: 400 });
+    }
+
     const entity = mockEntities.find((el: Entity) => el.id == entityId);
     return HttpResponse.json(entity);
   }),
@@ -61,6 +71,11 @@ export const mmsHandlers = [
     const url = new URL(request.url);
     const datastreamId = url.searchParams.get("datastream_id");
     const routeId = url.searchParams.get("route_id");
+
+    if (!datastreamId || !routeId) {
+      return new HttpResponse(null, { status: 400 });
+    }
+
     const manifests = mockManifests.filter(
       (el: Manifest) => el.datastreamId == datastreamId && el.routeId == routeId
     );
@@ -71,6 +86,11 @@ export const mmsHandlers = [
     const datastreamId = url.searchParams.get("datastream_id");
     const routeId = url.searchParams.get("route_id");
     const manifestId = url.searchParams.get("manifest_id");
+
+    if (!datastreamId || !routeId || !manifestId) {
+      return new HttpResponse(null, { status: 400 });
+    }
+
     const route = mockManifests.find(
       (el: Manifest) =>
         el.id == routeId &&
@@ -93,6 +113,11 @@ export const mmsHandlers = [
   http.get(API_ENDPOINTS.programs, ({ request }) => {
     const url = new URL(request.url);
     const entityId = url.searchParams.get("entity_id");
+
+    if (!entityId) {
+      return new HttpResponse(null, { status: 400 });
+    }
+
     const programs = mockPrograms.filter(
       (el: Program) => el.entityId == entityId
     );
@@ -102,6 +127,11 @@ export const mmsHandlers = [
     const url = new URL(request.url);
     const entityId = url.searchParams.get("entity_id");
     const programId = url.searchParams.get("program_id");
+
+    if (!entityId || !programId) {
+      return new HttpResponse(null, { status: 400 });
+    }
+
     const program = mockPrograms.find(
       (el: Program) => el.id == programId && el.entityId == entityId
     );
@@ -120,6 +150,11 @@ export const mmsHandlers = [
   http.get(API_ENDPOINTS.routes, ({ request }) => {
     const url = new URL(request.url);
     const datastreamId = url.searchParams.get("datastream_id");
+
+    if (!datastreamId) {
+      return new HttpResponse(null, { status: 400 });
+    }
+
     const routes = mockRoutes.filter(
       (el: Route) => el.datastreamId == datastreamId
     );
@@ -129,6 +164,11 @@ export const mmsHandlers = [
     const url = new URL(request.url);
     const datastreamId = url.searchParams.get("datastream_id");
     const routeId = url.searchParams.get("route_id");
+
+    if (!datastreamId || !routeId) {
+      return new HttpResponse(null, { status: 400 });
+    }
+
     const route = mockRoutes.find(
       (el: Route) => el.id == routeId && el.datastreamId == datastreamId
     );

@@ -2,7 +2,12 @@
 export const jsonPrettyPrint = (data: any): JSX.Element => {
   const jsonData = JSON.stringify(data, null, 2);
 
-  return <pre>{jsonData}</pre>;
+  const preStyle: React.CSSProperties = {
+    whiteSpace: "pre-wrap",
+    wordWrap: "break-word",
+  };
+
+  return <pre style={preStyle}>{jsonData}</pre>;
 };
 
 export default jsonPrettyPrint;

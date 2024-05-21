@@ -18,7 +18,10 @@ export const getManifests = async (
   datastream_id: number,
   route_id: number
 ): Promise<Response> => {
-  const url = `${API_ENDPOINTS.manifests}?datastream_id=${datastream_id}&route_id=${route_id}`;
+  const params = new URLSearchParams();
+  if (datastream_id) params.append("datastream_id", datastream_id.toString());
+  if (route_id) params.append("route_id", route_id.toString());
+  const url = `${API_ENDPOINTS.manifests}?${params.toString()}`;
 
   const response = await fetch(url, {
     method: "GET",
@@ -37,7 +40,11 @@ export const getManifest = async (
   route_id: number,
   manifest_id: number
 ): Promise<Response> => {
-  const url = `${API_ENDPOINTS.manifest}?datastream_id=${datastream_id}&route_id=${route_id}&manifest_id=${manifest_id}`;
+  const params = new URLSearchParams();
+  if (datastream_id) params.append("datastream_id", datastream_id.toString());
+  if (route_id) params.append("route_id", route_id.toString());
+  if (manifest_id) params.append("manifest_id", manifest_id.toString());
+  const url = `${API_ENDPOINTS.manifest}?${params.toString()}`;
 
   const response = await fetch(url, {
     method: "GET",

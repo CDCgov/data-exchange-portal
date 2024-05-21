@@ -2,11 +2,13 @@ import API_ENDPOINTS from "src/config/api";
 
 export interface CreateDataStreamBody {
   name: string;
+  programId: number | string;
 }
 
 export interface DataStream {
   id: number | string;
   name: string;
+  programId: number | string;
   routes: string[];
 }
 
@@ -28,9 +30,12 @@ export const getDataStreams = async (
 
 export const getDataStream = async (
   access_token: string,
-  data_stream_id: number
+  datastream_id: number
 ): Promise<Response> => {
-  const url = `${API_ENDPOINTS.dataStream}?data_stream_id=${data_stream_id}`;
+  const params = new URLSearchParams();
+  if (datastream_id) params.append("datastream_id", datastream_id.toString());
+
+  const url = `${API_ENDPOINTS.dataStream}?${params.toString()}`;
 
   const response = await fetch(url, {
     method: "GET",
@@ -45,12 +50,14 @@ export const getDataStream = async (
 
 export const createDataStream = async (
   access_token: string,
-  data_stream_name: string
+  data_stream_name: string,
+  program_id: number
 ): Promise<Response> => {
   const url = `${API_ENDPOINTS.dataStream}`;
 
   const body = JSON.stringify({
     name: data_stream_name,
+    programId: program_id,
   });
 
   const response = await fetch(url, {
