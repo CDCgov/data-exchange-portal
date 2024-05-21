@@ -15,6 +15,7 @@ import dexportal.config.ConfigLoader
 fun Route.authRoutes() {
     post("/api/token") {
         val authCode = call.request.queryParameters["code"]
+        print(call.request)
         if (authCode == null) {
             call.respond(HttpStatusCode.BadRequest, "Missing 'code' parameter")
             return@post

@@ -34,9 +34,9 @@ function App() {
         <Route
           path="home/*"
           element={
-            <AuthWrapper>
+            <ProtectedRoute>
               <Shell />
-            </AuthWrapper>
+            </ProtectedRoute>
           }>
           <Route path="dashboard" element={<Dashboard />}></Route>
           <Route path="profile" element={<Profile />}></Route>
