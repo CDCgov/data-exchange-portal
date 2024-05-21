@@ -34,3 +34,8 @@ out/
 
 ### VS Code ###
 .vscode/
+**/.DS_Store
+
+.env
+kls_database.db
+docs/
