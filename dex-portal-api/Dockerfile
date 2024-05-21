@@ -1,10 +1,10 @@
-FROM docker.io/library/gradle:jdk21 AS build
-COPY ./ /home/gradle/src
+FROM gradle:7-jdk11 AS build
+COPY --chown=gradle:gradle . /home/gradle/src
 WORKDIR /home/gradle/src
-RUN gradle build
+RUN gradle buildFatJar --no-daemon
 
-FROM docker.io/library/openjdk:23-jdk-oraclelinux9
-EXPOSE 8000
-COPY --from=build /home/gradle/src/build/libs/api-all.jar /app/
-
-ENTRYPOINT ["java", "-XX:+UnlockExperimentalVMOptions", "-jar", "/app/api-all.jar"]
+FROM openjdk:11
+EXPOSE 8080:8080
+RUN mkdir /app
+COPY --from=build /home/gradle/src/build/libs/*.jar /app/dex-portal-api.jar
+ENTRYPOINT ["java","-jar","/app/dex-portal-api.jar"]
