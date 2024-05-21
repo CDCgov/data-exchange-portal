@@ -12,7 +12,7 @@ import io.ktor.client.statement.*
 import dexportal.config.AuthConfig
 import dexportal.config.ConfigLoader
 
-suspend fun Route.authRoutes() {
+fun Route.authRoutes() {
     post("/api/token") {
         val authCode = call.request.queryParameters["code"]
         if (authCode == null) {

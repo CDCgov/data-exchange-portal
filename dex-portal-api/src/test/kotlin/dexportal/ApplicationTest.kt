@@ -1,6 +1,6 @@
 package dexportal
 
-import dexportal.plugins.*
+import dexportal.routes.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -15,7 +15,7 @@ class ApplicationTest {
         }
         client.get("/").apply {
             assertEquals(HttpStatusCode.OK, status)
-            assertEquals("Hello World!", bodyAsText())
+            assertEquals("Status: OK", bodyAsText())
         }
     }
 }
