@@ -12,6 +12,7 @@ import io.ktor.client.statement.*
 
 import dexportal.config.AuthConfig
 import dexportal.config.ConfigLoader
+import io.ktor.client.request.forms.*
 
 fun Route.authRoutes() {
     post("/api/token") {
@@ -29,7 +30,7 @@ fun Route.authRoutes() {
         val client = HttpClient(CIO)
 
         try {
-            val body = Parameters.build {
+            val body = parameters {
                 append("grant_type", grantType)
                 append("code", authCode)
                 append("client_id", authConfig.samsClientId)
@@ -38,10 +39,7 @@ fun Route.authRoutes() {
                 append("scope", scope)
             }
 
-            val response: HttpResponse = client.post("${authConfig.samsUrl}/auth/oauth/v2/token") {
-                contentType(ContentType.Application.FormUrlEncoded)
-                setBody(body)
-            }
+            val response: HttpResponse = client.submitForm("${authConfig.samsUrl}/auth/oauth/v2/token", body)
 
             call.respond(response)
         } catch (e: Exception) {
