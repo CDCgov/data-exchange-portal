@@ -2,6 +2,7 @@ package dexportal.routes
 
 import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.client.*
@@ -14,8 +15,8 @@ import dexportal.config.ConfigLoader
 
 fun Route.authRoutes() {
     post("/api/token") {
-        val authCode = call.request.queryParameters["code"]
-        print(call.request)
+        val formParameters = call.receiveParameters()
+        val authCode = formParameters["code"]
         if (authCode == null) {
             call.respond(HttpStatusCode.BadRequest, "Missing 'code' parameter")
             return@post
