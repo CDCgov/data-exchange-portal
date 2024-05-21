@@ -34,12 +34,8 @@ dependencies {
     implementation("io.ktor:ktor-server-content-negotiation:$ktor_version")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
-<<<<<<< Updated upstream
-    testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
-=======
     implementation("com.apollographql.apollo3:apollo-runtime")
-    testImplementation("io.ktor:ktor-server-tests-jvm")
->>>>>>> Stashed changes
+    testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }
 

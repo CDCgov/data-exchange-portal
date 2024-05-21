@@ -15,11 +15,7 @@ class ApplicationTest {
         }
         client.get("/").apply {
             assertEquals(HttpStatusCode.OK, status)
-<<<<<<< Updated upstream
-            assertEquals("Status: OK", bodyAsText())
-=======
             // assertEquals("Hello World!", bodyAsText())
->>>>>>> Stashed changes
         }
     }
 }
