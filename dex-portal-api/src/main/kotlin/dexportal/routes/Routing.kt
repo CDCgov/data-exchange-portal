@@ -10,5 +10,6 @@ fun Application.configureRouting() {
             call.respondText("Status: OK")
         }
         authRoutes()
+        protectedRoutes()
     }
 }

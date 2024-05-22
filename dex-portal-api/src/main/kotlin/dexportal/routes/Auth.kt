@@ -7,7 +7,6 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
-import io.ktor.client.request.*
 import io.ktor.client.statement.*
 
 import dexportal.config.AuthConfig
