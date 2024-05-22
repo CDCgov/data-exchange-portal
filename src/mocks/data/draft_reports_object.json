@@ -1,36 +1,50 @@
-submission_details_structure:
-
 {
-  "status": "complete",
-  "current_stage": "uploading",
+  "status": "processing", // enum: one of ["processing", "failed", "delivered"]
+  "current_stage": "dex-upload",
+  "current_action": "metadata-validation",
   "file_name": "test.txt",
-  "upload_id": "unique_guid",
+  "transport_id": "unique_guid", //represents the id for the entire transaction i.e. upload_id
   "timestamp": "12-12-2023", -- first initial timestamp
   "data_stream_id": "aims-celr",
   "data_stream_route": "csv",
-  "reports": [ -- stack reports in chrono order
+  "reports": [
     {
-      "stage": "uploading",
-      "message": "There was a problem",
-      "actionItem": "Try to upload again with better stuff"
-    }
-  ]
-}
-
-report_structure:
-
-{
-  "stage": "uploading",
-  "timestamp_complete": "12-12-2024",
-  "message": "There was a problem",
-  "errors": [
-    {
-      "type": "validation failed",
-      "level": "Error | Warning",
-      "message": "There was a problem",
-      "action_item": "Try to upload again with better stuff",
-      "details": {-- specifics to the error --},
-    }
+    "stage": "DEX HL7 v2", //describes a chunk of the pipeline, usually associated with a specific product; string could be human readable, or transformed from id to human readable
+    "action": "debatch", //describes specific thing that happened as part of the stage
+    "schema_name": "dex-hl7",
+    "version": "1.0",
+    "data_stream_id": "aims-celr",
+    "data_stream_route": "csv",
+    "jurisdiction": "MD",
+    "transport_id": "unique_guid", //represents the id for the entire transaction i.e. upload_id
+    "parent_id": "unique_guid", (would be null if it is the parent?) //id for the thing that resulted in this report?
+    "message_id": "unique_guid",//id for the thing this report is about
+    "type": "failure", //represents machine readable way to understand what happened in the stage action; enum: one of ["failure", "success", "pending"] ("delivered?")
+    "timestamp_complete": "12-12-2024", //time action completed
+    "message": "Debatch failed", //Action summary. For success would read "Debatch successful"
+    "errors": [
+      {
+      "type": "validation",
+      "stage": "dex-upload",
+      "action": "file-upload",
+      "level": "warning",
+      "message": "There was a problem. Here's an actionable message",
+      "details": {"key": "value"}
+      }, {...}
+    ],
+    "routing_metadata?": { all the specific submission metadata }
+    "data": { unique data to the report? },
+    }, {...}
   ],
-  "data": { unique data to the report },
+  "errors": [ //rolled-up errors for observability. might require specialized logic for meaningful debatched message errors/warnings
+    {
+      "type": "validation",
+      "stage": "dex-upload",
+      "action": "file-upload",
+      "level": "warning",
+      "message": "There was a problem. Here's an actionable message",
+      "details": {"key": "value"}
+    }, {...}
+  ],
+  "meta": blob
 }
