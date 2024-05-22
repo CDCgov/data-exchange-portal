@@ -6,14 +6,13 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.client.*
-import io.ktor.client.engine.cio.*
 import io.ktor.client.statement.*
 
 import dexportal.config.AuthConfig
 import dexportal.config.ConfigLoader
 import io.ktor.client.request.forms.*
 
-fun Route.authRoutes() {
+fun Route.authRoutes(client: HttpClient) {
     post("/api/token") {
         val formParameters = call.receiveParameters()
         val authCode = formParameters["code"]
@@ -25,8 +24,6 @@ fun Route.authRoutes() {
 
         val grantType = "authorization_code"
         val scope = "dex:status"
-
-        val client = HttpClient(CIO)
 
         try {
             val body = parameters {
@@ -44,8 +41,6 @@ fun Route.authRoutes() {
             call.respondText(responseBody, ContentType.Application.Json)
         } catch (e: Exception) {
             call.respond(e)
-        } finally {
-            client.close()
         }
     }
 }
