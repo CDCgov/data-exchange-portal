@@ -1,4 +1,4 @@
-rootProject.name = "DeXPortalAPI"
+rootProject.name = "dex-portal-api"
 
 pluginManagement {
     repositories {

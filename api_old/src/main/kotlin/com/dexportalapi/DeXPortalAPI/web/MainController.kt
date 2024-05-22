@@ -57,7 +57,7 @@ class MainController() {
                                         "/api/upload/" + dataStreamId +
                                         "?page_number=" + pageNumber + "&page_size=20"
                                         + "&date_start=$cleanedDateStart"
-                        )
+
                         .header("Authorization", authToken)
                         .retrieve()
                         .onStatus({ responseStatus ->

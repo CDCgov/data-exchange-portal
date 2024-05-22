@@ -40,7 +40,7 @@ fun Route.authRoutes() {
 
             val response: HttpResponse = client.submitForm("${authConfig.samsUrl}/auth/oauth/v2/token", body)
             val responseBody: String = response.bodyAsText()
- 
+
             call.respondText(responseBody, ContentType.Application.Json)
         } catch (e: Exception) {
             call.respond(e)

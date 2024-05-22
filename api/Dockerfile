@@ -1,10 +1,11 @@
 FROM docker.io/library/gradle:jdk21 AS build
 COPY ./ /home/gradle/src
 WORKDIR /home/gradle/src
-RUN gradle build
+RUN gradle buildFatJar --no-daemon
 
 FROM docker.io/library/openjdk:23-jdk-oraclelinux9
-EXPOSE 8080
-COPY --from=build /home/gradle/src/build/libs/DeXPortalAPI-0.0.1-SNAPSHOT.jar /app/
+EXPOSE 8080:8080
+RUN mkdir /app
+COPY --from=build /home/gradle/src/build/libs/*.jar /app/dex-portal-api.jar
 
-ENTRYPOINT ["java", "-XX:+UnlockExperimentalVMOptions", "-jar", "/app/DeXPortalAPI-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java","-jar","/app/dex-portal-api.jar"]
