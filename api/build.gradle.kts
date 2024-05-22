@@ -5,6 +5,7 @@ val logback_version: String by project
 plugins {
     kotlin("jvm") version "2.0.0"
     id("io.ktor.plugin") version "2.3.11"
+    id("com.apollographql.apollo3").version("3.8.4")
 }
 
 group = "dexportal"
@@ -32,6 +33,13 @@ dependencies {
     implementation("io.ktor:ktor-server-content-negotiation:$ktor_version")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
+    implementation("com.apollographql.apollo3:apollo-runtime")
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }
+
+apollo {
+    service("service") {
+        packageName.set("com.dexportal.dex-portal-api")
+    }
+ }

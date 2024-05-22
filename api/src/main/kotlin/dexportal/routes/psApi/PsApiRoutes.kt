@@ -8,5 +8,6 @@ fun Route.psAPI() {
         authenticate()
         reportCounts()
         fileSubmissions()
+        submissionDetails()
     }
 }

@@ -18,4 +18,8 @@ object ConfigLoader {
                 ?: throw IllegalStateException("SAMS_REDIRECT_URL not set")
         )
     }
+
+    fun getPSAPIUrl(): {
+        return psAPIUrl: String = System.getenv("PS_API_URL") ?: throw IllegalStateException("PS_API_URL not set")
+    }
 }
