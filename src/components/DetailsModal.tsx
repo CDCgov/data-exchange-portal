@@ -10,7 +10,6 @@ import {
   ModalBody,
   ModalFooter,
   Pill,
-  ProgressTracker,
 } from "@us-gov-cdc/cdc-react";
 import { format, parseISO } from "date-fns";
 
@@ -18,7 +17,7 @@ import { Icons } from "@us-gov-cdc/cdc-react-icons";
 import getStatusDisplayValuesById, {
   StatusDisplayValues,
 } from "src/utils/helperFunctions/statusDisplayValues";
-import { jsonPrettyPrint } from "src/utils/helperFunctions/json";
+import { jsonPrettyPrint, downloadJson } from "src/utils/helperFunctions/json";
 import getSubmissionDetails, {
   SubmissionDetails,
   Report,
@@ -110,18 +109,31 @@ function DetailsModal({
     }
 
     if (submission.status == "completed") {
-      return <ProgressTracker isComplete />;
+      return (
+        <Alert heading="Complete" type="success">
+          File submission is complete
+        </Alert>
+      );
     }
 
     if (submission.status == "processing") {
       return (
-        <ProgressTracker
-          label={`Stage: ${details?.current_stage} -- Action: ${details?.current_action}`}
-          isIndeterminate={true}
-        />
+        <Alert heading="Processing" type="info">
+          File submission is processing
+          <p
+            key={details.reports[0].message}
+            className="border-1px radius-md border-primary-light margin-y-2 padding-105">
+            {details.reports[0].message}
+          </p>
+        </Alert>
       );
     }
   };
+
+  const handleDownloadJson = () => {
+    downloadJson(details);
+  };
+
   return (
     <Modal
       isOpen={isModalOpen}
@@ -172,7 +184,7 @@ function DetailsModal({
       <ModalFooter>
         <Button
           ariaLabel="download submission details"
-          onClick={handleModalClose}>
+          onClick={handleDownloadJson}>
           Download Submission Details
         </Button>
         <Button
