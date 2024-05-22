@@ -7,7 +7,6 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
-import io.ktor.client.request.*
 import io.ktor.client.statement.*
 
 import dexportal.config.AuthConfig
@@ -41,7 +40,7 @@ fun Route.authRoutes() {
 
             val response: HttpResponse = client.submitForm("${authConfig.samsUrl}/auth/oauth/v2/token", body)
             val responseBody: String = response.bodyAsText()
- 
+
             call.respondText(responseBody, ContentType.Application.Json)
         } catch (e: Exception) {
             call.respond(e)

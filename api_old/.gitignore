@@ -3,6 +3,13 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+src/main/resources/application.properties
+.env
+.env.sh
+vars.sh
+api/src/main/resources/static
+
+!.env.example
 
 ### STS ###
 .apt_generated
@@ -34,8 +41,3 @@ out/
 
 ### VS Code ###
 .vscode/
-**/.DS_Store
-
-.env
-kls_database.db
-docs/
