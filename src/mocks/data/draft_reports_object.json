@@ -12,7 +12,7 @@
     "stage": "DEX HL7 v2", //describes a chunk of the pipeline, usually associated with a specific product; string could be human readable, or transformed from id to human readable
     "action": "debatch", //describes specific thing that happened as part of the stage
     "schema_name": "dex-hl7",
-    "version": "1.0",
+    "schema_version": "1.0",
     "data_stream_id": "aims-celr",
     "data_stream_route": "csv",
     "jurisdiction": "MD",
