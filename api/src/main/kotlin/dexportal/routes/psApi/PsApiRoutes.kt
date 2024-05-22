@@ -5,7 +5,7 @@ import dexportal.middleware.authenticate
 
 fun Route.psAPI() {
     route("/ps-api") {
-        authenticate()
+        // authenticate()
         reportCounts()
         fileSubmissions()
         submissionDetails()

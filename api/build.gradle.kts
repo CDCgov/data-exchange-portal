@@ -4,6 +4,7 @@ val logback_version: String by project
 
 plugins {
     kotlin("jvm") version "2.0.0"
+    kotlin("plugin.serialization") version "1.9.10"
     id("io.ktor.plugin") version "2.3.11"
     id("com.apollographql.apollo3").version("3.8.4")
 }
@@ -40,6 +41,6 @@ dependencies {
 
 apollo {
     service("service") {
-        packageName.set("com.dexportal.dex-portal-api")
+        packageName.set("com.dexportal")
     }
  }

@@ -1,3 +1,5 @@
+package dexportal.models.psApi
+
 data class FileSubmissionsSummary(
     val numberOfPages: Int,
     val pageNumber: Int,

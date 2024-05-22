@@ -1,3 +1,5 @@
+package dexportal.models.psApi
+
 data class ValidationReport(
     val line: Int,
     val column: Int,

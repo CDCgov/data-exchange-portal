@@ -1,6 +1,9 @@
+package dexportal.models.psApi
+
 data class CountsDetails(
     val counts: Int,
-    val reasons?: Map<String,Int> = emptyMap()
+    // Todo: Figure out way to handle unknown string-type keys
+    val reasons: Map<String,Int>? = emptyMap()
 )
 
 data class StatusCounts(
@@ -14,3 +17,4 @@ data class ReportCounts(
     val totalCounts: Int,
     val statusCounts: StatusCounts
 )
+

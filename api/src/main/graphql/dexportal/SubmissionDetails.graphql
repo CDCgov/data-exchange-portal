@@ -1,0 +1,7 @@
+#query SubmissionDetails() {
+#    allSubmissionDetails {
+#        info
+#        issues
+#        reports
+#    }
+#}

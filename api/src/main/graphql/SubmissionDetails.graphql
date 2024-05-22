@@ -1,7 +1,0 @@
-query ReportCounts() {
-    allSubmissionDetails {
-        info
-        issues
-        reports
-    }
-}

@@ -1,6 +1,0 @@
-query ReportCounts() {
-    allReportCounts {
-        total_counts
-        status_counts 
-    }
-}

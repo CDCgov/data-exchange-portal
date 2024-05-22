@@ -1,0 +1,20 @@
+#query FileSubmissions($cursor: String) {
+#    allFileSubmissions(after: $cursor) {
+#        cursor
+#        summary {
+#            number_of_pages
+#            page_number
+#            page_size
+#            total_items
+#        }
+#        items {
+#            upload_id
+#            filename
+#            status
+#            timestamp
+#            data_stream_id
+#            data_stream_route
+#        }
+#        hasMore
+#    }
+#}

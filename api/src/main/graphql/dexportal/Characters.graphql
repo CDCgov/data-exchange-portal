@@ -1,0 +1,7 @@
+query CharactersQuery {
+    allPeople {
+        people {
+            name
+        }
+    }
+}
