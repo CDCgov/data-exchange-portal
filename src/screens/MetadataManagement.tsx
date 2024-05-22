@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "react-oidc-context";
 
 import { Button, Dropdown } from "@us-gov-cdc/cdc-react";
-import jsonPrettyPrint from "src/utils/helperFunctions/jsonPrettyPrint";
+import { jsonPrettyPrint } from "src/utils/helperFunctions/json";
 
 import { getDataStreams, createDataStream } from "src/utils/api/dataStreams";
 import { getEntities, createEntity } from "src/utils/api/entities";

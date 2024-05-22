@@ -9,5 +9,3 @@ export const jsonPrettyPrint = (data: any): JSX.Element => {
 
   return <pre style={preStyle}>{jsonData}</pre>;
 };
-
-export default jsonPrettyPrint;

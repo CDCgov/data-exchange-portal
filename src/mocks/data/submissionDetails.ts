@@ -47,7 +47,7 @@ const generateReport = (
       case "completed":
         return "success";
       default:
-        return "";
+        return "success";
     }
   };
   const getMessage = () => {
@@ -86,15 +86,12 @@ const getReports = (
   stage: string,
   action: string
 ): Report[] => {
-  if (submission.status == "failed" && submission.data_stream_route == "hl7") {
-    const numOfReports = faker.number.int({ min: 1, max: 3 });
-    const reports: Report[] = [];
-    for (let i = 0; i < numOfReports; i++) {
-      reports.push(generateReport(submission, stage, action));
-    }
-    return reports;
+  const numOfReports = faker.number.int({ min: 1, max: 3 });
+  const reports: Report[] = [];
+  for (let i = 0; i < numOfReports; i++) {
+    reports.push(generateReport(submission, stage, action));
   }
-  return [];
+  return reports;
 };
 
 const generateSubmissionDetails = (

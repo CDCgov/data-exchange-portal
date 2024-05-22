@@ -6,7 +6,7 @@ export interface ReportError {
   action: string;
   level: string;
   message: string;
-  details?: any;
+  details?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
 export interface Report {
@@ -20,12 +20,12 @@ export interface Report {
   transport_id: string;
   parent_id: string;
   message_id: string;
-  type: string;
+  type: "failure" | "pending" | "success";
   timestamp_complete: string;
   message: string;
   errors: ReportError[];
-  routing_metadata?: any;
-  data?: any;
+  routing_metadata?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+  data?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
 export interface SubmissionDetails {
@@ -38,7 +38,7 @@ export interface SubmissionDetails {
   data_stream_id: string;
   data_stream_route: string;
   reports: Report[];
-  meta?: any;
+  meta?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
 export const getSubmissionDetails = async (
