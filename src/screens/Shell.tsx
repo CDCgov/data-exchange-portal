@@ -138,17 +138,17 @@ function Shell() {
                 },
               ],
             },
-            {
-              heading: "Admin Tasks",
-              items: [
-                {
-                  componentType: "a",
-                  icon: <Icons.Person />,
-                  text: "Metadata Management",
-                  onClick: () => navigate("/home/metadata-management"),
-                },
-              ],
-            },
+            // {
+            //   heading: "Admin Tasks",
+            //   items: [
+            //     {
+            //       componentType: "a",
+            //       icon: <Icons.Person />,
+            //       text: "Metadata Management",
+            //       onClick: () => navigate("/home/metadata-management"),
+            //     },
+            //   ],
+            // },
           ]}
           footer={[
             {
