@@ -131,7 +131,7 @@ function DetailsModal({
   };
 
   const handleDownloadJson = () => {
-    downloadJson(details);
+    downloadJson(details, `dex-${submission.upload_id}`);
   };
 
   return (
@@ -185,7 +185,7 @@ function DetailsModal({
         <Button
           ariaLabel="download submission details"
           onClick={handleDownloadJson}>
-          Download Submission Details
+          Download Report JSON
         </Button>
         <Button
           ariaLabel="close submissions details"
