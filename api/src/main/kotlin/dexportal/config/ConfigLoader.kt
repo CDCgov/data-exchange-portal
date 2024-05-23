@@ -18,4 +18,9 @@ object ConfigLoader {
                 ?: throw IllegalStateException("SAMS_REDIRECT_URL not set")
         )
     }
+
+    fun getMmsApiUrl(): String {
+        val mmsUrl = System.getenv("MMS_API_URL") ?: throw IllegalStateException("MMS_API_URL not set")
+        return mmsUrl
+    }
 }
