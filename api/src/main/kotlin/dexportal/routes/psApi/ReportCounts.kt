@@ -29,8 +29,8 @@ fun Route.reportCounts(client: HttpClient) {
             try {
                 val response: HttpResponse = client.get("$psApiUrl/api/report/counts/submissions/summary") {
                     header("Authorization", "$authToken")
-                    parameter("data_stream_id", "dex-testing")
-                    // parameter("data_stream_route", dataStreamRoute) don't include route so all are returned
+                    parameter("data_stream_id", "dextesting")
+                    parameter("data_stream_route", "testevent1")
                     if (cleanedDateStart.isNotEmpty()) {
                         parameter("date_start", cleanedDateStart)
                     }
