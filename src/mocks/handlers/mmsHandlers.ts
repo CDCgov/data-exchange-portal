@@ -45,7 +45,7 @@ export const mmsHandlers = [
   http.get(API_ENDPOINTS.entities, () => {
     return HttpResponse.json(mockEntities);
   }),
-  http.get(`${API_ENDPOINTS.entities}/:id`, ({ request, params }) => {
+  http.get(`${API_ENDPOINTS.entities}/:id`, ({ params }) => {
     const { id } = params;
 
     if (!id) {
