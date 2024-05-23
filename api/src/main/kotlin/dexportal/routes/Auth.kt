@@ -40,7 +40,7 @@ fun Route.authRoutes(client: HttpClient) {
 
             call.respondText(responseBody, ContentType.Application.Json)
         } catch (e: Exception) {
-            call.respond(e)
+            call.respond(HttpStatusCode.InternalServerError, e.message ?: "An unknown error occurred")
         }
     }
 }

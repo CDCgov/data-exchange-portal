@@ -19,7 +19,7 @@ object ConfigLoader {
         )
     }
 
-    fun getMmsApiUrl(): String {
+    fun getMmsApiEndpoint(): String {
         val mmsUrl = System.getenv("MMS_API_URL") ?: throw IllegalStateException("MMS_API_URL not set")
         return mmsUrl
     }
