@@ -11,6 +11,10 @@ class ApplicationTest {
     @Test
     fun testRoot() = testApplication {
         application {
+            configureAuthentication()
+            configureSerialization()
+            configureCORS()
+            configureHTTP()
             configureRouting()
         }
         client.get("/").apply {
