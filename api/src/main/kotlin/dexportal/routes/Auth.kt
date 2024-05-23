@@ -43,4 +43,3 @@ fun Route.authRoutes(client: HttpClient) {
             call.respond(HttpStatusCode.InternalServerError, e.message ?: "An unknown error occurred")
         }
     }
-}
