@@ -19,7 +19,7 @@ fun Route.mms(client: HttpClient) {
                     val responseBody: String = response.bodyAsText()
                     call.respondText(responseBody, ContentType.Application.Json)
                 } catch (e: Exception) {
-                    call.respond(e)
+                    call.respond(HttpStatusCode.InternalServerError, e.message ?: "An unknown error occurred")
                 }
             }
         }
