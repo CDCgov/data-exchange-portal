@@ -10,7 +10,7 @@ import io.ktor.server.application.*
 import io.ktor.server.response.*
 
 fun Route.mms(client: HttpClient) {
-    val mmsUrl = ConfigLoader.getMmsApiUrl()
+    val mmsUrl = ConfigLoader.getMmsApiEndpoint()
     route("/mms") {
         route("/health") {
             get {
@@ -19,7 +19,7 @@ fun Route.mms(client: HttpClient) {
                     val responseBody: String = response.bodyAsText()
                     call.respondText(responseBody, ContentType.Application.Json)
                 } catch (e: Exception) {
-                    call.respond(e)
+                    call.respond(HttpStatusCode.InternalServerError, e.message ?: "An unknown error occurred")
                 }
             }
         }
