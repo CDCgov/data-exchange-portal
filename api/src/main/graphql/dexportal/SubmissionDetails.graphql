@@ -1,4 +1,8 @@
-#query SubmissionDetails() {
+# This is a rough outline of the data needed to support SubmissionDetails.
+# Once the actual API is available, we can consider making enhancements
+# to better fit our data model for the front end.
+#
+#query SubmissionDetailsQuery() {
 #    allSubmissionDetails {
 #        info
 #        issues
