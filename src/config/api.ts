@@ -15,9 +15,9 @@ const API_ENDPOINTS = {
   route: `${API_URL}/route`,
   routes: `${API_URL}/routes`,
   // ps api routes
-  fileSubmissions: `${API_URL}/fileSubmissions`,
-  reportCounts: `${API_URL}/reportCounts`,
-  submissionDetails: `${API_URL}/submissionDetails`,
+  fileSubmissions: `${API_URL}/file-submissions`,
+  reportCounts: `${API_URL}/report-counts`,
+  submissionDetails: `${API_URL}/submission-details`,
   // auth
   tokenCallback: `${API_URL}/api/token`,
 };

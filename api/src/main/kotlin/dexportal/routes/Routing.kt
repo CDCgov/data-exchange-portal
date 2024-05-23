@@ -17,7 +17,7 @@ fun Application.configureRouting() {
         }
         authRoutes(client)
         mms(client)
-        psAPI()
+        psAPI(client)
     }
 
     environment.monitor.subscribe(ApplicationStopped) {
