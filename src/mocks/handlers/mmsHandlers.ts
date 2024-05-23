@@ -45,14 +45,14 @@ export const mmsHandlers = [
   http.get(API_ENDPOINTS.entities, () => {
     return HttpResponse.json(mockEntities);
   }),
-  http.get(`${API_ENDPOINTS.entities}/:id`, ({ params }) => {
-    const { id } = params;
+  http.get(`${API_ENDPOINTS.entities}/:entity_id`, ({ params }) => {
+    const { entity_id } = params;
 
-    if (!id) {
+    if (!entity_id) {
       return new HttpResponse(null, { status: 400 });
     }
 
-    const entity = mockEntities.find((el: Entity) => el.id == id);
+    const entity = mockEntities.find((el: Entity) => el.id == entity_id);
     return HttpResponse.json(entity);
   }),
   http.post(API_ENDPOINTS.entities, async ({ request }) => {
@@ -109,41 +109,45 @@ export const mmsHandlers = [
   }),
 
   // --> Programs
-  http.get(API_ENDPOINTS.programs, ({ request }) => {
-    const url = new URL(request.url);
-    const entityId = url.searchParams.get("entity_id");
+  http.get(`${API_ENDPOINTS.entities}/:entity_id/programs`, ({ params }) => {
+    const { entity_id } = params;
 
-    if (!entityId) {
+    if (!entity_id) {
       return new HttpResponse(null, { status: 400 });
     }
 
     const programs = mockPrograms.filter(
-      (el: Program) => el.entityId == entityId
+      (el: Program) => el.entityId == entity_id
     );
     return HttpResponse.json(programs);
   }),
-  http.get(API_ENDPOINTS.program, ({ request }) => {
-    const url = new URL(request.url);
-    const entityId = url.searchParams.get("entity_id");
-    const programId = url.searchParams.get("program_id");
+  http.get(
+    `${API_ENDPOINTS.entities}/:entity_id/programs/:program_id`,
+    ({ params }) => {
+      const { entity_id, program_id } = params;
 
-    if (!entityId || !programId) {
-      return new HttpResponse(null, { status: 400 });
+      if (!entity_id || !program_id) {
+        return new HttpResponse(null, { status: 400 });
+      }
+
+      const program = mockPrograms.find(
+        (el: Program) => el.id == program_id && el.entityId == entity_id
+      );
+      return HttpResponse.json(program);
     }
+  ),
+  http.post(
+    `${API_ENDPOINTS.entities}/:entity_id/programs`,
+    async ({ request, params }) => {
+      const { entity_id } = params;
+      const { name } = (await request.json()) as CreateProgramBody;
 
-    const program = mockPrograms.find(
-      (el: Program) => el.id == programId && el.entityId == entityId
-    );
-    return HttpResponse.json(program);
-  }),
-  http.post(API_ENDPOINTS.program, async ({ request }) => {
-    const { entityId, name } = (await request.json()) as CreateProgramBody;
-
-    if (!entityId || !name) {
-      return new HttpResponse(null, { status: 400 });
+      if (!name || !entity_id) {
+        return new HttpResponse(null, { status: 400 });
+      }
+      return HttpResponse.json({ id: 1, entityId: entity_id, name });
     }
-    return HttpResponse.json({ id: 1, entityId, name });
-  }),
+  ),
 
   // --> Routes
   http.get(API_ENDPOINTS.routes, ({ request }) => {
