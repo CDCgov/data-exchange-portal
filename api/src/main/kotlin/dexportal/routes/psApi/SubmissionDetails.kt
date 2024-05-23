@@ -6,10 +6,10 @@ import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
-fun Route.fileSubmissions(apolloClient: ApolloClient) {
-    route("/file-submissions") {
+fun Route.submissionDetails(apolloClient: ApolloClient) {
+    route("/submission-details") {
         get {
-            call.respond(HttpStatusCode.OK, "This is the /file-submissions endpoint")
+            call.respond(HttpStatusCode.OK, "This is the /submission-details endpoint")
         }
     }
 }
