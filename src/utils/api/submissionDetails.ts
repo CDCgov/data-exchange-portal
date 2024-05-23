@@ -1,31 +1,44 @@
 import API_ENDPOINTS from "src/config/api";
 
-export interface ValidationReport {
-  line: number;
-  column: number;
-  path: string;
-  description: string;
-  category: string;
-  classification: string;
+export interface ReportError {
+  type: string;
+  stage: string;
+  action: string;
+  level: string;
+  message: string;
+  details?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
-export interface SubmissionInfo {
-  status: string;
-  stage_name: string;
-  file_name: string;
-  file_size_bytes: number;
-  bytes_uploaded: number;
-  upload_id: string;
-  uploaded_by: string;
-  timestamp: string;
+export interface Report {
+  stage: string;
+  action: string;
+  schema_name: string;
+  version: string;
   data_stream_id: string;
   data_stream_route: string;
+  jurisdiction: string;
+  transport_id: string;
+  parent_id: string;
+  message_id: string;
+  type: "failure" | "pending" | "success";
+  timestamp_complete: string;
+  message: string;
+  errors: ReportError[];
+  routing_metadata?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+  data?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
 export interface SubmissionDetails {
-  info: SubmissionInfo;
-  issues: string[];
-  reports: ValidationReport[];
+  status: string;
+  current_stage: string;
+  current_action: string;
+  file_name: string;
+  transport_id: string;
+  timestamp: string;
+  data_stream_id: string;
+  data_stream_route: string;
+  reports: Report[];
+  meta?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
 export const getSubmissionDetails = async (

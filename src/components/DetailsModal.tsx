@@ -10,7 +10,6 @@ import {
   ModalBody,
   ModalFooter,
   Pill,
-  ProgressTracker,
 } from "@us-gov-cdc/cdc-react";
 import { format, parseISO } from "date-fns";
 
@@ -18,9 +17,11 @@ import { Icons } from "@us-gov-cdc/cdc-react-icons";
 import getStatusDisplayValuesById, {
   StatusDisplayValues,
 } from "src/utils/helperFunctions/statusDisplayValues";
-import jsonPrettyPrint from "src/utils/helperFunctions/jsonPrettyPrint";
+import { jsonPrettyPrint, downloadJson } from "src/utils/helperFunctions/json";
 import getSubmissionDetails, {
   SubmissionDetails,
+  Report,
+  ReportError,
 } from "src/utils/api/submissionDetails";
 import { FileSubmission } from "src/utils/api/fileSubmissions";
 
@@ -40,19 +41,14 @@ function DetailsModal({
   );
   const auth = useAuth();
   const [details, setDetails] = useState<SubmissionDetails>({
-    info: {
-      status: submission.status,
-      stage_name: "",
-      file_name: submission.filename,
-      file_size_bytes: 0,
-      bytes_uploaded: 0,
-      upload_id: submission.upload_id,
-      uploaded_by: "",
-      timestamp: submission.timestamp,
-      data_stream_id: submission.data_stream_id,
-      data_stream_route: submission.data_stream_route,
-    },
-    issues: [],
+    status: submission.status,
+    current_stage: "",
+    current_action: "",
+    file_name: submission.filename,
+    transport_id: submission.upload_id,
+    timestamp: submission.timestamp,
+    data_stream_id: submission.data_stream_id,
+    data_stream_route: submission.data_stream_route,
     reports: [],
   });
 
@@ -82,12 +78,26 @@ function DetailsModal({
     }
   }, [auth, submission, isModalOpen]);
 
+  const getErrorMessages = (): string[] => {
+    if (!details.reports) return [];
+
+    const failedReports: Report[] = details.reports.filter(
+      (report: Report) => report.type == "failure"
+    );
+
+    const messages: string[] = failedReports.flatMap((report: Report) =>
+      report.errors.map((er: ReportError) => er.message)
+    );
+    return messages;
+  };
+
   const getContent = () => {
     if (submission.status == "failed") {
+      const messages = getErrorMessages();
       return (
         <Alert heading="Failed" type="error">
-          {details.issues.length} Error(s) were detected
-          {details.issues.map((issue: string) => (
+          {messages.length} Error(s) were detected
+          {messages.map((issue: string) => (
             <p
               key={issue}
               className="border-1px radius-md border-secondary-light margin-y-2 padding-105">
@@ -99,24 +109,31 @@ function DetailsModal({
     }
 
     if (submission.status == "completed") {
-      return <ProgressTracker isComplete />;
+      return (
+        <Alert heading="Complete" type="success">
+          File submission is complete
+        </Alert>
+      );
     }
 
     if (submission.status == "processing") {
-      const total = Math.floor(details.info.file_size_bytes / (1024 * 1024));
-      const currentAmount = Math.floor(
-        details.info.bytes_uploaded / (1024 * 1024)
-      );
       return (
-        <ProgressTracker
-          label={`Stage: ${details.info.stage_name}`}
-          isIndeterminate={details.info.stage_name === "dex-hl7-validation"}
-          currentAmount={currentAmount}
-          totalAmount={total}
-        />
+        <Alert heading="Processing" type="info">
+          File submission is processing
+          <p
+            key={details.reports[0].message}
+            className="border-1px radius-md border-primary-light margin-y-2 padding-105">
+            {details.reports[0].message}
+          </p>
+        </Alert>
       );
     }
   };
+
+  const handleDownloadJson = () => {
+    downloadJson(details, `dex-${submission.upload_id}`);
+  };
+
   return (
     <Modal
       isOpen={isModalOpen}
@@ -142,15 +159,9 @@ function DetailsModal({
         <Divider className="margin-y-2" height={4} stroke="#E0E0E0" />
         <div className="grid-row margin-y-1">
           <div className="grid-col-4">
-            <strong>Uploaded by</strong>
-          </div>
-          <div className="grid-col-8">{details.info.uploaded_by}</div>
-        </div>
-        <div className="grid-row margin-y-1">
-          <div className="grid-col-4">
             <strong>Upload date</strong>
           </div>
-          <div className="grid-col-8">{formatDate(submission.timestamp)}</div>
+          <div className="grid-col-8">{formatDate(submission?.timestamp)}</div>
         </div>
         <div className="grid-row margin-y-1">
           <div className="grid-col-4">
@@ -164,24 +175,18 @@ function DetailsModal({
               {
                 id: "1",
                 title: "Submitted details",
-                content: jsonPrettyPrint(details.info),
+                content: jsonPrettyPrint(details),
               },
             ]}
           />
-          {submission.status === "failed" && details.reports.length > 0 && (
-            <Accordion
-              items={[
-                {
-                  id: "2",
-                  title: "Validation report",
-                  content: jsonPrettyPrint(details.reports),
-                },
-              ]}
-            />
-          )}
         </div>
       </ModalBody>
       <ModalFooter>
+        <Button
+          ariaLabel="download submission details"
+          onClick={handleDownloadJson}>
+          Download Report JSON
+        </Button>
         <Button
           ariaLabel="close submissions details"
           onClick={handleModalClose}>
