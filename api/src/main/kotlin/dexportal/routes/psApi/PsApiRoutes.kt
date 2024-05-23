@@ -1,12 +1,13 @@
 package dexportal.routes.psApi
 
 import io.ktor.server.routing.*
-import dexportal.middleware.authenticate
+import io.ktor.server.auth.*
 
 fun Route.psAPI() {
     route("/ps-api") {
-        authenticate()
-        reportCounts()
+        authenticate("auth-bearer") {
+            reportCounts()
+        }
         fileSubmissions()
     }
 }
