@@ -1,3 +1,4 @@
+// These models are likely unnecessary since ApolloClient will generate models automatically based on queries/schema
 package dexportal.models.psApi
 
 data class FileSubmissionsSummary(
