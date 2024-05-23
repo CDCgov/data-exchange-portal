@@ -10,28 +10,35 @@ import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
-fun Route.fileSubmissions(client: HttpClient) {
+fun Route.reportCounts(client: HttpClient) {
     val psApiUrl = ConfigLoader.getPsApiEndpoint()
 
-    route("/file-submissions") {
+    route("/report-counts") {
         get {
             val dataStreamId = call.request.queryParameters["data_stream_id"] ?: ""
             val dataStreamRoute = call.request.queryParameters["data_stream_route"] ?: ""
             val dateStart = call.request.queryParameters["date_start"] ?: ""
-            val pageNumber = call.request.queryParameters["page_number"] ?: ""
+            val dateEnd = call.request.queryParameters["date_end"] ?: ""
+            val daysInterval = call.request.queryParameters["days_interval"] ?: ""
 
             val authToken = call.request.headers["Authorization"]
 
-            val cleanedDateStart = processDateString(dateStart)
+            val cleanedDateStart = processDateString(dateStart) ?: ""
+            val cleanedDateEnd = processDateString(dateEnd) ?: ""
 
             try {
-                val response: HttpResponse = client.get("$psApiUrl/api/upload/dextesting") {
-                    header("Authorization", authToken)
+                val response: HttpResponse = client.get("$psApiUrl/api/report/counts/submissions/summary") {
+                    header("Authorization", "$authToken")
+                    parameter("data_stream_id", "dextesting")
                     parameter("data_stream_route", "testevent1")
-                    parameter("page_number", pageNumber)
-                    parameter("page_size", 20)
-                    if (cleanedDateStart != null) {
+                    if (cleanedDateStart.isNotEmpty()) {
                         parameter("date_start", cleanedDateStart)
+                    }
+                    if (cleanedDateEnd.isNotEmpty()) {
+                        parameter("date_end", cleanedDateEnd)
+                    }
+                    if (daysInterval.isNotEmpty()) {
+                        parameter("days_interval", daysInterval)
                     }
                 }
                 val responseBody: String = response.bodyAsText()

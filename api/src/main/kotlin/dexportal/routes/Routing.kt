@@ -19,7 +19,7 @@ fun Application.configureRouting() {
         authRoutes(client)
         authenticate("auth-bearer") {
             mms(client)
-            psAPI()
+            psAPI(client)
         }
     }
 
