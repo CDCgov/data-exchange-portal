@@ -10,7 +10,7 @@ import io.ktor.server.application.*
 import io.ktor.server.response.*
 
 fun Route.mms(client: HttpClient) {
-    val mmsUrl = ConfigLoader.getMmsApiUrl()
+    val mmsUrl = ConfigLoader.getMmsApiEndpoint()
     route("/mms") {
         route("/health") {
             get {

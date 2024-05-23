@@ -45,18 +45,17 @@ export const mmsHandlers = [
   http.get(API_ENDPOINTS.entities, () => {
     return HttpResponse.json(mockEntities);
   }),
-  http.get(API_ENDPOINTS.entity, ({ request }) => {
-    const url = new URL(request.url);
-    const entityId = url.searchParams.get("entity_id");
+  http.get(`${API_ENDPOINTS.entities}/:id`, ({ request, params }) => {
+    const { id } = params;
 
-    if (!entityId) {
+    if (!id) {
       return new HttpResponse(null, { status: 400 });
     }
 
-    const entity = mockEntities.find((el: Entity) => el.id == entityId);
+    const entity = mockEntities.find((el: Entity) => el.id == id);
     return HttpResponse.json(entity);
   }),
-  http.post(API_ENDPOINTS.entity, async ({ request }) => {
+  http.post(API_ENDPOINTS.entities, async ({ request }) => {
     const { name } = (await request.json()) as CreateEntityBody;
 
     if (!name) {

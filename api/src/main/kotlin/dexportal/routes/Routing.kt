@@ -7,6 +7,7 @@ import dexportal.routes.psApi.*
 import dexportal.routes.mms.*
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
+import io.ktor.server.auth.*
 
 fun Application.configureRouting() {
     val client = HttpClient(CIO)
@@ -16,8 +17,10 @@ fun Application.configureRouting() {
             call.respondText("Status: OK")
         }
         authRoutes(client)
-        mms(client)
-        psAPI()
+        authenticate("auth-bearer") {
+            mms(client)
+            psAPI()
+        }
     }
 
     environment.monitor.subscribe(ApplicationStopped) {

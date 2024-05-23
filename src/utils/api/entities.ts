@@ -27,10 +27,7 @@ export const getEntity = async (
   access_token: string,
   entity_id: number
 ): Promise<Response> => {
-  const params = new URLSearchParams();
-  if (entity_id) params.append("entity_id", entity_id.toString());
-
-  const url = `${API_ENDPOINTS.entity}?${params.toString()}`;
+  const url = `${API_ENDPOINTS.entities}/${entity_id}`;
 
   const response = await fetch(url, {
     method: "GET",
@@ -47,7 +44,7 @@ export const createEntity = async (
   access_token: string,
   entity_name: string
 ): Promise<Response> => {
-  const url = `${API_ENDPOINTS.entity}`;
+  const url = `${API_ENDPOINTS.entities}`;
 
   const body = JSON.stringify({
     name: entity_name,
