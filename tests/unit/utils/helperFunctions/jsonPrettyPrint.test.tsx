@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react";
-import { jsonPrettyPrint } from "src/utils/helperFunctions/jsonPrettyPrint";
+import { jsonPrettyPrint } from "src/utils/helperFunctions/json";
 
 describe("jsonPrettyPrint Function", () => {
   it("correctly formats and renders JSON data", () => {
