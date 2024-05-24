@@ -1,5 +1,5 @@
-i mport { ReportCounts } from "src/utils/api/reportCounts";
-r
+import { ReportCounts } from "src/utils/api/reportCounts";
+
 import mockSubmissions from "src/mocks/data/fileSubmissions";
 import { FileSubmissions, FileSubmission } from "src/utils/api/fileSubmissions";
 

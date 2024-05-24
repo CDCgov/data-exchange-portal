@@ -68,8 +68,8 @@ const generateReport = (
     action: action,
     schema_name: "0.0.1",
     version: "version 1",
-    data_stream_id: submission.data_stream_id,
-    data_stream_route: submission.data_stream_route,
+    data_stream_id: submission.metadata?.data_stream_id,
+    data_stream_route: submission.metadata?.data_stream_route,
     jurisdiction: faker.location.state({ abbreviated: true }),
     transport_id: submission.upload_id,
     parent_id: faker.string.uuid(),
@@ -97,7 +97,7 @@ const getReports = (
 const generateSubmissionDetails = (
   submission: FileSubmission
 ): SubmissionDetails => {
-  const route = submission.data_stream_route;
+  const route = submission.metadata?.data_stream_route;
   const stage = route == "hl7" ? "dex-hl7" : "dex-upload";
   const action = stage == "dex-hl7" ? "validation" : "metadata-validation";
 
@@ -108,8 +108,8 @@ const generateSubmissionDetails = (
     file_name: submission.filename,
     transport_id: submission.upload_id,
     timestamp: submission.timestamp,
-    data_stream_id: submission.data_stream_id,
-    data_stream_route: submission.data_stream_route,
+    data_stream_id: submission.metadata?.data_stream_id,
+    data_stream_route: submission.metadata?.data_stream_route,
     reports: getReports(submission, stage, action),
   };
   return details;

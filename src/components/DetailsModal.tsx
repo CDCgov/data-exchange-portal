@@ -48,8 +48,8 @@ function DetailsModal({
     file_name: submission.filename,
     transport_id: submission.upload_id,
     timestamp: submission.timestamp,
-    data_stream_id: submission.data_stream_id,
-    data_stream_route: submission.data_stream_route,
+    data_stream_id: submission.metadata?.data_stream_id,
+    data_stream_route: submission.metadata?.data_stream_route,
     reports: [],
   });
 

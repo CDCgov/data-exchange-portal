@@ -24,8 +24,10 @@ const generateFileSubmission = (
     filename: faker.system.commonFileName(route),
     status: faker.helpers.arrayElement(weightedStatuses),
     timestamp: faker.date.recent({ days: 40 }).toISOString(),
-    data_stream_id: dataStream,
-    data_stream_route: route,
+    metadata: {
+      data_stream_id: dataStream,
+      data_stream_route: route,
+    },
   };
   return submission;
 };
