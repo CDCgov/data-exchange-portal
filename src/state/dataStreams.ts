@@ -1,7 +1,7 @@
 import { atom } from "recoil";
-import { DataStream } from "src/utils/api/dataStreams";
+import { DataStreamWithRoutes } from "src/utils/api/dataStreams";
 
-export const dataStreamsAtom = atom<DataStream[]>({
+export const dataStreamsAtom = atom<DataStreamWithRoutes[]>({
   key: "dataStreams",
   default: [],
 });

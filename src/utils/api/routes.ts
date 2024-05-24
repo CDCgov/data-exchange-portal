@@ -6,7 +6,7 @@ export interface CreateRouteBody {
 }
 
 export interface Route {
-  id: number;
+  id?: number;
   dataStreamID: number;
   name: string;
 }

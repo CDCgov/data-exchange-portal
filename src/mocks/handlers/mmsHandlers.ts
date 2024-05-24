@@ -174,7 +174,7 @@ export const mmsHandlers = [
       const entityIdStr = Array.isArray(entity_id) ? entity_id[0] : entity_id;
       const entityIdNumber = parseInt(entityIdStr, 10);
 
-      return HttpResponse.json({ id: 1, entityId: entityIdNumber, name });
+      return HttpResponse.json({ id: 1, entityID: entityIdNumber, name });
     }
   ),
 
