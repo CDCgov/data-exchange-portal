@@ -5,9 +5,9 @@ export interface CreateProgramBody {
 }
 
 export interface Program {
-  id: number | string;
+  id: number;
+  entityID?: number;
   name: string;
-  entityId?: number | string;
 }
 
 export const getPrograms = async (

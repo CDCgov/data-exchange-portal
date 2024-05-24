@@ -47,12 +47,13 @@ export const mmsHandlers = [
   }),
   http.get(`${API_ENDPOINTS.entities}/:entity_id`, ({ params }) => {
     const { entity_id } = params;
-    const entityIdStr = Array.isArray(entity_id) ? entity_id[0] : entity_id;
-    const entityIdNumber = parseInt(entityIdStr, 10);
 
-    if (!entity_id) {
+    if (!entity_id || entity_id == "NaN") {
       return new HttpResponse(null, { status: 400 });
     }
+
+    const entityIdStr = Array.isArray(entity_id) ? entity_id[0] : entity_id;
+    const entityIdNumber = parseInt(entityIdStr, 10);
 
     const entity = mockEntities.find((el: Entity) => el.id == entityIdNumber);
     return HttpResponse.json(entity);
@@ -117,7 +118,11 @@ export const mmsHandlers = [
     if (!entity_id || entity_id == "NaN") {
       return new HttpResponse(null, { status: 400 });
     }
-    const programs = entity_id == "1" ? mockPrograms1 : mockPrograms2;
+
+    const entityIdStr = Array.isArray(entity_id) ? entity_id[0] : entity_id;
+    const entityIdNumber = parseInt(entityIdStr, 10);
+
+    const programs = entityIdNumber == 1 ? mockPrograms1 : mockPrograms2;
     return HttpResponse.json(programs);
   }),
   http.get(
@@ -133,8 +138,16 @@ export const mmsHandlers = [
       ) {
         return new HttpResponse(null, { status: 400 });
       }
-      const programs = entity_id == "1" ? mockPrograms1 : mockPrograms2;
-      const program = programs.find((el: Program) => el.id == program_id);
+
+      const entityIdStr = Array.isArray(entity_id) ? entity_id[0] : entity_id;
+      const entityIdNumber = parseInt(entityIdStr, 10);
+      const programIdStr = Array.isArray(program_id)
+        ? program_id[0]
+        : program_id;
+      const programIdNumber = parseInt(programIdStr, 10);
+
+      const programs = entityIdNumber == 1 ? mockPrograms1 : mockPrograms2;
+      const program = programs.find((el: Program) => el.id == programIdNumber);
       return HttpResponse.json(program);
     }
   ),
@@ -147,7 +160,11 @@ export const mmsHandlers = [
       if (!name || !entity_id || entity_id == "NaN") {
         return new HttpResponse(null, { status: 400 });
       }
-      return HttpResponse.json({ id: 1, entityId: entity_id, name });
+
+      const entityIdStr = Array.isArray(entity_id) ? entity_id[0] : entity_id;
+      const entityIdNumber = parseInt(entityIdStr, 10);
+
+      return HttpResponse.json({ id: 1, entityId: entityIdNumber, name });
     }
   ),
 
