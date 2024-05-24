@@ -109,7 +109,7 @@ export const mmsHandlers = [
       const { dataStream, route } = params;
       const { config } = (await request.json()) as CreateManifestBody;
 
-      if (!dataStream || !dataStream || !config) {
+      if (!dataStream || !route || !config) {
         return new HttpResponse(null, { status: 400 });
       }
 
