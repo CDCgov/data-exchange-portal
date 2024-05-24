@@ -11,8 +11,6 @@ const API_ENDPOINTS = {
   entities: `${API_URL}/${MMS_PREFIX}/entities`,
   manifest: `${API_URL}/${MMS_PREFIX}/manifest`,
   manifests: `${API_URL}/${MMS_PREFIX}/manifests`,
-  program: `${API_URL}/${MMS_PREFIX}/program`,
-  programs: `${API_URL}/${MMS_PREFIX}/programs`,
   route: `${API_URL}/${MMS_PREFIX}/route`,
   routes: `${API_URL}/${MMS_PREFIX}/routes`,
   // ps api routes

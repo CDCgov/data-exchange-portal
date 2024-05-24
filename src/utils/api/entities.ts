@@ -25,7 +25,7 @@ export const getEntities = async (access_token: string): Promise<Response> => {
 
 export const getEntity = async (
   access_token: string,
-  entity_id: number
+  entity_id: number | string
 ): Promise<Response> => {
   const url = `${API_ENDPOINTS.entities}/${entity_id}`;
 
