@@ -10,7 +10,7 @@ import { CreateRouteBody, Route } from "src/utils/api/routes";
 import mockDataStreams from "src/mocks/data/dataStreams";
 import mockEntities from "src/mocks/data/entities";
 import mockManifests from "src/mocks/data/manifests";
-import mockPrograms from "src/mocks/data/programs";
+import { mockPrograms1, mockPrograms2 } from "src/mocks/data/programs";
 import mockRoutes from "src/mocks/data/routes";
 
 export const mmsHandlers = [
@@ -112,13 +112,10 @@ export const mmsHandlers = [
   http.get(`${API_ENDPOINTS.entities}/:entity_id/programs`, ({ params }) => {
     const { entity_id } = params;
 
-    if (!entity_id) {
+    if (!entity_id || entity_id == "NaN") {
       return new HttpResponse(null, { status: 400 });
     }
-
-    const programs = mockPrograms.filter(
-      (el: Program) => el.entityId == entity_id
-    );
+    const programs = entity_id == "1" ? mockPrograms1 : mockPrograms2;
     return HttpResponse.json(programs);
   }),
   http.get(
@@ -126,13 +123,16 @@ export const mmsHandlers = [
     ({ params }) => {
       const { entity_id, program_id } = params;
 
-      if (!entity_id || !program_id) {
+      if (
+        !entity_id ||
+        !program_id ||
+        entity_id == "NaN" ||
+        entity_id == "NaN"
+      ) {
         return new HttpResponse(null, { status: 400 });
       }
-
-      const program = mockPrograms.find(
-        (el: Program) => el.id == program_id && el.entityId == entity_id
-      );
+      const programs = entity_id == "1" ? mockPrograms1 : mockPrograms2;
+      const program = programs.find((el: Program) => el.id == program_id);
       return HttpResponse.json(program);
     }
   ),
@@ -142,7 +142,7 @@ export const mmsHandlers = [
       const { entity_id } = params;
       const { name } = (await request.json()) as CreateProgramBody;
 
-      if (!name || !entity_id) {
+      if (!name || !entity_id || entity_id == "NaN") {
         return new HttpResponse(null, { status: 400 });
       }
       return HttpResponse.json({ id: 1, entityId: entity_id, name });

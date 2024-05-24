@@ -1,6 +1,6 @@
 import { Program } from "src/utils/api/programs";
 
-const mockPrograms: Program[] = [
+export const mockPrograms1: Program[] = [
   {
     id: 1,
     entityId: "1",
@@ -11,6 +11,9 @@ const mockPrograms: Program[] = [
     entityId: "1",
     name: "program_2",
   },
+];
+
+export const mockPrograms2: Program[] = [
   {
     id: 3,
     entityId: "2",
@@ -21,6 +24,9 @@ const mockPrograms: Program[] = [
     entityId: "2",
     name: "program_4",
   },
+  {
+    id: 4,
+    entityId: "2",
+    name: "program_5",
+  },
 ];
-
-export default mockPrograms;
