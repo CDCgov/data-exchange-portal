@@ -5,7 +5,7 @@ export interface CreateEntityBody {
 }
 
 export interface Entity {
-  id: number | string;
+  id: number;
   name: string;
 }
 

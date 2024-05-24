@@ -47,12 +47,14 @@ export const mmsHandlers = [
   }),
   http.get(`${API_ENDPOINTS.entities}/:entity_id`, ({ params }) => {
     const { entity_id } = params;
+    const entityIdStr = Array.isArray(entity_id) ? entity_id[0] : entity_id;
+    const entityIdNumber = parseInt(entityIdStr, 10);
 
     if (!entity_id) {
       return new HttpResponse(null, { status: 400 });
     }
 
-    const entity = mockEntities.find((el: Entity) => el.id == entity_id);
+    const entity = mockEntities.find((el: Entity) => el.id == entityIdNumber);
     return HttpResponse.json(entity);
   }),
   http.post(API_ENDPOINTS.entities, async ({ request }) => {
