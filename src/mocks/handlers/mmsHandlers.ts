@@ -79,47 +79,56 @@ export const mmsHandlers = [
   }),
 
   // --> Manifests
-  http.get(API_ENDPOINTS.manifests, ({ request }) => {
-    const url = new URL(request.url);
-    const datastreamId = url.searchParams.get("datastream_id");
-    const routeId = url.searchParams.get("route_id");
+  http.get(
+    `${API_ENDPOINTS.dataStreams}/:dataStream/routes/:route/manifests`,
+    ({ params }) => {
+      const { dataStream, route } = params;
 
-    if (!datastreamId || !routeId) {
-      return new HttpResponse(null, { status: 400 });
+      if (!dataStream || !route) {
+        return new HttpResponse(null, { status: 400 });
+      }
+
+      const manifestDataStream = mockDataStreams.find(
+        (d: DataStream) => d.name == dataStream
+      );
+      if (!manifestDataStream) return HttpResponse.json([]);
+
+      const routes = manifestDataStream.id == 1 ? mockRoutes1 : mockRoutes2;
+      const manifestRoute = routes.find((r: Route) => r.name == route);
+      if (!manifestRoute) return HttpResponse.json([]);
+
+      const manifests = mockManifests.filter(
+        (el: Manifest) => el.dataStreamRouteID == manifestRoute.id
+      );
+      return HttpResponse.json(manifests);
     }
+  ),
+  http.post(
+    `${API_ENDPOINTS.dataStreams}/:dataStream/routes/:route/manifests`,
+    async ({ request, params }) => {
+      const { dataStream, route } = params;
+      const { config } = (await request.json()) as CreateManifestBody;
 
-    const manifests = mockManifests.filter(
-      (el: Manifest) => el.datastreamId == datastreamId && el.routeId == routeId
-    );
-    return HttpResponse.json(manifests);
-  }),
-  http.get(API_ENDPOINTS.manifest, ({ request }) => {
-    const url = new URL(request.url);
-    const datastreamId = url.searchParams.get("datastream_id");
-    const routeId = url.searchParams.get("route_id");
-    const manifestId = url.searchParams.get("manifest_id");
+      if (!dataStream || !dataStream || !config) {
+        return new HttpResponse(null, { status: 400 });
+      }
 
-    if (!datastreamId || !routeId || !manifestId) {
-      return new HttpResponse(null, { status: 400 });
+      const manifestDataStream = mockDataStreams.find(
+        (d: DataStream) => d.name == dataStream
+      );
+      if (!manifestDataStream) return new HttpResponse(null, { status: 400 });
+
+      const routes = manifestDataStream.id == 1 ? mockRoutes1 : mockRoutes2;
+      const manifestRoute = routes.find((r: Route) => r.name == route);
+      if (!manifestRoute) return new HttpResponse(null, { status: 400 });
+
+      return HttpResponse.json({
+        id: 1,
+        dataStreamRouteID: manifestRoute.id,
+        config,
+      });
     }
-
-    const route = mockManifests.find(
-      (el: Manifest) =>
-        el.id == routeId &&
-        el.datastreamId == datastreamId &&
-        el.id == manifestId
-    );
-    return HttpResponse.json(route);
-  }),
-  http.post(API_ENDPOINTS.manifest, async ({ request }) => {
-    const { datastreamId, routeId, manifestJson } =
-      (await request.json()) as CreateManifestBody;
-
-    if (!datastreamId || !routeId || !manifestJson) {
-      return new HttpResponse(null, { status: 400 });
-    }
-    return HttpResponse.json({ id: 1, datastreamId, routeId, manifestJson });
-  }),
+  ),
 
   // --> Programs
   http.get(`${API_ENDPOINTS.entities}/:entity_id/programs`, ({ params }) => {

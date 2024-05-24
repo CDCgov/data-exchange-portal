@@ -54,7 +54,6 @@ export const createRoute = async (
   const url = `${API_ENDPOINTS.dataStreams}/${datastream_id}/routes`;
 
   const body = JSON.stringify({
-    datastreamId: datastream_id,
     name: route_name,
   });
 
