@@ -6,13 +6,11 @@ const PS_API_PREFIX = "ps-api";
 
 const API_ENDPOINTS = {
   // mms routes
-  dataStream: `${API_URL}/${MMS_PREFIX}/dataStream`,
+  dataStreamsAndRoutes: `${API_URL}/mms-custom/data-streams-plus-routes`,
   dataStreams: `${API_URL}/${MMS_PREFIX}/dataStreams`,
   entities: `${API_URL}/${MMS_PREFIX}/entities`,
   manifest: `${API_URL}/${MMS_PREFIX}/manifest`,
   manifests: `${API_URL}/${MMS_PREFIX}/manifests`,
-  route: `${API_URL}/${MMS_PREFIX}/route`,
-  routes: `${API_URL}/${MMS_PREFIX}/routes`,
   // ps api routes
   fileSubmissions: `${API_URL}/${PS_API_PREFIX}/file-submissions`,
   reportCounts: `${API_URL}/${PS_API_PREFIX}/report-counts`,
