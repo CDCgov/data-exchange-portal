@@ -14,7 +14,8 @@ import {
 import { format, parseISO } from "date-fns";
 
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
-import getStatusDisplayValuesById, {
+import {
+  getStatusDisplayValuesByName,
   StatusDisplayValues,
 } from "src/utils/helperFunctions/statusDisplayValues";
 import { jsonPrettyPrint, downloadJson } from "src/utils/helperFunctions/json";
@@ -36,7 +37,7 @@ function DetailsModal({
   isModalOpen,
   handleModalClose,
 }: PropTypes) {
-  const displayValues: StatusDisplayValues = getStatusDisplayValuesById(
+  const displayValues: StatusDisplayValues = getStatusDisplayValuesByName(
     submission.status
   );
   const auth = useAuth();

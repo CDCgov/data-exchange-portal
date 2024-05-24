@@ -4,7 +4,7 @@ import { Pill } from "@us-gov-cdc/cdc-react";
 
 import { ReportCounts } from "src/utils/api/reportCounts";
 
-import getStatusDisplayValuesById from "src/utils/helperFunctions/statusDisplayValues";
+import { getStatusDisplayValuesById } from "src/utils/helperFunctions/statusDisplayValues";
 
 interface StatusBoxData {
   id: string;

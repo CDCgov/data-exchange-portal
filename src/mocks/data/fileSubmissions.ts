@@ -6,13 +6,13 @@ import {
 } from "src/utils/api/fileSubmissions";
 
 const weightedStatuses = [
-  "completed",
-  "completed",
-  "completed",
-  "completed",
-  "failed",
-  "failed",
-  "processing",
+  "UploadComplete",
+  "UploadComplete",
+  "UploadComplete",
+  "UploadComplete",
+  "FailedMetadata",
+  "FailedMetadata",
+  "Uploading",
 ];
 
 const generateFileSubmission = (

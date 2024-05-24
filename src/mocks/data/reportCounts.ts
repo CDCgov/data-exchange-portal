@@ -1,30 +1,31 @@
-import { ReportCounts } from "src/utils/api/reportCounts";
+i mport { ReportCounts } from "src/utils/api/reportCounts";
+r
 import mockSubmissions from "src/mocks/data/fileSubmissions";
 import { FileSubmissions, FileSubmission } from "src/utils/api/fileSubmissions";
 
 export const generateCounts = (submissions: FileSubmissions): ReportCounts => {
   const total = submissions.summary.total_items;
-  const completed = submissions.items.filter(
-    (el: FileSubmission) => el.status == "completed"
+  const completed = submissions.items.filter((el: FileSubmission) =>
+    el.status.toLowerCase().includes("complete")
   );
-  const failed = submissions.items.filter(
-    (el: FileSubmission) => el.status == "failed"
+  const failed = submissions.items.filter((el: FileSubmission) =>
+    el.status.toLowerCase().includes("failed")
   );
-  const processing = submissions.items.filter(
-    (el: FileSubmission) => el.status == "processing"
+  const processing = submissions.items.filter((el: FileSubmission) =>
+    el.status.toLowerCase().includes("uploading")
   );
 
   return {
     total_counts: total,
     status_counts: {
-      completed: {
+      uploaded: {
         counts: completed.length,
       },
       failed: {
         counts: failed.length,
         reasons: {},
       },
-      processing: {
+      uploading: {
         counts: processing.length,
       },
     },
