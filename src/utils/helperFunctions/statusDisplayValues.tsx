@@ -40,7 +40,29 @@ const computedStatusValues: StatusDisplayValuesMap = {
 };
 
 export function getStatusDisplayValuesById(id: string): StatusDisplayValues {
-  return computedStatusValues[id] || defaultComputedValue;
+  switch (id) {
+    case "uploading":
+      return computedStatusValues.processing;
+    case "failed":
+      return computedStatusValues.failed;
+    case "uploaded":
+      return computedStatusValues.completed;
+    default:
+      return defaultComputedValue;
+  }
 }
 
-export default getStatusDisplayValuesById;
+export function getStatusDisplayValuesByName(
+  status: string
+): StatusDisplayValues {
+  switch (status) {
+    case "Uploading":
+      return computedStatusValues.processing;
+    case "FailedMetadata":
+      return computedStatusValues.failed;
+    case "UploadComplete":
+      return computedStatusValues.completed;
+    default:
+      return defaultComputedValue;
+  }
+}

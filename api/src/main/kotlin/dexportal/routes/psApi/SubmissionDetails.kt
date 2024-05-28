@@ -19,7 +19,7 @@ fun Route.submissionDetails(client: HttpClient) {
             val authToken = call.request.headers["Authorization"]
 
             try {
-                val response: HttpResponse = client.get("$psApiUrl/api/status/$uploadId") {
+                val response: HttpResponse = client.get("$psApiUrl/api/report/uploadId/$uploadId") {
                     header("Authorization", authToken)
                 }
                 val responseBody: String = response.bodyAsText()

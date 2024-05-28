@@ -1,5 +1,4 @@
 export enum Timeframe {
-  All = "All",
   Last30Days = "Last 30 Days",
   Last15Days = "Last 15 Days",
   Last7Days = "Last 7 Days",
@@ -7,7 +6,6 @@ export enum Timeframe {
 }
 
 const timeframes: Timeframe[] = [
-  Timeframe.All,
   Timeframe.Last30Days,
   Timeframe.Last15Days,
   Timeframe.Last7Days,

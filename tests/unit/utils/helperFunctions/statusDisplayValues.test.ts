@@ -1,8 +1,8 @@
-import getStatusDisplayValuesById from "src/utils/helperFunctions/statusDisplayValues";
+import { getStatusDisplayValuesById } from "src/utils/helperFunctions/statusDisplayValues";
 
 describe("Status Display Values", () => {
   it("should return a status display value object for valid status id", async () => {
-    const validId = "completed";
+    const validId = "uploaded";
     const statusDisplay = getStatusDisplayValuesById(validId);
     expect(statusDisplay.label).toStrictEqual("Completed");
     expect(statusDisplay.color).toStrictEqual("#84BC49");

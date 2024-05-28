@@ -1,19 +1,20 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import API_ENDPOINTS from "src/config/api";
 
 export interface FileSubmissionsSummary {
-  number_of_pages: number;
   page_number: number;
+  number_of_pages: number;
   page_size: number;
   total_items: number;
 }
 
 export interface FileSubmission {
-  upload_id: string;
-  filename: string;
   status: string;
+  filename: string;
+  upload_id: string;
   timestamp: string;
-  data_stream_id: string;
-  data_stream_route: string;
+  metadata?: any;
+  issues?: string[];
 }
 
 export interface FileSubmissions {
@@ -22,8 +23,8 @@ export interface FileSubmissions {
 }
 
 export const defaultSubmissionSummary: FileSubmissionsSummary = {
-  number_of_pages: 0,
   page_number: 1,
+  number_of_pages: 0,
   page_size: 10,
   total_items: 0,
 };
@@ -33,8 +34,7 @@ export const defaultSubmissionItem: FileSubmission = {
   filename: "",
   status: "",
   timestamp: "",
-  data_stream_id: "",
-  data_stream_route: "",
+  metadata: {},
 };
 
 export const getFileSubmissions = async (

@@ -27,7 +27,7 @@ import {
   defaultSubmissionSummary,
   getFileSubmissions,
 } from "src/utils/api/fileSubmissions";
-import getStatusDisplayValuesById from "src/utils/helperFunctions/statusDisplayValues";
+import { getStatusDisplayValuesByName } from "src/utils/helperFunctions/statusDisplayValues";
 
 import DetailsModal from "src/components/DetailsModal";
 import SearchOptions from "src/components/SearchOptions";
@@ -132,8 +132,10 @@ function Submissions() {
                   </TableDataCell>
                   <TableDataCell size="sm">
                     <Pill
-                      label={getStatusDisplayValuesById(item.status).label}
-                      color={getStatusDisplayValuesById(item.status).pillColor}
+                      label={getStatusDisplayValuesByName(item.status).label}
+                      color={
+                        getStatusDisplayValuesByName(item.status).pillColor
+                      }
                     />
                   </TableDataCell>
                   <TableDataCell size="md">
