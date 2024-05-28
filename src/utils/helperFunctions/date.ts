@@ -17,6 +17,6 @@ export const getPastDate = (daysBefore: Timeframe): string => {
     case Timeframe.LastDay:
       return dataToString(new Date(new Date().setDate(today.getDate() - 1)));
     default:
-      return dataToString(new Date("2021-01-01T05:00:00Z"));
+      return dataToString(new Date(new Date().setDate(today.getDate() - 1)));
   }
 };

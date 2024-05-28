@@ -9,9 +9,9 @@ interface CountsDetails {
 
 interface StatusCounts {
   [key: string]: CountsDetails;
-  completed: CountsDetails;
+  uploading: CountsDetails;
   failed: CountsDetails;
-  processing: CountsDetails;
+  uploaded: CountsDetails;
 }
 
 export interface ReportCounts {
@@ -22,9 +22,9 @@ export interface ReportCounts {
 export const defaultReportCounts: ReportCounts = {
   total_counts: 0,
   status_counts: {
-    completed: { counts: 0 },
+    uploading: { counts: 0 },
     failed: { counts: 0, reasons: {} },
-    processing: { counts: 0 },
+    uploaded: { counts: 0 },
   },
 };
 
@@ -33,7 +33,8 @@ const getReportCounts = async (
   data_stream_id: string,
   data_stream_route?: string,
   date_start?: string,
-  date_end?: string
+  date_end?: string,
+  days_interval?: number
 ): Promise<Response> => {
   const params = new URLSearchParams();
 
@@ -41,6 +42,7 @@ const getReportCounts = async (
   if (data_stream_route) params.append("data_stream_route", data_stream_route);
   if (date_start) params.append("date_start", date_start);
   if (date_end) params.append("date_end", date_end);
+  if (days_interval) params.append("days_interval", days_interval.toString());
 
   const url = `${API_ENDPOINTS.reportCounts}?${params.toString()}`;
 

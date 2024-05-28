@@ -48,7 +48,7 @@ function Dashboard() {
       }
     };
 
-    if (dataStreamId) fetchCall();
+    fetchCall();
   }, [auth, dataStreamId, dataRoute, timeframe]);
 
   return (

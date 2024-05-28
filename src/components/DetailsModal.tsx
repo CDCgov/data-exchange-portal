@@ -14,14 +14,13 @@ import {
 import { format, parseISO } from "date-fns";
 
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
-import getStatusDisplayValuesById, {
+import {
+  getStatusDisplayValuesByName,
   StatusDisplayValues,
 } from "src/utils/helperFunctions/statusDisplayValues";
 import { jsonPrettyPrint, downloadJson } from "src/utils/helperFunctions/json";
 import getSubmissionDetails, {
   SubmissionDetails,
-  Report,
-  ReportError,
 } from "src/utils/api/submissionDetails";
 import { FileSubmission } from "src/utils/api/fileSubmissions";
 
@@ -36,19 +35,14 @@ function DetailsModal({
   isModalOpen,
   handleModalClose,
 }: PropTypes) {
-  const displayValues: StatusDisplayValues = getStatusDisplayValuesById(
+  const displayValues: StatusDisplayValues = getStatusDisplayValuesByName(
     submission.status
   );
   const auth = useAuth();
   const [details, setDetails] = useState<SubmissionDetails>({
-    status: submission.status,
-    current_stage: "",
-    current_action: "",
-    file_name: submission.filename,
-    transport_id: submission.upload_id,
-    timestamp: submission.timestamp,
-    data_stream_id: submission.data_stream_id,
-    data_stream_route: submission.data_stream_route,
+    upload_id: submission.upload_id,
+    data_stream_id: submission.metadata?.data_stream_id,
+    data_stream_route: submission.metadata?.data_stream_route,
     reports: [],
   });
 
@@ -79,21 +73,14 @@ function DetailsModal({
   }, [auth, submission, isModalOpen]);
 
   const getErrorMessages = (): string[] => {
-    if (!details.reports) return [];
+    if (!submission.issues?.length) return [];
 
-    const failedReports: Report[] = details.reports.filter(
-      (report: Report) => report.type == "failure"
-    );
-
-    const messages: string[] = failedReports.flatMap((report: Report) =>
-      report.errors.map((er: ReportError) => er.message)
-    );
-    return messages;
+    return submission.issues;
   };
 
   const getContent = () => {
-    if (submission.status == "failed") {
-      const messages = getErrorMessages();
+    const messages = getErrorMessages();
+    if (messages.length > 0) {
       return (
         <Alert heading="Failed" type="error">
           {messages.length} Error(s) were detected
@@ -108,7 +95,7 @@ function DetailsModal({
       );
     }
 
-    if (submission.status == "completed") {
+    if (submission.status.toLowerCase().includes("complete")) {
       return (
         <Alert heading="Complete" type="success">
           File submission is complete
@@ -116,15 +103,10 @@ function DetailsModal({
       );
     }
 
-    if (submission.status == "processing") {
+    if (submission.status.toLowerCase().includes("uploading")) {
       return (
         <Alert heading="Processing" type="info">
           File submission is processing
-          <p
-            key={details.reports[0].message}
-            className="border-1px radius-md border-primary-light margin-y-2 padding-105">
-            {details.reports[0].message}
-          </p>
         </Alert>
       );
     }
