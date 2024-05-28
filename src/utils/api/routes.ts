@@ -1,13 +1,13 @@
 import API_ENDPOINTS from "src/config/api";
 
 export interface CreateRouteBody {
-  datastreamId: number | string;
+  dataStreamID: number;
   name: string;
 }
 
 export interface Route {
-  id: number | string;
-  datastreamId: number | string;
+  id?: number;
+  dataStreamID: number;
   name: string;
 }
 
@@ -15,9 +15,7 @@ export const getRoutes = async (
   access_token: string,
   datastream_id: number
 ): Promise<Response> => {
-  const params = new URLSearchParams();
-  if (datastream_id) params.append("datastream_id", datastream_id.toString());
-  const url = `${API_ENDPOINTS.routes}?${params.toString()}`;
+  const url = `${API_ENDPOINTS.dataStreams}/${datastream_id}/routes`;
 
   const response = await fetch(url, {
     method: "GET",
@@ -35,10 +33,7 @@ export const getRoute = async (
   datastream_id: number,
   route_id: number
 ): Promise<Response> => {
-  const params = new URLSearchParams();
-  if (datastream_id) params.append("datastream_id", datastream_id.toString());
-  if (route_id) params.append("route_id", route_id.toString());
-  const url = `${API_ENDPOINTS.route}?${params.toString()}`;
+  const url = `${API_ENDPOINTS.dataStreams}/${datastream_id}/routes/${route_id}`;
 
   const response = await fetch(url, {
     method: "GET",
@@ -56,10 +51,9 @@ export const createRoute = async (
   datastream_id: number,
   route_name: string
 ): Promise<Response> => {
-  const url = `${API_ENDPOINTS.route}`;
+  const url = `${API_ENDPOINTS.dataStreams}/${datastream_id}/routes`;
 
   const body = JSON.stringify({
-    datastreamId: datastream_id,
     name: route_name,
   });
 

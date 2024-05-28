@@ -10,7 +10,11 @@ import dexLogo from "src/assets/dex_logo.svg";
 import { useSetRecoilState } from "recoil";
 import { dataRouteAtom, dataStreamIdAtom } from "src/state/searchParams";
 import { dataStreamsAtom } from "src/state/dataStreams";
-import { getDataStreams, DataStream } from "src/utils/api/dataStreams";
+import {
+  getDataStreamsAndRoutes,
+  DataStreamWithRoutes,
+} from "src/utils/api/dataStreams";
+import { Route } from "src/utils/api/routes";
 import { getDataRoutes } from "src/utils/helperFunctions/dataStreams";
 
 import {
@@ -36,20 +40,20 @@ function Shell() {
 
   useEffect(() => {
     const fetchCall = async () => {
-      const res = await getDataStreams(auth.user?.access_token || "");
+      const res = await getDataStreamsAndRoutes(auth.user?.access_token || "");
 
       try {
         const data = await res.json();
-        const streams = data as DataStream[];
+        const streams = data as DataStreamWithRoutes[];
         setDataStreams(streams);
 
         const streamId = searchParams.get("data_stream_id");
         const route = searchParams.get("data_route");
         const userHasDataStream = streams.find(
-          (stream: DataStream) => stream.name == streamId
+          (stream: DataStreamWithRoutes) => stream.name == streamId
         );
         const dataStreamHasRoute = userHasDataStream?.routes.find(
-          (r: string) => r == route
+          (r: Route) => r.name == route
         );
 
         if (!userHasDataStream || !dataStreamHasRoute) {

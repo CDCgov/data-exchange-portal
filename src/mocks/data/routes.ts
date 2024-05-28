@@ -1,26 +1,22 @@
 import { Route } from "src/utils/api/routes";
 
-const mockRoutes: Route[] = [
+export const mockRoutes1: Route[] = [
   {
     id: 1,
-    datastreamId: 1,
-    name: "route_1",
+    dataStreamID: 1,
+    name: "csv",
   },
   {
     id: 2,
-    datastreamId: 1,
-    name: "route_2",
-  },
-  {
-    id: 3,
-    datastreamId: 2,
-    name: "route_3",
-  },
-  {
-    id: 4,
-    datastreamId: 2,
-    name: "route_4",
+    dataStreamID: 1,
+    name: "hl7",
   },
 ];
 
-export default mockRoutes;
+export const mockRoutes2: Route[] = [
+  {
+    id: 3,
+    dataStreamID: 2,
+    name: "hl7",
+  },
+];

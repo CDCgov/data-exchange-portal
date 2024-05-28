@@ -36,7 +36,6 @@ function MetadataManagement() {
   const [datastreamId, setDatastreamId] = useState("");
 
   const [routeName, setRouteName] = useState("");
-  const [routeId, setRouteId] = useState("");
 
   const [manifestJson, setManifestJson] = useState("");
 
@@ -136,14 +135,12 @@ function MetadataManagement() {
 
   // Manifests
   const handleGetManifest = async () => {
-    const res = await getManifests(
-      authToken,
-      parseInt(datastreamId),
-      parseInt(routeId)
-    );
+    const res = await getManifests(authToken, datastreamName, routeName);
 
     if (res.status != 200) {
-      setApiResponse("Bad request: datastream id and route id are required");
+      setApiResponse(
+        "Bad request: datastream name and route name are required"
+      );
       return;
     }
 
@@ -151,16 +148,17 @@ function MetadataManagement() {
     setApiResponse(json);
   };
   const handleCreateManifest = async () => {
+    const manifestObject = JSON.parse(manifestJson);
     const res = await createManifest(
       authToken,
-      parseInt(datastreamId),
-      parseInt(routeId),
-      manifestJson
+      datastreamName,
+      routeName,
+      manifestObject
     );
 
     if (res.status != 200) {
       setApiResponse(
-        "Bad request: datastream id, route id, and manifestJson are required"
+        "Bad request: datastream name, route name, and config are required"
       );
       return;
     }
@@ -303,36 +301,34 @@ function MetadataManagement() {
       case formTypes[4]:
         return (
           <div className="margin-bottom-8">
-            <label className="usa-label" htmlFor="datastream_id">
-              Datastream ID
+            <label className="usa-label" htmlFor="datastream_name">
+              Datastream Name
             </label>
             <input
               className="usa-input"
-              value={datastreamId}
-              type="number"
-              id="datastream_id"
-              name="datastream_id"
-              onChange={(e) => setDatastreamId(e.target.value)}
+              value={datastreamName}
+              id="datastream_name"
+              name="datastream_name"
+              onChange={(e) => setDatastreamName(e.target.value)}
             />
-            <label className="usa-label" htmlFor="route_id">
-              Route ID
+            <label className="usa-label" htmlFor="route_name">
+              Route Name
             </label>
             <input
               className="usa-input"
-              value={routeId}
-              type="number"
-              id="route_id"
-              name="route_id"
-              onChange={(e) => setRouteId(e.target.value)}
+              value={routeName}
+              id="route_name"
+              name="route_name"
+              onChange={(e) => setRouteName(e.target.value)}
             />
-            <label className="usa-label" htmlFor="manifest_json">
-              Manifest JSON
+            <label className="usa-label" htmlFor="config_json">
+              Config JSON
             </label>
             <textarea
               className="usa-textarea"
               value={manifestJson}
-              id="manifest_json"
-              name="manifest_json"
+              id="config_json"
+              name="config_json"
               onChange={(e) => setManifestJson(e.target.value)}
             />
             <div className="margin-top-2 display-flex flex-justify">
