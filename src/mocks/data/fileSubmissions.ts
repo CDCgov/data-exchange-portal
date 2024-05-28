@@ -15,19 +15,35 @@ const weightedStatuses = [
   "Uploading",
 ];
 
+const getIssues = (status: string, route: string): string[] => {
+  if (status.toLowerCase().includes("failed")) {
+    console.log(status);
+    return route == "csv"
+      ? [
+          "Missing required metadata field, 'meta_field1'.",
+          "Metadata field, 'meta_field2' is set to 'value3' and does not contain one of the allowed values: [ 'value1', value2' ]",
+        ]
+      : ["Hl7 Validation Error -- See validation report"];
+  }
+
+  return [];
+};
+
 const generateFileSubmission = (
   dataStream: string,
   route: string
 ): FileSubmission => {
+  const status = faker.helpers.arrayElement(weightedStatuses);
   const submission: FileSubmission = {
     upload_id: faker.string.uuid(),
     filename: faker.system.commonFileName(route),
-    status: faker.helpers.arrayElement(weightedStatuses),
+    status: status,
     timestamp: faker.date.recent({ days: 40 }).toISOString(),
     metadata: {
       data_stream_id: dataStream,
       data_stream_route: route,
     },
+    issues: getIssues(status, route),
   };
   return submission;
 };
