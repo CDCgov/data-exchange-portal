@@ -6,7 +6,7 @@ on:
     branches:
       - main
     paths:
-      - dex-portal-api/**
+      - api/**
 
 jobs:
   remote-trigger:
@@ -14,4 +14,3 @@ jobs:
     with:
       WORKFLOW: app-service-dev.yml
     secrets: inherit
-
