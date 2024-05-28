@@ -13,5 +13,5 @@ export const dataRouteAtom = atom<string>({
 
 export const timeFrameAtom = atom<Timeframe>({
   key: "timeframe",
-  default: Timeframe.All,
+  default: Timeframe.Last7Days,
 });
