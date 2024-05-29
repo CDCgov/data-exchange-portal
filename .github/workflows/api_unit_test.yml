@@ -23,7 +23,7 @@ jobs:
         with:
           distribution: "microsoft"
           java-version: 17
-      - name: Set up environment variables
+      - name: Unit Test
         env:
           SAMS_CLIENT_ID: ${{ secrets.SAMS_CLIENT_ID }}
           SAMS_CLIENT_SECRET: ${{ secrets.SAMS_CLIENT_SECRET }}
@@ -31,6 +31,4 @@ jobs:
           SAMS_REDIRECT_URL: ${{ secrets.SAMS_REDIRECT_URL }}
           MMS_API_URL: ${{ secrets.MMS_API_URL }}
           PS_API_URL: ${{ secrets.PS_API_URL }}
-        run: echo "Environment variables are set"
-      - name: Unit Test
         run: ./gradlew test
