@@ -44,14 +44,21 @@ function UserAuthGroup() {
   return (
     <>
       <h2 className="font-sans-lg">User ↔ AuthGroup Assignment</h2>
-      <label className="usa-label" htmlFor="options">
-        Select User (Identity)
-      </label>
-      <select className="usa-select" name="options" id="options">
-        <option value="value1">Option A</option>
-        <option value="value2">Option B</option>
-        <option value="value3">Option C</option>
-      </select>
+      <div className="grid-row">
+        <div className="grid-col flex-1 padding-right-2">
+          <label className="usa-label" htmlFor="options">
+            Select User (Identity)
+          </label>
+          <select className="usa-select" name="options" id="options">
+            <option value="value1">Option A</option>
+            <option value="value2">Option B</option>
+            <option value="value3">Option C</option>
+          </select>
+        </div>
+        <div className="grid-col flex-1"></div>
+        <div className="grid-col flex-1"></div>
+        <div className="grid-col flex-1"></div>
+      </div>
       <div className="grid-row">
         <div className="grid-col flex-1 padding-right-2">
           <label className="usa-label" htmlFor="options">
@@ -64,7 +71,7 @@ function UserAuthGroup() {
           </select>
         </div>
 
-        <div className="grid-col flex-1 padding-right-2">
+        <div className="grid-col flex-1">
           <label className="usa-label" htmlFor="options">
             Select AuthGroup
           </label>
@@ -74,6 +81,8 @@ function UserAuthGroup() {
             <option value="value3">Option C</option>
           </select>
         </div>
+        <div className="grid-col flex-1"></div>
+        <div className="grid-col flex-1"></div>
       </div>
       <Button
         className="margin-top-4"
