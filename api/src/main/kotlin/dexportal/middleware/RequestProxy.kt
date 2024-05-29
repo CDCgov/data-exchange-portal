@@ -21,6 +21,12 @@ suspend fun PipelineContext<Unit, ApplicationCall>.requestProxy(
 
     val requestBody = call.receiveText()
 
+    // Log request details
+    call.application.log.info("Proxying request to: $externalApiUrl")
+    call.application.log.info("Query Parameters: $queryParams")
+    call.application.log.info("Headers: $headers")
+    call.application.log.info("Request Body: $requestBody")
+
     val response = client.request(externalApiUrl) {
         method = call.request.httpMethod
         url {
@@ -39,6 +45,10 @@ suspend fun PipelineContext<Unit, ApplicationCall>.requestProxy(
             setBody(requestBody)
         }
     }
+
+    // Log response details
+    call.application.log.info("Received response status: ${response.status}")
+    call.application.log.info("Received response body: ${response.bodyAsText()}")
 
     val status = response.status
     val responseBody: String = response.bodyAsText()
