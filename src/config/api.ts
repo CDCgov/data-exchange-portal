@@ -9,6 +9,7 @@ const API_ENDPOINTS = {
   dataStreamsAndRoutes: `${API_URL}/mms-custom/datastreams-and-routes`,
   dataStreams: `${API_URL}/${MMS_PREFIX}/datastreams`,
   entities: `${API_URL}/${MMS_PREFIX}/entities`,
+  authGroups: `${API_URL}/${MMS_PREFIX}/tbd`, // TODO: get this once the namespace is final and merged to mms
   // ps api routes
   fileSubmissions: `${API_URL}/${PS_API_PREFIX}/file-submissions`,
   reportCounts: `${API_URL}/${PS_API_PREFIX}/report-counts`,

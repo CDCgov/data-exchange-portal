@@ -3,3 +3,7 @@
 #root {
   height: 100%;
 }
+
+.cdc-react .dropdown-items {
+  overflow: scroll;
+}
