@@ -23,7 +23,7 @@ import { mockRoutes1, mockRoutes2 } from "src/mocks/data/routes";
 
 export const mmsHandlers = [
   // --> Datastreams
-  http.get(API_ENDPOINTS.dataStreamsAndRoutes, () => {
+  http.get(API_ENDPOINTS.currentUserDatastreamRoutes, () => {
     return HttpResponse.json(mockDataStreamsWithRoutes);
   }),
   http.get(API_ENDPOINTS.dataStreams, () => {

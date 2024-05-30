@@ -13,14 +13,15 @@ export interface DataStream {
   name: string;
 }
 
-export interface DataStreamWithRoutes extends DataStream {
+export interface DataStreamWithRoutes {
+  datastream: DataStream;
   routes: Route[];
 }
 
 export const getDataStreamsAndRoutes = async (
   access_token: string
 ): Promise<Response> => {
-  const url = `${API_ENDPOINTS.dataStreamsAndRoutes}`;
+  const url = `${API_ENDPOINTS.currentUserDatastreamRoutes}`;
 
   const response = await fetch(url, {
     method: "GET",

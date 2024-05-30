@@ -6,7 +6,7 @@ const PS_API_PREFIX = "ps-api";
 
 const API_ENDPOINTS = {
   // mms routes
-  dataStreamsAndRoutes: `${API_URL}/mms-custom/datastreams-and-routes`,
+  currentUserDatastreamRoutes: `${API_URL}/${MMS_PREFIX}/current-user/datastreams-with-routes`,
   dataStreams: `${API_URL}/${MMS_PREFIX}/datastreams`,
   entities: `${API_URL}/${MMS_PREFIX}/entities`,
   identities: `${API_URL}/${MMS_PREFIX}/identities`, // TODO: get this once the namespace is final and merged to mms

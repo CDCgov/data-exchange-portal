@@ -17,7 +17,6 @@ const weightedStatuses = [
 
 const getIssues = (status: string, route: string): string[] => {
   if (status.toLowerCase().includes("failed")) {
-    console.log(status);
     return route == "csv"
       ? [
           "Missing required metadata field, 'meta_field1'.",
