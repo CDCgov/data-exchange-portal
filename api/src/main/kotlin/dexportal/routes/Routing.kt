@@ -1,5 +1,6 @@
 package dexportal.routes
 
+import dexportal.config.ConfigLoader
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -7,6 +8,8 @@ import dexportal.routes.psApi.*
 import dexportal.routes.mms.*
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.server.auth.*
 
 fun Application.configureRouting() {
@@ -22,7 +25,9 @@ fun Application.configureRouting() {
         get("/health") {
             val response: HttpResponse = client.get("$mmsUrl/health")
             val responseBody: String = response.bodyAsText()
-            call.respondText("MMS /health Response:", responseBody)
+            call.application.log.info("Health Check Response: $response")
+            call.application.log.info("Health Check ResponseBody: $responseBody")
+            call.respondText("MMS /health Response: $responseBody")
         }
         authRoutes(client)
         authenticate("auth-bearer") {
