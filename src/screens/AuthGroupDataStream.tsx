@@ -5,7 +5,10 @@ import { Button } from "@us-gov-cdc/cdc-react";
 
 import { getDataStreams } from "src/utils/api/dataStreams";
 import { getEntities } from "src/utils/api/entities";
-import { getAuthGroups } from "src/utils/api/authGroups";
+import {
+  getAuthGroups,
+  assignAuthGroupToDataStream,
+} from "src/utils/api/authGroups";
 import { getRoutes } from "src/utils/api/routes";
 
 function AuthGroupDataStream() {
@@ -31,6 +34,8 @@ function AuthGroupDataStream() {
 
   const [selectedRouteName, setSelectedRouteName] = useState("");
   const [selectedRouteId, setSelectedRouteId] = useState("");
+
+  const [responseMessage, setResponseMessage] = useState("");
 
   useEffect(() => {
     setAuthToken(auth.user?.access_token ?? "");
@@ -131,7 +136,7 @@ function AuthGroupDataStream() {
     );
   };
 
-  const handleLinkAuthGroupToDatastream = () => {
+  const handleLinkAuthGroupToDatastream = async () => {
     console.log("selectedEntityId:", selectedEntityId);
     console.log("selectedEntityName:", selectedEntityName);
     console.log("selectedAuthGroupId:", selectedAuthGroupId);
@@ -140,6 +145,14 @@ function AuthGroupDataStream() {
     console.log("selectedDatastreamName:", selectedDatastreamName);
     console.log("selectedRoutesId:", selectedRouteId);
     console.log("selectedRoutesName:", selectedRouteName);
+    const response = await assignAuthGroupToDataStream(
+      authToken,
+      +selectedAuthGroupId,
+      +selectedRouteId
+    );
+    console.log(response);
+    // Todo: replace this with the actual response
+    setResponseMessage(response.statusText);
   };
 
   return (
@@ -195,12 +208,14 @@ function AuthGroupDataStream() {
           </select>
         </div>
       </div>
-      <Button
-        className="margin-top-4"
-        ariaLabel="Link AuthGroup to DataStream"
-        onClick={handleLinkAuthGroupToDatastream}>
-        Submit
-      </Button>
+      <div className="display-flex flex-align-center margin-top-4">
+        <Button
+          ariaLabel="Link AuthGroup to DataStream"
+          onClick={handleLinkAuthGroupToDatastream}>
+          Submit
+        </Button>
+        <div className="padding-left-2 font-mono-md">{responseMessage}</div>
+      </div>
     </>
   );
 }

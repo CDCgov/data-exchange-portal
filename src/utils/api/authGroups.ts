@@ -4,6 +4,11 @@ export interface CreateAuthGroupBody {
   name: string;
 }
 
+export interface CreateDatastreamRouteGroupBody {
+  authgroupID: number;
+  datastreamRouteID: number;
+}
+
 export interface AuthGroup {
   id: number;
   name: string;
@@ -49,3 +54,51 @@ export const createAuthGroup = async (
 
   return response;
 };
+
+export const assignAuthGroupToDataStream = async (
+  access_token: string,
+  authgroup_id: number,
+  route_id: number
+): Promise<Response> => {
+  const url = `${API_ENDPOINTS.dataStreamRouteGroups}`;
+
+  const body = JSON.stringify({
+    authgroupID: authgroup_id,
+    datastreamRouteID: route_id,
+  });
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token,
+    },
+    body,
+  }).catch();
+
+  return response;
+};
+
+// export const assignUserToAuthGroup = async (
+//   access_token: string,
+//   identity_id: number,
+//   authgroup_id: number
+// ): Promise<Response> => {
+//   const url = `${API_ENDPOINTS.dataStreamRouteGroups}`;
+//
+//   const body = JSON.stringify({
+//     identityId: identity_id,
+//     authgroupID: authgroup_id,
+//   });
+//
+//   const response = await fetch(url, {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//       Authorization: "Bearer " + access_token,
+//     },
+//     body,
+//   }).catch();
+//
+//   return response;
+// };

@@ -1,5 +1,7 @@
 import AuthGroupDataStream from "./AuthGroupDataStream";
 import UserAuthGroup from "./UserAuthGroup";
+import IdentityLookUp from "./IdentityLookUp";
+
 function UserManagement() {
   return (
     <section className="main_content padding-x-2">
@@ -7,6 +9,8 @@ function UserManagement() {
       <AuthGroupDataStream />
       <hr className="margin-y-5" />
       <UserAuthGroup />
+      <hr className="margin-y-5" />
+      <IdentityLookUp />
     </section>
   );
 }
