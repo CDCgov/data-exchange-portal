@@ -1,12 +1,12 @@
 package dexportal.middleware
 
-import io.ktor.server.application.*
-import io.ktor.server.response.*
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
+import io.ktor.server.application.*
 import io.ktor.server.request.*
+import io.ktor.server.response.*
 import io.ktor.util.pipeline.*
 
 suspend fun PipelineContext<Unit, ApplicationCall>.requestProxy(
@@ -30,19 +30,19 @@ suspend fun PipelineContext<Unit, ApplicationCall>.requestProxy(
     val response = client.request(externalApiUrl) {
         method = call.request.httpMethod
         url {
-            queryParams.forEach { key, values ->
+            call.request.queryParameters.forEach { key, values ->
                 parameter(key, values)
             }
         }
         headers {
-            headers.forEach { key, values ->
+            call.request.headers.forEach { key, values ->
                 values.forEach { value ->
                     append(key, value)
                 }
             }
         }
         if (requestBody.isNotEmpty()) {
-            setBody(requestBody)
+           setBody(call.receiveText())
         }
     }
 
