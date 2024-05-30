@@ -50,14 +50,14 @@ function Shell() {
         const streamId = searchParams.get("data_stream_id");
         const route = searchParams.get("data_route");
         const userHasDataStream = streams.find(
-          (stream: DataStreamWithRoutes) => stream.name == streamId
+          (stream: DataStreamWithRoutes) => stream.datastream.name == streamId
         );
         const dataStreamHasRoute = userHasDataStream?.routes.find(
           (r: Route) => r.name == route
         );
 
         if (!userHasDataStream || !dataStreamHasRoute) {
-          const dataStreamId = streams[0].name;
+          const dataStreamId = streams[0].datastream.name;
           setDataStreamId(dataStreamId);
           const route = getDataRoutes(streams, dataStreamId)[0];
           setDataRoute(route);
