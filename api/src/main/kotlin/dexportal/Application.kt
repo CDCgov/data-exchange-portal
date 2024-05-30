@@ -8,7 +8,9 @@ import io.ktor.server.netty.*
 import io.ktor.server.plugins.cors.routing.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.serialization.kotlinx.json.*
+import io.ktor.server.plugins.callloging.*
 import io.ktor.server.auth.*
+import org.slf4j.event.Level
 
 fun main() {
     embeddedServer(Netty, port = 8080, host = "0.0.0.0", module = Application::module).start(wait = true)
@@ -35,6 +37,12 @@ fun Application.configureSerialization() {
     }
 }
 
+fun Application.configureLogging() {
+    install(CallLogging) {
+        level = Level.INFO
+    }
+}
+
 fun Application.configureCORS() {
     install(CORS) {
         anyHost()
@@ -51,6 +59,7 @@ fun Application.configureCORS() {
 fun Application.module() {
     configureAuthentication()
     configureSerialization()
+    configureLogging()
     configureCORS()
     configureHTTP()
     configureRouting()
