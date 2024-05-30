@@ -12,9 +12,17 @@ import io.ktor.server.auth.*
 fun Application.configureRouting() {
     val client = HttpClient(CIO)
 
+    val mmsUrl = ConfigLoader.getMmsApiEndpoint()
+
     routing {
         get("/") {
             call.respondText("Status: OK")
+        }
+        // Todo: Revisit this once we've debugged the 403 issue
+        get("/health") {
+            val response: HttpResponse = client.get("$mmsUrl/health")
+            val responseBody: String = response.bodyAsText()
+            call.respondText("MMS /health Response:", responseBody)
         }
         authRoutes(client)
         authenticate("auth-bearer") {
