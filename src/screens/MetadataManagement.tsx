@@ -9,6 +9,7 @@ import { getEntities, createEntity } from "src/utils/api/entities";
 import { getManifests, createManifest } from "src/utils/api/manifests";
 import { getPrograms, createProgram } from "src/utils/api/programs";
 import { getRoutes, createRoute } from "src/utils/api/routes";
+import { getAuthGroups, createAuthGroup } from "src/utils/api/authGroups";
 
 function MetadataManagement() {
   const auth = useAuth();
@@ -19,6 +20,7 @@ function MetadataManagement() {
     "Datastreams",
     "Routes",
     "Manifests",
+    "AuthGroups",
   ];
   const [formType, setFormType] = useState(formTypes[0]);
 
@@ -38,6 +40,9 @@ function MetadataManagement() {
   const [routeName, setRouteName] = useState("");
 
   const [manifestJson, setManifestJson] = useState("");
+
+  const [authGroupName, setAuthGroupName] = useState("");
+  const [authGroupId, setAuthGroupId] = useState("");
 
   const [apiResponse, setApiResponse] = useState(
     "API response will display here"
@@ -160,6 +165,30 @@ function MetadataManagement() {
       setApiResponse(
         "Bad request: datastream name, route name, and config are required"
       );
+      return;
+    }
+
+    const json = await res.json();
+    setApiResponse(json);
+  };
+
+  // Authgroups
+  const handleGetAuthGroups = async () => {
+    const res = await getAuthGroups(authToken, entityId);
+
+    if (res.status != 200) {
+      setApiResponse("Bad request: entityId is required");
+      return;
+    }
+
+    const json = await res.json();
+    setApiResponse(json);
+  };
+  const handleCreateAuthGroup = async () => {
+    const res = await createAuthGroup(authToken, entityId, authGroupName);
+
+    if (res.status != 200) {
+      setApiResponse("Bad request: entityId and authGroupName are required");
       return;
     }
 
@@ -343,6 +372,40 @@ function MetadataManagement() {
             </div>
           </div>
         );
+      case formTypes[5]:
+        return (
+          <div className="margin-bottom-8">
+            {/* Todo: Fetch this list instead of it being an input value */}
+            <label className="usa-label" htmlFor="authgroup_name">
+              EntityID
+            </label>
+            <input
+              className="usa-input"
+              value={entityId}
+              id="entity_id"
+              name="entity_id"
+              onChange={(e) => setEntityId(e.target.value)}
+            />
+            <label className="usa-label" htmlFor="authgroup_name">
+              AuthGroup Name
+            </label>
+            <input
+              className="usa-input"
+              value={authGroupName}
+              id="authgroup_name"
+              name="authgroup_name"
+              onChange={(e) => setAuthGroupName(e.target.value)}
+            />
+            <div className="margin-top-2 display-flex flex-justify">
+              <Button ariaLabel="Create Entity" onClick={handleCreateAuthGroup}>
+                Create AuthGroup
+              </Button>
+              <Button ariaLabel="Get Entities" onClick={handleGetAuthGroups}>
+                Get AuthGroups
+              </Button>
+            </div>
+          </div>
+        );
       default:
         return;
     }
@@ -355,7 +418,14 @@ function MetadataManagement() {
       </h1>
       <Dropdown
         className="padding-right-2"
-        items={["Entities", "Programs", "Datastreams", "Routes", "Manifests"]}
+        items={[
+          "Entities",
+          "Programs",
+          "Datastreams",
+          "Routes",
+          "Manifests",
+          "AuthGroups",
+        ]}
         label="Meta Data Object"
         onSelect={setFormType}
         srText="Meta Data Object"

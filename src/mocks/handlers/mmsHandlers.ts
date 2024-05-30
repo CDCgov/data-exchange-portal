@@ -6,6 +6,11 @@ import { CreateEntityBody, Entity } from "src/utils/api/entities";
 import { CreateManifestBody, Manifest } from "src/utils/api/manifests";
 import { CreateProgramBody, Program } from "src/utils/api/programs";
 import { CreateRouteBody, Route } from "src/utils/api/routes";
+import {
+  CreateAuthGroupBody,
+  CreateDatastreamRouteGroupBody,
+  AuthGroup,
+} from "src/utils/api/authGroups";
 
 import {
   mockDataStreams,
@@ -18,7 +23,7 @@ import { mockRoutes1, mockRoutes2 } from "src/mocks/data/routes";
 
 export const mmsHandlers = [
   // --> Datastreams
-  http.get(API_ENDPOINTS.dataStreamsAndRoutes, () => {
+  http.get(API_ENDPOINTS.currentUserDatastreamRoutes, () => {
     return HttpResponse.json(mockDataStreamsWithRoutes);
   }),
   http.get(API_ENDPOINTS.dataStreams, () => {
@@ -254,4 +259,65 @@ export const mmsHandlers = [
       });
     }
   ),
+
+  // --> AuthGroups
+  http.get(`${API_ENDPOINTS.entities}/:entity_id/groups`, ({ params }) => {
+    const { entity_id } = params;
+
+    if (!entity_id || entity_id == "NaN") {
+      return new HttpResponse(null, { status: 400 });
+    }
+
+    // Todo: Switch to using a mock data object instead of hardcoding
+    return HttpResponse.json([
+      { id: "1", name: "group1" },
+      { id: "2", name: "group2" },
+    ]);
+  }),
+
+  http.post(
+    `${API_ENDPOINTS.entities}/:entity_id/groups`,
+    async ({ request, params }) => {
+      const { entity_id } = params;
+      const { name } = (await request.json()) as CreateAuthGroupBody;
+
+      console.log(entity_id);
+      console.log(name);
+
+      if (!entity_id || !name || entity_id == "NaN" || name == "NaN") {
+        return new HttpResponse(null, { status: 400 });
+      }
+      // Todo: Switch to using a mock data object instead of hardcoding
+      return HttpResponse.json({ test: "ok" });
+    }
+  ),
+
+  // --> Identities
+  http.get(`${API_ENDPOINTS.identities}`, ({ params }) => {
+    // Todo: Switch to using a mock data object instead of hardcoding
+    return HttpResponse.json([
+      { id: "1", name: "identity1" },
+      { id: "2", name: "identity2" },
+    ]);
+  }),
+
+  // --> DataStreamRouteGroups
+  http.get(`${API_ENDPOINTS.dataStreamRouteGroups}`, ({ params }) => {
+    // Todo: Switch to using a mock data object instead of hardcoding
+    return HttpResponse.json([
+      { id: "1", name: "identity1" },
+      { id: "2", name: "identity2" },
+    ]);
+  }),
+
+  http.post(`${API_ENDPOINTS.dataStreamRouteGroups}`, async ({ request }) => {
+    const { authgroupID, datastreamRouteID } =
+      (await request.json()) as CreateDatastreamRouteGroupBody;
+
+    if (!authgroupID || !datastreamRouteID) {
+      return new HttpResponse(null, { status: 400 });
+    }
+    // Todo: Switch to using a mock data object instead of hardcoding
+    return HttpResponse.json({ status: "success" });
+  }),
 ];

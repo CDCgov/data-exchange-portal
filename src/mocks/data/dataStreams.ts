@@ -1,5 +1,4 @@
 import { DataStream, DataStreamWithRoutes } from "src/utils/api/dataStreams";
-import { mockRoutes1, mockRoutes2 } from "src/mocks/data/routes";
 
 export const mockDataStreams: DataStream[] = [
   {
@@ -16,15 +15,41 @@ export const mockDataStreams: DataStream[] = [
 
 export const mockDataStreamsWithRoutes: DataStreamWithRoutes[] = [
   {
-    id: 1,
-    programID: 1,
-    name: "aims-celr",
-    routes: mockRoutes1,
+    datastream: {
+      id: 1,
+      programID: 1,
+      name: "dextesting",
+    },
+    routes: [
+      {
+        id: 1,
+        dataStreamID: 1,
+        name: "testevent1",
+      },
+      {
+        id: 2,
+        dataStreamID: 1,
+        name: "testevent2",
+      },
+    ],
   },
   {
-    id: 2,
-    programID: 1,
-    name: "daart",
-    routes: mockRoutes2,
+    datastream: {
+      id: 2,
+      programID: 1,
+      name: "dextesting_2",
+    },
+    routes: [
+      {
+        id: 3,
+        dataStreamID: 2,
+        name: "testevent3",
+      },
+      {
+        id: 4,
+        dataStreamID: 2,
+        name: "testevent4",
+      },
+    ],
   },
 ];
