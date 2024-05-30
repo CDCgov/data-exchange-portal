@@ -17,10 +17,8 @@ fun Application.configureRouting() {
             call.respondText("Status: OK")
         }
         authRoutes(client)
-        authenticate("auth-bearer") {
-            mms(client)
-            psAPI(client)
-        }
+        mms(client)
+        psAPI(client)
     }
 
     environment.monitor.subscribe(ApplicationStopped) {

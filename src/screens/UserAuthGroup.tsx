@@ -5,7 +5,7 @@ import { Button } from "@us-gov-cdc/cdc-react";
 
 import { getIdentities } from "src/utils/api/identities";
 import { getEntities } from "src/utils/api/entities";
-import { getAuthGroups } from "src/utils/api/authGroups";
+import { getAuthGroups, assignUserToAuthGroup } from "src/utils/api/authGroups";
 
 function UserAuthGroup() {
   const auth = useAuth();
@@ -25,6 +25,8 @@ function UserAuthGroup() {
 
   const [selectedAuthGroupName, setSelectedAuthGroupName] = useState("");
   const [selectedAuthGroupId, setSelectedAuthGroupId] = useState("");
+
+  const [responseMessage, setResponseMessage] = useState("");
 
   useEffect(() => {
     setAuthToken(auth.user?.access_token ?? "");
@@ -74,7 +76,7 @@ function UserAuthGroup() {
       <Fragment>
         <option value="">Select Identity</option>
         {identitiesList.map((item) => {
-          return <option value={item.id}>{item.name}</option>;
+          return <option value={item.id}>{item.idpClientID}</option>;
         })}
       </Fragment>
     );
@@ -102,13 +104,19 @@ function UserAuthGroup() {
     );
   };
 
-  const handleLinkUserToAuthGroup = () => {
+  const handleLinkUserToAuthGroup = async () => {
     console.log("selectedIdentityId:", selectedIdentityId);
     console.log("selectedIdentityName:", selectedIdentityName);
     console.log("selectedEntityId:", selectedEntityId);
     console.log("selectedEntityName:", selectedEntityName);
     console.log("selectedAuthGroupId:", selectedAuthGroupId);
     console.log("selectedAuthGroupName:", selectedAuthGroupName);
+    const response = await assignUserToAuthGroup(
+      authToken,
+      +selectedIdentityId,
+      +selectedAuthGroupId
+    );
+    setResponseMessage(response.statusText);
   };
 
   return (
@@ -160,12 +168,15 @@ function UserAuthGroup() {
         <div className="grid-col flex-1"></div>
         <div className="grid-col flex-1"></div>
       </div>
-      <Button
-        className="margin-top-4"
-        ariaLabel="Link AuthGroup to DataStream"
-        onClick={handleLinkUserToAuthGroup}>
-        Submit
-      </Button>
+      <div className="display-flex flex-align-center margin-top-4">
+        <Button
+          className="margin-top-4"
+          ariaLabel="Link AuthGroup to DataStream"
+          onClick={handleLinkUserToAuthGroup}>
+          Submit
+        </Button>
+        <div className="padding-left-2 font-mono-md">{responseMessage}</div>
+      </div>
     </>
   );
 }

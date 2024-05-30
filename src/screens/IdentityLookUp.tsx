@@ -1,45 +1,51 @@
 import { useState, useEffect, Fragment } from "react";
 import { useAuth } from "react-oidc-context";
+import { jsonPrettyPrint } from "src/utils/helperFunctions/json";
 
-import { Button } from "@us-gov-cdc/cdc-react";
-
-import { getEntities } from "src/utils/api/entities";
+import {
+  getIdentities,
+  getIdentityDatastreamsAndRoutes,
+} from "src/utils/api/identities";
 
 function IdentityLookUp() {
   const auth = useAuth();
   const [authToken, setAuthToken] = useState("");
 
-  const [entitiesList, setEntitiesList] = useState([]);
+  const [identitiesList, setIdentitiesList] = useState([]);
 
-  const [selectedEntityName, setSelectedEntityName] = useState("");
-  const [selectedEntityId, setSelectedEntityId] = useState("");
+  const [apiResponse, setApiResponse] = useState(
+    "API response will display here"
+  );
 
   useEffect(() => {
     setAuthToken(auth.user?.access_token ?? "");
   }, [auth]);
 
   useEffect(() => {
-    fetchEntities();
+    fetchIdentities();
   }, []);
 
-  const fetchEntities = async () => {
-    const res = await getEntities(authToken);
+  const fetchIdentities = async () => {
+    const res = await getIdentities(authToken);
     const json = await res.json();
-    setEntitiesList(json);
+    setIdentitiesList(json);
   };
 
-  const handleSetEntity = async (e: any) => {
-    setSelectedEntityId(e.target.value);
-    setSelectedEntityName(e.target.selectedOptions[0].text);
-    // Todo: Fetch Entity Information
+  const handleSetIdentities = async (e: any) => {
+    const res = await getIdentityDatastreamsAndRoutes(
+      authToken,
+      e.target.value
+    );
+    const json = await res.json();
+    setApiResponse(json);
   };
 
-  const setEntityDropdownOptions = () => {
+  const setIdentitiesDropdownOptions = () => {
     return (
       <Fragment>
-        <option value="">Select Entity</option>
-        {entitiesList.map((item) => {
-          return <option value={item.id}>{item.name}</option>;
+        <option value="">Select Identity</option>
+        {identitiesList.map((item) => {
+          return <option value={item.id}>{item.idpClientID}</option>;
         })}
       </Fragment>
     );
@@ -50,15 +56,15 @@ function IdentityLookUp() {
       <h2 className="font-sans-lg">User LookUp</h2>
       <div className="grid-row margin-bottom-4">
         <div className="grid-col flex-1 padding-right-2">
-          <label className="usa-label" htmlFor="entity-dropdown">
-            Select Entity
+          <label className="usa-label" htmlFor="identity-dropdown">
+            Select Identity
           </label>
           <select
             className="usa-select"
-            name="entity-dropdown"
-            id="entity-dropdown"
-            onChange={handleSetEntity}>
-            {setEntityDropdownOptions()}
+            name="identity-dropdown"
+            id="identity-dropdown"
+            onChange={handleSetIdentities}>
+            {setIdentitiesDropdownOptions()}
           </select>
         </div>
         <div className="grid-col"></div>
@@ -67,11 +73,8 @@ function IdentityLookUp() {
       </div>
       <div className="display-flex flex-align-center margin-y-4">
         <div className="grid-col flex-1 padding-2 border border-gray-5 radius-lg shadow-1 bg-white">
-          <pre>
-            {JSON.stringify({ entity: "put response here?" }, undefined, 2)}
-          </pre>
+          <pre>{jsonPrettyPrint(apiResponse)}</pre>
         </div>
-        <div className="grid-col"></div>
         <div className="grid-col"></div>
       </div>
     </>
