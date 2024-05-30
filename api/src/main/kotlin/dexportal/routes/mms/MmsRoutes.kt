@@ -12,8 +12,10 @@ fun Route.mms(client: HttpClient) {
     route("/mms") {
         get("/health") { }
 
+        datastreamRouteGroups()
         datastreams()
         entities()
+        identities()
         manifests()
 
         intercept(ApplicationCallPipeline.Call) {
