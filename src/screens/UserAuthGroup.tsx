@@ -1,41 +1,54 @@
 import { useState, useEffect, Fragment } from "react";
 import { useAuth } from "react-oidc-context";
 
-import { Button, Dropdown } from "@us-gov-cdc/cdc-react";
+import { Button } from "@us-gov-cdc/cdc-react";
 
-import { getDataStreams, createDataStream } from "src/utils/api/dataStreams";
 import { getEntities, createEntity } from "src/utils/api/entities";
-import { getManifests, createManifest } from "src/utils/api/manifests";
-import { getPrograms, createProgram } from "src/utils/api/programs";
-import { getRoutes, createRoute } from "src/utils/api/routes";
 import { getAuthGroups, createAuthGroups } from "src/utils/api/authGroups";
 
 function UserAuthGroup() {
   const auth = useAuth();
   const [authToken, setAuthToken] = useState("");
 
-  const [entitiesList, setEntitiesList] = useState(["jhu", "fearless"]);
+  const [entitiesList, setEntitiesList] = useState([
+    { id: 1, name: "error fetching entities" },
+  ]);
 
-  const [entityName, setEntityName] = useState("");
-  const [entityId, setEntityId] = useState("");
+  const [selectedEntityName, setSelectedEntityName] = useState("");
+  const [selectedEntityId, setSelectedEntityId] = useState("");
 
   useEffect(() => {
     setAuthToken(auth.user?.access_token ?? "");
   }, [auth]);
 
-  const handleLinkAuthGroup = () => {
-    console.log("hit handleLinkAuthGroup");
+  useEffect(() => {
+    //fetchIdentities();
+    fetchEntities();
+  }, []);
+
+  const fetchEntities = async () => {
+    const res = await getEntities(authToken);
+    const json = await res.json();
+    setEntitiesList(json);
   };
 
-  const handleSetEntityDatastream = (e: any) => {
-    console.log(e.target.value);
+  const handleSetEntity = (e: any) => {
+    setSelectedEntityId(e.target.value);
+    setSelectedEntityName(e.target.selectedOptions[0].text);
+    // Todo: Fetch AuthGroups with selected entityId
+  };
+
+  const handleLinkUserToAuthGroup = () => {
+    // console.log("selectedUserId:", selectedUserId);
+    console.log("selectedEntityId:", selectedEntityId);
+    console.log("selectedEntityName:", selectedEntityName);
   };
 
   const setEntityDropdownOptions = () => {
     return (
       <Fragment>
         {entitiesList.map((item) => {
-          return <option value={item}>{item}</option>;
+          return <option value={item.id}>{item.name}</option>;
         })}
       </Fragment>
     );
@@ -64,10 +77,12 @@ function UserAuthGroup() {
           <label className="usa-label" htmlFor="options">
             Select Entity
           </label>
-          <select className="usa-select" name="options" id="options">
-            <option value="value1">Option A</option>
-            <option value="value2">Option B</option>
-            <option value="value3">Option C</option>
+          <select
+            className="usa-select"
+            name="options"
+            id="options"
+            onChange={handleSetEntity}>
+            {setEntityDropdownOptions()}
           </select>
         </div>
 
@@ -87,7 +102,7 @@ function UserAuthGroup() {
       <Button
         className="margin-top-4"
         ariaLabel="Link AuthGroup to DataStream"
-        onClick={handleLinkAuthGroup}>
+        onClick={handleLinkUserToAuthGroup}>
         Submit
       </Button>
     </>

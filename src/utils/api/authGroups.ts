@@ -2,7 +2,6 @@ import API_ENDPOINTS from "src/config/api";
 
 export interface CreateAuthGroupBody {
   name: string;
-  authgroup_id: string;
 }
 
 export interface AuthGroup {
@@ -11,9 +10,10 @@ export interface AuthGroup {
 }
 
 export const getAuthGroups = async (
-  access_token: string
+  access_token: string,
+  entity_id: string
 ): Promise<Response> => {
-  const url = `${API_ENDPOINTS.authGroups}`;
+  const url = `${API_ENDPOINTS.entities}/${entity_id}/groups`;
 
   const response = await fetch(url, {
     method: "GET",
@@ -26,16 +26,16 @@ export const getAuthGroups = async (
   return response;
 };
 
-export const createAuthGroups = async (
+// Todo: Determine actual body payload needed
+export const createAuthGroup = async (
   access_token: string,
-  authgroup_name: string,
-  entity_id: string
+  entity_id: string,
+  authgroup_name: string
 ): Promise<Response> => {
-  const url = `${API_ENDPOINTS.authGroups}`;
+  const url = `${API_ENDPOINTS.entities}/${entity_id}/groups`;
 
   const body = JSON.stringify({
     name: authgroup_name,
-    entityId: entity_id,
   });
 
   const response = await fetch(url, {

@@ -9,7 +9,7 @@ import { getEntities, createEntity } from "src/utils/api/entities";
 import { getManifests, createManifest } from "src/utils/api/manifests";
 import { getPrograms, createProgram } from "src/utils/api/programs";
 import { getRoutes, createRoute } from "src/utils/api/routes";
-import { getAuthGroups, createAuthGroups } from "src/utils/api/authGroups";
+import { getAuthGroups, createAuthGroup } from "src/utils/api/authGroups";
 
 function MetadataManagement() {
   const auth = useAuth();
@@ -174,12 +174,10 @@ function MetadataManagement() {
 
   // Authgroups
   const handleGetAuthGroups = async () => {
-    const res = await getManifests(authToken, datastreamName, routeName);
+    const res = await getAuthGroups(authToken, entityId);
 
     if (res.status != 200) {
-      setApiResponse(
-        "Bad request: datastream name and route name are required"
-      );
+      setApiResponse("Bad request: entityId is required");
       return;
     }
 
@@ -187,18 +185,10 @@ function MetadataManagement() {
     setApiResponse(json);
   };
   const handleCreateAuthGroup = async () => {
-    const manifestObject = JSON.parse(manifestJson);
-    const res = await createManifest(
-      authToken,
-      datastreamName,
-      routeName,
-      manifestObject
-    );
+    const res = await createAuthGroup(authToken, entityId, authGroupName);
 
     if (res.status != 200) {
-      setApiResponse(
-        "Bad request: datastream name, route name, and config are required"
-      );
+      setApiResponse("Bad request: entityId and authGroupName are required");
       return;
     }
 
@@ -385,16 +375,7 @@ function MetadataManagement() {
       case formTypes[5]:
         return (
           <div className="margin-bottom-8">
-            <label className="usa-label" htmlFor="authgroup_name">
-              AuthGroup Name
-            </label>
-            <input
-              className="usa-input"
-              value={authGroupName}
-              id="authgroup_name"
-              name="authgroup_name"
-              onChange={(e) => setAuthGroupName(e.target.value)}
-            />
+            {/* Todo: Fetch this list instead of it being an input value */}
             <label className="usa-label" htmlFor="authgroup_name">
               EntityID
             </label>
@@ -404,6 +385,16 @@ function MetadataManagement() {
               id="entity_id"
               name="entity_id"
               onChange={(e) => setEntityId(e.target.value)}
+            />
+            <label className="usa-label" htmlFor="authgroup_name">
+              AuthGroup Name
+            </label>
+            <input
+              className="usa-input"
+              value={authGroupName}
+              id="authgroup_name"
+              name="authgroup_name"
+              onChange={(e) => setAuthGroupName(e.target.value)}
             />
             <div className="margin-top-2 display-flex flex-justify">
               <Button ariaLabel="Create Entity" onClick={handleCreateAuthGroup}>
