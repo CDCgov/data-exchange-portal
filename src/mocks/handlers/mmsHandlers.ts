@@ -9,7 +9,6 @@ import { CreateRouteBody, Route } from "src/utils/api/routes";
 import {
   CreateAuthGroupBody,
   CreateDatastreamRouteGroupBody,
-  AuthGroup,
 } from "src/utils/api/authGroups";
 
 import {
@@ -293,7 +292,7 @@ export const mmsHandlers = [
   ),
 
   // --> Identities
-  http.get(`${API_ENDPOINTS.identities}`, ({ params }) => {
+  http.get(`${API_ENDPOINTS.identities}`, () => {
     // Todo: Switch to using a mock data object instead of hardcoding
     return HttpResponse.json([
       { id: "1", name: "identity1" },
@@ -302,7 +301,7 @@ export const mmsHandlers = [
   }),
 
   // --> DataStreamRouteGroups
-  http.get(`${API_ENDPOINTS.dataStreamRouteGroups}`, ({ params }) => {
+  http.get(`${API_ENDPOINTS.dataStreamRouteGroups}`, () => {
     // Todo: Switch to using a mock data object instead of hardcoding
     return HttpResponse.json([
       { id: "1", name: "identity1" },
