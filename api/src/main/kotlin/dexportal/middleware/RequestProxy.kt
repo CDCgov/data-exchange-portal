@@ -16,22 +16,12 @@ suspend fun PipelineContext<Unit, ApplicationCall>.requestProxy(
     val externalApiUrl = "${externalBaseUrl}${path}"
 
     val queryParams = call.request.queryParameters
-    val headers = call.request.headers
+    val authToken = call.request.headers["Authorization"]
+    val contentType = call.request.headers["Content-Type"]
     val requestBody = call.receiveText()
 
     call.application.log.info("Proxying request to: $externalApiUrl")
-    call.application.log.info("Query Parameters:")
-    queryParams.forEach { key, values ->
-        values.forEach { value ->
-            call.application.log.info("$key: $value")
-        }
-    }
-    call.application.log.info("Headers:")
-    headers.forEach { key, values ->
-        values.forEach { value ->
-            call.application.log.info("$key: $value")
-        }
-    }
+    call.application.log.info("Auth Header: $authToken")
     call.application.log.info("Request Body: $requestBody")
 
     try {
@@ -42,12 +32,11 @@ suspend fun PipelineContext<Unit, ApplicationCall>.requestProxy(
                     parameter(key, values)
                 }
             }
-            headers {
-                headers.forEach { key, values ->
-                    values.forEach { value ->
-                        append(key, value)
-                    }
-                }
+            if (!authToken.isNullOrEmpty()) {
+                header("Authorization", authToken)
+            }
+            if (!contentType.isNullOrEmpty()) {
+                header("Content-Type", contentType)
             }
             if (requestBody.isNotEmpty()) {
                 setBody(requestBody)
