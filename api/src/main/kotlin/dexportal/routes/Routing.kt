@@ -8,12 +8,17 @@ import dexportal.routes.psApi.*
 import dexportal.routes.mms.*
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
+import io.ktor.client.plugins.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
-import io.ktor.server.auth.*
 
 fun Application.configureRouting() {
-    val client = HttpClient(CIO)
+    val client = HttpClient(CIO) {
+        install(HttpTimeout) {
+            requestTimeoutMillis = 5000
+            connectTimeoutMillis = 5000
+        }
+    }
 
     val mmsUrl = ConfigLoader.getMmsApiEndpoint()
 
