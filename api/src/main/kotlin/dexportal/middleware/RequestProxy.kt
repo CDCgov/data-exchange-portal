@@ -16,46 +16,57 @@ suspend fun PipelineContext<Unit, ApplicationCall>.requestProxy(
     val externalApiUrl = "${externalBaseUrl}${path}"
 
     val queryParams = call.request.queryParameters
-
     val headers = call.request.headers
-
     val requestBody = call.receiveText()
 
-    // Log request details
     call.application.log.info("Proxying request to: $externalApiUrl")
-    call.application.log.info("Query Parameters: $queryParams")
-    call.application.log.info("Headers: $headers")
-    call.application.log.info("Request Body: $requestBody")
-
-    val response = client.request(externalApiUrl) {
-        method = call.request.httpMethod
-        url {
-            queryParams.forEach { key, values ->
-                parameter(key, values)
-            }
-        }
-        headers {
-            headers.forEach { key, values ->
-                values.forEach { value ->
-                    append(key, value)
-                }
-            }
-        }
-        if (requestBody.isNotEmpty()) {
-            setBody(requestBody)
+    call.application.log.info("Query Parameters:")
+    queryParams.forEach { key, values ->
+        values.forEach { value ->
+            call.application.log.info("$key: $value")
         }
     }
+    call.application.log.info("Headers:")
+    headers.forEach { key, values ->
+        values.forEach { value ->
+            call.application.log.info("$key: $value")
+        }
+    }
+    call.application.log.info("Request Body: $requestBody")
 
-    // Log response details
-    call.application.log.info("Received response status: ${response.status}")
-    call.application.log.info("Received response body: ${response.bodyAsText()}")
+    try {
+        val response = client.request(externalApiUrl) {
+            method = call.request.httpMethod
+            url {
+                queryParams.forEach { key, values ->
+                    parameter(key, values)
+                }
+            }
+            headers {
+                headers.forEach { key, values ->
+                    values.forEach { value ->
+                        append(key, value)
+                    }
+                }
+            }
+            if (requestBody.isNotEmpty()) {
+                setBody(requestBody)
+            }
+        }
 
-    val status = response.status
-    val responseBody: String = response.bodyAsText()
+        call.application.log.info("Received response status: ${response.status}")
+        call.application.log.info("Received response body: ${response.bodyAsText()}")
 
-    if (status == HttpStatusCode.OK || status == HttpStatusCode.Created) {
-        call.respondText(responseBody, ContentType.Application.Json)
-    } else {
-        call.respond(status, responseBody)
+        val status = response.status
+        val responseBody: String = response.bodyAsText()
+
+        if (status == HttpStatusCode.OK || status == HttpStatusCode.Created) {
+            call.respondText(responseBody, ContentType.Application.Json)
+        } else {
+            call.respond(status, responseBody)
+        }
+    } catch (e: Exception) {
+        call.application.log.error("Error during proxying request: ${e.message}")
+        call.respond(HttpStatusCode.InternalServerError, "Internal Server Error")
     }
 }

@@ -1,5 +1,6 @@
 package dexportal.routes.mms
 
+import io.ktor.server.auth.*
 import io.ktor.server.routing.*
 
 fun Route.identities() {
@@ -15,8 +16,10 @@ fun Route.identities() {
         post { }
         delete("{id}") { }
     }
-    route("/current-user") {
-        get { }
-        get("/datastreams-with-routes") { }
+    authenticate("auth-bearer") {
+        route("/current-user") {
+            get { }
+            get("/datastreams-with-routes") { }
+        }
     }
 }
