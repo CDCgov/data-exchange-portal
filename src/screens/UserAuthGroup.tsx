@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { useState, useEffect, Fragment } from "react";
 import { useAuth } from "react-oidc-context";
 

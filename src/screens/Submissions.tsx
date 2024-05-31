@@ -72,8 +72,13 @@ function Submissions() {
       try {
         const data = (await res.json()) as FileSubmissions;
         // TODO: Pagination should handle this logic
-        setDataSummary(data.summary);
-        setCurrentPageData(data.items.slice(0, pageLimit));
+        if (data?.summary) {
+          setDataSummary(data.summary);
+        }
+
+        if (data?.items) {
+          setCurrentPageData(data.items.slice(0, pageLimit));
+        }
       } catch (error) {
         console.error("Failed to parse JSON:", error);
       }

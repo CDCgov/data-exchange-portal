@@ -40,9 +40,13 @@ function Shell() {
 
   useEffect(() => {
     const fetchCall = async () => {
-      const res = await getDataStreamsAndRoutes(auth.user?.access_token || "");
-
       try {
+        const res = await getDataStreamsAndRoutes(
+          auth.user?.access_token || ""
+        );
+
+        if (res.status != 200) return;
+
         const data = await res.json();
         const streams = data as DataStreamWithRoutes[];
         setDataStreams(streams);

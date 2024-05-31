@@ -10,6 +10,7 @@ import { getManifests, createManifest } from "src/utils/api/manifests";
 import { getPrograms, createProgram } from "src/utils/api/programs";
 import { getRoutes, createRoute } from "src/utils/api/routes";
 import { getAuthGroups, createAuthGroup } from "src/utils/api/authGroups";
+import { getIdentities, createIdentity } from "src/utils/api/identities";
 
 function MetadataManagement() {
   const auth = useAuth();
@@ -21,6 +22,7 @@ function MetadataManagement() {
     "Routes",
     "Manifests",
     "AuthGroups",
+    "Identities",
   ];
   const [formType, setFormType] = useState(formTypes[0]);
 
@@ -42,7 +44,8 @@ function MetadataManagement() {
   const [manifestJson, setManifestJson] = useState("");
 
   const [authGroupName, setAuthGroupName] = useState("");
-  const [authGroupId, setAuthGroupId] = useState("");
+
+  const [identityClientID, setIdentityClientID] = useState("");
 
   const [apiResponse, setApiResponse] = useState(
     "API response will display here"
@@ -196,9 +199,27 @@ function MetadataManagement() {
     setApiResponse(json);
   };
 
+  // Identities
+  const handleGetIdentities = async () => {
+    const res = await getIdentities(authToken);
+    const json = await res.json();
+    setApiResponse(json);
+  };
+  const handleCreateIdentity = async () => {
+    const res = await createIdentity(authToken, identityClientID);
+
+    if (res.status != 200) {
+      setApiResponse("Bad request: idenenty client_id is required");
+      return;
+    }
+
+    const json = await res.json();
+    setApiResponse(json);
+  };
+
   const renderFormType = () => {
     switch (formType) {
-      case formTypes[0]:
+      case "Entities":
         return (
           <div className="margin-bottom-8">
             <label className="usa-label" htmlFor="entity_name">
@@ -221,7 +242,7 @@ function MetadataManagement() {
             </div>
           </div>
         );
-      case formTypes[1]:
+      case "Programs":
         return (
           <div className="margin-bottom-8">
             <label className="usa-label" htmlFor="entity_id">
@@ -255,7 +276,7 @@ function MetadataManagement() {
             </div>
           </div>
         );
-      case formTypes[2]:
+      case "Datastreams":
         return (
           <div className="margin-bottom-8">
             <label className="usa-label" htmlFor="program_id">
@@ -293,7 +314,7 @@ function MetadataManagement() {
             </div>
           </div>
         );
-      case formTypes[3]:
+      case "Routes":
         return (
           <div className="margin-bottom-8">
             <label className="usa-label" htmlFor="datastream_id">
@@ -327,7 +348,7 @@ function MetadataManagement() {
             </div>
           </div>
         );
-      case formTypes[4]:
+      case "Manifests":
         return (
           <div className="margin-bottom-8">
             <label className="usa-label" htmlFor="datastream_name">
@@ -372,7 +393,7 @@ function MetadataManagement() {
             </div>
           </div>
         );
-      case formTypes[5]:
+      case "AuthGroups":
         return (
           <div className="margin-bottom-8">
             {/* Todo: Fetch this list instead of it being an input value */}
@@ -406,6 +427,29 @@ function MetadataManagement() {
             </div>
           </div>
         );
+      case "Identities":
+        return (
+          <div className="margin-bottom-8">
+            <label className="usa-label" htmlFor="identity_client_id">
+              Identity Client ID
+            </label>
+            <input
+              className="usa-input"
+              value={identityClientID}
+              id="identity_client_id"
+              name="identity_client_id"
+              onChange={(e) => setIdentityClientID(e.target.value)}
+            />
+            <div className="margin-top-2 display-flex flex-justify">
+              <Button ariaLabel="Create Entity" onClick={handleCreateIdentity}>
+                Create Identity
+              </Button>
+              <Button ariaLabel="Get Entities" onClick={handleGetIdentities}>
+                Get Identities
+              </Button>
+            </div>
+          </div>
+        );
       default:
         return;
     }
@@ -418,14 +462,7 @@ function MetadataManagement() {
       </h1>
       <Dropdown
         className="padding-right-2"
-        items={[
-          "Entities",
-          "Programs",
-          "Datastreams",
-          "Routes",
-          "Manifests",
-          "AuthGroups",
-        ]}
+        items={formTypes}
         label="Meta Data Object"
         onSelect={setFormType}
         srText="Meta Data Object"
