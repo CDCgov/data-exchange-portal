@@ -42,7 +42,9 @@ function Dashboard() {
 
       try {
         const data: ReportCounts = (await res.json()) as ReportCounts;
-        setCountsData(data);
+        if (data.status_counts) {
+          setCountsData(data);
+        }
       } catch (error) {
         console.error("Failed to parse JSON:", error);
       }
