@@ -6,6 +6,7 @@ import { jsonPrettyPrint } from "src/utils/helperFunctions/json";
 import {
   getIdentities,
   getIdentityDatastreamsAndRoutes,
+  Identity,
 } from "src/utils/api/identities";
 
 function IdentityLookUp() {
@@ -45,7 +46,7 @@ function IdentityLookUp() {
     return (
       <Fragment>
         <option value="">Select Identity</option>
-        {identitiesList.map((item) => {
+        {identitiesList.map((item: Identity) => {
           return <option value={item.id}>{item.idpClientID}</option>;
         })}
       </Fragment>

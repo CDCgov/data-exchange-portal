@@ -4,13 +4,14 @@ import { useAuth } from "react-oidc-context";
 
 import { Button } from "@us-gov-cdc/cdc-react";
 
-import { getDataStreams } from "src/utils/api/dataStreams";
-import { getEntities } from "src/utils/api/entities";
+import { getDataStreams, DataStream } from "src/utils/api/dataStreams";
+import { getEntities, Entity } from "src/utils/api/entities";
 import {
   getAuthGroups,
   assignAuthGroupToDataStream,
+  AuthGroup,
 } from "src/utils/api/authGroups";
-import { getRoutes } from "src/utils/api/routes";
+import { getRoutes, Route } from "src/utils/api/routes";
 
 function AuthGroupDataStream() {
   const auth = useAuth();
@@ -97,7 +98,7 @@ function AuthGroupDataStream() {
     return (
       <Fragment>
         <option value="">Select Entity</option>
-        {entitiesList.map((item) => {
+        {entitiesList.map((item: Entity) => {
           return <option value={item.id}>{item.name}</option>;
         })}
       </Fragment>
@@ -108,7 +109,7 @@ function AuthGroupDataStream() {
     return (
       <Fragment>
         <option value="">Select AuthGroup</option>
-        {authGroupsList.map((item) => {
+        {authGroupsList.map((item: AuthGroup) => {
           return <option value={item.id}>{item.name}</option>;
         })}
       </Fragment>
@@ -119,7 +120,7 @@ function AuthGroupDataStream() {
     return (
       <Fragment>
         <option value="">Select Datastream</option>
-        {datastreamsList.map((item) => {
+        {datastreamsList.map((item: DataStream) => {
           return <option value={item.id}>{item.name}</option>;
         })}
       </Fragment>
@@ -130,7 +131,7 @@ function AuthGroupDataStream() {
     return (
       <Fragment>
         <option value="">Select Route</option>
-        {routesList.map((item) => {
+        {routesList.map((item: Route) => {
           return <option value={item.id}>{item.name}</option>;
         })}
       </Fragment>

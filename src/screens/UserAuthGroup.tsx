@@ -4,9 +4,13 @@ import { useAuth } from "react-oidc-context";
 
 import { Button } from "@us-gov-cdc/cdc-react";
 
-import { getIdentities } from "src/utils/api/identities";
-import { getEntities } from "src/utils/api/entities";
-import { getAuthGroups, assignUserToAuthGroup } from "src/utils/api/authGroups";
+import { getIdentities, Identity } from "src/utils/api/identities";
+import { getEntities, Entity } from "src/utils/api/entities";
+import {
+  getAuthGroups,
+  assignUserToAuthGroup,
+  AuthGroup,
+} from "src/utils/api/authGroups";
 
 function UserAuthGroup() {
   const auth = useAuth();
@@ -76,7 +80,7 @@ function UserAuthGroup() {
     return (
       <Fragment>
         <option value="">Select Identity</option>
-        {identitiesList.map((item) => {
+        {identitiesList.map((item: Identity) => {
           return <option value={item.id}>{item.idpClientID}</option>;
         })}
       </Fragment>
@@ -87,7 +91,7 @@ function UserAuthGroup() {
     return (
       <Fragment>
         <option value="">Select Entity</option>
-        {entitiesList.map((item) => {
+        {entitiesList.map((item: Entity) => {
           return <option value={item.id}>{item.name}</option>;
         })}
       </Fragment>
@@ -98,7 +102,7 @@ function UserAuthGroup() {
     return (
       <Fragment>
         <option value="">Select AuthGroup</option>
-        {authGroupsList.map((item) => {
+        {authGroupsList.map((item: AuthGroup) => {
           return <option value={item.id}>{item.name}</option>;
         })}
       </Fragment>
