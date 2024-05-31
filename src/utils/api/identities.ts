@@ -21,6 +21,28 @@ export const getIdentities = async (
   return response;
 };
 
+export const createIdentity = async (
+  access_token: string,
+  client_id: string
+): Promise<Response> => {
+  const url = `${API_ENDPOINTS.identities}`;
+
+  const body = JSON.stringify({
+    idpClientID: client_id,
+  });
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token,
+    },
+    body,
+  }).catch();
+
+  return response;
+};
+
 export const getIdentityDatastreamsAndRoutes = async (
   access_token: string,
   identity_id: number | string
