@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Fragment } from "react";
 import { useRecoilValue } from "recoil";
 import {
   dataRouteAtom,
@@ -17,6 +17,16 @@ import {
   // TablePagination,
   TableRow,
 } from "@us-gov-cdc/cdc-react";
+
+import {
+  createColumnHelper,
+  flexRender,
+  getCoreRowModel,
+  getSortedRowModel,
+  SortingState,
+  useReactTable,
+} from "@tanstack/react-table";
+
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
 
 import {
@@ -35,6 +45,29 @@ import SearchOptions from "src/components/SearchOptions";
 import { useAuth } from "react-oidc-context";
 import { getPastDate } from "src/utils/helperFunctions/date";
 
+const columnHelper = createColumnHelper<FileSubmission>();
+
+const columns = [
+  columnHelper.accessor("filename", {
+    header: "File Name",
+    cell: (info) => info.getValue(),
+  }),
+  columnHelper.accessor("status", {
+    header: "Upload Status",
+    cell: (info) => info.getValue(),
+  }),
+  columnHelper.accessor("timestamp", {
+    header: "Submitted",
+    cell: (info) => info.getValue(),
+  }),
+  columnHelper.display({
+    id: "details",
+    header: "Details",
+    enableSorting: false,
+    cell: (props) => "...",
+  }),
+];
+
 function Submissions() {
   const auth = useAuth();
   const pageLimit = 10;
@@ -42,6 +75,7 @@ function Submissions() {
   const [dataSummary, setDataSummary] = useState<FileSubmissionsSummary>(
     defaultSubmissionSummary
   );
+  const [sorting, setSorting] = useState<SortingState>([]);
 
   const dataStreamId = useRecoilValue(dataStreamIdAtom);
   const dataRoute = useRecoilValue(dataRouteAtom);
@@ -87,6 +121,18 @@ function Submissions() {
     if (dataStreamId) fetchCall();
   }, [auth, dataStreamId, dataRoute, timeframe]);
 
+  const table = useReactTable({
+    data: currentPageData,
+    state: {
+      sorting,
+    },
+    onSortingChange: setSorting,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    debugTable: true,
+  });
+
   const handleModalClose = () => {
     setIsModalOpen(false);
   };
@@ -108,57 +154,53 @@ function Submissions() {
           </div>
           <Table className="padding-y-3">
             <TableHead>
-              <TableRow>
-                <TableHeader>
-                  <React.Fragment key=".0">
-                    <Icons.SortArrow className="sort-icon"></Icons.SortArrow>
-                    <span className="text-left">File Name</span>
-                  </React.Fragment>
-                </TableHeader>
-                <TableHeader size="sm">
-                  <Icons.SortArrow className="sort-icon"></Icons.SortArrow>
-                  <span className="text-left">Upload Status</span>
-                </TableHeader>
-                <TableHeader size="md">
-                  <Icons.SortArrow className="sort-icon"></Icons.SortArrow>
-                  <span className="text-left">Submitted</span>
-                </TableHeader>
-                <TableHeader size="sm" className="details-row">
-                  <span className="text-center">Details</span>
-                </TableHeader>
-              </TableRow>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <tr key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => {
+                    return (
+                      <TableHeader>
+                        {/* <th key={header.id} colSpan={header.colSpan}> */}
+                        {header.isPlaceholder ? null : (
+                          <div
+                            {...{
+                              className: header.column.getCanSort()
+                                ? "cursor-pointer display-flex flex-align-center"
+                                : "display-flex flex-align-center",
+                              onClick: header.column.getToggleSortingHandler(),
+                            }}>
+                            {{
+                              asc: (
+                                <Icons.ArrowUp className="sort-icon"></Icons.ArrowUp>
+                              ),
+                              desc: (
+                                <Icons.ArrowDown className="sort-icon"></Icons.ArrowDown>
+                              ),
+                            }[header.column.getIsSorted() as string] ?? (
+                              <Icons.SortArrow className="sort-icon"></Icons.SortArrow>
+                            )}
+                            {flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                          </div>
+                        )}
+                      </TableHeader>
+                    );
+                  })}
+                </tr>
+              ))}
             </TableHead>
             <TableBody>
-              {currentPageData.map((item: FileSubmission) => (
-                <TableRow key={`table-row-${item.upload_id}`}>
-                  {/* Todo: Update this to use a more appropriate id as key */}
-                  <TableDataCell className="text-left">
-                    {item.filename}
-                  </TableDataCell>
-                  <TableDataCell size="sm">
-                    <Pill
-                      label={getStatusDisplayValuesByName(item.status).label}
-                      color={
-                        getStatusDisplayValuesByName(item.status).pillColor
-                      }
-                    />
-                  </TableDataCell>
-                  <TableDataCell size="md">
-                    {new Date(item.timestamp).toLocaleString()}
-                  </TableDataCell>
-                  <TableDataCell size="sm" className="details-row">
-                    <Button
-                      ariaLabel="Submission Details"
-                      onClick={() => {
-                        setIsModalOpen(true);
-                        setSelectedSubmission(item);
-                      }}
-                      variation="text"
-                      icon={<Icons.Dots />}
-                      iconOnly
-                      size="default"
-                    />
-                  </TableDataCell>
+              {table.getRowModel().rows.map((row) => (
+                <TableRow key={`table-row-${row.id}`}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableDataCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableDataCell>
+                  ))}
                 </TableRow>
               ))}
             </TableBody>

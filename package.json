@@ -21,6 +21,7 @@
     "@faker-js/faker": "^8.4.1",
     "@nivo/core": "^0.85.1",
     "@nivo/pie": "^0.85.1",
+    "@tanstack/react-table": "^8.17.3",
     "@us-gov-cdc/cdc-react": "^1.11.0",
     "@us-gov-cdc/cdc-react-icons": "^2.5.0",
     "date-fns": "^3.6.0",
