@@ -16,22 +16,20 @@ fun Route.healthCheck(client: HttpClient) {
         val healthCheckResults = mutableListOf<String>()
 
         try {
-            val responseMms: HttpResponse = client.get("$mmsUrl/health")
-            val responseMmsBody: String = responseMms.bodyAsText()
-            healthCheckResults.add("Mms /health Success:\n\n$responseMmsBody")
+            client.get("$mmsUrl/health")
+            healthCheckResults.add("MMS API Service Status: OK")
         } catch (e: Exception) {
-            healthCheckResults.add("Mms /health Error:\n\n${e.message ?: "An unknown error occurred"}")
+            healthCheckResults.add("MMS API Service Status: Error\n${e.message ?: "An unknown error occurred"}")
         }
 
         try {
-            val responsePsApi: HttpResponse = client.get("$psApiUrl/health")
-            val responsePsApiBody: String = responsePsApi.bodyAsText()
-            healthCheckResults.add("PsApi /health Success:\n\n$responsePsApiBody")
+            client.get("$psApiUrl/health")
+            healthCheckResults.add("PS API Service Status: OK")
         } catch (e: Exception) {
-            healthCheckResults.add("PsApi /health Error:\n\n${e.message ?: "An unknown error occurred"}")
+            healthCheckResults.add("PS API Service Status: Error\n${e.message ?: "An unknown error occurred"}")
         }
 
-        val response = healthCheckResults.joinToString(separator = "\n--------------------\n")
+        val response = healthCheckResults.joinToString(separator = "\n\n")
         call.respondText(response)
     }
 }
