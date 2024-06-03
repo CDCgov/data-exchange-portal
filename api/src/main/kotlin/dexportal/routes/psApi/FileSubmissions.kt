@@ -25,9 +25,9 @@ fun Route.fileSubmissions(client: HttpClient) {
             val cleanedDateStart = processDateString(dateStart)
 
             try {
-                val response: HttpResponse = client.get("$psApiUrl/api/upload/dextesting") {
+                val response: HttpResponse = client.get("$psApiUrl/api/upload/$dataStreamId") {
                     header("Authorization", authToken)
-                    parameter("data_stream_route", "testevent1")
+                    parameter("data_stream_route", dataStreamRoute)
                     parameter("page_number", pageNumber)
                     parameter("page_size", 20)
                     if (cleanedDateStart != null) {
