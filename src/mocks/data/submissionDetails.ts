@@ -40,10 +40,10 @@ const generateSubmissionDetails = (
 };
 
 const buildMockDetails = (): SubmissionDetails[] => {
-  const detailsAims: SubmissionDetails[] = mockSubmissions.aimsAll.items.map(
+  const detailsAims: SubmissionDetails[] = mockSubmissions.aimsAll.map(
     (el: FileSubmission) => generateSubmissionDetails(el)
   );
-  const detailsDaart: SubmissionDetails[] = mockSubmissions.daartHl7.items.map(
+  const detailsDaart: SubmissionDetails[] = mockSubmissions.daartHl7.map(
     (el: FileSubmission) => generateSubmissionDetails(el)
   );
   return [...detailsAims, ...detailsDaart];
