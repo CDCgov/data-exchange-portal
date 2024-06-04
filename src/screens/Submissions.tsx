@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Fragment } from "react";
+import { useEffect, useState, Fragment } from "react";
 import { useRecoilValue } from "recoil";
 import {
   dataRouteAtom,
@@ -14,7 +14,7 @@ import {
   TableDataCell,
   TableHead,
   TableHeader,
-  // TablePagination,
+  TablePaginationServerSide,
   TableRow,
 } from "@us-gov-cdc/cdc-react";
 
@@ -48,6 +48,7 @@ import { getPastDate } from "src/utils/helperFunctions/date";
 function Submissions() {
   const auth = useAuth();
   const pageLimit = 10;
+  const [currentPage, setCurrentPage] = useState(1);
   const [currentPageData, setCurrentPageData] = useState<FileSubmission[]>([]);
   const [dataSummary, setDataSummary] = useState<FileSubmissionsSummary>(
     defaultSubmissionSummary
@@ -113,10 +114,10 @@ function Submissions() {
         dataRoute != "All" ? dataRoute : "",
         getPastDate(timeframe),
         new Date().toISOString(),
-        sorting.length > 0 ? sorting[0].id : "date", // TODO: Map to sort_by
-        sorting.length > 0 && sorting[0].desc ? "descending" : "ascending", // TODO: Map to sort_order
-        1, // TODO: Map to onClick of page number from pagination, this represent page_number
-        10 // TODO: Map to page_size
+        sorting.length > 0 ? sorting[0].id : "date",
+        sorting.length > 0 && sorting[0].desc ? "descending" : "ascending",
+        currentPage,
+        pageLimit
       );
 
       // TODO: add UI feedback for failed fileSubmission retrieval
@@ -130,7 +131,7 @@ function Submissions() {
         }
 
         if (data?.items) {
-          setCurrentPageData(data.items.slice(0, pageLimit));
+          setCurrentPageData(data.items);
         }
       } catch (error) {
         console.error("Failed to parse JSON:", error);
@@ -138,14 +139,19 @@ function Submissions() {
     };
 
     if (dataStreamId) fetchCall();
-  }, [auth, dataStreamId, dataRoute, sorting, timeframe]);
+  }, [auth, dataStreamId, dataRoute, sorting, timeframe, currentPage]);
+
+  const handleSetSorting = (action: React.SetStateAction<SortingState>) => {
+    setSorting(action);
+    setCurrentPage(1);
+  };
 
   const table = useReactTable({
     data: currentPageData,
     state: {
       sorting,
     },
-    onSortingChange: setSorting,
+    onSortingChange: handleSetSorting,
     manualSorting: true,
     columns,
     getCoreRowModel: getCoreRowModel(),
@@ -172,6 +178,10 @@ function Submissions() {
     setIsModalOpen(false);
   };
 
+  const handleSetCurrentPage = (page: number) => {
+    setCurrentPage(page);
+  };
+
   return (
     <section className="submissions_page bg-grey padding-x-2">
       <h1 className="cdc-page-header padding-y-3 margin-0">
@@ -194,6 +204,7 @@ function Submissions() {
                   {headerGroup.headers.map((header) => {
                     return (
                       <TableHeader
+                        key={header.id}
                         size={getColSize(header.id)}
                         className={header.id == "details" ? "details-row" : ""}>
                         {header.isPlaceholder ? null : (
@@ -250,6 +261,11 @@ function Submissions() {
               ))}
             </TableBody>
           </Table>
+          <TablePaginationServerSide
+            currentPage={currentPage}
+            numberOfPages={dataSummary.number_of_pages}
+            setCurrentPage={handleSetCurrentPage}
+          />
           {/* <TablePagination pageLimit={pageLimit} data={currentPageData} /> */}
           <>
             <DetailsModal

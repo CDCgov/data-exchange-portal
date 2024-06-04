@@ -75,7 +75,7 @@ const generateSummary = (
 ) => {
   return {
     page_number: pageNumber,
-    number_of_pages: Math.floor(submissions.length / pageSize),
+    number_of_pages: Math.ceil(submissions.length / pageSize),
     page_size: pageSize,
     total_items: submissions.length,
   };
