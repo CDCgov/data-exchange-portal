@@ -45,13 +45,12 @@ function PortalTable<TData>({ table }: PortalTableProps<TData>) {
                     size={getColSize(header.id)}
                     className={header.id == "details" ? "details-row" : ""}>
                     {header.isPlaceholder ? null : (
-                      <span
+                      <button
                         className={
                           header.column.getCanSort()
                             ? "cursor-pointer display-flex flex-align-center"
                             : ""
                         }
-                        role="button"
                         onClick={header.column.getToggleSortingHandler()}>
                         {header.column.getCanSort() && (
                           <>
@@ -71,7 +70,7 @@ function PortalTable<TData>({ table }: PortalTableProps<TData>) {
                           header.column.columnDef.header,
                           header.getContext()
                         )}
-                      </span>
+                      </button>
                     )}
                   </TableHeader>
                 );
