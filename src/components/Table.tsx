@@ -44,12 +44,12 @@ function PortalTable<TData>({ table }: PortalTableProps<TData>) {
                     key={header.id}
                     size={getColSize(header.id)}
                     className={header.id == "details" ? "details-row" : ""}>
-                    {header.isPlaceholder ? null : (
+                    {header.column.getCanSort() ? (
                       <button
                         className={
                           header.column.getCanSort()
-                            ? "cursor-pointer display-flex flex-align-center"
-                            : ""
+                            ? "header-button cursor-pointer display-flex flex-align-center"
+                            : "header-button"
                         }
                         onClick={header.column.getToggleSortingHandler()}>
                         {header.column.getCanSort() && (
@@ -71,6 +71,13 @@ function PortalTable<TData>({ table }: PortalTableProps<TData>) {
                           header.getContext()
                         )}
                       </button>
+                    ) : (
+                      <>
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                      </>
                     )}
                   </TableHeader>
                 );
