@@ -168,8 +168,8 @@ export const getSubmissions = (
   startDate: string,
   sortBy: string,
   sortOrder: string,
-  pageNumber: number = 1,
-  pageSize: number = 20
+  pageNumber: number,
+  pageSize: number
 ): FileSubmissions => {
   const dateFilteredItems = dateFilter(submissions, startDate);
 
