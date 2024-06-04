@@ -45,29 +45,6 @@ import SearchOptions from "src/components/SearchOptions";
 import { useAuth } from "react-oidc-context";
 import { getPastDate } from "src/utils/helperFunctions/date";
 
-const columnHelper = createColumnHelper<FileSubmission>();
-
-const columns = [
-  columnHelper.accessor("filename", {
-    header: "File Name",
-    cell: (info) => info.getValue(),
-  }),
-  columnHelper.accessor("status", {
-    header: "Upload Status",
-    cell: (info) => info.getValue(),
-  }),
-  columnHelper.accessor("timestamp", {
-    header: "Submitted",
-    cell: (info) => info.getValue(),
-  }),
-  columnHelper.display({
-    id: "details",
-    header: "Details",
-    enableSorting: false,
-    cell: (props) => "...",
-  }),
-];
-
 function Submissions() {
   const auth = useAuth();
   const pageLimit = 10;
@@ -85,6 +62,49 @@ function Submissions() {
   const [selectedSubmission, setSelectedSubmission] = useState<FileSubmission>(
     defaultSubmissionItem
   );
+
+  const columnHelper = createColumnHelper<FileSubmission>();
+
+  const columns = [
+    columnHelper.accessor("filename", {
+      header: "File Name",
+      cell: (info) => info.getValue(),
+    }),
+    columnHelper.accessor("status", {
+      header: "Upload Status",
+      cell: (info) => (
+        <Pill
+          label={getStatusDisplayValuesByName(info.getValue()).label}
+          color={getStatusDisplayValuesByName(info.getValue()).pillColor}
+        />
+      ),
+    }),
+    columnHelper.accessor("timestamp", {
+      header: "Submitted",
+      cell: (info) => info.getValue(),
+    }),
+    columnHelper.display({
+      id: "details",
+      header: "Details",
+      enableSorting: false,
+      cell: ({ row, cell }) => {
+        return (
+          <Button
+            id={cell.id}
+            ariaLabel="Submission Details"
+            onClick={() => {
+              setIsModalOpen(true);
+              setSelectedSubmission(row.original);
+            }}
+            variation="text"
+            icon={<Icons.Dots />}
+            iconOnly
+            size="default"
+          />
+        );
+      },
+    }),
+  ];
 
   useEffect(() => {
     const fetchCall = async () => {
@@ -132,6 +152,10 @@ function Submissions() {
     getSortedRowModel: getSortedRowModel(),
     debugTable: true,
   });
+
+  // useEffect(() => {
+  //   console.log("tablestate:", table.getState());
+  // }, [table.getState()]);
 
   const handleModalClose = () => {
     setIsModalOpen(false);
