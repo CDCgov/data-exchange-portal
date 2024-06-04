@@ -85,7 +85,7 @@ function Submissions() {
     }),
     columnHelper.display({
       id: "details",
-      header: () => <span className="text-left">Details</span>,
+      header: () => <span className="text-center">Details</span>,
       cell: ({ row, cell }) => {
         return (
           <Button
@@ -156,7 +156,7 @@ function Submissions() {
   //   console.log("tablestate:", table.getState());
   // }, [table.getState()]);
 
-  const getColSize = (field) => {
+  const getColSize = (field: string) => {
     switch (field) {
       case "filename":
         break;
@@ -196,7 +196,9 @@ function Submissions() {
                 <tr key={headerGroup.id}>
                   {headerGroup.headers.map((header) => {
                     return (
-                      <TableHeader size={getColSize(header.id)}>
+                      <TableHeader
+                        size={getColSize(header.id)}
+                        className={header.id == "details" ? "details-row" : ""}>
                         {header.isPlaceholder ? null : (
                           <div
                             {...{
@@ -237,7 +239,10 @@ function Submissions() {
                   {row.getVisibleCells().map((cell) => (
                     <TableDataCell
                       key={cell.id}
-                      size={getColSize(cell.column.id)}>
+                      size={getColSize(cell.column.id)}
+                      className={
+                        cell.column.id == "details" ? "details-row" : ""
+                      }>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
