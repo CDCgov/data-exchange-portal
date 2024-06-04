@@ -114,7 +114,7 @@ function Submissions() {
         getPastDate(timeframe),
         new Date().toISOString(),
         sorting.length > 0 ? sorting[0].id : "date", // TODO: Map to sort_by
-        "descending", // TODO: Map to sort_order
+        sorting.length > 0 && sorting[0].desc ? "descending" : "ascending", // TODO: Map to sort_order
         1, // TODO: Map to onClick of page number from pagination, this represent page_number
         10 // TODO: Map to page_size
       );
@@ -146,6 +146,7 @@ function Submissions() {
       sorting,
     },
     onSortingChange: setSorting,
+    manualSorting: true,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
