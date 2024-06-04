@@ -113,8 +113,8 @@ function Submissions() {
         dataRoute != "All" ? dataRoute : "",
         getPastDate(timeframe),
         new Date().toISOString(),
+        sorting.length > 0 ? sorting[0].id : "date", // TODO: Map to sort_by
         "descending", // TODO: Map to sort_order
-        "date", // TODO: Map to sort_by
         1, // TODO: Map to onClick of page number from pagination, this represent page_number
         10 // TODO: Map to page_size
       );
@@ -138,7 +138,7 @@ function Submissions() {
     };
 
     if (dataStreamId) fetchCall();
-  }, [auth, dataStreamId, dataRoute, timeframe]);
+  }, [auth, dataStreamId, dataRoute, sorting, timeframe]);
 
   const table = useReactTable({
     data: currentPageData,
@@ -151,10 +151,6 @@ function Submissions() {
     getSortedRowModel: getSortedRowModel(),
     debugTable: true,
   });
-
-  // useEffect(() => {
-  //   console.log("tablestate:", table.getState());
-  // }, [table.getState()]);
 
   const getColSize = (field: string) => {
     switch (field) {
