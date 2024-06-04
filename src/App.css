@@ -7,3 +7,8 @@
 .cdc-react .dropdown-items {
   overflow: scroll;
 }
+
+.cdc-react .sort-arrows {
+  margin-left: 5px; /* Hack until we replace the sort icons */
+  margin-right: 5px; /* Hack until we replace the sort icons */
+}

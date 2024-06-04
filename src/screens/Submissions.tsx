@@ -200,7 +200,7 @@ function Submissions() {
                         size={getColSize(header.id)}
                         className={header.id == "details" ? "details-row" : ""}>
                         {header.isPlaceholder ? null : (
-                          <div
+                          <span
                             {...{
                               className: header.column.getCanSort()
                                 ? "cursor-pointer display-flex flex-align-center"
@@ -211,10 +211,10 @@ function Submissions() {
                               <Fragment>
                                 {{
                                   asc: (
-                                    <Icons.ArrowUp className="sort-icon"></Icons.ArrowUp>
+                                    <Icons.ArrowUp className="sort-arrows"></Icons.ArrowUp>
                                   ),
                                   desc: (
-                                    <Icons.ArrowDown className="sort-icon"></Icons.ArrowDown>
+                                    <Icons.ArrowDown className="sort-arrows"></Icons.ArrowDown>
                                   ),
                                 }[header.column.getIsSorted() as string] ?? (
                                   <Icons.SortArrow className="sort-icon"></Icons.SortArrow>
@@ -225,7 +225,7 @@ function Submissions() {
                               header.column.columnDef.header,
                               header.getContext()
                             )}
-                          </div>
+                          </span>
                         )}
                       </TableHeader>
                     );
