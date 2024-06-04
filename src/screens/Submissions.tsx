@@ -1,4 +1,4 @@
-import { useEffect, useState, Fragment } from "react";
+import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import {
   dataRouteAtom,
@@ -6,21 +6,10 @@ import {
   timeFrameAtom,
 } from "src/state/searchParams";
 
-import {
-  Button,
-  Pill,
-  Table,
-  TableBody,
-  TableDataCell,
-  TableHead,
-  TableHeader,
-  TablePaginationServerSide,
-  TableRow,
-} from "@us-gov-cdc/cdc-react";
+import { Button, Pill } from "@us-gov-cdc/cdc-react";
 
 import {
   createColumnHelper,
-  flexRender,
   getCoreRowModel,
   getSortedRowModel,
   SortingState,
@@ -40,6 +29,7 @@ import {
 import { getStatusDisplayValuesByName } from "src/utils/helperFunctions/statusDisplayValues";
 
 import DetailsModal from "src/components/DetailsModal";
+import PortalTable from "src/components/Table";
 import SearchOptions from "src/components/SearchOptions";
 
 import { useAuth } from "react-oidc-context";
@@ -159,21 +149,6 @@ function Submissions() {
     debugTable: true,
   });
 
-  const getColSize = (field: string) => {
-    switch (field) {
-      case "filename":
-        break;
-      case "status":
-        return "sm";
-      case "timestamp":
-        return "md";
-      case "details":
-        return "sm";
-      default:
-        return "md";
-    }
-  };
-
   const handleModalClose = () => {
     setIsModalOpen(false);
   };
@@ -197,73 +172,10 @@ function Submissions() {
           <div className="text-base font-sans-sm">
             Showing {currentPageData.length} items of {dataSummary.total_items}
           </div>
-          <Table className="padding-y-3">
-            <TableHead>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => {
-                    return (
-                      <TableHeader
-                        key={header.id}
-                        size={getColSize(header.id)}
-                        className={header.id == "details" ? "details-row" : ""}>
-                        {header.isPlaceholder ? null : (
-                          <span
-                            {...{
-                              className: header.column.getCanSort()
-                                ? "cursor-pointer display-flex flex-align-center"
-                                : "",
-                              onClick: header.column.getToggleSortingHandler(),
-                            }}>
-                            {header.column.getCanSort() && (
-                              <Fragment>
-                                {{
-                                  asc: (
-                                    <Icons.ArrowUp className="sort-arrows"></Icons.ArrowUp>
-                                  ),
-                                  desc: (
-                                    <Icons.ArrowDown className="sort-arrows"></Icons.ArrowDown>
-                                  ),
-                                }[header.column.getIsSorted() as string] ?? (
-                                  <Icons.SortArrow className="sort-icon"></Icons.SortArrow>
-                                )}
-                              </Fragment>
-                            )}
-                            {flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                          </span>
-                        )}
-                      </TableHeader>
-                    );
-                  })}
-                </tr>
-              ))}
-            </TableHead>
-            <TableBody>
-              {table.getRowModel().rows.map((row) => (
-                <TableRow key={`table-row-${row.id}`}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableDataCell
-                      key={cell.id}
-                      size={getColSize(cell.column.id)}
-                      className={
-                        cell.column.id == "details" ? "details-row" : ""
-                      }>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableDataCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-          <TablePaginationServerSide
+          <PortalTable
             currentPage={currentPage}
             numberOfPages={dataSummary.number_of_pages}
+            table={table}
             setCurrentPage={handleSetCurrentPage}
           />
           {/* <TablePagination pageLimit={pageLimit} data={currentPageData} /> */}
