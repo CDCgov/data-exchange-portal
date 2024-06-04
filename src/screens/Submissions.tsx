@@ -81,7 +81,7 @@ function Submissions() {
     }),
     columnHelper.accessor("timestamp", {
       header: () => <span className="text-left">Submitted</span>,
-      cell: (info) => info.getValue(),
+      cell: (info) => new Date(info.getValue()).toLocaleString(),
     }),
     columnHelper.display({
       id: "details",
