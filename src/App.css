@@ -15,10 +15,7 @@
 
 .cdc-react .header-button {
   background: none;
-  color: inherit;
   border: none;
-  padding: 0;
-  outline: inherit;
   flex-grow: 2;
   font-weight: bold;
   font-size: 0.825rem;
