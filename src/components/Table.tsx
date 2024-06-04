@@ -1,4 +1,4 @@
-import { Table as ReactTable, flexRender } from "@tanstack/react-table";
+import { Table as TanStackTable, flexRender } from "@tanstack/react-table";
 
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
 
@@ -13,18 +13,10 @@ import {
 } from "@us-gov-cdc/cdc-react";
 
 export interface PortalTableProps<TData> {
-  currentPage: number;
-  numberOfPages: number;
-  setCurrentPage: (page: number) => void;
-  table: ReactTable<TData>;
+  table: TanStackTable<TData>;
 }
 
-function PortalTable<TData>({
-  currentPage,
-  numberOfPages,
-  setCurrentPage,
-  table,
-}: PortalTableProps<TData>) {
+function PortalTable<TData>({ table }: PortalTableProps<TData>) {
   const getColSize = (field: string) => {
     switch (field) {
       case "filename":
@@ -102,9 +94,9 @@ function PortalTable<TData>({
         </TableBody>
       </Table>
       <TablePaginationServerSide
-        currentPage={currentPage}
-        numberOfPages={numberOfPages}
-        setCurrentPage={setCurrentPage}
+        currentPage={table.getState().pagination.pageIndex}
+        numberOfPages={table.getPageCount()}
+        setCurrentPage={table.setPageIndex}
       />
     </>
   );

@@ -1724,22 +1724,17 @@
     "@typescript-eslint/types" "6.4.0"
     eslint-visitor-keys "^3.4.1"
 
-"@us-gov-cdc/cdc-react-icons@^2.4.0":
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/@us-gov-cdc/cdc-react-icons/-/cdc-react-icons-2.4.0.tgz#f31f8f2dd4284b1874eda8b9e0c671286344344b"
-  integrity sha512-FCP4vAUjztBGEouhyxrZTBd8M0VGJTOwcJxvba2IfGQDCtesZqaVSRbk/wv+CpD1cma1bXunM3Gt81mEOiTRng==
-
 "@us-gov-cdc/cdc-react-icons@^2.5.0":
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/@us-gov-cdc/cdc-react-icons/-/cdc-react-icons-2.5.0.tgz#cb36cbe356c33a8d44cff0addea4e448de021912"
   integrity sha512-pOVV7qh/wcbpTcvWL1CnCXafiLa4vapjJpQmHmFvu6Eb3iI9wxIRDahhwn5voXunDiUxVyjQV7RsFR7T4dz9pw==
 
-"@us-gov-cdc/cdc-react@^1.11.0":
-  version "1.11.0"
-  resolved "https://registry.yarnpkg.com/@us-gov-cdc/cdc-react/-/cdc-react-1.11.0.tgz#5119eb2cd438bddcc57d1daca0a4e1a6c65fb99f"
-  integrity sha512-e+BiRE5D5Y0ilSKccBOByrSC6OI60TlRAKGmjIA859enMxZTKZhm9R4+6TT/U9+h89MB9KSC+d3irLt4tkWi0A==
+"@us-gov-cdc/cdc-react@^1.13.0":
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/@us-gov-cdc/cdc-react/-/cdc-react-1.13.0.tgz#db57c6044f0c8b7820e59a069e730aca79e62250"
+  integrity sha512-YAj9YfXm7G1nxsf/n6LfiZTxRJxpBjgV8Qzz5J18NnJU4hRZH73e9C2o7vZTpGodRlelcHRDOUOEVsi/rj8kpA==
   dependencies:
-    "@us-gov-cdc/cdc-react-icons" "^2.4.0"
+    "@us-gov-cdc/cdc-react-icons" "^2.5.0"
     "@uswds/uswds" "^3.5.0"
 
 "@uswds/uswds@^3.5.0":

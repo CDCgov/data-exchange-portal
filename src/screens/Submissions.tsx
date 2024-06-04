@@ -12,6 +12,7 @@ import {
   createColumnHelper,
   getCoreRowModel,
   getSortedRowModel,
+  PaginationState,
   SortingState,
   useReactTable,
 } from "@tanstack/react-table";
@@ -37,12 +38,16 @@ import { getPastDate } from "src/utils/helperFunctions/date";
 
 function Submissions() {
   const auth = useAuth();
-  const pageLimit = 10;
-  const [currentPage, setCurrentPage] = useState(1);
+
   const [currentPageData, setCurrentPageData] = useState<FileSubmission[]>([]);
   const [dataSummary, setDataSummary] = useState<FileSubmissionsSummary>(
     defaultSubmissionSummary
   );
+
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10,
+  });
   const [sorting, setSorting] = useState<SortingState>([]);
 
   const dataStreamId = useRecoilValue(dataStreamIdAtom);
@@ -106,8 +111,8 @@ function Submissions() {
         new Date().toISOString(),
         sorting.length > 0 ? sorting[0].id : "date",
         sorting.length > 0 && sorting[0].desc ? "descending" : "ascending",
-        currentPage,
-        pageLimit
+        pagination.pageIndex + 1,
+        pagination.pageSize
       );
 
       // TODO: add UI feedback for failed fileSubmission retrieval
@@ -129,20 +134,24 @@ function Submissions() {
     };
 
     if (dataStreamId) fetchCall();
-  }, [auth, dataStreamId, dataRoute, sorting, timeframe, currentPage]);
+  }, [auth, dataStreamId, dataRoute, sorting, timeframe, pagination]);
 
   const handleSetSorting = (action: React.SetStateAction<SortingState>) => {
     setSorting(action);
-    setCurrentPage(1);
+    table.setPageIndex(0);
   };
 
   const table = useReactTable({
     data: currentPageData,
     state: {
+      pagination,
       sorting,
     },
     onSortingChange: handleSetSorting,
     manualSorting: true,
+    onPaginationChange: setPagination,
+    pageCount: dataSummary.number_of_pages,
+    manualPagination: true,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -151,10 +160,6 @@ function Submissions() {
 
   const handleModalClose = () => {
     setIsModalOpen(false);
-  };
-
-  const handleSetCurrentPage = (page: number) => {
-    setCurrentPage(page);
   };
 
   return (
@@ -172,12 +177,7 @@ function Submissions() {
           <div className="text-base font-sans-sm">
             Showing {currentPageData.length} items of {dataSummary.total_items}
           </div>
-          <PortalTable
-            currentPage={currentPage}
-            numberOfPages={dataSummary.number_of_pages}
-            table={table}
-            setCurrentPage={handleSetCurrentPage}
-          />
+          <PortalTable table={table} />
           {/* <TablePagination pageLimit={pageLimit} data={currentPageData} /> */}
           <>
             <DetailsModal
