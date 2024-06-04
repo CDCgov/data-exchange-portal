@@ -51,95 +51,162 @@ const generateSubmissions = (
   dataStream: string,
   route: string,
   amount: number = 10
-): FileSubmissions => {
+): FileSubmission[] => {
   const items = [];
   for (let i = 0; i < amount; i++) {
     items.push(generateFileSubmission(dataStream, route));
   }
-
-  const summary: FileSubmissionsSummary = {
-    total_items: amount,
-    page_number: 1,
-    page_size: 10,
-    number_of_pages: Math.floor(amount / 10),
-  };
-
-  return {
-    summary,
-    items,
-  };
+  return items;
 };
 
-function shuffleArray(array: FileSubmission[]) {
+const shuffleArray = (array: FileSubmission[]) => {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
 
     [array[i], array[j]] = [array[j], array[i]];
   }
   return array;
-}
-
-export const submissionsAimsCsv: FileSubmissions = generateSubmissions(
-  "aims-celr",
-  "csv",
-  47
-);
-export const submissionsAimsHl7: FileSubmissions = generateSubmissions(
-  "aims-celr",
-  "hl7",
-  35
-);
-export const submissionsDaartHl7: FileSubmissions = generateSubmissions(
-  "daart",
-  "hl7",
-  62
-);
-export const submissionsAimsAll: FileSubmissions = {
-  summary: {
-    number_of_pages:
-      submissionsAimsCsv.summary.number_of_pages +
-      submissionsAimsHl7.summary.number_of_pages,
-    page_number: 1,
-    page_size: 10,
-    total_items:
-      submissionsAimsCsv.summary.total_items +
-      submissionsAimsHl7.summary.total_items,
-  },
-  items: shuffleArray([
-    ...submissionsAimsCsv.items,
-    ...submissionsAimsHl7.items,
-  ]),
 };
 
-export const dateFilter = (
-  submissions: FileSubmissions,
-  date: string
-): FileSubmissions => {
-  const newSubmissions: FileSubmissions = JSON.parse(
-    JSON.stringify(submissions)
-  );
+const generateSummary = (
+  submissions: FileSubmission[],
+  pageNumber: number,
+  pageSize: number
+) => {
+  return {
+    page_number: pageNumber,
+    number_of_pages: Math.floor(submissions.length / pageSize),
+    page_size: pageSize,
+    total_items: submissions.length,
+  };
+};
 
-  newSubmissions.items = submissions.items.filter(
+const dateFilter = (
+  submissions: FileSubmission[],
+  date: string
+): FileSubmission[] => {
+  const newSubmissions: FileSubmission[] = submissions.filter(
     (el: FileSubmission) => new Date(el.timestamp) > new Date(date)
   );
-
-  newSubmissions.summary.total_items = newSubmissions.items.length;
-
   return newSubmissions;
 };
 
+const sortSubmissions = (
+  submissions: FileSubmission[],
+  sortBy: string,
+  sortOrder: string
+): FileSubmission[] => {
+  const itemCopies = JSON.parse(JSON.stringify(submissions));
+
+  if (sortBy == "filename") {
+    itemCopies.sort((a: FileSubmission, b: FileSubmission) => {
+      const nameA = a.filename.toLowerCase();
+      const nameB = b.filename.toLowerCase();
+
+      if (nameA < nameB) {
+        return sortOrder == "ascending" ? -1 : 1;
+      }
+      if (nameA > nameB) {
+        return sortOrder == "ascending" ? 1 : -1;
+      }
+      return 0;
+    });
+  }
+  if (sortBy == "status") {
+    itemCopies.sort((a: FileSubmission, b: FileSubmission) => {
+      const statusA = a.status.toLowerCase();
+      const statusB = b.status.toLowerCase();
+
+      if (statusA < statusB) {
+        return sortOrder == "ascending" ? -1 : 1;
+      }
+      if (statusA > statusB) {
+        return sortOrder == "ascending" ? 1 : -1;
+      }
+      return 0;
+    });
+  }
+  if (sortBy == "timestamp") {
+    itemCopies.sort((a: FileSubmission, b: FileSubmission) => {
+      const dateA = new Date(a.timestamp);
+      const dateB = new Date(b.timestamp);
+
+      if (dateA < dateB) {
+        return sortOrder == "ascending" ? -1 : 1;
+      }
+      if (dateA > dateB) {
+        return sortOrder == "ascending" ? 1 : -1;
+      }
+      return 0;
+    });
+  }
+  return itemCopies;
+};
+
+const submissionsItemsAimsCsv: FileSubmission[] = generateSubmissions(
+  "aims-celr",
+  "csv",
+  67
+);
+const submissionsItemsAimsHl7: FileSubmission[] = generateSubmissions(
+  "aims-celr",
+  "hl7",
+  55
+);
+const submissionsItemsDaartHl7: FileSubmission[] = generateSubmissions(
+  "daart",
+  "hl7",
+  85
+);
+const submissionsItemsAimsAll: FileSubmission[] = shuffleArray([
+  ...submissionsItemsAimsCsv,
+  ...submissionsItemsAimsHl7,
+]);
+
+export const getSubmissions = (
+  submissions: FileSubmission[],
+  startDate: string,
+  sortBy: string,
+  sortOrder: string,
+  pageNumber: number,
+  pageSize: number
+): FileSubmissions => {
+  const dateFilteredItems = dateFilter(submissions, startDate);
+
+  const summary: FileSubmissionsSummary = generateSummary(
+    dateFilteredItems,
+    pageNumber,
+    pageSize
+  );
+
+  const sortedItems: FileSubmission[] = sortSubmissions(
+    dateFilteredItems,
+    sortBy,
+    sortOrder
+  );
+
+  const startItem: number = (pageNumber - 1) * pageSize;
+  const endItem: number = pageNumber * pageSize;
+  const pageData: FileSubmission[] = sortedItems.slice(startItem, endItem);
+
+  return {
+    summary,
+    items: pageData,
+  };
+};
+
 interface MockSubmissions {
-  aimsCsv: FileSubmissions;
-  aimsHl7: FileSubmissions;
-  aimsAll: FileSubmissions;
-  daartHl7: FileSubmissions;
+  aimsCsv: FileSubmission[];
+  aimsHl7: FileSubmission[];
+  aimsAll: FileSubmission[];
+  daartHl7: FileSubmission[];
 }
 
 const mockSubmissions: MockSubmissions = {
-  aimsCsv: submissionsAimsCsv,
-  aimsHl7: submissionsAimsHl7,
-  aimsAll: submissionsAimsAll,
-  daartHl7: submissionsDaartHl7,
+  aimsCsv: submissionsItemsAimsCsv,
+  aimsHl7: submissionsItemsAimsHl7,
+  aimsAll: submissionsItemsAimsAll,
+  daartHl7: submissionsItemsDaartHl7,
 };
 
 export default mockSubmissions;

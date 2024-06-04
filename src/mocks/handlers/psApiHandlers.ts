@@ -1,10 +1,12 @@
 import { http, HttpResponse } from "msw";
 import API_ENDPOINTS from "src/config/api";
 
-import { FileSubmissions } from "src/utils/api/fileSubmissions";
+import { FileSubmission } from "src/utils/api/fileSubmissions";
 
 import { generateCounts } from "src/mocks/data/reportCounts";
-import mockSubmissions, { dateFilter } from "src/mocks/data/fileSubmissions";
+import mockSubmissions, {
+  getSubmissions,
+} from "src/mocks/data/fileSubmissions";
 import getMockDetails from "src/mocks/data/submissionDetails";
 
 const earliestDate: string = new Date("2021-01-01T05:00:00Z").toISOString();
@@ -15,9 +17,22 @@ export const psApiHandlers = [
     const dataStreamId = url.searchParams.get("data_stream_id");
     const dataRoute = url.searchParams.get("data_stream_route");
     const startDate = url.searchParams.get("date_start") ?? earliestDate;
+    const sortBy = url.searchParams.get("sort_by") ?? "filename";
+    const sortOrder = url.searchParams.get("sort_order") ?? "descending";
+    const pageNumber = url.searchParams.get("page_number");
+    const pageSize = url.searchParams.get("page_size");
 
-    const submissionsResponse = (submissions: FileSubmissions) => {
-      return HttpResponse.json(dateFilter(submissions, startDate));
+    const submissionsResponse = (submissions: FileSubmission[]) => {
+      return HttpResponse.json(
+        getSubmissions(
+          submissions,
+          startDate,
+          sortBy,
+          sortOrder,
+          pageNumber ? parseInt(pageNumber) : 1,
+          pageSize ? parseInt(pageSize) : 10
+        )
+      );
     };
 
     if (!dataStreamId) {
@@ -41,9 +56,18 @@ export const psApiHandlers = [
     const dataRoute = url.searchParams.get("data_stream_route");
     const startDate = url.searchParams.get("date_start") ?? earliestDate;
 
-    const countsResponse = (submissions: FileSubmissions) => {
+    const countsResponse = (submissions: FileSubmission[]) => {
       return HttpResponse.json(
-        generateCounts(dateFilter(submissions, startDate))
+        generateCounts(
+          getSubmissions(
+            submissions,
+            startDate,
+            "filename",
+            "descending",
+            1,
+            150
+          )
+        )
       );
     };
 

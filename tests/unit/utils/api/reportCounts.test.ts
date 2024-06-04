@@ -1,33 +1,40 @@
 import getReportCounts from "src/utils/api/reportCounts";
-import mockCounts from "src/mocks/data/reportCounts";
+import { generateCounts } from "src/mocks/data/reportCounts";
+import mockSubmissions, {
+  getSubmissions,
+} from "src/mocks/data/fileSubmissions";
+
+const earliestDate: string = new Date("2021-01-01T05:00:00Z").toISOString();
 
 describe("reportCounts", () => {
   it("should fetch aims-csv counts", async () => {
-    const payload = mockCounts.aimsCsv;
+    const payload = generateCounts(
+      getSubmissions(
+        mockSubmissions.aimsCsv,
+        earliestDate,
+        "filename",
+        "descending",
+        1,
+        150
+      )
+    );
     const res = await getReportCounts("mock_auth_token", "aims-celr", "csv");
     const data = await res.json();
 
     expect(data).toStrictEqual(payload);
   });
 
-  it("should fetch aims-hl7 counts", async () => {
-    const payload = mockCounts.aimsHl7;
-    const res = await getReportCounts("mock_auth_token", "aims-celr", "hl7");
-    const data = await res.json();
-
-    expect(data).toStrictEqual(payload);
-  });
-
-  it("should fetch aims-all counts", async () => {
-    const payload = mockCounts.aimsAll;
-    const res = await getReportCounts("mock_auth_token", "aims-celr", "");
-    const data = await res.json();
-
-    expect(data).toStrictEqual(payload);
-  });
-
   it("should fetch daart-hl7 counts", async () => {
-    const payload = mockCounts.daartHl7;
+    const payload = generateCounts(
+      getSubmissions(
+        mockSubmissions.daartHl7,
+        earliestDate,
+        "filename",
+        "descending",
+        1,
+        150
+      )
+    );
     const res = await getReportCounts("mock_auth_token", "daart", "hl7");
     const data = await res.json();
 

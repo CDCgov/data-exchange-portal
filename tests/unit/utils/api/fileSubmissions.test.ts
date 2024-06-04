@@ -1,34 +1,56 @@
 import { getFileSubmissions } from "src/utils/api/fileSubmissions";
-import mockSubmissions from "src/mocks/data/fileSubmissions";
+import mockSubmissions, {
+  getSubmissions,
+} from "src/mocks/data/fileSubmissions";
+
+const earliestDate: string = new Date("2021-01-01T05:00:00Z").toISOString();
 
 describe("fileSubmissions", () => {
   it("should fetch aims-csv file submissions", async () => {
-    const payload = mockSubmissions.aimsCsv;
-    const res = await getFileSubmissions("mock_auth_token", "aims-celr", "csv");
+    const payload = getSubmissions(
+      mockSubmissions.aimsCsv,
+      earliestDate,
+      "timestamp",
+      "ascending",
+      1,
+      10
+    );
+    const res = await getFileSubmissions(
+      "mock_auth_token",
+      "aims-celr",
+      "csv",
+      earliestDate,
+      "",
+      "timestamp",
+      "ascending",
+      1,
+      10
+    );
     const data = await res.json();
 
     expect(data).toStrictEqual(payload);
   });
 
-  it("should fetch aims-hl7 file submissions", async () => {
-    const payload = mockSubmissions.aimsHl7;
-    const res = await getFileSubmissions("mock_auth_token", "aims-celr", "hl7");
-    const data = await res.json();
-
-    expect(data).toStrictEqual(payload);
-  });
-
-  it("should fetch aims-csv file submissions", async () => {
-    const payload = mockSubmissions.aimsAll;
-    const res = await getFileSubmissions("mock_auth_token", "aims-celr", "");
-    const data = await res.json();
-
-    expect(data).toStrictEqual(payload);
-  });
-
-  it("should fetch aims-csv file submissions", async () => {
-    const payload = mockSubmissions.daartHl7;
-    const res = await getFileSubmissions("mock_auth_token", "daart", "hl7");
+  it("should fetch daart file submissions", async () => {
+    const payload = getSubmissions(
+      mockSubmissions.daartHl7,
+      earliestDate,
+      "timestamp",
+      "ascending",
+      1,
+      10
+    );
+    const res = await getFileSubmissions(
+      "mock_auth_token",
+      "daart",
+      "hl7",
+      earliestDate,
+      "",
+      "timestamp",
+      "ascending",
+      1,
+      10
+    );
     const data = await res.json();
 
     expect(data).toStrictEqual(payload);

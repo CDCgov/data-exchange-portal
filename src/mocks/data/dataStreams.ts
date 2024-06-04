@@ -18,18 +18,18 @@ export const mockDataStreamsWithRoutes: DataStreamWithRoutes[] = [
     datastream: {
       id: 1,
       programID: 1,
-      name: "dextesting",
+      name: "aims-celr",
     },
     routes: [
       {
         id: 1,
         dataStreamID: 1,
-        name: "testevent1",
+        name: "csv",
       },
       {
         id: 2,
         dataStreamID: 1,
-        name: "testevent2",
+        name: "hl7",
       },
     ],
   },
@@ -37,18 +37,13 @@ export const mockDataStreamsWithRoutes: DataStreamWithRoutes[] = [
     datastream: {
       id: 2,
       programID: 1,
-      name: "dextesting_2",
+      name: "daart",
     },
     routes: [
       {
         id: 3,
         dataStreamID: 2,
-        name: "testevent3",
-      },
-      {
-        id: 4,
-        dataStreamID: 2,
-        name: "testevent4",
+        name: "hl7",
       },
     ],
   },
