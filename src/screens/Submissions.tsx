@@ -86,7 +86,6 @@ function Submissions() {
     columnHelper.display({
       id: "details",
       header: "Details",
-      enableSorting: false,
       cell: ({ row, cell }) => {
         return (
           <Button
@@ -157,6 +156,21 @@ function Submissions() {
   //   console.log("tablestate:", table.getState());
   // }, [table.getState()]);
 
+  const getColSize = (field) => {
+    switch (field) {
+      case "filename":
+        break;
+      case "status":
+        return "sm";
+      case "timestamp":
+        return "md";
+      case "details":
+        return "sm";
+      default:
+        return "md";
+    }
+  };
+
   const handleModalClose = () => {
     setIsModalOpen(false);
   };
@@ -182,7 +196,7 @@ function Submissions() {
                 <tr key={headerGroup.id}>
                   {headerGroup.headers.map((header) => {
                     return (
-                      <TableHeader>
+                      <TableHeader size={getColSize(header.id)}>
                         {/* <th key={header.id} colSpan={header.colSpan}> */}
                         {header.isPlaceholder ? null : (
                           <div
@@ -218,7 +232,9 @@ function Submissions() {
               {table.getRowModel().rows.map((row) => (
                 <TableRow key={`table-row-${row.id}`}>
                   {row.getVisibleCells().map((cell) => (
-                    <TableDataCell key={cell.id}>
+                    <TableDataCell
+                      key={cell.id}
+                      size={getColSize(cell.column.id)}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
