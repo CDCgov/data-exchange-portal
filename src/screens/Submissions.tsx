@@ -67,11 +67,11 @@ function Submissions() {
 
   const columns = [
     columnHelper.accessor("filename", {
-      header: "File Name",
+      header: () => <span className="text-left">File Name</span>,
       cell: (info) => info.getValue(),
     }),
     columnHelper.accessor("status", {
-      header: "Upload Status",
+      header: () => <span className="text-left">Upload Status</span>,
       cell: (info) => (
         <Pill
           label={getStatusDisplayValuesByName(info.getValue()).label}
@@ -80,12 +80,12 @@ function Submissions() {
       ),
     }),
     columnHelper.accessor("timestamp", {
-      header: "Submitted",
+      header: () => <span className="text-left">Submitted</span>,
       cell: (info) => info.getValue(),
     }),
     columnHelper.display({
       id: "details",
-      header: "Details",
+      header: () => <span className="text-left">Details</span>,
       cell: ({ row, cell }) => {
         return (
           <Button
@@ -197,24 +197,27 @@ function Submissions() {
                   {headerGroup.headers.map((header) => {
                     return (
                       <TableHeader size={getColSize(header.id)}>
-                        {/* <th key={header.id} colSpan={header.colSpan}> */}
                         {header.isPlaceholder ? null : (
                           <div
                             {...{
                               className: header.column.getCanSort()
                                 ? "cursor-pointer display-flex flex-align-center"
-                                : "display-flex flex-align-center",
+                                : "",
                               onClick: header.column.getToggleSortingHandler(),
                             }}>
-                            {{
-                              asc: (
-                                <Icons.ArrowUp className="sort-icon"></Icons.ArrowUp>
-                              ),
-                              desc: (
-                                <Icons.ArrowDown className="sort-icon"></Icons.ArrowDown>
-                              ),
-                            }[header.column.getIsSorted() as string] ?? (
-                              <Icons.SortArrow className="sort-icon"></Icons.SortArrow>
+                            {header.column.getCanSort() && (
+                              <Fragment>
+                                {{
+                                  asc: (
+                                    <Icons.ArrowUp className="sort-icon"></Icons.ArrowUp>
+                                  ),
+                                  desc: (
+                                    <Icons.ArrowDown className="sort-icon"></Icons.ArrowDown>
+                                  ),
+                                }[header.column.getIsSorted() as string] ?? (
+                                  <Icons.SortArrow className="sort-icon"></Icons.SortArrow>
+                                )}
+                              </Fragment>
                             )}
                             {flexRender(
                               header.column.columnDef.header,
