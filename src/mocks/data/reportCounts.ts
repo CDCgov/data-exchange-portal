@@ -1,9 +1,9 @@
 import { ReportCounts } from "src/utils/api/reportCounts";
 
-import mockSubmissions from "src/mocks/data/fileSubmissions";
 import { FileSubmissions, FileSubmission } from "src/utils/api/fileSubmissions";
 
 export const generateCounts = (submissions: FileSubmissions): ReportCounts => {
+  console.log(submissions);
   const total = submissions.summary.total_items;
   const completed = submissions.items.filter((el: FileSubmission) =>
     el.status.toLowerCase().includes("complete")
@@ -31,19 +31,3 @@ export const generateCounts = (submissions: FileSubmissions): ReportCounts => {
     },
   };
 };
-
-interface MockCounts {
-  aimsCsv: ReportCounts;
-  aimsHl7: ReportCounts;
-  aimsAll: ReportCounts;
-  daartHl7: ReportCounts;
-}
-
-const reportCounts: MockCounts = {
-  aimsCsv: generateCounts(mockSubmissions.aimsCsv),
-  aimsHl7: generateCounts(mockSubmissions.aimsHl7),
-  aimsAll: generateCounts(mockSubmissions.aimsAll),
-  daartHl7: generateCounts(mockSubmissions.daartHl7),
-};
-
-export default reportCounts;
