@@ -18,18 +18,13 @@ export interface PortalTableProps<TData> {
 
 function PortalTable<TData>({ table }: PortalTableProps<TData>) {
   const getColSize = (field: string) => {
-    switch (field) {
-      case "filename":
-        break;
-      case "status":
-        return "sm";
-      case "timestamp":
-        return "md";
-      case "details":
-        return "sm";
-      default:
-        return "md";
+    if (field === "status" || field === "details") {
+      return "sm";
     }
+    if (field === "timestamp") {
+      return "md";
+    }
+    return "md";
   };
 
   return (

@@ -9,8 +9,8 @@
 }
 
 .cdc-react .sort-arrows {
-  margin-left: 5px; /* Hack until we replace the sort icons */
-  margin-right: 5px; /* Hack until we replace the sort icons */
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 .cdc-react .header-button {
