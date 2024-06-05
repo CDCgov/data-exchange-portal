@@ -51,10 +51,10 @@ function PortalTable<TData>({ table }: PortalTableProps<TData>) {
                           <>
                             {{
                               asc: (
-                                <Icons.ArrowUp className="sort-arrows"></Icons.ArrowUp>
+                                <Icons.SortArrowUp className="sort-icon"></Icons.SortArrowUp>
                               ),
                               desc: (
-                                <Icons.ArrowDown className="sort-arrows"></Icons.ArrowDown>
+                                <Icons.SortArrowDown className="sort-icon"></Icons.SortArrowDown>
                               ),
                             }[header.column.getIsSorted() as string] ?? (
                               <Icons.SortArrow className="sort-icon"></Icons.SortArrow>

@@ -23,7 +23,7 @@
     "@nivo/pie": "^0.85.1",
     "@tanstack/react-table": "^8.17.3",
     "@us-gov-cdc/cdc-react": "^1.13.0",
-    "@us-gov-cdc/cdc-react-icons": "^2.5.0",
+    "@us-gov-cdc/cdc-react-icons": "^2.6.0",
     "date-fns": "^3.6.0",
     "msw": "^2.2.1",
     "oidc-client-ts": "^2.2.4",
