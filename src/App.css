@@ -7,3 +7,11 @@
 .cdc-react .dropdown-items {
   overflow: scroll;
 }
+
+.cdc-react .header-button {
+  background: none;
+  border: none;
+  flex-grow: 2;
+  font-weight: bold;
+  font-size: 0.825rem;
+}

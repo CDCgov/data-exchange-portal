@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import {
   dataRouteAtom,
@@ -6,17 +6,17 @@ import {
   timeFrameAtom,
 } from "src/state/searchParams";
 
+import { Button, Pill } from "@us-gov-cdc/cdc-react";
+
 import {
-  Button,
-  Pill,
-  Table,
-  TableBody,
-  TableDataCell,
-  TableHead,
-  TableHeader,
-  // TablePagination,
-  TableRow,
-} from "@us-gov-cdc/cdc-react";
+  createColumnHelper,
+  getCoreRowModel,
+  getSortedRowModel,
+  PaginationState,
+  SortingState,
+  useReactTable,
+} from "@tanstack/react-table";
+
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
 
 import {
@@ -30,6 +30,7 @@ import {
 import { getStatusDisplayValuesByName } from "src/utils/helperFunctions/statusDisplayValues";
 
 import DetailsModal from "src/components/DetailsModal";
+import PortalTable from "src/components/Table";
 import SearchOptions from "src/components/SearchOptions";
 
 import { useAuth } from "react-oidc-context";
@@ -37,11 +38,17 @@ import { getPastDate } from "src/utils/helperFunctions/date";
 
 function Submissions() {
   const auth = useAuth();
-  const pageLimit = 10;
+
   const [currentPageData, setCurrentPageData] = useState<FileSubmission[]>([]);
   const [dataSummary, setDataSummary] = useState<FileSubmissionsSummary>(
     defaultSubmissionSummary
   );
+
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+  const [sorting, setSorting] = useState<SortingState>([]);
 
   const dataStreamId = useRecoilValue(dataStreamIdAtom);
   const dataRoute = useRecoilValue(dataRouteAtom);
@@ -52,6 +59,48 @@ function Submissions() {
     defaultSubmissionItem
   );
 
+  const columnHelper = createColumnHelper<FileSubmission>();
+
+  const columns = [
+    columnHelper.accessor("filename", {
+      header: () => <span className="text-left">File Name</span>,
+      cell: (info) => info.getValue(),
+    }),
+    columnHelper.accessor("status", {
+      header: () => <span className="text-left">Upload Status</span>,
+      cell: (info) => (
+        <Pill
+          label={getStatusDisplayValuesByName(info.getValue()).label}
+          color={getStatusDisplayValuesByName(info.getValue()).pillColor}
+        />
+      ),
+    }),
+    columnHelper.accessor("timestamp", {
+      header: () => <span className="text-left">Submitted</span>,
+      cell: (info) => new Date(info.getValue()).toLocaleString(),
+    }),
+    columnHelper.display({
+      id: "details",
+      header: () => <span className="text-center">Details</span>,
+      cell: ({ row, cell }) => {
+        return (
+          <Button
+            id={cell.id}
+            ariaLabel="Submission Details"
+            onClick={() => {
+              setIsModalOpen(true);
+              setSelectedSubmission(row.original);
+            }}
+            variation="text"
+            icon={<Icons.Dots />}
+            iconOnly
+            size="default"
+          />
+        );
+      },
+    }),
+  ];
+
   useEffect(() => {
     const fetchCall = async () => {
       const res = await getFileSubmissions(
@@ -60,10 +109,10 @@ function Submissions() {
         dataRoute != "All" ? dataRoute : "",
         getPastDate(timeframe),
         new Date().toISOString(),
-        "descending", // TODO: Map to sort_order
-        "date", // TODO: Map to sort_by
-        1, // TODO: Map to onClick of page number from pagination, this represent page_number
-        10 // TODO: Map to page_size
+        sorting.length > 0 ? sorting[0].id : "date",
+        sorting.length > 0 && sorting[0].desc ? "descending" : "ascending",
+        pagination.pageIndex + 1,
+        pagination.pageSize
       );
 
       // TODO: add UI feedback for failed fileSubmission retrieval
@@ -77,7 +126,7 @@ function Submissions() {
         }
 
         if (data?.items) {
-          setCurrentPageData(data.items.slice(0, pageLimit));
+          setCurrentPageData(data.items);
         }
       } catch (error) {
         console.error("Failed to parse JSON:", error);
@@ -85,7 +134,29 @@ function Submissions() {
     };
 
     if (dataStreamId) fetchCall();
-  }, [auth, dataStreamId, dataRoute, timeframe]);
+  }, [auth, dataStreamId, dataRoute, sorting, timeframe, pagination]);
+
+  const handleSetSorting = (action: React.SetStateAction<SortingState>) => {
+    setSorting(action);
+    table.setPageIndex(0);
+  };
+
+  const table = useReactTable({
+    data: currentPageData,
+    state: {
+      pagination,
+      sorting,
+    },
+    onSortingChange: handleSetSorting,
+    manualSorting: true,
+    onPaginationChange: setPagination,
+    pageCount: dataSummary.number_of_pages,
+    manualPagination: true,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    debugTable: true,
+  });
 
   const handleModalClose = () => {
     setIsModalOpen(false);
@@ -106,63 +177,7 @@ function Submissions() {
           <div className="text-base font-sans-sm">
             Showing {currentPageData.length} items of {dataSummary.total_items}
           </div>
-          <Table className="padding-y-3">
-            <TableHead>
-              <TableRow>
-                <TableHeader>
-                  <React.Fragment key=".0">
-                    <Icons.SortArrow className="sort-icon"></Icons.SortArrow>
-                    <span className="text-left">File Name</span>
-                  </React.Fragment>
-                </TableHeader>
-                <TableHeader size="sm">
-                  <Icons.SortArrow className="sort-icon"></Icons.SortArrow>
-                  <span className="text-left">Upload Status</span>
-                </TableHeader>
-                <TableHeader size="md">
-                  <Icons.SortArrow className="sort-icon"></Icons.SortArrow>
-                  <span className="text-left">Submitted</span>
-                </TableHeader>
-                <TableHeader size="sm" className="details-row">
-                  <span className="text-center">Details</span>
-                </TableHeader>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {currentPageData.map((item: FileSubmission) => (
-                <TableRow key={`table-row-${item.upload_id}`}>
-                  {/* Todo: Update this to use a more appropriate id as key */}
-                  <TableDataCell className="text-left">
-                    {item.filename}
-                  </TableDataCell>
-                  <TableDataCell size="sm">
-                    <Pill
-                      label={getStatusDisplayValuesByName(item.status).label}
-                      color={
-                        getStatusDisplayValuesByName(item.status).pillColor
-                      }
-                    />
-                  </TableDataCell>
-                  <TableDataCell size="md">
-                    {new Date(item.timestamp).toLocaleString()}
-                  </TableDataCell>
-                  <TableDataCell size="sm" className="details-row">
-                    <Button
-                      ariaLabel="Submission Details"
-                      onClick={() => {
-                        setIsModalOpen(true);
-                        setSelectedSubmission(item);
-                      }}
-                      variation="text"
-                      icon={<Icons.Dots />}
-                      iconOnly
-                      size="default"
-                    />
-                  </TableDataCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+          <PortalTable table={table} />
           {/* <TablePagination pageLimit={pageLimit} data={currentPageData} /> */}
           <>
             <DetailsModal

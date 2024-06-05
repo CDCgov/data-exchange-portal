@@ -1300,6 +1300,18 @@
   dependencies:
     defer-to-connect "^1.0.1"
 
+"@tanstack/react-table@^8.17.3":
+  version "8.17.3"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-table/-/react-table-8.17.3.tgz#4e10b4cf5355a40d6d72a83d3f4b3ecd32f56bf4"
+  integrity sha512-5gwg5SvPD3lNAXPuJJz1fOCEZYk9/GeBFH3w/hCgnfyszOIzwkwgp5I7Q4MJtn0WECp84b5STQUDdmvGi8m3nA==
+  dependencies:
+    "@tanstack/table-core" "8.17.3"
+
+"@tanstack/table-core@8.17.3":
+  version "8.17.3"
+  resolved "https://registry.yarnpkg.com/@tanstack/table-core/-/table-core-8.17.3.tgz#d7a9830abb29cd369b52b2a7159dc0360af646fd"
+  integrity sha512-mPBodDGVL+fl6d90wUREepHa/7lhsghg2A3vFpakEhrhtbIlgNAZiMr7ccTgak5qbHqF14Fwy+W1yFWQt+WmYQ==
+
 "@testing-library/dom@^10.0.0":
   version "10.0.0"
   resolved "https://registry.yarnpkg.com/@testing-library/dom/-/dom-10.0.0.tgz#ae1ab88aad35a728a38264041163174cafd7e8dd"
@@ -1712,22 +1724,22 @@
     "@typescript-eslint/types" "6.4.0"
     eslint-visitor-keys "^3.4.1"
 
-"@us-gov-cdc/cdc-react-icons@^2.4.0":
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/@us-gov-cdc/cdc-react-icons/-/cdc-react-icons-2.4.0.tgz#f31f8f2dd4284b1874eda8b9e0c671286344344b"
-  integrity sha512-FCP4vAUjztBGEouhyxrZTBd8M0VGJTOwcJxvba2IfGQDCtesZqaVSRbk/wv+CpD1cma1bXunM3Gt81mEOiTRng==
-
 "@us-gov-cdc/cdc-react-icons@^2.5.0":
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/@us-gov-cdc/cdc-react-icons/-/cdc-react-icons-2.5.0.tgz#cb36cbe356c33a8d44cff0addea4e448de021912"
   integrity sha512-pOVV7qh/wcbpTcvWL1CnCXafiLa4vapjJpQmHmFvu6Eb3iI9wxIRDahhwn5voXunDiUxVyjQV7RsFR7T4dz9pw==
 
-"@us-gov-cdc/cdc-react@^1.11.0":
-  version "1.11.0"
-  resolved "https://registry.yarnpkg.com/@us-gov-cdc/cdc-react/-/cdc-react-1.11.0.tgz#5119eb2cd438bddcc57d1daca0a4e1a6c65fb99f"
-  integrity sha512-e+BiRE5D5Y0ilSKccBOByrSC6OI60TlRAKGmjIA859enMxZTKZhm9R4+6TT/U9+h89MB9KSC+d3irLt4tkWi0A==
+"@us-gov-cdc/cdc-react-icons@^2.6.0":
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/@us-gov-cdc/cdc-react-icons/-/cdc-react-icons-2.6.0.tgz#9b3d8caa6d3508c0c5cfeb03fcc0d7fc5a06e304"
+  integrity sha512-+Wjix/qpuphjhr56prpHUpbliZZzIMUD4ftN8VYgT8ARTsGGu+QOxn13YxA4u8E53/2JRcRdpl+D9/kOi3Pxjw==
+
+"@us-gov-cdc/cdc-react@^1.13.0":
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/@us-gov-cdc/cdc-react/-/cdc-react-1.13.0.tgz#db57c6044f0c8b7820e59a069e730aca79e62250"
+  integrity sha512-YAj9YfXm7G1nxsf/n6LfiZTxRJxpBjgV8Qzz5J18NnJU4hRZH73e9C2o7vZTpGodRlelcHRDOUOEVsi/rj8kpA==
   dependencies:
-    "@us-gov-cdc/cdc-react-icons" "^2.4.0"
+    "@us-gov-cdc/cdc-react-icons" "^2.5.0"
     "@uswds/uswds" "^3.5.0"
 
 "@uswds/uswds@^3.5.0":
