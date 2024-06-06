@@ -295,8 +295,8 @@ export const mmsHandlers = [
   http.get(`${API_ENDPOINTS.identities}`, () => {
     // Todo: Switch to using a mock data object instead of hardcoding
     return HttpResponse.json([
-      { id: "1", name: "identity1" },
-      { id: "2", name: "identity2" },
+      { id: "1", idpClientID: "identity1" },
+      { id: "2", idpClientID: "identity2" },
     ]);
   }),
 
