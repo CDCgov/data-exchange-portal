@@ -17,9 +17,13 @@ export interface PortalTableProps<TData> {
 }
 
 function PortalTable<TData>({ table }: PortalTableProps<TData>) {
+  // TODO: Remove sizing from this Table component
   const getColSize = (field: string) => {
     if (field === "status" || field === "details") {
       return "sm";
+    }
+    if (field === "timestamp") {
+      return "md";
     }
     return "md";
   };
