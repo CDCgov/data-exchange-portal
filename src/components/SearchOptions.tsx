@@ -67,6 +67,7 @@ function SearchOptions({
     jurisdiction,
     sender_id,
     timeframe,
+    handleFilter,
     setSearchParams,
   ]);
 
