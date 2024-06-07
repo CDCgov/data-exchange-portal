@@ -15,3 +15,13 @@ export const timeFrameAtom = atom<Timeframe>({
   key: "timeframe",
   default: Timeframe.Last7Days,
 });
+
+export const jurisdictionAtom = atom<string>({
+  key: "jurisdiction",
+  default: "",
+});
+
+export const senderIdAtom = atom<string>({
+  key: "senderId",
+  default: "",
+});

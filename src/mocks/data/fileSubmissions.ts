@@ -28,6 +28,13 @@ const getIssues = (status: string, route: string): string[] => {
   return [];
 };
 
+const createSentBy = () => {
+  const prefix = ["PH", "ST", "LB", "CO", "HO", "PR"];
+  const randomPrefix = faker.helpers.arrayElement(prefix);
+
+  return `${randomPrefix}-LA`;
+};
+
 const generateFileSubmission = (
   dataStream: string,
   route: string
@@ -38,6 +45,8 @@ const generateFileSubmission = (
     filename: faker.system.commonFileName(route),
     status: status,
     timestamp: faker.date.recent({ days: 40 }).toISOString(),
+    jurisdiction: `USA-${faker.location.stateAbbr()}`,
+    sender: createSentBy(),
     metadata: {
       data_stream_id: dataStream,
       data_stream_route: route,
@@ -112,6 +121,34 @@ const sortSubmissions = (
       return 0;
     });
   }
+  if (sortBy == "jurisdiction") {
+    itemCopies.sort((a: FileSubmission, b: FileSubmission) => {
+      const nameA = a.jurisdiction.toLowerCase();
+      const nameB = b.jurisdiction.toLowerCase();
+
+      if (nameA < nameB) {
+        return sortOrder == "ascending" ? -1 : 1;
+      }
+      if (nameA > nameB) {
+        return sortOrder == "ascending" ? 1 : -1;
+      }
+      return 0;
+    });
+  }
+  if (sortBy == "sender") {
+    itemCopies.sort((a: FileSubmission, b: FileSubmission) => {
+      const nameA = a.sender.toLowerCase();
+      const nameB = b.sender.toLowerCase();
+
+      if (nameA < nameB) {
+        return sortOrder == "ascending" ? -1 : 1;
+      }
+      if (nameA > nameB) {
+        return sortOrder == "ascending" ? 1 : -1;
+      }
+      return 0;
+    });
+  }
   if (sortBy == "status") {
     itemCopies.sort((a: FileSubmission, b: FileSubmission) => {
       const statusA = a.status.toLowerCase();
@@ -169,18 +206,33 @@ export const getSubmissions = (
   sortBy: string,
   sortOrder: string,
   pageNumber: number,
-  pageSize: number
+  pageSize: number,
+  jurisdiction: string,
+  senderId: string
 ): FileSubmissions => {
   const dateFilteredItems = dateFilter(submissions, startDate);
 
+  const jurisdictionFilter = jurisdiction
+    ? dateFilteredItems.filter(
+        (el: FileSubmission) =>
+          jurisdiction == "All" || el.jurisdiction == jurisdiction
+      )
+    : dateFilteredItems;
+
+  const senderFilter = senderId
+    ? jurisdictionFilter.filter(
+        (el: FileSubmission) => senderId == "All" || el.sender == senderId
+      )
+    : jurisdictionFilter;
+
   const summary: FileSubmissionsSummary = generateSummary(
-    dateFilteredItems,
+    senderFilter,
     pageNumber,
     pageSize
   );
 
   const sortedItems: FileSubmission[] = sortSubmissions(
-    dateFilteredItems,
+    senderFilter,
     sortBy,
     sortOrder
   );

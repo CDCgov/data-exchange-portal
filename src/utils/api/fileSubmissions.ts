@@ -13,6 +13,8 @@ export interface FileSubmission {
   filename: string;
   upload_id: string;
   timestamp: string;
+  jurisdiction: string;
+  sender: string;
   metadata?: any;
   issues?: string[];
 }
@@ -33,6 +35,8 @@ export const defaultSubmissionItem: FileSubmission = {
   upload_id: "",
   filename: "",
   status: "",
+  jurisdiction: "",
+  sender: "",
   timestamp: "",
   metadata: {},
 };
@@ -46,7 +50,9 @@ export const getFileSubmissions = async (
   sort_by?: string,
   sort_order?: string,
   page_number?: number,
-  page_size?: number
+  page_size?: number,
+  jurisdiction?: string,
+  senderId?: string
 ): Promise<Response> => {
   const params = new URLSearchParams();
 
@@ -58,6 +64,8 @@ export const getFileSubmissions = async (
   if (sort_order) params.append("sort_order", sort_order);
   if (page_size) params.append("page_size", page_size.toString());
   if (page_number) params.append("page_number", page_number.toString());
+  if (jurisdiction) params.append("jurisdiction", jurisdiction);
+  if (senderId) params.append("sender_id", senderId);
 
   const url = `${API_ENDPOINTS.fileSubmissions}?${params.toString()}`;
 

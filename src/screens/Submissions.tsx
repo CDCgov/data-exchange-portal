@@ -4,6 +4,8 @@ import {
   dataRouteAtom,
   dataStreamIdAtom,
   timeFrameAtom,
+  jurisdictionAtom,
+  senderIdAtom,
 } from "src/state/searchParams";
 
 import { Button, Pill } from "@us-gov-cdc/cdc-react";
@@ -53,6 +55,8 @@ function Submissions() {
   const dataStreamId = useRecoilValue(dataStreamIdAtom);
   const dataRoute = useRecoilValue(dataRouteAtom);
   const timeframe = useRecoilValue(timeFrameAtom);
+  const jurisdiction = useRecoilValue(jurisdictionAtom);
+  const senderId = useRecoilValue(senderIdAtom);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSubmission, setSelectedSubmission] = useState<FileSubmission>(
@@ -64,6 +68,14 @@ function Submissions() {
   const columns = [
     columnHelper.accessor("filename", {
       header: () => <span className="text-left">File Name</span>,
+      cell: (info) => info.getValue(),
+    }),
+    columnHelper.accessor("jurisdiction", {
+      header: () => <span className="text-left">Jurisdiction</span>,
+      cell: (info) => info.getValue(),
+    }),
+    columnHelper.accessor("sender", {
+      header: () => <span className="text-left">Sent By</span>,
       cell: (info) => info.getValue(),
     }),
     columnHelper.accessor("status", {
@@ -103,16 +115,23 @@ function Submissions() {
 
   useEffect(() => {
     const fetchCall = async () => {
+      const sortDirection = () => {
+        if (sorting.length == 0) return "descending";
+        return sorting[0].desc ? "descending" : "ascending";
+      };
+
       const res = await getFileSubmissions(
         auth.user?.access_token || "",
         dataStreamId,
         dataRoute != "All" ? dataRoute : "",
         getPastDate(timeframe),
         new Date().toISOString(),
-        sorting.length > 0 ? sorting[0].id : "date",
-        sorting.length > 0 && sorting[0].desc ? "descending" : "ascending",
+        sorting.length > 0 ? sorting[0].id : "timestamp",
+        sortDirection(),
         pagination.pageIndex + 1,
-        pagination.pageSize
+        pagination.pageSize,
+        jurisdiction,
+        senderId
       );
 
       // TODO: add UI feedback for failed fileSubmission retrieval
@@ -134,10 +153,23 @@ function Submissions() {
     };
 
     if (dataStreamId) fetchCall();
-  }, [auth, dataStreamId, dataRoute, sorting, timeframe, pagination]);
+  }, [
+    auth,
+    dataStreamId,
+    dataRoute,
+    jurisdiction,
+    senderId,
+    sorting,
+    timeframe,
+    pagination,
+  ]);
 
   const handleSetSorting = (action: React.SetStateAction<SortingState>) => {
     setSorting(action);
+    table.setPageIndex(0);
+  };
+
+  const handleFilter = () => {
     table.setPageIndex(0);
   };
 
@@ -167,7 +199,7 @@ function Submissions() {
       <h1 className="cdc-page-header padding-y-3 margin-0">
         Track Submissions
       </h1>
-      <SearchOptions />
+      <SearchOptions forSubmissions handleFilter={handleFilter} />
       {currentPageData.length === 0 ? (
         <p className="text-base font-sans-sm padding-top-3">
           No items found. Try expanding the timeframe or modifying the filters.
