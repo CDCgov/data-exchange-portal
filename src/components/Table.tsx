@@ -22,9 +22,6 @@ function PortalTable<TData>({ table }: PortalTableProps<TData>) {
     if (field === "status" || field === "details") {
       return "sm";
     }
-    if (field === "timestamp") {
-      return "md";
-    }
     return "md";
   };
 
