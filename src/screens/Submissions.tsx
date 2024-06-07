@@ -103,14 +103,20 @@ function Submissions() {
 
   useEffect(() => {
     const fetchCall = async () => {
+      const sortDirection = () => {
+        if (sorting.length == 0) return "descending";
+
+        return sorting[0].desc ? "descending" : "ascending";
+      };
+
       const res = await getFileSubmissions(
         auth.user?.access_token || "",
         dataStreamId,
         dataRoute != "All" ? dataRoute : "",
         getPastDate(timeframe),
         new Date().toISOString(),
-        sorting.length > 0 ? sorting[0].id : "date",
-        sorting.length > 0 && sorting[0].desc ? "descending" : "ascending",
+        sorting.length > 0 ? sorting[0].id : "timestamp",
+        sortDirection(),
         pagination.pageIndex + 1,
         pagination.pageSize
       );
@@ -167,7 +173,7 @@ function Submissions() {
       <h1 className="cdc-page-header padding-y-3 margin-0">
         Track Submissions
       </h1>
-      <SearchOptions />
+      <SearchOptions forSubmissions />
       {currentPageData.length === 0 ? (
         <p className="text-base font-sans-sm padding-top-3">
           No items found. Try expanding the timeframe or modifying the filters.
