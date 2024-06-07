@@ -66,6 +66,14 @@ function Submissions() {
       header: () => <span className="text-left">File Name</span>,
       cell: (info) => info.getValue(),
     }),
+    columnHelper.accessor("jurisdiction", {
+      header: () => <span className="text-left">Jurisdiction</span>,
+      cell: (info) => info.getValue(),
+    }),
+    columnHelper.accessor("sender", {
+      header: () => <span className="text-left">Sent By</span>,
+      cell: (info) => info.getValue(),
+    }),
     columnHelper.accessor("status", {
       header: () => <span className="text-left">Upload Status</span>,
       cell: (info) => (
@@ -105,7 +113,6 @@ function Submissions() {
     const fetchCall = async () => {
       const sortDirection = () => {
         if (sorting.length == 0) return "descending";
-
         return sorting[0].desc ? "descending" : "ascending";
       };
 
