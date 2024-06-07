@@ -28,6 +28,13 @@ const getIssues = (status: string, route: string): string[] => {
   return [];
 };
 
+const createSentBy = () => {
+  const prefix = ["PH", "ST", "LB", "CO", "HO", "PR"];
+  const randomPrefix = faker.helpers.arrayElement(prefix);
+
+  return `${randomPrefix}-LA`;
+};
+
 const generateFileSubmission = (
   dataStream: string,
   route: string
@@ -38,6 +45,8 @@ const generateFileSubmission = (
     filename: faker.system.commonFileName(route),
     status: status,
     timestamp: faker.date.recent({ days: 40 }).toISOString(),
+    jurisdiction: `USA-${faker.location.stateAbbr()}`,
+    sender: createSentBy(),
     metadata: {
       data_stream_id: dataStream,
       data_stream_route: route,
@@ -102,6 +111,34 @@ const sortSubmissions = (
     itemCopies.sort((a: FileSubmission, b: FileSubmission) => {
       const nameA = a.filename.toLowerCase();
       const nameB = b.filename.toLowerCase();
+
+      if (nameA < nameB) {
+        return sortOrder == "ascending" ? -1 : 1;
+      }
+      if (nameA > nameB) {
+        return sortOrder == "ascending" ? 1 : -1;
+      }
+      return 0;
+    });
+  }
+  if (sortBy == "jurisdiction") {
+    itemCopies.sort((a: FileSubmission, b: FileSubmission) => {
+      const nameA = a.jurisdiction.toLowerCase();
+      const nameB = b.jurisdiction.toLowerCase();
+
+      if (nameA < nameB) {
+        return sortOrder == "ascending" ? -1 : 1;
+      }
+      if (nameA > nameB) {
+        return sortOrder == "ascending" ? 1 : -1;
+      }
+      return 0;
+    });
+  }
+  if (sortBy == "sender") {
+    itemCopies.sort((a: FileSubmission, b: FileSubmission) => {
+      const nameA = a.sender.toLowerCase();
+      const nameB = b.sender.toLowerCase();
 
       if (nameA < nameB) {
         return sortOrder == "ascending" ? -1 : 1;
