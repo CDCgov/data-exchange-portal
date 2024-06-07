@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import {
   dataRouteAtom,
@@ -169,10 +169,6 @@ function Submissions() {
     table.setPageIndex(0);
   };
 
-  const handleFilter = () => {
-    table.setPageIndex(0);
-  };
-
   const table = useReactTable({
     data: currentPageData,
     state: {
@@ -189,6 +185,10 @@ function Submissions() {
     getSortedRowModel: getSortedRowModel(),
     debugTable: true,
   });
+
+  const handleFilter = useCallback(() => {
+    table.setPageIndex(0);
+  }, [table]);
 
   const handleModalClose = () => {
     setIsModalOpen(false);
