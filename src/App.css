@@ -15,3 +15,7 @@
   font-weight: bold;
   font-size: 0.825rem;
 }
+
+.dashboard-search {
+  max-width: 40rem;
+}

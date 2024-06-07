@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "react-oidc-context";
 
-import { Button, Dropdown } from "@us-gov-cdc/cdc-react";
+import { Button } from "@us-gov-cdc/cdc-react";
+import Select, { SelectOption } from "src/components/formFields/Select";
+
 import { jsonPrettyPrint } from "src/utils/helperFunctions/json";
 
 import { getDataStreams, createDataStream } from "src/utils/api/dataStreams";
@@ -15,15 +17,17 @@ import { getIdentities, createIdentity } from "src/utils/api/identities";
 function MetadataManagement() {
   const auth = useAuth();
   const [authToken, setAuthToken] = useState("");
-  const formTypes = [
-    "Entities",
-    "Programs",
-    "Datastreams",
-    "Routes",
-    "Manifests",
-    "AuthGroups",
-    "Identities",
+
+  const formTypes: SelectOption[] = [
+    { value: "Entities", display: "Entities" },
+    { value: "Programs", display: "Programs" },
+    { value: "Datastreams", display: "Datastreams" },
+    { value: "Routes", display: "Routes" },
+    { value: "Manifests", display: "Manifests" },
+    { value: "AuthGroups", display: "AuthGroups" },
+    { value: "Identities", display: "Identities" },
   ];
+
   const [formType, setFormType] = useState(formTypes[0]);
 
   useEffect(() => {
@@ -217,8 +221,12 @@ function MetadataManagement() {
     setApiResponse(json);
   };
 
+  const handleFormTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFormType({ value: e.target.value, display: e.target.value });
+  };
+
   const renderFormType = () => {
-    switch (formType) {
+    switch (formType.value) {
       case "Entities":
         return (
           <div className="margin-bottom-8">
@@ -460,13 +468,13 @@ function MetadataManagement() {
       <h1 className="cdc-page-header padding-y-3 margin-0">
         Metadata Management
       </h1>
-      <Dropdown
+      <Select
         className="padding-right-2"
-        items={formTypes}
+        labelClassName="margin-top-0"
+        id="data-route-filter"
         label="Meta Data Object"
-        onSelect={setFormType}
-        srText="Meta Data Object"
-        defaultValue={formType}
+        onChange={handleFormTypeChange}
+        options={formTypes}
       />
       <div className="display-flex flex-justify-start">
         <div className="width-mobile-lg">{renderFormType()}</div>

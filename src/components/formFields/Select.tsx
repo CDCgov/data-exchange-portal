@@ -13,6 +13,7 @@ export type SelectProps = {
   id: string;
   options: SelectOption[];
   className?: string;
+  labelClassName?: string;
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   validationStatus?: ValidationStatus;
   inputRef?:
@@ -33,6 +34,7 @@ export const Select = ({
   options,
   onChange,
   className,
+  labelClassName,
   inputRef,
   validationStatus,
   label = "",
@@ -65,7 +67,10 @@ export const Select = ({
   return (
     <div className={className}>
       {label && (
-        <Label requiredMarker={required} htmlFor={id}>
+        <Label
+          requiredMarker={required}
+          htmlFor={id}
+          className={labelClassName}>
           {label}
         </Label>
       )}
@@ -81,7 +86,9 @@ export const Select = ({
         <>
           <option>- Select -</option>
           {options.map(({ value, display }: SelectOption) => (
-            <option value={value}>{display}</option>
+            <option key={value} value={value}>
+              {display}
+            </option>
           ))}
         </>
       </select>
