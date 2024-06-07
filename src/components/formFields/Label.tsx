@@ -41,14 +41,13 @@ export const Label = ({
   return (
     <label
       {...labelProps}
-      data-testid={`test-id-${htmlFor}`}
+      data-testid={`test-id-label-${htmlFor}`}
       className={classes}
       htmlFor={htmlFor}>
       {children}
       {hint && <span className="usa-hint">{hint}</span>}
       {requiredMarker && (
         <>
-          {" "}
           <RequiredMarker />
         </>
       )}

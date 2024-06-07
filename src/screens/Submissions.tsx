@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import {
   dataRouteAtom,
@@ -161,15 +161,11 @@ function Submissions() {
     senderId,
     sorting,
     timeframe,
-    pagination,
+    // pagination,
   ]);
 
   const handleSetSorting = (action: React.SetStateAction<SortingState>) => {
     setSorting(action);
-    table.setPageIndex(0);
-  };
-
-  const handleFilter = () => {
     table.setPageIndex(0);
   };
 
@@ -189,6 +185,10 @@ function Submissions() {
     getSortedRowModel: getSortedRowModel(),
     debugTable: true,
   });
+
+  const handleFilter = useCallback(() => {
+    table.setPageIndex(0);
+  }, [table]);
 
   const handleModalClose = () => {
     setIsModalOpen(false);

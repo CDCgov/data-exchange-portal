@@ -11,13 +11,9 @@ import {
 import { dataStreamsAtom } from "src/state/dataStreams";
 
 import Select, { SelectOption } from "src/components/formFields/Select";
-import { Dropdown } from "@us-gov-cdc/cdc-react";
-import { Icons } from "@us-gov-cdc/cdc-react-icons";
-
 import {
   getDataRoutes,
   getDataStreamOptions,
-  getDataStreamIds,
   getRoutesOptions,
 } from "src/utils/helperFunctions/dataStreams";
 import { Timeframe, timeframeOptions } from "src/types/timeframes";

@@ -1,1 +1,1 @@
-export type ValidationStatus = "error" | "success";
+export type ValidationStatus = "error" | "success" | null;

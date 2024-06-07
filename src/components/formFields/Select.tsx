@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import classnames from "classnames";
 import { ValidationStatus } from "src/types/validationStatus";
 import Label from "src/components/formFields/Label";
@@ -13,6 +13,7 @@ export type SelectProps = {
   id: string;
   options: SelectOption[];
   className?: string;
+  onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   validationStatus?: ValidationStatus;
   inputRef?:
     | string
@@ -22,20 +23,30 @@ export type SelectProps = {
     | undefined;
   label?: string;
   required?: boolean;
-  errors?: string;
+  errorMessage?: string;
+  defaultValue?: string;
+  disabled?: boolean;
 };
 
 export const Select = ({
   id,
   options,
+  onChange,
   className,
   inputRef,
   validationStatus,
   label = "",
   required = false,
-  errors = "",
-  ...inputProps
-}: SelectProps & JSX.IntrinsicElements["select"]): React.ReactElement => {
+  errorMessage = "",
+  defaultValue = "",
+  disabled = false,
+}: SelectProps): React.ReactElement => {
+  const [currentVal, setCurrentVal] = useState(defaultValue);
+
+  useEffect(() => {
+    setCurrentVal(defaultValue);
+  }, [defaultValue]);
+
   const isError = validationStatus === "error";
   const isSuccess = validationStatus === "success";
   const classes = classnames("usa-select", {
@@ -43,20 +54,30 @@ export const Select = ({
     "usa-input--success": isSuccess,
   });
 
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setCurrentVal(e.target.value);
+
+    if (onChange) {
+      onChange(e);
+    }
+  };
+
   return (
     <div className={className}>
-      {label ?? (
+      {label && (
         <Label requiredMarker={required} htmlFor={id}>
           {label}
         </Label>
       )}
       <select
-        data-testid="Select"
+        value={currentVal}
+        data-testid={`test-id-select-${id}`}
         className={classes}
+        onChange={handleChange}
+        disabled={disabled}
         id={id}
         name={id}
-        ref={inputRef}
-        {...inputProps}>
+        ref={inputRef}>
         <>
           <option>- Select -</option>
           {options.map(({ value, display }: SelectOption) => (
@@ -64,7 +85,7 @@ export const Select = ({
           ))}
         </>
       </select>
-      {errors ?? <ErrorMessage>{errors}</ErrorMessage>}
+      {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
     </div>
   );
 };
