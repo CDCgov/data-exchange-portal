@@ -159,53 +159,59 @@ function SearchOptions({
   ];
 
   return (
-    <div className="padding-bottom-2 display-flex flex-row flex-justify">
-      <div className="display-flex flex-row">
-        <Select
-          className="padding-right-2"
-          id="data-stream-filter"
-          label="Data Stream"
-          onChange={handleDataStreamId}
-          options={getDataStreamOptions(dataStreams)}
-          defaultValue={data_stream_id}
-        />
-        <Select
-          className="padding-right-2"
-          id="data-route-filter"
-          label="Data Route"
-          onChange={handleDataRoute}
-          options={getRoutesOptions(dataStreams, data_stream_id)}
-          defaultValue={data_route}
-        />
-        <Select
-          className="padding-right-2"
-          id="timeframe-filter"
-          label="Timeframe"
-          onChange={handleTimeframe}
-          options={timeframeOptions}
-          defaultValue={timeframe}
-        />
-        {forSubmissions && (
-          <>
-            <Select
-              className="padding-right-2"
-              id="jurisdiction-filter"
-              label="Jurisdiction"
-              onChange={handleJurisdiction}
-              options={jurisdictions}
-              defaultValue={jurisdiction}
-            />
-            <Select
-              className="padding-right-2"
-              id="sender-id-filter"
-              label="Sender"
-              onChange={handleSender}
-              options={senders}
-              defaultValue={sender_id}
-            />
-          </>
-        )}
-      </div>
+    <div
+      className={`display-flex flex-justify padding-bottom-4 ${
+        forSubmissions ? "" : "dashboard-search"
+      }`}>
+      <Select
+        className="padding-right-2 flex-1"
+        labelClassName="margin-top-0"
+        id="data-stream-filter"
+        label="Data Stream"
+        onChange={handleDataStreamId}
+        options={getDataStreamOptions(dataStreams)}
+        defaultValue={data_stream_id}
+      />
+      <Select
+        className="padding-right-2 flex-1"
+        labelClassName="margin-top-0"
+        id="data-route-filter"
+        label="Data Route"
+        onChange={handleDataRoute}
+        options={getRoutesOptions(dataStreams, data_stream_id)}
+        defaultValue={data_route}
+      />
+      <Select
+        className="padding-right-2 flex-1"
+        labelClassName="margin-top-0"
+        id="timeframe-filter"
+        label="Timeframe"
+        onChange={handleTimeframe}
+        options={timeframeOptions}
+        defaultValue={timeframe}
+      />
+      {forSubmissions && (
+        <>
+          <Select
+            className="padding-right-2 flex-1"
+            labelClassName="margin-top-0"
+            id="jurisdiction-filter"
+            label="Jurisdiction"
+            onChange={handleJurisdiction}
+            options={jurisdictions}
+            defaultValue={jurisdiction}
+          />
+          <Select
+            className="padding-right-2 flex-1"
+            labelClassName="margin-top-0"
+            id="sender-id-filter"
+            label="Sender"
+            onChange={handleSender}
+            options={senders}
+            defaultValue={sender_id}
+          />
+        </>
+      )}
     </div>
   );
 }
