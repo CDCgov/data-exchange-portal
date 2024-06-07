@@ -21,6 +21,8 @@ export const psApiHandlers = [
     const sortOrder = url.searchParams.get("sort_order") ?? "descending";
     const pageNumber = url.searchParams.get("page_number");
     const pageSize = url.searchParams.get("page_size");
+    const jurisdiction = url.searchParams.get("jurisdiction");
+    const senderId = url.searchParams.get("sender_id");
 
     const submissionsResponse = (submissions: FileSubmission[]) => {
       return HttpResponse.json(
@@ -30,7 +32,9 @@ export const psApiHandlers = [
           sortBy,
           sortOrder,
           pageNumber ? parseInt(pageNumber) : 1,
-          pageSize ? parseInt(pageSize) : 10
+          pageSize ? parseInt(pageSize) : 10,
+          jurisdiction ?? "",
+          senderId ?? ""
         )
       );
     };
@@ -65,7 +69,9 @@ export const psApiHandlers = [
             "filename",
             "descending",
             1,
-            150
+            150,
+            "All",
+            "All"
           )
         )
       );

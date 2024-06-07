@@ -87,6 +87,60 @@ function SearchOptions({ forSubmissions = false }: SearchOptionsProps) {
     setSenderId(senderId);
   };
 
+  const jurisdictions = [
+    "All",
+    "USA-AL",
+    "USA-AK",
+    "USA-AZ",
+    "USA-AR",
+    "USA-CA",
+    "USA-CO",
+    "USA-CT",
+    "USA-DE",
+    "USA-FL",
+    "USA-GA",
+    "USA-HI",
+    "USA-ID",
+    "USA-IL",
+    "USA-IN",
+    "USA-IA",
+    "USA-KS",
+    "USA-KY",
+    "USA-LA",
+    "USA-ME",
+    "USA-MD",
+    "USA-MA",
+    "USA-MI",
+    "USA-MN",
+    "USA-MS",
+    "USA-MO",
+    "USA-MT",
+    "USA-NE",
+    "USA-NV",
+    "USA-NH",
+    "USA-NJ",
+    "USA-NM",
+    "USA-NY",
+    "USA-NC",
+    "USA-ND",
+    "USA-OH",
+    "USA-OK",
+    "USA-OR",
+    "USA-PA",
+    "USA-RI",
+    "USA-SC",
+    "USA-SD",
+    "USA-TN",
+    "USA-TX",
+    "USA-UT",
+    "USA-VT",
+    "USA-VA",
+    "USA-WA",
+    "USA-WV",
+    "USA-WI",
+    "USA-WY",
+  ];
+
   return (
     <div className="padding-bottom-2 display-flex flex-row flex-justify">
       <div className="display-flex flex-row cdc-submissions-page--filters">
@@ -119,7 +173,7 @@ function SearchOptions({ forSubmissions = false }: SearchOptionsProps) {
           <>
             <Dropdown
               className="padding-right-2"
-              items={["MD", "VA"]}
+              items={jurisdictions}
               label="Jurisdiction"
               onSelect={handleJurisdiction}
               srText="Jurisdiction"
@@ -127,7 +181,15 @@ function SearchOptions({ forSubmissions = false }: SearchOptionsProps) {
             />
             <Dropdown
               className="padding-right-2"
-              items={["Sender 1", "Sender 2"]}
+              items={[
+                "All",
+                "PH-LA",
+                "ST-LA",
+                "LB-LA",
+                "CO-LA",
+                "HO-LA",
+                "PR-LA",
+              ]}
               label="Sender"
               onSelect={handleSender}
               srText="Sender"
