@@ -21,9 +21,13 @@ import timeframes, { Timeframe } from "src/types/timeframes";
 
 interface SearchOptionsProps {
   forSubmissions?: boolean;
+  handleFilter?: () => void;
 }
 
-function SearchOptions({ forSubmissions = false }: SearchOptionsProps) {
+function SearchOptions({
+  forSubmissions = false,
+  handleFilter,
+}: SearchOptionsProps) {
   const [searchParams, setSearchParams] = useSearchParams();
   const [data_stream_id, setDataStreamId] = useRecoilState(dataStreamIdAtom);
   const [data_route, setDataRoute] = useRecoilState(dataRouteAtom);
@@ -48,6 +52,8 @@ function SearchOptions({ forSubmissions = false }: SearchOptionsProps) {
   }, []);
 
   useEffect(() => {
+    if (handleFilter) handleFilter();
+
     setSearchParams({
       data_stream_id,
       data_route,

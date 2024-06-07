@@ -169,6 +169,10 @@ function Submissions() {
     table.setPageIndex(0);
   };
 
+  const handleFilter = () => {
+    table.setPageIndex(0);
+  };
+
   const table = useReactTable({
     data: currentPageData,
     state: {
@@ -195,7 +199,7 @@ function Submissions() {
       <h1 className="cdc-page-header padding-y-3 margin-0">
         Track Submissions
       </h1>
-      <SearchOptions forSubmissions />
+      <SearchOptions forSubmissions handleFilter={handleFilter} />
       {currentPageData.length === 0 ? (
         <p className="text-base font-sans-sm padding-top-3">
           No items found. Try expanding the timeframe or modifying the filters.
