@@ -206,18 +206,33 @@ export const getSubmissions = (
   sortBy: string,
   sortOrder: string,
   pageNumber: number,
-  pageSize: number
+  pageSize: number,
+  jurisdiction: string,
+  senderId: string
 ): FileSubmissions => {
   const dateFilteredItems = dateFilter(submissions, startDate);
 
+  const jurisdictionFilter = jurisdiction
+    ? dateFilteredItems.filter(
+        (el: FileSubmission) =>
+          jurisdiction == "All" || el.jurisdiction == jurisdiction
+      )
+    : dateFilteredItems;
+
+  const senderFilter = senderId
+    ? jurisdictionFilter.filter(
+        (el: FileSubmission) => senderId == "All" || el.sender == senderId
+      )
+    : jurisdictionFilter;
+
   const summary: FileSubmissionsSummary = generateSummary(
-    dateFilteredItems,
+    senderFilter,
     pageNumber,
     pageSize
   );
 
   const sortedItems: FileSubmission[] = sortSubmissions(
-    dateFilteredItems,
+    senderFilter,
     sortBy,
     sortOrder
   );
