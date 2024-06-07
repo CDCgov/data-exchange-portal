@@ -41,7 +41,7 @@ export const Label = ({
   return (
     <label
       {...labelProps}
-      data-testid="label"
+      data-testid={`test-id-${htmlFor}`}
       className={classes}
       htmlFor={htmlFor}>
       {children}

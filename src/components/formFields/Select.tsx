@@ -38,17 +38,13 @@ export const Select = ({
 }: SelectProps & JSX.IntrinsicElements["select"]): React.ReactElement => {
   const isError = validationStatus === "error";
   const isSuccess = validationStatus === "success";
-  const classes = classnames(
-    "usa-select",
-    {
-      "usa-input--error": isError,
-      "usa-input--success": isSuccess,
-    },
-    className
-  );
+  const classes = classnames("usa-select", {
+    "usa-input--error": isError,
+    "usa-input--success": isSuccess,
+  });
 
   return (
-    <>
+    <div className={className}>
       {label ?? (
         <Label requiredMarker={required} htmlFor={id}>
           {label}
@@ -69,7 +65,7 @@ export const Select = ({
         </>
       </select>
       {errors ?? <ErrorMessage>{errors}</ErrorMessage>}
-    </>
+    </div>
   );
 };
 
