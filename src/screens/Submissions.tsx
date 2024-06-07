@@ -66,12 +66,12 @@ function Submissions() {
       header: () => <span className="text-left">File Name</span>,
       cell: (info) => info.getValue(),
     }),
-    columnHelper.accessor("sender", {
-      header: () => <span className="text-left">Sender</span>,
-      cell: (info) => info.getValue(),
-    }),
     columnHelper.accessor("jurisdiction", {
       header: () => <span className="text-left">Jurisdiction</span>,
+      cell: (info) => info.getValue(),
+    }),
+    columnHelper.accessor("sender", {
+      header: () => <span className="text-left">Sent By</span>,
       cell: (info) => info.getValue(),
     }),
     columnHelper.accessor("status", {

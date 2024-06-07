@@ -28,6 +28,20 @@ const getIssues = (status: string, route: string): string[] => {
   return [];
 };
 
+const createSentBy = () => {
+  const prefix = ["PH", "ST", "LB", "CO", "HO", "PR"];
+
+  const arrayLength = prefix.length;
+
+  const randomIndex = Math.floor(Math.random() * arrayLength);
+
+  return `${prefix[randomIndex]}-LA`;
+};
+
+const createJurisdiction = () => {
+  return `USA-${faker.location.stateAbbr()}`;
+};
+
 const generateFileSubmission = (
   dataStream: string,
   route: string
@@ -38,8 +52,8 @@ const generateFileSubmission = (
     filename: faker.system.commonFileName(route),
     status: status,
     timestamp: faker.date.recent({ days: 40 }).toISOString(),
-    jurisdiction: faker.address.state(),
-    sender: faker.company.name(), // TODO: Make an array of some more realistic examples and update this
+    jurisdiction: createJurisdiction(),
+    sender: createSentBy(), // TODO: Make an array of some more realistic examples and update this
     metadata: {
       data_stream_id: dataStream,
       data_stream_route: route,
