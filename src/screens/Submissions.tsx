@@ -111,14 +111,19 @@ function Submissions() {
 
   useEffect(() => {
     const fetchCall = async () => {
+      const sortDirection = () => {
+        if (sorting.length == 0) return "descending";
+        return sorting[0].desc ? "descending" : "ascending";
+      };
+
       const res = await getFileSubmissions(
         auth.user?.access_token || "",
         dataStreamId,
         dataRoute != "All" ? dataRoute : "",
         getPastDate(timeframe),
         new Date().toISOString(),
-        sorting.length > 0 ? sorting[0].id : "date",
-        sorting.length > 0 && sorting[0].desc ? "descending" : "ascending",
+        sorting.length > 0 ? sorting[0].id : "timestamp",
+        sortDirection(),
         pagination.pageIndex + 1,
         pagination.pageSize
       );
