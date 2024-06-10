@@ -15,7 +15,9 @@ describe("reportCounts", () => {
         "filename",
         "descending",
         1,
-        150
+        150,
+        "",
+        ""
       )
     );
     const res = await getReportCounts("mock_auth_token", "aims-celr", "csv");
@@ -32,7 +34,9 @@ describe("reportCounts", () => {
         "filename",
         "descending",
         1,
-        150
+        150,
+        "",
+        ""
       )
     );
     const res = await getReportCounts("mock_auth_token", "daart", "hl7");

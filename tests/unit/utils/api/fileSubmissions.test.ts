@@ -13,7 +13,9 @@ describe("fileSubmissions", () => {
       "timestamp",
       "ascending",
       1,
-      10
+      10,
+      "",
+      ""
     );
     const res = await getFileSubmissions(
       "mock_auth_token",
@@ -24,7 +26,9 @@ describe("fileSubmissions", () => {
       "timestamp",
       "ascending",
       1,
-      10
+      10,
+      "",
+      ""
     );
     const data = await res.json();
 
@@ -38,7 +42,9 @@ describe("fileSubmissions", () => {
       "timestamp",
       "ascending",
       1,
-      10
+      10,
+      "",
+      ""
     );
     const res = await getFileSubmissions(
       "mock_auth_token",
