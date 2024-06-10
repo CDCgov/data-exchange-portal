@@ -38,7 +38,7 @@ export const getAuthGroups = async (
 // Todo: Determine actual body payload needed
 export const createAuthGroup = async (
   access_token: string,
-  entity_id: string,
+  entity_id: string | number,
   authgroup_name: string
 ): Promise<Response> => {
   const url = `${API_ENDPOINTS.entities}/${entity_id}/groups`;
@@ -86,7 +86,7 @@ export const assignAuthGroupToDataStream = async (
 export const assignUserToAuthGroup = async (
   access_token: string,
   identity_id: number,
-  authgroup_id: number
+  authgroup_id: number | string
 ): Promise<Response> => {
   const url = `${API_ENDPOINTS.groups}/${authgroup_id}/identities`;
 

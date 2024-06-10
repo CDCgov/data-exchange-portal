@@ -50,13 +50,13 @@ function AuthGroupDataStream() {
     fetchDataStreams();
   }, [fetchEntities, fetchDataStreams]);
 
-  const fetchAuthGroups = async (entity_id: string) => {
+  const fetchAuthGroups = async (entity_id: number) => {
     const res = await getAuthGroups(authToken, entity_id);
     const json = await res.json();
     setAuthGroupsList(json);
   };
 
-  const fetchRoutes = async (datastream_id: string) => {
+  const fetchRoutes = async (datastream_id: number) => {
     const res = await getRoutes(authToken, datastream_id);
     const json = await res.json();
     setRoutesList(json);
@@ -64,7 +64,7 @@ function AuthGroupDataStream() {
 
   const handleSetEntity = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedEntityId(e.target.value);
-    await fetchAuthGroups(e.target.value);
+    await fetchAuthGroups(parseInt(e.target.value));
   };
 
   const handleSetAuthGroup = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -75,7 +75,7 @@ function AuthGroupDataStream() {
     e: React.ChangeEvent<HTMLSelectElement>
   ) => {
     setSelectedDatastreamId(e.target.value);
-    await fetchRoutes(e.target.value);
+    await fetchRoutes(parseInt(e.target.value));
   };
 
   const handleSetRoute = async (e: React.ChangeEvent<HTMLSelectElement>) => {
