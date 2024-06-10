@@ -26,7 +26,9 @@ describe("fileSubmissions", () => {
       "timestamp",
       "ascending",
       1,
-      10
+      10,
+      "",
+      ""
     );
     const data = await res.json();
 
