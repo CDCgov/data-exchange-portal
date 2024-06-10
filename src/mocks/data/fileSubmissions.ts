@@ -45,7 +45,7 @@ const generateFileSubmission = (
     filename: faker.system.commonFileName(route),
     status: status,
     timestamp: faker.date.recent({ days: 40 }).toISOString(),
-    jurisdiction: `USA-${faker.location.stateAbbr()}`,
+    jurisdiction: `USA-${faker.location.state({ abbreviated: true })}`,
     sender: createSentBy(),
     metadata: {
       data_stream_id: dataStream,

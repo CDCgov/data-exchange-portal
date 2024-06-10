@@ -15,7 +15,7 @@ import {
   DataStreamWithRoutes,
 } from "src/utils/api/dataStreams";
 import { Route } from "src/utils/api/routes";
-import { getDataRoutes } from "src/utils/helperFunctions/dataStreams";
+import { getDataRoutes } from "src/utils/helperFunctions/metadataFilters";
 
 import {
   ProfileHeader,
