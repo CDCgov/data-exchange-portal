@@ -1,7 +1,7 @@
-/* eslint-disable */
-import { useState, useEffect, Fragment } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { useAuth } from "react-oidc-context";
 import { jsonPrettyPrint } from "src/utils/helperFunctions/json";
+import Select, { SelectOption } from "src/components/formFields/Select";
 
 import {
   getIdentities,
@@ -23,17 +23,19 @@ function IdentityLookUp() {
     setAuthToken(auth.user?.access_token ?? "");
   }, [auth]);
 
-  useEffect(() => {
-    fetchIdentities();
-  }, []);
-
-  const fetchIdentities = async () => {
+  const fetchIdentities = useCallback(async () => {
     const res = await getIdentities(authToken);
     const json = await res.json();
     setIdentitiesList(json);
-  };
+  }, [authToken]);
 
-  const handleSetIdentities = async (e: any) => {
+  useEffect(() => {
+    fetchIdentities();
+  }, [fetchIdentities]);
+
+  const handleSetIdentities = async (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
     const res = await getIdentityDatastreamsAndRoutes(
       authToken,
       e.target.value
@@ -42,33 +44,24 @@ function IdentityLookUp() {
     setApiResponse(json);
   };
 
-  const setIdentitiesDropdownOptions = () => {
-    return (
-      <Fragment>
-        <option value="">Select Identity</option>
-        {identitiesList.map((item: Identity) => {
-          return <option value={item.id}>{item.idpClientID}</option>;
-        })}
-      </Fragment>
-    );
-  };
+  const identitiesOptions: SelectOption[] = identitiesList.map(
+    (i: Identity) => ({
+      value: i.id,
+      display: i.idpClientID,
+    })
+  );
 
   return (
     <>
       <h2 className="font-sans-lg">User LookUp</h2>
-      <div className="grid-row margin-bottom-4">
-        <div className="grid-col flex-1 padding-right-2">
-          <label className="usa-label" htmlFor="identity-dropdown">
-            Select Identity
-          </label>
-          <select
-            className="usa-select"
-            name="identity-dropdown"
-            id="identity-dropdown"
-            onChange={handleSetIdentities}>
-            {setIdentitiesDropdownOptions()}
-          </select>
-        </div>
+      <div className="grid-row margin-top-2 margin-bottom-4">
+        <Select
+          className="grid-col flex-1 padding-right-2"
+          id="identity-list-select"
+          label="Select Identity"
+          onChange={handleSetIdentities}
+          options={identitiesOptions}
+        />
         <div className="grid-col"></div>
         <div className="grid-col"></div>
         <div className="grid-col"></div>

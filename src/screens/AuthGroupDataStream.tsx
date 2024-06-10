@@ -1,6 +1,6 @@
-/* eslint-disable */
-import { useState, useEffect, Fragment } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { useAuth } from "react-oidc-context";
+import Select, { SelectOption } from "src/components/formFields/Select";
 
 import { Button } from "@us-gov-cdc/cdc-react";
 
@@ -18,23 +18,13 @@ function AuthGroupDataStream() {
   const [authToken, setAuthToken] = useState("");
 
   const [entitiesList, setEntitiesList] = useState([]);
-
   const [authGroupsList, setAuthGroupsList] = useState([]);
-
   const [datastreamsList, setDatastreamsList] = useState([]);
-
   const [routesList, setRoutesList] = useState([]);
 
-  const [selectedEntityName, setSelectedEntityName] = useState("");
   const [selectedEntityId, setSelectedEntityId] = useState("");
-
-  const [selectedAuthGroupName, setSelectedAuthGroupName] = useState("");
   const [selectedAuthGroupId, setSelectedAuthGroupId] = useState("");
-
-  const [selectedDatastreamName, setSelectedDatastreamName] = useState("");
   const [selectedDatastreamId, setSelectedDatastreamId] = useState("");
-
-  const [selectedRouteName, setSelectedRouteName] = useState("");
   const [selectedRouteId, setSelectedRouteId] = useState("");
 
   const [responseMessage, setResponseMessage] = useState("");
@@ -43,22 +33,22 @@ function AuthGroupDataStream() {
     setAuthToken(auth.user?.access_token ?? "");
   }, [auth]);
 
-  useEffect(() => {
-    fetchEntities();
-    fetchDataStreams();
-  }, []);
-
-  const fetchEntities = async () => {
+  const fetchEntities = useCallback(async () => {
     const res = await getEntities(authToken);
     const json = await res.json();
     setEntitiesList(json);
-  };
+  }, [authToken]);
 
-  const fetchDataStreams = async () => {
+  const fetchDataStreams = useCallback(async () => {
     const res = await getDataStreams(authToken);
     const json = await res.json();
     setDatastreamsList(json);
-  };
+  }, [authToken]);
+
+  useEffect(() => {
+    fetchEntities();
+    fetchDataStreams();
+  }, [fetchEntities, fetchDataStreams]);
 
   const fetchAuthGroups = async (entity_id: string) => {
     const res = await getAuthGroups(authToken, entity_id);
@@ -66,87 +56,61 @@ function AuthGroupDataStream() {
     setAuthGroupsList(json);
   };
 
-  const fetchRoutes = async (datastream_id: number) => {
+  const fetchRoutes = async (datastream_id: string) => {
     const res = await getRoutes(authToken, datastream_id);
     const json = await res.json();
     setRoutesList(json);
   };
 
-  const handleSetEntity = async (e: any) => {
+  const handleSetEntity = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedEntityId(e.target.value);
-    setSelectedEntityName(e.target.selectedOptions[0].text);
     await fetchAuthGroups(e.target.value);
   };
 
-  const handleSetAuthGroup = (e: any) => {
+  const handleSetAuthGroup = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedAuthGroupId(e.target.value);
-    setSelectedAuthGroupName(e.target.selectedOptions[0].text);
   };
 
-  const handleSetDatastream = async (e: any) => {
+  const handleSetDatastream = async (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
     setSelectedDatastreamId(e.target.value);
-    setSelectedDatastreamName(e.target.selectedOptions[0].text);
     await fetchRoutes(e.target.value);
   };
 
-  const handleSetRoute = async (e: any) => {
+  const handleSetRoute = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedRouteId(e.target.value);
-    setSelectedRouteName(e.target.selectedOptions[0].text);
   };
 
-  const setEntityDropdownOptions = () => {
-    return (
-      <Fragment>
-        <option value="">Select Entity</option>
-        {entitiesList.map((item: Entity) => {
-          return <option value={item.id}>{item.name}</option>;
-        })}
-      </Fragment>
-    );
-  };
+  const entitiesOptions: SelectOption[] = entitiesList.map((e: Entity) => ({
+    value: e.id,
+    display: e.name,
+  }));
 
-  const setAuthGroupDropdownOptions = () => {
-    return (
-      <Fragment>
-        <option value="">Select AuthGroup</option>
-        {authGroupsList.map((item: AuthGroup) => {
-          return <option value={item.id}>{item.name}</option>;
-        })}
-      </Fragment>
-    );
-  };
+  const authGroupOptions: SelectOption[] = authGroupsList.map(
+    (g: AuthGroup) => ({
+      value: g.id,
+      display: g.name,
+    })
+  );
 
-  const setDatastreamDropdownOptions = () => {
-    return (
-      <Fragment>
-        <option value="">Select Datastream</option>
-        {datastreamsList.map((item: DataStream) => {
-          return <option value={item.id}>{item.name}</option>;
-        })}
-      </Fragment>
-    );
-  };
+  const datastreamOptions: SelectOption[] = datastreamsList.map(
+    (d: DataStream) => ({
+      value: d.id,
+      display: d.name,
+    })
+  );
 
-  const setRoutesDropdownOptions = () => {
-    return (
-      <Fragment>
-        <option value="">Select Route</option>
-        {routesList.map((item: Route) => {
-          return <option value={item.id}>{item.name}</option>;
-        })}
-      </Fragment>
-    );
-  };
+  const routeOptions: SelectOption[] = routesList.map((r: Route) => ({
+    value: r.id ?? 0,
+    display: r.name,
+  }));
 
   const handleLinkAuthGroupToDatastream = async () => {
     console.log("selectedEntityId:", selectedEntityId);
-    console.log("selectedEntityName:", selectedEntityName);
     console.log("selectedAuthGroupId:", selectedAuthGroupId);
-    console.log("selectedAuthGroupName:", selectedAuthGroupName);
     console.log("selectedDatastreamId:", selectedDatastreamId);
-    console.log("selectedDatastreamName:", selectedDatastreamName);
     console.log("selectedRoutesId:", selectedRouteId);
-    console.log("selectedRoutesName:", selectedRouteName);
     const response = await assignAuthGroupToDataStream(
       authToken,
       +selectedAuthGroupId,
@@ -160,55 +124,35 @@ function AuthGroupDataStream() {
   return (
     <>
       <h2 className="font-sans-lg">AuthGroup ↔ Datastream Assignment</h2>
-      <div className="grid-row">
-        <div className="grid-col flex-1 padding-right-2">
-          <label className="usa-label" htmlFor="entity-dropdown">
-            Select Entity
-          </label>
-          <select
-            className="usa-select"
-            name="entity-dropdown"
-            id="entity-dropdown"
-            onChange={handleSetEntity}>
-            {setEntityDropdownOptions()}
-          </select>
-        </div>
-        <div className="grid-col flex-1 padding-right-2">
-          <label className="usa-label" htmlFor="authgroup-dropdown">
-            Select AuthGroup
-          </label>
-          <select
-            className="usa-select"
-            name="authgroup-dropdown"
-            id="authgroup-dropdown"
-            onChange={handleSetAuthGroup}>
-            {setAuthGroupDropdownOptions()}
-          </select>
-        </div>
-        <div className="grid-col flex-1 padding-right-2">
-          <label className="usa-label" htmlFor="datastream-dropdown">
-            Select Datastream
-          </label>
-          <select
-            className="usa-select"
-            name="datastream-dropdown"
-            id="datastream-dropdown"
-            onChange={handleSetDatastream}>
-            {setDatastreamDropdownOptions()}
-          </select>
-        </div>
-        <div className="grid-col flex-1">
-          <label className="usa-label" htmlFor="options">
-            Select Route
-          </label>
-          <select
-            className="usa-select"
-            name="options"
-            id="options"
-            onChange={handleSetRoute}>
-            {setRoutesDropdownOptions()}
-          </select>
-        </div>
+      <div className="grid-row margin-top-2">
+        <Select
+          className="grid-col flex-1 padding-right-2"
+          id="entity-list-select"
+          label="Select Entity"
+          onChange={handleSetEntity}
+          options={entitiesOptions}
+        />
+        <Select
+          className="grid-col flex-1 padding-right-2"
+          id="authgroup-list-select"
+          label="Select Authgroup"
+          onChange={handleSetAuthGroup}
+          options={authGroupOptions}
+        />
+        <Select
+          className="grid-col flex-1 padding-right-2"
+          id="datastream-list-select"
+          label="Select Datastream"
+          onChange={handleSetDatastream}
+          options={datastreamOptions}
+        />
+        <Select
+          className="grid-col flex-1 padding-right-2"
+          id="routes-list-select"
+          label="Select Route"
+          onChange={handleSetRoute}
+          options={routeOptions}
+        />
       </div>
       <div className="display-flex flex-align-center margin-top-4">
         <Button

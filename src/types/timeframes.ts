@@ -1,3 +1,5 @@
+import { SelectOption } from "src/components/formFields/Select";
+
 export enum Timeframe {
   Last30Days = "Last 30 Days",
   Last15Days = "Last 15 Days",
@@ -11,5 +13,9 @@ const timeframes: Timeframe[] = [
   Timeframe.Last7Days,
   Timeframe.LastDay,
 ];
+
+export const timeframeOptions: SelectOption[] = timeframes.map(
+  (t: Timeframe) => ({ value: t, display: t })
+);
 
 export default timeframes;

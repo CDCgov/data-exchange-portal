@@ -10,14 +10,13 @@ import {
 } from "src/state/searchParams";
 import { dataStreamsAtom } from "src/state/dataStreams";
 
-import { Dropdown } from "@us-gov-cdc/cdc-react";
-import { Icons } from "@us-gov-cdc/cdc-react-icons";
-
+import Select, { SelectOption } from "src/components/formFields/Select";
 import {
   getDataRoutes,
-  getDataStreamIds,
+  getDataStreamOptions,
+  getRoutesOptions,
 } from "src/utils/helperFunctions/dataStreams";
-import timeframes, { Timeframe } from "src/types/timeframes";
+import { Timeframe, timeframeOptions } from "src/types/timeframes";
 
 interface SearchOptionsProps {
   forSubmissions?: boolean;
@@ -71,140 +70,143 @@ function SearchOptions({
     setSearchParams,
   ]);
 
-  const handleDataStreamId = (dataStreamId: string) => {
+  const handleDataStreamId = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const dataStreamId = e.target.value;
     setDataStreamId(dataStreamId);
     const route = getDataRoutes(dataStreams, dataStreamId)[0];
     setDataRoute(route);
   };
 
-  const handleDataRoute = (dataRoute: string) => {
-    setDataRoute(dataRoute);
+  const handleDataRoute = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setDataRoute(e.target.value);
   };
 
-  const handleTimeframe = (time: string) => {
-    const timeframe = time as Timeframe;
+  const handleTimeframe = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const timeframe = e.target.value as Timeframe;
     setTimeframe(timeframe);
   };
 
-  const handleJurisdiction = (jd: string) => {
-    setJurisdiction(jd);
+  const handleJurisdiction = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setJurisdiction(e.target.value);
   };
 
-  const handleSender = (senderId: string) => {
-    setSenderId(senderId);
+  const handleSender = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSenderId(e.target.value);
   };
 
-  const jurisdictions = [
-    "All",
-    "USA-AL",
-    "USA-AK",
-    "USA-AZ",
-    "USA-AR",
-    "USA-CA",
-    "USA-CO",
-    "USA-CT",
-    "USA-DE",
-    "USA-FL",
-    "USA-GA",
-    "USA-HI",
-    "USA-ID",
-    "USA-IL",
-    "USA-IN",
-    "USA-IA",
-    "USA-KS",
-    "USA-KY",
-    "USA-LA",
-    "USA-ME",
-    "USA-MD",
-    "USA-MA",
-    "USA-MI",
-    "USA-MN",
-    "USA-MS",
-    "USA-MO",
-    "USA-MT",
-    "USA-NE",
-    "USA-NV",
-    "USA-NH",
-    "USA-NJ",
-    "USA-NM",
-    "USA-NY",
-    "USA-NC",
-    "USA-ND",
-    "USA-OH",
-    "USA-OK",
-    "USA-OR",
-    "USA-PA",
-    "USA-RI",
-    "USA-SC",
-    "USA-SD",
-    "USA-TN",
-    "USA-TX",
-    "USA-UT",
-    "USA-VT",
-    "USA-VA",
-    "USA-WA",
-    "USA-WV",
-    "USA-WI",
-    "USA-WY",
+  const jurisdictions: SelectOption[] = [
+    { value: "All", display: "All" },
+    { value: "USA-AL", display: "USA-AL" },
+    { value: "USA-AK", display: "USA-AK" },
+    { value: "USA-AZ", display: "USA-AZ" },
+    { value: "USA-AR", display: "USA-AR" },
+    { value: "USA-CA", display: "USA-CA" },
+    { value: "USA-CO", display: "USA-CO" },
+    { value: "USA-CT", display: "USA-CT" },
+    { value: "USA-DE", display: "USA-DE" },
+    { value: "USA-FL", display: "USA-FL" },
+    { value: "USA-GA", display: "USA-GA" },
+    { value: "USA-HI", display: "USA-HI" },
+    { value: "USA-ID", display: "USA-ID" },
+    { value: "USA-IL", display: "USA-IL" },
+    { value: "USA-IN", display: "USA-IN" },
+    { value: "USA-IA", display: "USA-IA" },
+    { value: "USA-KS", display: "USA-KS" },
+    { value: "USA-KY", display: "USA-KY" },
+    { value: "USA-LA", display: "USA-LA" },
+    { value: "USA-ME", display: "USA-ME" },
+    { value: "USA-MD", display: "USA-MD" },
+    { value: "USA-MA", display: "USA-MA" },
+    { value: "USA-MI", display: "USA-MI" },
+    { value: "USA-MN", display: "USA-MN" },
+    { value: "USA-MS", display: "USA-MS" },
+    { value: "USA-MO", display: "USA-MO" },
+    { value: "USA-MT", display: "USA-MT" },
+    { value: "USA-NE", display: "USA-NE" },
+    { value: "USA-NV", display: "USA-NV" },
+    { value: "USA-NH", display: "USA-NH" },
+    { value: "USA-NJ", display: "USA-NJ" },
+    { value: "USA-NM", display: "USA-NM" },
+    { value: "USA-NY", display: "USA-NY" },
+    { value: "USA-NC", display: "USA-NC" },
+    { value: "USA-ND", display: "USA-ND" },
+    { value: "USA-OH", display: "USA-OH" },
+    { value: "USA-OK", display: "USA-OK" },
+    { value: "USA-OR", display: "USA-OR" },
+    { value: "USA-PA", display: "USA-PA" },
+    { value: "USA-RI", display: "USA-RI" },
+    { value: "USA-SC", display: "USA-SC" },
+    { value: "USA-SD", display: "USA-SD" },
+    { value: "USA-TN", display: "USA-TN" },
+    { value: "USA-TX", display: "USA-TX" },
+    { value: "USA-UT", display: "USA-UT" },
+    { value: "USA-VT", display: "USA-VT" },
+    { value: "USA-VA", display: "USA-VA" },
+    { value: "USA-WA", display: "USA-WA" },
+    { value: "USA-WV", display: "USA-WV" },
+    { value: "USA-WI", display: "USA-WI" },
+    { value: "USA-WY", display: "USA-WY" },
+  ];
+
+  const senders: SelectOption[] = [
+    { value: "All", display: "All" },
+    { value: "PH-LA", display: "PH-LA" },
+    { value: "ST-LA", display: "ST-LA" },
+    { value: "LB-LA", display: "LB-LA" },
+    { value: "CO-LA", display: "CO-LA" },
+    { value: "HO-LA", display: "HO-LA" },
+    { value: "PR-LA", display: "PR-LA" },
   ];
 
   return (
-    <div className="padding-bottom-2 display-flex flex-row flex-justify">
-      <div className="display-flex flex-row cdc-submissions-page--filters">
-        <Dropdown
-          className="padding-right-2"
-          items={getDataStreamIds(dataStreams)}
-          label="Data Stream"
-          onSelect={handleDataStreamId}
-          srText="Data Stream"
-          defaultValue={data_stream_id}
-        />
-        <Dropdown
-          className="padding-right-2"
-          items={getDataRoutes(dataStreams, data_stream_id)}
-          label="Route"
-          onSelect={handleDataRoute}
-          srText="Data Route"
-          defaultValue={data_route}
-        />
-        <Dropdown
-          className="padding-right-2"
-          items={timeframes}
-          label="Timeframe"
-          labelIcon={<Icons.Calendar />}
-          onSelect={handleTimeframe}
-          srText="Timeframe"
-          defaultValue={timeframe}
-        />
-        {forSubmissions && (
-          <>
-            <Dropdown
-              className="padding-right-2"
-              items={jurisdictions}
-              label="Jurisdiction"
-              onSelect={handleJurisdiction}
-              srText="Jurisdiction"
-              defaultValue={jurisdiction}
-            />
-            <Dropdown
-              className="padding-right-2"
-              items={[
-                "All",
-                "PH-LA",
-                "ST-LA",
-                "LB-LA",
-                "CO-LA",
-                "HO-LA",
-                "PR-LA",
-              ]}
-              label="Sender"
-              onSelect={handleSender}
-              srText="Sender"
-              defaultValue={sender_id}
-            />
-          </>
-        )}
-      </div>
+    <div
+      className={`display-flex flex-justify padding-bottom-4 ${
+        forSubmissions ? "" : "dashboard-search"
+      }`}>
+      <Select
+        className="padding-right-2 flex-1"
+        id="data-stream-filter"
+        label="Data Stream"
+        onChange={handleDataStreamId}
+        options={getDataStreamOptions(dataStreams)}
+        defaultValue={data_stream_id}
+      />
+      <Select
+        className="padding-right-2 flex-1"
+        id="data-route-filter"
+        label="Data Route"
+        onChange={handleDataRoute}
+        options={getRoutesOptions(dataStreams, data_stream_id)}
+        defaultValue={data_route}
+      />
+      <Select
+        className="padding-right-2 flex-1"
+        id="timeframe-filter"
+        label="Timeframe"
+        onChange={handleTimeframe}
+        options={timeframeOptions}
+        defaultValue={timeframe}
+      />
+      {forSubmissions && (
+        <>
+          <Select
+            className="padding-right-2 flex-1"
+            id="jurisdiction-filter"
+            label="Jurisdiction"
+            onChange={handleJurisdiction}
+            options={jurisdictions}
+            defaultValue={jurisdiction}
+          />
+          <Select
+            className="padding-right-2 flex-1"
+            id="sender-id-filter"
+            label="Sender"
+            onChange={handleSender}
+            options={senders}
+            defaultValue={sender_id}
+          />
+        </>
+      )}
     </div>
   );
 }

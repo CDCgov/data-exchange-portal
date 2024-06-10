@@ -1,6 +1,6 @@
-/* eslint-disable */
-import { useState, useEffect, Fragment } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { useAuth } from "react-oidc-context";
+import Select, { SelectOption } from "src/components/formFields/Select";
 
 import { Button } from "@us-gov-cdc/cdc-react";
 
@@ -17,18 +17,11 @@ function UserAuthGroup() {
   const [authToken, setAuthToken] = useState("");
 
   const [identitiesList, setIdentitiesList] = useState([]);
-
   const [entitiesList, setEntitiesList] = useState([]);
-
   const [authGroupsList, setAuthGroupsList] = useState([]);
 
-  const [selectedIdentityName, setSelectedIdentityName] = useState("");
   const [selectedIdentityId, setSelectedIdentityId] = useState("");
-
-  const [selectedEntityName, setSelectedEntityName] = useState("");
   const [selectedEntityId, setSelectedEntityId] = useState("");
-
-  const [selectedAuthGroupName, setSelectedAuthGroupName] = useState("");
   const [selectedAuthGroupId, setSelectedAuthGroupId] = useState("");
 
   const [responseMessage, setResponseMessage] = useState("");
@@ -37,22 +30,22 @@ function UserAuthGroup() {
     setAuthToken(auth.user?.access_token ?? "");
   }, [auth]);
 
-  useEffect(() => {
-    fetchIdentities();
-    fetchEntities();
-  }, []);
-
-  const fetchIdentities = async () => {
+  const fetchIdentities = useCallback(async () => {
     const res = await getIdentities(authToken);
     const json = await res.json();
     setIdentitiesList(json);
-  };
+  }, [authToken]);
 
-  const fetchEntities = async () => {
+  const fetchEntities = useCallback(async () => {
     const res = await getEntities(authToken);
     const json = await res.json();
     setEntitiesList(json);
-  };
+  }, [authToken]);
+
+  useEffect(() => {
+    fetchIdentities();
+    fetchEntities();
+  }, [fetchEntities, fetchIdentities]);
 
   const fetchAuthGroups = async (entity_id: string) => {
     const res = await getAuthGroups(authToken, entity_id);
@@ -60,62 +53,44 @@ function UserAuthGroup() {
     setAuthGroupsList(json);
   };
 
-  const handleSetIdentities = async (e: any) => {
+  const handleSetIdentities = async (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
     setSelectedIdentityId(e.target.value);
-    setSelectedIdentityName(e.target.selectedOptions[0].text);
   };
 
-  const handleSetEntity = async (e: any) => {
+  const handleSetEntity = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedEntityId(e.target.value);
-    setSelectedEntityName(e.target.selectedOptions[0].text);
     await fetchAuthGroups(e.target.value);
   };
 
-  const handleSetAuthGroup = (e: any) => {
+  const handleSetAuthGroup = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedAuthGroupId(e.target.value);
-    setSelectedAuthGroupName(e.target.selectedOptions[0].text);
   };
 
-  const setIdentitiesDropdownOptions = () => {
-    return (
-      <Fragment>
-        <option value="">Select Identity</option>
-        {identitiesList.map((item: Identity) => {
-          return <option value={item.id}>{item.idpClientID}</option>;
-        })}
-      </Fragment>
-    );
-  };
+  const identitiesOptions: SelectOption[] = identitiesList.map(
+    (i: Identity) => ({
+      value: i.id,
+      display: i.idpClientID,
+    })
+  );
 
-  const setEntityDropdownOptions = () => {
-    return (
-      <Fragment>
-        <option value="">Select Entity</option>
-        {entitiesList.map((item: Entity) => {
-          return <option value={item.id}>{item.name}</option>;
-        })}
-      </Fragment>
-    );
-  };
+  const entitiesOptions: SelectOption[] = entitiesList.map((e: Entity) => ({
+    value: e.id,
+    display: e.name,
+  }));
 
-  const setAuthGroupDropdownOptions = () => {
-    return (
-      <Fragment>
-        <option value="">Select AuthGroup</option>
-        {authGroupsList.map((item: AuthGroup) => {
-          return <option value={item.id}>{item.name}</option>;
-        })}
-      </Fragment>
-    );
-  };
+  const authGroupOptions: SelectOption[] = authGroupsList.map(
+    (g: AuthGroup) => ({
+      value: g.id,
+      display: g.name,
+    })
+  );
 
   const handleLinkUserToAuthGroup = async () => {
     console.log("selectedIdentityId:", selectedIdentityId);
-    console.log("selectedIdentityName:", selectedIdentityName);
     console.log("selectedEntityId:", selectedEntityId);
-    console.log("selectedEntityName:", selectedEntityName);
     console.log("selectedAuthGroupId:", selectedAuthGroupId);
-    console.log("selectedAuthGroupName:", selectedAuthGroupName);
     const response = await assignUserToAuthGroup(
       authToken,
       +selectedIdentityId,
@@ -127,49 +102,33 @@ function UserAuthGroup() {
   return (
     <>
       <h2 className="font-sans-lg">User ↔ AuthGroup Assignment</h2>
-      <div className="grid-row">
-        <div className="grid-col flex-1 padding-right-2">
-          <label className="usa-label" htmlFor="identity-dropdown">
-            Select Identity
-          </label>
-          <select
-            className="usa-select"
-            name="identity-dropdown"
-            id="identity-dropdown"
-            onChange={handleSetIdentities}>
-            {setIdentitiesDropdownOptions()}
-          </select>
-        </div>
+      <div className="grid-row margin-top-2">
+        <Select
+          className="grid-col flex-1 padding-right-2"
+          id="identity-list-select"
+          label="Select Identity"
+          onChange={handleSetIdentities}
+          options={identitiesOptions}
+        />
         <div className="grid-col flex-1"></div>
         <div className="grid-col flex-1"></div>
         <div className="grid-col flex-1"></div>
       </div>
-      <div className="grid-row">
-        <div className="grid-col flex-1 padding-right-2">
-          <label className="usa-label" htmlFor="entity-dropdown">
-            Select Entity
-          </label>
-          <select
-            className="usa-select"
-            name="entity-dropdown"
-            id="entity-dropdown"
-            onChange={handleSetEntity}>
-            {setEntityDropdownOptions()}
-          </select>
-        </div>
-
-        <div className="grid-col flex-1">
-          <label className="usa-label" htmlFor="authgroup-dropdown">
-            Select AuthGroup
-          </label>
-          <select
-            className="usa-select"
-            name="authgroup-dropdown"
-            id="authgroup-dropdown"
-            onChange={handleSetAuthGroup}>
-            {setAuthGroupDropdownOptions()}
-          </select>
-        </div>
+      <div className="grid-row margin-top-2">
+        <Select
+          className="grid-col flex-1 padding-right-2"
+          id="entity-list-select"
+          label="Select Entity"
+          onChange={handleSetEntity}
+          options={entitiesOptions}
+        />
+        <Select
+          className="grid-col flex-1 padding-right-2"
+          id="authgroup-list-select"
+          label="Select Authgroup"
+          onChange={handleSetAuthGroup}
+          options={authGroupOptions}
+        />
         <div className="grid-col flex-1"></div>
         <div className="grid-col flex-1"></div>
       </div>

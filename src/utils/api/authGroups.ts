@@ -20,7 +20,7 @@ export interface AuthGroup {
 
 export const getAuthGroups = async (
   access_token: string,
-  entity_id: string
+  entity_id: string | number
 ): Promise<Response> => {
   const url = `${API_ENDPOINTS.entities}/${entity_id}/groups`;
 
