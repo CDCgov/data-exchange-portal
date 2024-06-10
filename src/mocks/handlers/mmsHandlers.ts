@@ -3,6 +3,7 @@ import API_ENDPOINTS from "src/config/api";
 
 import { CreateDataStreamBody, DataStream } from "src/utils/api/dataStreams";
 import { CreateEntityBody, Entity } from "src/utils/api/entities";
+import { CreateIdentityBody } from "src/utils/api/identities";
 import { CreateManifestBody, Manifest } from "src/utils/api/manifests";
 import { CreateProgramBody, Program } from "src/utils/api/programs";
 import { CreateRouteBody, Route } from "src/utils/api/routes";
@@ -290,6 +291,24 @@ export const mmsHandlers = [
   http.get(`${API_ENDPOINTS.identities}`, () => {
     return HttpResponse.json(mockIdentities);
   }),
+  http.post(API_ENDPOINTS.identities, async ({ request }) => {
+    const { idpClientID } = (await request.json()) as CreateIdentityBody;
+
+    if (!idpClientID) {
+      return new HttpResponse(null, { status: 400 });
+    }
+    return new HttpResponse(null, { status: 200 });
+  }),
+  http.get(
+    `${API_ENDPOINTS.identities}/:identity_id/datastreams-with-routes`,
+    ({ params }) => {
+      const { identity_id } = params;
+      if (!identity_id || identity_id == "NaN") {
+        return new HttpResponse(null, { status: 400 });
+      }
+      return HttpResponse.json(mockDataStreamsWithRoutes);
+    }
+  ),
 
   // --> UserToAuthGroup
   http.post(
