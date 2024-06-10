@@ -13,7 +13,7 @@ export interface Route {
 
 export const getRoutes = async (
   access_token: string,
-  datastream_id: number
+  datastream_id: number | string
 ): Promise<Response> => {
   const url = `${API_ENDPOINTS.dataStreams}/${datastream_id}/routes`;
 

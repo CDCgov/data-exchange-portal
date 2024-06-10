@@ -161,7 +161,7 @@ function Submissions() {
     senderId,
     sorting,
     timeframe,
-    // pagination,
+    pagination,
   ]);
 
   const handleSetSorting = (action: React.SetStateAction<SortingState>) => {

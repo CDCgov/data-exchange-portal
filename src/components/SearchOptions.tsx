@@ -165,7 +165,6 @@ function SearchOptions({
       }`}>
       <Select
         className="padding-right-2 flex-1"
-        labelClassName="margin-top-0"
         id="data-stream-filter"
         label="Data Stream"
         onChange={handleDataStreamId}
@@ -174,7 +173,6 @@ function SearchOptions({
       />
       <Select
         className="padding-right-2 flex-1"
-        labelClassName="margin-top-0"
         id="data-route-filter"
         label="Data Route"
         onChange={handleDataRoute}
@@ -183,7 +181,6 @@ function SearchOptions({
       />
       <Select
         className="padding-right-2 flex-1"
-        labelClassName="margin-top-0"
         id="timeframe-filter"
         label="Timeframe"
         onChange={handleTimeframe}
@@ -194,7 +191,6 @@ function SearchOptions({
         <>
           <Select
             className="padding-right-2 flex-1"
-            labelClassName="margin-top-0"
             id="jurisdiction-filter"
             label="Jurisdiction"
             onChange={handleJurisdiction}
@@ -203,7 +199,6 @@ function SearchOptions({
           />
           <Select
             className="padding-right-2 flex-1"
-            labelClassName="margin-top-0"
             id="sender-id-filter"
             label="Sender"
             onChange={handleSender}

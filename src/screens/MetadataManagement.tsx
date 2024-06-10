@@ -470,7 +470,6 @@ function MetadataManagement() {
       </h1>
       <Select
         className="padding-right-2"
-        labelClassName="margin-top-0"
         id="data-route-filter"
         label="Meta Data Object"
         onChange={handleFormTypeChange}
