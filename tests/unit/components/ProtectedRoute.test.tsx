@@ -30,7 +30,6 @@ vi.mock("src/utils/helperFunctions/env", () => ({
 describe("ProtectedRoute", () => {
   type MockUseAuth = {
     isAuthenticated: boolean;
-    activeNavigator: any;
     isLoading: boolean;
   };
 
@@ -40,7 +39,6 @@ describe("ProtectedRoute", () => {
   beforeEach(() => {
     mockUseAuth = {
       isAuthenticated: false,
-      activeNavigator: undefined,
       isLoading: false,
     };
 

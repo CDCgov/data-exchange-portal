@@ -13,6 +13,13 @@ const earliestDate: string = new Date("2021-01-01T05:00:00Z").toISOString();
 
 export const psApiHandlers = [
   http.get(API_ENDPOINTS.fileSubmissions, ({ request }) => {
+    console.log("in request");
+    console.log("in request");
+    console.log(request.headers);
+    console.log(request.url);
+    console.log("in request");
+    console.log("in request");
+    console.log("in request");
     const url = new URL(request.url);
     const dataStreamId = url.searchParams.get("data_stream_id");
     const dataRoute = url.searchParams.get("data_stream_route");

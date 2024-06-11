@@ -143,6 +143,7 @@ function Submissions() {
         if (data?.summary) {
           setDataSummary(data.summary);
         }
+        console.log("Data: ", data);
 
         if (data?.items) {
           setCurrentPageData(data.items);
