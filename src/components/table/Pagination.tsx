@@ -11,8 +11,8 @@ type PaginationPageProps = {
 };
 
 type PaginationProps = {
-  totalPages?: number;
   currentPage: number;
+  totalPages?: number;
   maxSlots?: number;
   setCurrentPage: (page: number) => void;
 };
