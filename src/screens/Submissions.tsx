@@ -32,7 +32,7 @@ import {
 import { getStatusDisplayValuesByName } from "src/utils/helperFunctions/statusDisplayValues";
 
 import DetailsModal from "src/components/DetailsModal";
-import PortalTable from "src/components/Table";
+import PortalTable from "src/components/table/Table";
 import SearchOptions from "src/components/SearchOptions";
 
 import { useAuth } from "react-oidc-context";
@@ -210,7 +210,6 @@ function Submissions() {
             Showing {currentPageData.length} items of {dataSummary.total_items}
           </div>
           <PortalTable table={table} />
-          {/* <TablePagination pageLimit={pageLimit} data={currentPageData} /> */}
           <>
             <DetailsModal
               submission={selectedSubmission}
