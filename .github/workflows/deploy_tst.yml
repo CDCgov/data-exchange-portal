@@ -7,9 +7,6 @@ on:
         description: Branch to deploy
         required: false
         default: main
-  push:
-    branches:
-      - main
 
 jobs:
   deploy:
