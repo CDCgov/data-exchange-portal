@@ -1,13 +1,13 @@
 import { render, screen } from "@testing-library/react";
 import { vi } from "vitest";
+import { useAuth, hasAuthParams } from "react-oidc-context";
 import { useNavigate } from "react-router-dom";
 import { ProtectedRoute } from "src/components/ProtectedRoute";
-import {
-  createMockedAuthContext,
-  withMockedAuthProvider,
-} from "tests/utility/helpers";
 
-vi.mock("react-oidc-context");
+vi.mock("react-oidc-context", () => ({
+  useAuth: vi.fn(),
+  hasAuthParams: vi.fn(),
+}));
 
 vi.mock("react-router-dom", () => ({
   useNavigate: vi.fn(),
@@ -28,34 +28,52 @@ vi.mock("src/utils/helperFunctions/env", () => ({
 }));
 
 describe("ProtectedRoute", () => {
+  type MockUseAuth = {
+    isAuthenticated: boolean;
+    activeNavigator: any;
+    isLoading: boolean;
+  };
+
+  let mockUseAuth: MockUseAuth;
   let mockNavigate: ReturnType<typeof useNavigate>;
+
+  beforeEach(() => {
+    mockUseAuth = {
+      isAuthenticated: false,
+      activeNavigator: undefined,
+      isLoading: false,
+    };
+
+    (useAuth as unknown as jest.Mock).mockReturnValue(mockUseAuth);
+    mockNavigate = vi.fn() as unknown as ReturnType<typeof useNavigate>;
+    (useNavigate as unknown as jest.Mock).mockReturnValue(mockNavigate);
+
+    (hasAuthParams as unknown as jest.Mock).mockReturnValue(false); // Ensure hasAuthParams returns false
+
+    localStorage.clear();
+  });
 
   afterEach(() => {
     vi.clearAllMocks();
-    vi.restoreAllMocks();
   });
 
   it("should navigate to login if not authenticated and no OIDC storage", () => {
     render(
-      withMockedAuthProvider(
-        <ProtectedRoute>
-          <div>Protected Content</div>
-        </ProtectedRoute>,
-        createMockedAuthContext({ isAuthenticated: false, isLoading: false })
-      )
+      <ProtectedRoute>
+        <div>Protected Content</div>
+      </ProtectedRoute>
     );
 
     expect(mockNavigate).toHaveBeenCalledWith("/login", { replace: true });
   });
 
   it("should render children if authenticated", () => {
+    mockUseAuth.isAuthenticated = true;
+
     render(
-      withMockedAuthProvider(
-        <ProtectedRoute>
-          <div>Protected Content</div>
-        </ProtectedRoute>,
-        createMockedAuthContext({ isAuthenticated: true, isLoading: false })
-      )
+      <ProtectedRoute>
+        <div>Protected Content</div>
+      </ProtectedRoute>
     );
 
     expect(screen.getByText("Protected Content")).toBeInTheDocument();
