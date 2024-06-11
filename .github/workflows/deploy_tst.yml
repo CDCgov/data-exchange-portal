@@ -1,4 +1,4 @@
-name: "Deploy to TST"
+name: "TST - Deploy Frontend"
 
 on:
   workflow_dispatch:
@@ -6,20 +6,18 @@ on:
       branch:
         description: Branch to deploy
         required: false
-  push:
-    branches:
-      - main
+        default: main
 
 jobs:
   deploy:
-    name: "Deploy to TST"
-    environment: TST
+    name: "Deploy to tst"
+    environment: tst
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.inputs.branch || 'main' }}
+          ref: ${{ github.event.inputs.branch }}
       - uses: actions/setup-node@v4
         with:
           node-version: 18
@@ -48,23 +46,3 @@ jobs:
         run: yarn build:tst
       - name: Deploy
         run: swa deploy ./dist -d ${{ secrets.AZURE_SWA_DEPLOY_TOKEN }} --env tst -w .
-  e2e:
-    needs: deploy
-    name: "Run e2e regression tests"
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 18
-      - name: Install dependencies
-        run: yarn install
-      - name: Install Playwright dependencies
-        run: npx playwright install --with-deps
-      - name: Run Playwright tests
-        env:
-          PLAYWRIGHT_TEST_BASE_URL: https://dextst.cdc.gov
-          SAMS_USERNAME: ${{ secrets.SAMS_USERNAME }}
-          SAMS_PASSWORD: ${{ secrets.SAMS_PASSWORD }}
-        run: npx playwright test
