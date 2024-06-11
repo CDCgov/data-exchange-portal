@@ -45,7 +45,7 @@ const generateFileSubmission = (
     filename: faker.system.commonFileName(route),
     status: status,
     timestamp: faker.date.recent({ days: 40 }).toISOString(),
-    jurisdiction: `USA-${faker.location.stateAbbr()}`,
+    jurisdiction: `USA-${faker.location.state({ abbreviated: true })}`,
     sender: createSentBy(),
     metadata: {
       data_stream_id: dataStream,
@@ -183,17 +183,17 @@ const sortSubmissions = (
 const submissionsItemsAimsCsv: FileSubmission[] = generateSubmissions(
   "aims-celr",
   "csv",
-  67
+  105
 );
 const submissionsItemsAimsHl7: FileSubmission[] = generateSubmissions(
   "aims-celr",
   "hl7",
-  55
+  86
 );
 const submissionsItemsDaartHl7: FileSubmission[] = generateSubmissions(
   "daart",
   "hl7",
-  85
+  127
 );
 const submissionsItemsAimsAll: FileSubmission[] = shuffleArray([
   ...submissionsItemsAimsCsv,

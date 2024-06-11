@@ -1,6 +1,7 @@
 import { Table as TanStackTable, flexRender } from "@tanstack/react-table";
 
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
+import Pagination from "src/components/table/Pagination";
 
 import {
   Table,
@@ -9,7 +10,6 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-  TablePaginationServerSide,
 } from "@us-gov-cdc/cdc-react";
 
 export interface PortalTableProps<TData> {
@@ -93,9 +93,9 @@ function PortalTable<TData>({ table }: PortalTableProps<TData>) {
           ))}
         </TableBody>
       </Table>
-      <TablePaginationServerSide
-        currentPage={table.getState().pagination.pageIndex}
-        numberOfPages={table.getPageCount()}
+      <Pagination
+        currentPage={table.getState().pagination.pageIndex + 1}
+        totalPages={table.getPageCount()}
         setCurrentPage={table.setPageIndex}
       />
     </>
