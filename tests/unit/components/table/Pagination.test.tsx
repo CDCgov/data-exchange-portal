@@ -1,6 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { vi } from "vitest";
-import React from "react";
 
 import Pagination from "src/components/table/Pagination";
 
@@ -135,7 +134,7 @@ describe("Pagination component", () => {
   });
 
   it("doesn't render last page when unbounded", () => {
-    const randomPage = Math.random() * 1000;
+    const randomPage = 1234;
     render(
       <Pagination
         currentPage={randomPage}
