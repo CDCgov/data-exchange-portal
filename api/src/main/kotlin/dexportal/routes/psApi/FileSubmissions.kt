@@ -19,6 +19,7 @@ fun Route.fileSubmissions(client: HttpClient) {
             val dataStreamRoute = call.request.queryParameters["data_stream_route"] ?: ""
             val dateStart = call.request.queryParameters["date_start"] ?: ""
             val pageNumber = call.request.queryParameters["page_number"] ?: ""
+            val pageSize = call.request.queryParameters["page_size"] ?: ""
 
             val authToken = call.request.headers["Authorization"]
 
@@ -29,7 +30,7 @@ fun Route.fileSubmissions(client: HttpClient) {
                     header("Authorization", authToken)
                     parameter("data_stream_route", dataStreamRoute)
                     parameter("page_number", pageNumber)
-                    parameter("page_size", 20)
+                    parameter("page_size", pageSize)
                     if (cleanedDateStart != null) {
                         parameter("date_start", cleanedDateStart)
                     }
