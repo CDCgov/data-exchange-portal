@@ -7,8 +7,6 @@ import {
   withMockedAuthProvider,
 } from "tests/utility/helpers";
 
-vi.mock("react-oidc-context");
-
 describe("Shell", () => {
   afterEach(() => {
     vi.clearAllMocks();

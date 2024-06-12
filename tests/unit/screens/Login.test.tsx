@@ -7,8 +7,6 @@ import {
 import { vi } from "vitest";
 import * as Utils from "src/utils/helperFunctions/env";
 
-vi.mock("react-oidc-context");
-
 describe("Login", () => {
   it("should show welcome message", () => {
     render(
