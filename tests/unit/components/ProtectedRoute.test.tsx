@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { ProtectedRoute } from "src/components/ProtectedRoute";
+import ProtectedRoute from "src/components/ProtectedRoute";
 import {
   withMockedAuthProvider,
   createMockedAuthContext,

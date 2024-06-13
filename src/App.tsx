@@ -19,7 +19,7 @@ import UserManagement from "./screens/UserManagement";
 import Profile from "src/screens/Profile";
 import Submissions from "src/screens/Submissions";
 
-import { ProtectedRoute } from "src/components/ProtectedRoute";
+import ProtectedRoute from "src/components/ProtectedRoute";
 
 function App() {
   // ignore Auth if running locally
