@@ -4,6 +4,8 @@ const API_URL = getEnv("VITE_API_BASE_URL");
 const MMS_PREFIX = "mms";
 const PS_API_PREFIX = "ps-api";
 
+const UPLOAD_API = "dexapi.cdc.gov"; // Todo: Confirm this is correct endpoint
+
 const API_ENDPOINTS = {
   // mms routes
   currentUserDatastreamRoutes: `${API_URL}/${MMS_PREFIX}/current-user/datastreams-with-routes`,
