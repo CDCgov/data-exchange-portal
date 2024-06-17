@@ -25,6 +25,8 @@ function UploadFiles() {
           ...state,
           [action.field]: action.payload,
         };
+      case "reset":
+        return initialState;
       default:
         throw new Error("Unrecognized action type provided to form reducer");
     }
@@ -67,34 +69,18 @@ function UploadFiles() {
     });
   };
 
-  const handleUpload = () => {
-    const timestamp: string = new Date().toISOString();
+  const handleReset = () => {
+    dispatch({ type: "reset" });
+  };
 
+  const handleUpload = () => {
     const upload = new tus.Upload(formState.file, {
       endpoint: getEnv("VITE_UPLOAD_API_ENDPOINT"),
       retryDelays: [0, 3000, 5000, 10000, 20000],
       metadata: {
         filename: formState.filename,
         filetype: formState.filetype,
-        meta_destination_id: formState.destination,
-        meta_ext_event: formState.event,
-        meta_username: formState.meta_username,
-        meta_ext_filestatus: formState.meta_ext_filestatus,
-        meta_ext_filename: formState.filename,
-        meta_ext_file_timestamp: timestamp,
-        meta_ext_objectkey: formState.meta_ext_objectkey,
-        meta_ext_uploadid: formState.meta_ext_uploadid,
-        meta_file_timestamp: timestamp,
-        meta_program: formState.meta_program,
-        meta_ext_source: formState.meta_ext_source,
-        meta_organization: formState.meta_organization,
-        original_file_timestamp: timestamp,
-        message_type: formState.message_type,
-        route: formState.route,
-        reporting_jurisdiction: formState.reporting_jurisdiction,
-        system_provider: formState.system_provider,
-        orig_filename: formState.filename,
-        original_filename: formState.filename,
+        manifest: formState.manifest,
       },
       onError: function (error) {
         console.log("Failed because: " + error);
@@ -122,24 +108,16 @@ function UploadFiles() {
         <h1 className="cdc-page-header padding-y-3 margin-0">Upload Files</h1>
         {/* Todo: Migrate this to be an <Alert> */}
         {uploadFeedback[0] !== "" && (
-          <div
-            className="usa-summary-box width-mobile-lg margin-bottom-2"
-            role="region"
-            aria-labelledby="summary-box-key-information">
-            <h3
-              className="usa-summary-box__heading"
-              id="summary-box-key-information">
-              Status:
-            </h3>
-            <div className="usa-summary-box__text">{uploadFeedback[0]}</div>
-          </div>
+          <Alert className="margin-y-2" type="info">
+            Status: {uploadFeedback[0]}
+          </Alert>
         )}
         <div className="grid-row flex-row">
           <div className="grid-col flex-2">
             <div className="border border-base-lighter bg-white radius-md padding-3 margin-right-2">
               <div className="display-flex flex-row flex-justify-start flex-align-center margin-right-2">
                 <Button
-                  className="usa-button usa-button--outline"
+                  className="usa-button usa-button--outline margin-y-1"
                   id="choose-file"
                   type="button"
                   onClick={handleFileSelection}>
@@ -167,22 +145,31 @@ function UploadFiles() {
                 communicated to each organization during onboarding. Any
                 questions should be directed to your organization admin.
               </Alert>
-              <label className="usa-label" htmlFor="input-type-textarea">
+              <label className="usa-label" htmlFor="manifest">
                 Input the Submission Manifest
               </label>
+              <span id="manifest-hint" className="usa-hint">
+                Supported format: JSON
+              </span>
               <textarea
                 className="usa-textarea"
-                id="input-type-textarea"
-                name="input-type-textarea"
-                onChange={handleManifestInputChange}></textarea>
+                id="manifest"
+                name="manifest"
+                onChange={handleManifestInputChange}
+                value={formState.manifest}></textarea>
               <hr className="margin-y-2 border-1px border-base-lighter" />
-              <Button
-                type="submit"
-                className="margin-y-4"
-                id="upload-button"
-                onClick={handleUpload}>
-                Submit
-              </Button>
+              <div className="margin-y-1">
+                <Button type="submit" id="upload-button" onClick={handleUpload}>
+                  Submit
+                </Button>
+                <Button
+                  className="usa-button--outline"
+                  type="button"
+                  id="reset-button"
+                  onClick={handleReset}>
+                  Reset
+                </Button>
+              </div>
             </div>
           </div>
           <div className="grid-col border border-base-lighter bg-white padding-3 radius-md">
@@ -212,7 +199,10 @@ function UploadFiles() {
               <dt className="font-mono-md padding-bottom-1">
                 <strong>data_stream_route</strong>
               </dt>
-              <dd>This wil matche suermistin tie torme data file. Typically</dd>
+              <dd>
+                The name of the folder destination for the data file. Typically
+                this will match the submission file format.
+              </dd>
               <hr className="margin-y-2 border-1px border-base-lighter" />
               <dt className="font-mono-md padding-bottom-1">
                 <strong>jurisdiction</strong>

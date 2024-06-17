@@ -27,3 +27,7 @@
 button#choose-file svg {
   margin-right: 0.35rem;
 }
+
+.cdc-react .usa-alert .usa-alert__text {
+  font-family: sans-serif !important;
+}
