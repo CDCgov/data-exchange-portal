@@ -99,10 +99,7 @@ function UploadFiles() {
         setUploadFeedback([`Uploading: ${percentage}%`, "info"]);
       },
       onSuccess: function () {
-        setUploadFeedback([
-          `Upload successful: ${upload.file.name}`,
-          "success",
-        ]);
+        setUploadFeedback([`Upload successful`, "success"]);
       },
     });
 
