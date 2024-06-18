@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function ManifestDefinitions() {
   return (
     <dl>
@@ -10,7 +8,7 @@ export default function ManifestDefinitions() {
         An alphabetical code that identifies the public health authority that
         supplies the data. In cases where the data producer is the same as the
         sender, the value should match the sender_id. In cases where this is not
-        provided or known, use a value of "null."
+        provided or known, use a value of &quot;null.&quot;
       </dd>
       <hr className="margin-y-2 border-1px border-base-lighter" />
       <dt className="font-mono-md padding-bottom-1">
@@ -42,8 +40,8 @@ export default function ManifestDefinitions() {
       </dt>
       <dd>
         An alphabetical code that identifies the sender, machine, or
-        intermediary organization that's sending data. This code is provided
-        during onboarding.
+        intermediary organization that&apos;s sending data. This code is
+        provided during onboarding.
       </dd>
       <hr className="margin-y-2 border-1px border-base-lighter" />
       <dt className="font-mono-md padding-bottom-1">
@@ -51,7 +49,7 @@ export default function ManifestDefinitions() {
       </dt>
       <dd>
         The version of the metadata being sent. In all new cases, this field
-        value will be "2.0"
+        value will be &quot;2.0&quot;.
       </dd>
     </dl>
   );

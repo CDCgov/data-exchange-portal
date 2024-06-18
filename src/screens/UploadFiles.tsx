@@ -1,4 +1,4 @@
-import { ChangeEvent, useReducer, useState, useEffect } from "react";
+import { ChangeEvent, useReducer, useState } from "react";
 
 import ManifestDefinitions from "src/components/ManifestDefs";
 import { Button } from "../../src/components/Button";
@@ -15,12 +15,11 @@ interface FileUpload {
 
 interface DispatchAction {
   type: string;
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   value?: any;
 }
 
 function UploadFiles() {
-  const fileTypes = [".csv", ".hl7", ".txt"];
-
   const initialState: FileUpload = {
     file: new File([""], ""),
     manifest: "",
@@ -79,7 +78,8 @@ function UploadFiles() {
     if (inputElement) inputElement.value = ""; // Set to an empty string to clear
   };
 
-  // Todo: Disable submit when one is uploading
+  // Todo: Disable submit when one is uploading. This will prevent any additional uploads from
+  // starting which could create some confusion.
   const handleUpload = () => {
     const parsedJson = JSON.parse(formState.manifest);
 
@@ -133,7 +133,6 @@ function UploadFiles() {
                   type="file"
                   id="file-uploader"
                   name="file-uploader"
-                  accept={fileTypes.toString()}
                   multiple
                   onChange={(e) => handleFileNameChange(e)}
                 />
