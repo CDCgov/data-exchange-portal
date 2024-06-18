@@ -1,4 +1,4 @@
-import { useReducer, useState, useEffect } from "react";
+import { ChangeEvent, useReducer, useState, useEffect } from "react";
 
 import { Button } from "../../src/components/Button";
 import { Alert } from "@us-gov-cdc/cdc-react";
@@ -7,23 +7,37 @@ import * as tus from "tus-js-client";
 
 import { getEnv } from "../../src/utils/helperFunctions/env";
 
+interface FileUpload {
+  file: File;
+  manifest: string;
+}
+
+interface DispatchAction {
+  type: string;
+  value?: any;
+}
+
 function UploadFiles() {
   const fileTypes = [".csv", ".hl7", ".txt"];
 
-  const initialState = {
-    file: {},
-    filename: "",
+  const initialState: FileUpload = {
+    file: new File([""], ""),
     manifest: "",
   };
 
   const [uploadFeedback, setUploadFeedback] = useState<Array<string>>(["", ""]);
 
-  function reducer(state, action) {
+  function reducer(state: FileUpload, action: DispatchAction) {
     switch (action.type) {
-      case "updateField":
+      case "updateFile":
         return {
           ...state,
-          [action.field]: action.payload,
+          file: action.value,
+        };
+      case "updateManifest":
+        return {
+          ...state,
+          manifest: action.value,
         };
       case "reset":
         return initialState;
@@ -46,26 +60,19 @@ function UploadFiles() {
     document?.getElementById("file-uploader")?.click();
   };
 
-  const handleFileNameChange = (e) => {
+  const handleFileNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       dispatch({
-        type: "updateField",
-        field: "file",
-        payload: e.target.files[0],
-      });
-      dispatch({
-        type: "updateField",
-        field: "filename",
-        payload: e.target.files[0].name,
+        type: "updateFile",
+        value: e.target.files[0],
       });
     }
   };
 
-  const handleManifestInputChange = (e) => {
+  const handleManifestInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     dispatch({
-      type: "updateField",
-      field: "manifest",
-      payload: e.target.value,
+      type: "updateManifest",
+      value: e.target.value,
     });
   };
 
@@ -78,8 +85,8 @@ function UploadFiles() {
       endpoint: getEnv("VITE_UPLOAD_API_ENDPOINT"),
       retryDelays: [0, 3000, 5000, 10000, 20000],
       metadata: {
-        filename: formState.filename,
-        filetype: formState.filetype,
+        filename: formState.file.name,
+        filetype: formState.file.type,
         manifest: formState.manifest,
       },
       onError: function (error) {
@@ -132,7 +139,7 @@ function UploadFiles() {
                   onChange={(e) => handleFileNameChange(e)}
                 />
                 <p id="file-name" className="text-italic text-normal">
-                  {formState.filename ? formState.filename : "No file chosen"}
+                  {formState.file.name ? formState.file.name : "No file chosen"}
                 </p>
               </div>
               <hr className="margin-y-2 border-1px border-base-lighter" />
