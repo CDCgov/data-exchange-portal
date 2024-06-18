@@ -78,6 +78,12 @@ function UploadFiles() {
 
   const handleReset = () => {
     dispatch({ type: "reset" });
+
+    // Manually reset file input since reselecting same file wont trigger onChange
+    const inputElement = document.getElementById(
+      "file-uploader"
+    ) as HTMLInputElement;
+    if (inputElement) inputElement.value = ""; // Set to an empty string to clear
   };
 
   const handleUpload = () => {
