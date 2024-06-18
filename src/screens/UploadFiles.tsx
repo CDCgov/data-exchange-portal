@@ -49,14 +49,6 @@ function UploadFiles() {
 
   const [formState, dispatch] = useReducer(reducer, initialState);
 
-  // This useEffect is to help with development
-  useEffect(() => {
-    console.log(
-      "FormState(this is the payload that will be sent to the tus endpoint):",
-      formState
-    );
-  }, [formState]);
-
   const handleFileSelection = () => {
     document?.getElementById("file-uploader")?.click();
   };
@@ -87,23 +79,24 @@ function UploadFiles() {
     if (inputElement) inputElement.value = ""; // Set to an empty string to clear
   };
 
+  // Todo: Disable submit when one is uploading
   const handleUpload = () => {
+    const parsedJson = JSON.parse(formState.manifest);
+
     const upload = new tus.Upload(formState.file, {
       endpoint: getEnv("VITE_UPLOAD_API_ENDPOINT"),
       retryDelays: [0, 3000, 5000, 10000, 20000],
       metadata: {
         filename: formState.file.name,
         filetype: formState.file.type,
-        manifest: formState.manifest,
+        ...parsedJson,
       },
       onError: function (error) {
-        console.log("Failed because: " + error);
         setUploadFeedback([`Upload failed: ${error.message}`, "error"]);
       },
       onProgress: function (bytesUploaded, bytesTotal) {
         const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2);
         setUploadFeedback([`Uploading: ${percentage}%`, "info"]);
-        console.log(bytesUploaded, bytesTotal, percentage + "%");
       },
       onSuccess: function () {
         setUploadFeedback([
@@ -120,7 +113,6 @@ function UploadFiles() {
     <>
       <section className="main_content padding-x-2">
         <h1 className="cdc-page-header padding-y-3 margin-0">Upload Files</h1>
-        {/* Todo: Migrate this to be an <Alert> */}
         {uploadFeedback[0] !== "" && (
           <Alert className="margin-y-2" type="info">
             Status: {uploadFeedback[0]}
