@@ -7,7 +7,7 @@ import { Alert } from "@us-gov-cdc/cdc-react";
 
 import * as tus from "tus-js-client";
 
-import { getEnv } from "../../src/utils/helperFunctions/env";
+import API_ENDPOINTS from "src/config/api";
 
 interface FileUpload {
   file: File;
@@ -87,7 +87,7 @@ function UploadFiles() {
     const parsedJson = JSON.parse(formState.manifest);
 
     const upload = new tus.Upload(formState.file, {
-      endpoint: getEnv("VITE_UPLOAD_API_ENDPOINT"),
+      endpoint: API_ENDPOINTS.upload,
       retryDelays: [0, 3000, 5000, 10000, 20000],
       headers: {
         Authorization: `Bearer ${auth.user?.access_token}`,
