@@ -1,6 +1,7 @@
 import { getEnv } from "src/utils/helperFunctions/env";
 
 const API_URL = getEnv("VITE_API_BASE_URL");
+const UPLOAD_URL = getEnv("VITE_UPLOAD_API_ENDPOINT");
 const MMS_PREFIX = "mms";
 const PS_API_PREFIX = "ps-api";
 
@@ -18,6 +19,8 @@ const API_ENDPOINTS = {
   submissionDetails: `${API_URL}/${PS_API_PREFIX}/submission-details`,
   // auth
   tokenCallback: `${API_URL}/api/token`,
+  // upload
+  upload: UPLOAD_URL,
 };
 
 export default API_ENDPOINTS;
