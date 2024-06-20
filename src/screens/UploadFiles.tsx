@@ -93,8 +93,7 @@ function UploadFiles() {
         Authorization: `Bearer ${auth.user?.access_token}`,
       },
       metadata: {
-        filename: formState.file.name,
-        filetype: formState.file.type,
+        received_filename: formState.file.name,
         ...parsedJson,
       },
       onError: function (error) {
