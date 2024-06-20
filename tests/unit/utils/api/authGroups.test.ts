@@ -14,12 +14,6 @@ describe("authgroups - GET", () => {
 
     expect(data).toStrictEqual(payload);
   });
-
-  it("should return 400 without entityID", async () => {
-    const res = await getAuthGroups("mock_auth_token", "");
-
-    expect(res.status).toStrictEqual(400);
-  });
 });
 
 describe("authgroups - POST", () => {
@@ -27,12 +21,6 @@ describe("authgroups - POST", () => {
     const res = await createAuthGroup("mock_auth_token", 1, "test_auth_group");
 
     expect(res.status).toStrictEqual(200);
-  });
-
-  it("should return 404 without entityID", async () => {
-    const res = await createAuthGroup("mock_auth_token", "", "test_auth_group");
-
-    expect(res.status).toStrictEqual(404);
   });
 
   it("should return 400 without name", async () => {

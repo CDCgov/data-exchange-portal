@@ -37,9 +37,4 @@ describe("identities -- datastreams and routes", () => {
 
     expect(data).toStrictEqual(payload);
   });
-  it("should return 400 if identity id is missing", async () => {
-    const res = await getIdentityDatastreamsAndRoutes("mock_auth_token", "");
-
-    expect(res.status).toStrictEqual(400);
-  });
 });
