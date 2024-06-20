@@ -7,12 +7,11 @@ function Logout() {
   const auth = useAuth();
   const navigate = useNavigate();
 
-  const from = "/";
-
   useEffect(() => {
-    auth.removeUser();
-    navigate(from, { replace: true });
-  }, [auth, from, navigate]);
+    auth.removeUser().then(() => {
+      navigate("/login", { replace: true });
+    });
+  }, [auth, navigate]);
 
   return <></>; // Can possibly add a loading message here in the future.
 }

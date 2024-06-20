@@ -8,8 +8,6 @@ import {
   withMockedAuthProvider,
 } from "tests/utility/helpers";
 
-vi.mock("react-oidc-context");
-
 describe("Submissions page", () => {
   afterEach(() => {
     vi.clearAllMocks();
