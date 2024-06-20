@@ -36,6 +36,7 @@ function PortalTable<TData>({ table }: PortalTableProps<TData>) {
                   <TableHeader
                     key={header.id}
                     size={getColSize(header.id)}
+                    id={`column-${header.id}`}
                     className={header.id == "details" ? "details-row" : ""}>
                     {header.column.getCanSort() ? (
                       <button

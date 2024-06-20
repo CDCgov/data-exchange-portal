@@ -1,5 +1,9 @@
 import API_ENDPOINTS from "src/config/api";
 
+export interface CreateIdentityBody {
+  idpClientID: string;
+}
+
 export interface Identity {
   id: number;
   idpClientID: string;

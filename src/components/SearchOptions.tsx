@@ -15,7 +15,7 @@ import {
   getDataRoutes,
   getDataStreamOptions,
   getRoutesOptions,
-} from "src/utils/helperFunctions/dataStreams";
+} from "src/utils/helperFunctions/metadataFilters";
 import { Timeframe, timeframeOptions } from "src/types/timeframes";
 
 interface SearchOptionsProps {

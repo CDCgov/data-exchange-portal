@@ -3,7 +3,6 @@ import { ReportCounts } from "src/utils/api/reportCounts";
 import { FileSubmissions, FileSubmission } from "src/utils/api/fileSubmissions";
 
 export const generateCounts = (submissions: FileSubmissions): ReportCounts => {
-  console.log(submissions);
   const total = submissions.summary.total_items;
   const completed = submissions.items.filter((el: FileSubmission) =>
     el.status.toLowerCase().includes("complete")
