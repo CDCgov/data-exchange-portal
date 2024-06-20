@@ -280,7 +280,11 @@ export const mmsHandlers = [
       const { entity_id } = params;
       const { name } = (await request.json()) as CreateAuthGroupBody;
 
-      if (!entity_id || !name || entity_id == "NaN" || name == "NaN") {
+      if (!entity_id || entity_id == "NaN") {
+        return new HttpResponse(null, { status: 404 });
+      }
+
+      if (!name || name == "NaN") {
         return new HttpResponse(null, { status: 400 });
       }
       return new HttpResponse(null, { status: 200 });
