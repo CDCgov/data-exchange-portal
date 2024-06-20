@@ -1,10 +1,6 @@
-import { UserManager, UserManagerSettingsStore } from "oidc-client-ts";
-import {
-  AuthContextProps,
-  AuthProvider,
-  AuthState,
-  useAuth,
-} from "react-oidc-context";
+import { UserManager, UserManagerSettingsStore, User } from "oidc-client-ts";
+import { RecoilRoot } from "recoil";
+import { AuthContextProps, useAuth } from "react-oidc-context";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 import { vi } from "vitest";
 import ProtectedRoute from "src/components/ProtectedRoute";
@@ -93,18 +89,20 @@ export function withMemoryRouter(
 ): React.ReactElement {
   return (
     <MemoryRouter initialEntries={[path]}>
-      <Routes>
-        <Route
-          path={path}
-          element={
-            opts.protected ? (
-              <ProtectedRoute>{children}</ProtectedRoute>
-            ) : (
-              children
-            )
-          }
-        />
-      </Routes>
+      <RecoilRoot>
+        <Routes>
+          <Route
+            path={path}
+            element={
+              opts.protected ? (
+                <ProtectedRoute>{children}</ProtectedRoute>
+              ) : (
+                children
+              )
+            }
+          />
+        </Routes>
+      </RecoilRoot>
     </MemoryRouter>
   );
 }

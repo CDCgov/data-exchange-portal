@@ -36,6 +36,11 @@ export default defineConfig({
   test: {
     globals: true,
     environment: "jsdom",
+    coverage: {
+      provider: "v8",
+      exclude: ["src/mocks/*"],
+      include: ["src/*"],
+    },
     setupFiles: "./tests/setup.ts",
     include: ["**/*.{test,spec}.?(c|m)[jt]s?(x)"],
     exclude: [...configDefaults.exclude, "./tests/e2e/**", "./api/**"],
