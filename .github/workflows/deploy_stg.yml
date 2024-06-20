@@ -11,64 +11,65 @@ jobs:
     environment: Stage
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-    - name: Setup Node
-      uses: actions/setup-node@v4
-      with:
-        node-version: 18
-    - name: Install SWA CL
-      run: yarn global add @azure/static-web-apps-cli
-    - name: Install frontend dependencies
-      run: yarn install
-    - name: Install API dependencies
-      working-directory: api
-      run: npm install --production
-    - name: Generate build number
-      id: gen_build_number
-      run: |
-        NEXT_VERSION=${{github.ref_name}}
-        SHORT_SHA=$(git rev-parse --short HEAD)
-        echo "build_number=${NEXT_VERSION}_${SHORT_SHA}" >> $GITHUB_OUTPUT
-    - name: Create stg environment variables
-      run: |
-        touch .env.stg
-        echo VITE_SAMS_AUTHORITY_URL=https://apigw-stg.cdc.gov >> .env.stg
-        echo VITE_SAMS_CLIENT_ID=${{ secrets.SAMS_CLIENT_ID_STG }} >> .env.stg
-        echo VITE_SAMS_AUTH_URL=https://apigw-stg.cdc.gov:8443/auth/oauth/v2/authorize >> .env.stg
-        echo VITE_SAMS_USER_INFO_URL=https://apigw-stg.cdc.gov:8443/openid/connect/v1/userinfo >> .env.stg
-        echo VITE_OAUTH_CALLBACK_URL=https://dexstg.cdc.gov/oauth_callback >> .env.stg
-        echo VITE_OAUTH_TOKEN_URL=https://dexstg.cdc.gov/api/token >> .env.stg
-        echo VITE_APP_BUILD_NUMBER=${{ steps.gen_build_number.outputs.build_number }} >> .env.stg
-        echo VITE_APP_CONFIG_CONNECTION_STRING="${{ secrets.APP_CONFIG_CONNECTION_STRING }}" >> .env.stg
-    - name: Build frontend
-      run: yarn build:stg
-    - name: Build API
-      working-directory: api
-      run: npm run build
-    - name: Zip Release Candidate
-      run: zip -r ${{ github.ref_name }}.zip dist api/dist
-    - name: Create Github Draft Release
-      id: create_draft_release
-      uses: actions/create-release@v1
-      env:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - name: Install SWA CL
+        run: yarn global add @azure/static-web-apps-cli
+      - name: Install frontend dependencies
+        run: yarn install
+      - name: Install API dependencies
+        working-directory: api
+        run: npm install --production
+      - name: Generate build number
+        id: gen_build_number
+        run: |
+          NEXT_VERSION=${{github.ref_name}}
+          SHORT_SHA=$(git rev-parse --short HEAD)
+          echo "build_number=${NEXT_VERSION}_${SHORT_SHA}" >> $GITHUB_OUTPUT
+      - name: Create stg environment variables
+        run: |
+          touch .env.stg
+          echo VITE_SAMS_AUTHORITY_URL=https://apigw-stg.cdc.gov >> .env.stg
+          echo VITE_SAMS_CLIENT_ID=${{ secrets.SAMS_CLIENT_ID_STG }} >> .env.stg
+          echo VITE_SAMS_AUTH_URL=https://apigw-stg.cdc.gov:8443/auth/oauth/v2/authorize >> .env.stg
+          echo VITE_SAMS_USER_INFO_URL=https://apigw-stg.cdc.gov:8443/openid/connect/v1/userinfo >> .env.stg
+          echo VITE_OAUTH_CALLBACK_URL=https://dexstg.cdc.gov/oauth_callback >> .env.stg
+          echo VITE_OAUTH_TOKEN_URL=https://dexstg.cdc.gov/api/token >> .env.stg
+          echo VITE_APP_BUILD_NUMBER=${{ steps.gen_build_number.outputs.build_number }} >> .env.stg
+          echo VITE_APP_CONFIG_CONNECTION_STRING="${{ secrets.APP_CONFIG_CONNECTION_STRING }}" >> .env.stg
+          echo VITE_UPLOAD_API_ENDPOINT="${{ secrets.UPLOAD_API_ENDPOINT }}" >> .env.dev
+      - name: Build frontend
+        run: yarn build:stg
+      - name: Build API
+        working-directory: api
+        run: npm run build
+      - name: Zip Release Candidate
+        run: zip -r ${{ github.ref_name }}.zip dist api/dist
+      - name: Create Github Draft Release
+        id: create_draft_release
+        uses: actions/create-release@v1
+        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ github.ref_name }}
-        release_name: "Release Candidate ${{ github.ref_name }}"
-        draft: true
-        prerelease: false
-    - name: Attach Release Candidate Zip
-      uses: actions/upload-release-asset@v1.0.1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_draft_release.outputs.upload_url }}
-        asset_path: ./${{ github.ref_name }}.zip
-        asset_name: ${{ github.ref_name }}.zip
-        asset_content_type: application/zip
-    - name: Deploy
-      run: swa deploy ./dist --api-location ./api -d ${{ secrets.AZURE_SWA_DEPLOY_TOKEN }} --api-language node --api-version 18 --env stg -w .
+        with:
+          tag_name: ${{ github.ref_name }}
+          release_name: "Release Candidate ${{ github.ref_name }}"
+          draft: true
+          prerelease: false
+      - name: Attach Release Candidate Zip
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_draft_release.outputs.upload_url }}
+          asset_path: ./${{ github.ref_name }}.zip
+          asset_name: ${{ github.ref_name }}.zip
+          asset_content_type: application/zip
+      - name: Deploy
+        run: swa deploy ./dist --api-location ./api -d ${{ secrets.AZURE_SWA_DEPLOY_TOKEN }} --api-language node --api-version 18 --env stg -w .
 
   e2e:
     needs: create-rc

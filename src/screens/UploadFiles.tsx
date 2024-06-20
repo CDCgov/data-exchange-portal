@@ -1,4 +1,5 @@
 import { ChangeEvent, useReducer, useState } from "react";
+import { useAuth } from "react-oidc-context";
 
 import ManifestDefinitions from "src/components/ManifestDefs";
 import { Button } from "../../src/components/Button";
@@ -20,6 +21,8 @@ interface DispatchAction {
 }
 
 function UploadFiles() {
+  const auth = useAuth();
+
   const initialState: FileUpload = {
     file: new File([""], ""),
     manifest: "",
@@ -86,6 +89,9 @@ function UploadFiles() {
     const upload = new tus.Upload(formState.file, {
       endpoint: getEnv("VITE_UPLOAD_API_ENDPOINT"),
       retryDelays: [0, 3000, 5000, 10000, 20000],
+      headers: {
+        Authorization: `Bearer ${auth.user?.access_token}`,
+      },
       metadata: {
         filename: formState.file.name,
         filetype: formState.file.type,
@@ -99,10 +105,7 @@ function UploadFiles() {
         setUploadFeedback([`Uploading: ${percentage}%`, "info"]);
       },
       onSuccess: function () {
-        setUploadFeedback([
-          `Upload successful: ${upload.file.name}`,
-          "success",
-        ]);
+        setUploadFeedback([`Upload successful`, "success"]);
       },
     });
 
