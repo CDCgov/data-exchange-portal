@@ -1,32 +1,29 @@
 import { PropsWithChildren, useEffect } from "react";
-import { useAuth, hasAuthParams } from "react-oidc-context";
-import { useNavigate } from "react-router-dom";
-import { getEnv } from "src/utils/helperFunctions/env";
+import { useAuth } from "react-oidc-context";
+import { useLocation, useNavigate } from "react-router-dom";
+import { getOIDCTokenDetails } from "src/utils/helperFunctions/auth";
 
-export function ProtectedRoute({ children }: PropsWithChildren) {
+function ProtectedRoute({ children }: PropsWithChildren) {
   const auth = useAuth();
+  const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (
-      !hasAuthParams() &&
-      !auth.isAuthenticated &&
-      !auth.activeNavigator &&
-      !auth.isLoading
-    ) {
-      const oidcStorage = window.localStorage.getItem(
-        `oidc.user:${getEnv("VITE_SAMS_AUTHORITY_URL")}:${getEnv(
-          "VITE_SAMS_CLIENT_ID"
-        )}`
-      );
+    const expires_in = auth.user?.expires_in ?? 0;
 
-      if (oidcStorage) {
-        auth.signinSilent();
-      } else {
+    if (!auth.isAuthenticated || expires_in <= 0) {
+      const tokenDetails = getOIDCTokenDetails();
+
+      if (!tokenDetails || tokenDetails.expireTime < Date.now()) {
         navigate("/login", { replace: true });
+        return;
       }
+
+      auth.signinSilent()?.catch(() => navigate("/login", { replace: true }));
     }
-  }, [auth, navigate]);
+  }, [auth, location, navigate]);
 
   return children;
 }
+
+export default ProtectedRoute;

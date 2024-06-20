@@ -10,8 +10,6 @@ import {
 } from "tests/utility/helpers";
 import { dataStreamIdAtom, dataRouteAtom } from "src/state/searchParams";
 
-vi.mock("react-oidc-context");
-
 describe("Submissions page", () => {
   afterEach(() => {
     vi.clearAllMocks();

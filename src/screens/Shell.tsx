@@ -135,8 +135,8 @@ function Shell() {
                 {
                   componentType: "a",
                   icon: <Icons.ArrowUp />,
-                  text: "Uploaded Files",
-                  onClick: () => navigate("/"),
+                  text: "Upload Files",
+                  onClick: () => navigate("/home/upload"),
                 },
                 {
                   componentType: "a",

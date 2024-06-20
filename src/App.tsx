@@ -16,10 +16,11 @@ import Logout from "src/components/Logout";
 import Dashboard from "src/screens/Dashboard";
 import MetadataManagement from "./screens/MetadataManagement";
 import UserManagement from "./screens/UserManagement";
+import UploadFiles from "./screens/UploadFiles.tsx";
 import Profile from "src/screens/Profile";
 import Submissions from "src/screens/Submissions";
 
-import { ProtectedRoute } from "src/components/ProtectedRoute";
+import ProtectedRoute from "src/components/ProtectedRoute";
 
 function App() {
   // ignore Auth if running locally
@@ -45,6 +46,7 @@ function App() {
             path="metadata-management"
             element={<MetadataManagement />}></Route>
           <Route path="user-management" element={<UserManagement />}></Route>
+          <Route path="upload" element={<UploadFiles />}></Route>
           <Route path="profile" element={<Profile />}></Route>
           <Route path="submissions" element={<Submissions />}></Route>
 
