@@ -4,24 +4,22 @@ import { ValidationStatus } from "src/types/validationStatus";
 import Label from "src/components/formFields/Label";
 import ErrorMessage from "src/components/formFields/ErrorMessage";
 
-export type SelectOption = {
-  value: string | number;
-  display: string | JSX.Element;
-};
+type TextInputRef =
+  | string
+  | ((instance: HTMLInputElement | null) => void)
+  | React.RefObject<HTMLInputElement>
+  | null
+  | undefined;
 
-export type SelectProps = {
+type TextInputProps = {
   id: string;
-  options: SelectOption[];
+  type: "text" | "email" | "number" | "password" | "search" | "tel" | "url";
   className?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   labelClassName?: string;
-  onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   validationStatus?: ValidationStatus;
-  inputRef?:
-    | string
-    | ((instance: HTMLSelectElement | null) => void)
-    | React.RefObject<HTMLSelectElement>
-    | null
-    | undefined;
+  inputSize?: "small" | "medium";
+  inputRef?: TextInputRef;
   label?: string;
   hint?: string;
   required?: boolean;
@@ -30,41 +28,47 @@ export type SelectProps = {
   disabled?: boolean;
 };
 
-export const Select = ({
+export const TextInput = ({
   id,
-  options,
+  type,
   onChange,
-  className = "",
+  className,
   labelClassName = "margin-top-0",
-  inputRef,
   validationStatus,
+  inputSize,
+  inputRef,
   label = "",
   hint = "",
   required = false,
   errorMessage = "",
   defaultValue = "",
   disabled = false,
-}: SelectProps): React.ReactElement => {
+}: TextInputProps): React.ReactElement => {
   const [currentVal, setCurrentVal] = useState(defaultValue);
 
   useEffect(() => {
     setCurrentVal(defaultValue);
   }, [defaultValue]);
 
-  const isError = validationStatus === "error";
-  const isSuccess = validationStatus === "success";
-  const classes = classnames("usa-select", {
-    "usa-input--error": isError,
-    "usa-input--success": isSuccess,
-  });
-
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCurrentVal(e.target.value);
 
     if (onChange) {
       onChange(e);
     }
   };
+
+  const isError = validationStatus === "error";
+  const isSuccess = validationStatus === "success";
+  const isSmall = inputSize === "small";
+  const isMedium = inputSize === "medium";
+
+  const classes = classnames("usa-input", {
+    "usa-input--error": isError,
+    "usa-input--success": isSuccess,
+    "usa-input--small": isSmall,
+    "usa-input--medium": isMedium,
+  });
 
   return (
     <div className={className}>
@@ -77,27 +81,20 @@ export const Select = ({
           {label}
         </Label>
       )}
-      <select
+      <input
         value={currentVal}
-        data-testid={`test-id-select-${id}`}
+        data-testid={`test-id-input-${id}`}
         className={classes}
         onChange={handleChange}
         disabled={disabled}
         id={id}
         name={id}
-        ref={inputRef}>
-        <>
-          <option>- Select -</option>
-          {options.map(({ value, display }: SelectOption) => (
-            <option key={value} value={value}>
-              {display}
-            </option>
-          ))}
-        </>
-      </select>
+        type={type}
+        ref={inputRef}
+      />
       {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
     </div>
   );
 };
 
-export default Select;
+export default TextInput;

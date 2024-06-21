@@ -39,19 +39,25 @@ export const Label = ({
   );
 
   return (
-    <label
-      {...labelProps}
-      data-testid="label"
-      className={classes}
-      htmlFor={htmlFor}>
-      {children}
-      {hint && <span className="usa-hint">{hint}</span>}
-      {requiredMarker && (
-        <>
-          <RequiredMarker />
-        </>
+    <>
+      <label
+        {...labelProps}
+        data-testid="label"
+        className={classes}
+        htmlFor={htmlFor}>
+        {children}
+        {requiredMarker && (
+          <>
+            <RequiredMarker />
+          </>
+        )}
+      </label>
+      {hint && (
+        <div className="usa-hint" id={`${htmlFor}-hint`}>
+          hint
+        </div>
       )}
-    </label>
+    </>
   );
 };
 
