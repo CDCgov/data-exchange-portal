@@ -4,45 +4,47 @@ import { ValidationStatus } from "src/types/validationStatus";
 import Label from "src/components/formFields/Label";
 import ErrorMessage from "src/components/formFields/ErrorMessage";
 
-type TextInputRef =
+export type TextInputRef =
   | string
   | ((instance: HTMLInputElement | null) => void)
   | React.RefObject<HTMLInputElement>
   | null
   | undefined;
 
-type TextInputProps = {
+export type TextInputProps = {
   id: string;
-  type: "text" | "email" | "number" | "password" | "search" | "tel" | "url";
   className?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  labelClassName?: string;
-  validationStatus?: ValidationStatus;
-  inputSize?: "small" | "medium";
-  inputRef?: TextInputRef;
-  label?: string;
-  hint?: string;
-  required?: boolean;
-  errorMessage?: string;
   defaultValue?: string;
   disabled?: boolean;
+  errorMessage?: string;
+  hint?: string;
+  inputRef?: TextInputRef;
+  inputSize?: "small" | "medium";
+  label?: string;
+  labelClassName?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  placeholder?: string;
+  required?: boolean;
+  type?: "text" | "email" | "number" | "password" | "search" | "tel" | "url";
+  validationStatus?: ValidationStatus;
 };
 
 export const TextInput = ({
   id,
-  type,
-  onChange,
-  className,
-  labelClassName = "margin-top-0",
-  validationStatus,
-  inputSize,
-  inputRef,
-  label = "",
-  hint = "",
-  required = false,
-  errorMessage = "",
+  className = "",
   defaultValue = "",
   disabled = false,
+  errorMessage = "",
+  hint = "",
+  inputRef,
+  inputSize,
+  label = "",
+  labelClassName = "margin-top-0",
+  onChange,
+  placeholder = "",
+  required = false,
+  type = "text",
+  validationStatus,
 }: TextInputProps): React.ReactElement => {
   const [currentVal, setCurrentVal] = useState(defaultValue);
 
@@ -87,6 +89,7 @@ export const TextInput = ({
         className={classes}
         onChange={handleChange}
         disabled={disabled}
+        placeholder={placeholder}
         id={id}
         name={id}
         type={type}
