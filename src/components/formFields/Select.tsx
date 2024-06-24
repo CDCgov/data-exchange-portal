@@ -23,6 +23,7 @@ export type SelectProps = {
     | null
     | undefined;
   label?: string;
+  hint?: string;
   required?: boolean;
   errorMessage?: string;
   defaultValue?: string;
@@ -38,6 +39,7 @@ export const Select = ({
   inputRef,
   validationStatus,
   label = "",
+  hint = "",
   required = false,
   errorMessage = "",
   defaultValue = "",
@@ -70,6 +72,7 @@ export const Select = ({
         <Label
           requiredMarker={required}
           htmlFor={id}
+          hint={hint}
           className={labelClassName}>
           {label}
         </Label>
