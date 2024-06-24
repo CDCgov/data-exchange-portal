@@ -45,8 +45,10 @@ function UploadFiles() {
           ...state,
           manifest: action.value,
         };
-      case "reset":
+      case "reset": {
+        setUploadResultMessage("");
         return initialState;
+      }
       default:
         throw new Error("Unrecognized action type provided to form reducer");
     }
@@ -55,7 +57,6 @@ function UploadFiles() {
   const [formState, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    console.log(formState);
     formState?.file.name !== "" && formState.manifest !== ""
       ? setFormIsEmpty(false)
       : setFormIsEmpty(true);
@@ -94,34 +95,38 @@ function UploadFiles() {
   // Todo: Disable submit when one is uploading. This will prevent any additional uploads from
   // starting which could create some confusion.
   const handleUpload = () => {
-    const parsedJson = JSON.parse(formState.manifest);
+    try {
+      const parsedJson = JSON.parse(formState.manifest);
+      const upload = new tus.Upload(formState.file, {
+        endpoint: API_ENDPOINTS.upload,
+        retryDelays: [0, 3000, 5000, 10000, 20000],
+        headers: {
+          Authorization: `Bearer ${auth.user?.access_token}`,
+        },
+        metadata: {
+          received_filename: formState.file.name,
+          ...parsedJson,
+        },
+        onError: function (error) {
+          setUploadResultMessage(`Upload failed: ${error.message}`);
+          setUploadResultAlert("error");
+        },
+        onProgress: function (bytesUploaded, bytesTotal) {
+          const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2);
+          setUploadResultMessage(`Uploading: ${percentage}%`);
+          setUploadResultAlert("info");
+        },
+        onSuccess: function () {
+          setUploadResultMessage(`Upload successful`);
+          setUploadResultAlert("success");
+        },
+      });
 
-    const upload = new tus.Upload(formState.file, {
-      endpoint: API_ENDPOINTS.upload,
-      retryDelays: [0, 3000, 5000, 10000, 20000],
-      headers: {
-        Authorization: `Bearer ${auth.user?.access_token}`,
-      },
-      metadata: {
-        received_filename: formState.file.name,
-        ...parsedJson,
-      },
-      onError: function (error) {
-        setUploadResultMessage(`Upload failed: ${error.message}`);
-        setUploadResultAlert("error");
-      },
-      onProgress: function (bytesUploaded, bytesTotal) {
-        const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2);
-        setUploadResultMessage(`Uploading: ${percentage}%`);
-        setUploadResultAlert("info");
-      },
-      onSuccess: function () {
-        setUploadResultMessage(`Upload successful`);
-        setUploadResultAlert("success");
-      },
-    });
-
-    upload.start();
+      upload.start();
+    } catch (error) {
+      setUploadResultMessage(`Upload failed: error parsing JSON`);
+      setUploadResultAlert("error");
+    }
   };
 
   return (
@@ -129,8 +134,11 @@ function UploadFiles() {
       <section className="main_content padding-x-2">
         <h1 className="cdc-page-header padding-y-3 margin-0">Upload Files</h1>
         {uploadResultMessage.length > 0 && (
-          <Alert className="margin-y-2" type={uploadResultAlert}>
-            Status: {uploadResultMessage}
+          <Alert
+            data-testid="error-alert"
+            className="margin-y-2"
+            type={uploadResultAlert}>
+            {uploadResultMessage}
           </Alert>
         )}
         <div className="grid-row flex-row">

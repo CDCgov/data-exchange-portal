@@ -71,3 +71,15 @@ test("should clear selected file name and manifest content on reset click", asyn
   expect(manifestInput.value).toEqual("");
   expect(fileName.textContent).toEqual("No file chosen");
 });
+
+test("should display json parse error with invalid json entered into manifest", async () => {
+  const { getByLabelText, getByText, getByRole } = render(<UploadFiles />);
+
+  const manifestInput = getByLabelText("Input the Submission Manifest");
+  await fireEvent.change(manifestInput, { target: { value: "{" } });
+
+  const submitButton = getByRole("button", { name: "Submit" });
+  await fireEvent.click(submitButton);
+
+  expect(getByText("Upload failed: error parsing JSON")).toBet;
+});
