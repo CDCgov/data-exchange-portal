@@ -1,5 +1,6 @@
 import { atom } from "recoil";
 import { Timeframe } from "src/types/timeframes";
+import { formatISO } from "date-fns";
 
 export const dataStreamIdAtom = atom<string>({
   key: "dataStreamId",
@@ -18,12 +19,12 @@ export const timeFrameAtom = atom<Timeframe>({
 
 export const startDateAtom = atom<string>({
   key: "startDate",
-  default: new Date().toISOString(),
+  default: formatISO(new Date()),
 });
 
 export const endDateAtom = atom<string>({
   key: "endDate",
-  default: new Date().toISOString(),
+  default: formatISO(new Date()),
 });
 
 export const jurisdictionAtom = atom<string>({

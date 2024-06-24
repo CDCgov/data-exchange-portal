@@ -1,44 +1,71 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { RecoilRoot } from "recoil";
-import { useSearchParams } from "react-router-dom";
-import { vi } from "vitest";
+import { describe, it, expect, vi } from "vitest";
+import { MemoryRouter } from "react-router-dom";
 import SearchOptions from "src/components/SearchOptions";
+import { dataStreamsAtom } from "src/state/dataStreams";
+import {
+  dataRouteAtom,
+  dataStreamIdAtom,
+  endDateAtom,
+  jurisdictionAtom,
+  senderIdAtom,
+  startDateAtom,
+  timeFrameAtom,
+} from "src/state/searchParams";
+import { Timeframe } from "src/types/timeframes";
 
-vi.mock("react-router-dom", () => ({
-  ...vi.importActual("react-router-dom"),
-  useSearchParams: vi.fn(),
-}));
-
-vi.mock("src/utils/helperFunctions/metadataFilters", () => ({
-  getDataRoutes: vi.fn(() => ["route1"]),
-  getDataStreamOptions: vi.fn(() => [{ value: "stream1", display: "stream1" }]),
-  getRoutesOptions: vi.fn(() => [{ value: "route1", display: "route1" }]),
-}));
-
-describe("SearchOptions", () => {
-  const mockUseSearchParams = useSearchParams as jest.Mock;
-  beforeEach(() => {
-    mockUseSearchParams.mockReturnValue([new URLSearchParams(), vi.fn()]);
-  });
-
-  it("renders without crashing", () => {
-    render(
+const setup = (props = {}) => {
+  render(
+    <MemoryRouter>
       <RecoilRoot>
-        <SearchOptions />
+        <SearchOptions {...props} />
       </RecoilRoot>
-    );
+    </MemoryRouter>
+  );
+};
+
+describe("SearchOptions component", () => {
+  it("renders without errors", () => {
+    setup();
 
     expect(screen.getByLabelText("Data Stream")).toBeInTheDocument();
     expect(screen.getByLabelText("Data Route")).toBeInTheDocument();
     expect(screen.getByLabelText("Timeframe")).toBeInTheDocument();
   });
 
-  it("handles optional forSubmissions prop correctly", () => {
-    render(
-      <RecoilRoot>
-        <SearchOptions forSubmissions />
-      </RecoilRoot>
-    );
+  it("renders with default values", () => {
+    setup();
+
+    const dataStreamSelect = screen.getByLabelText(
+      "Data Stream"
+    ) as HTMLSelectElement;
+    const dataRouteSelect = screen.getByLabelText(
+      "Data Route"
+    ) as HTMLSelectElement;
+    const timeframeSelect = screen.getByLabelText(
+      "Timeframe"
+    ) as HTMLSelectElement;
+
+    expect(dataStreamSelect.value).toBe("- Select -");
+    expect(dataRouteSelect.value).toBe("- Select -");
+    expect(timeframeSelect.value).toBe("Last 7 Days");
+  });
+
+  it("renders custom timeframe inputs", () => {
+    setup();
+
+    const timeframeSelect = screen.getByLabelText(
+      "Timeframe"
+    ) as HTMLSelectElement;
+    fireEvent.change(timeframeSelect, { target: { value: Timeframe.Custom } });
+
+    expect(screen.getByLabelText("Start Date")).toBeInTheDocument();
+    expect(screen.getByLabelText("End Date")).toBeInTheDocument();
+  });
+
+  it("conditionally renders jurisdiction and sender filters", () => {
+    setup({ forSubmissions: true });
 
     expect(screen.getByLabelText("Jurisdiction")).toBeInTheDocument();
     expect(screen.getByLabelText("Sender")).toBeInTheDocument();

@@ -45,7 +45,9 @@ describe("TextInput component", () => {
     const handleChange = vi.fn();
     render(<TextInput id="test-input" onChange={handleChange} />);
 
-    const input = screen.getByTestId("test-id-input-test-input");
+    const input = screen.getByTestId(
+      "test-id-input-test-input"
+    ) as HTMLInputElement;
     fireEvent.change(input, { target: { value: "new value" } });
 
     expect(handleChange).toHaveBeenCalledTimes(1);
@@ -62,7 +64,9 @@ describe("TextInput component", () => {
   it("renders with the given default value", () => {
     render(<TextInput id="test-input" defaultValue="default value" />);
 
-    const input = screen.getByTestId("test-id-input-test-input");
+    const input = screen.getByTestId(
+      "test-id-input-test-input"
+    ) as HTMLInputElement;
     expect(input.value).toBe("default value");
   });
 

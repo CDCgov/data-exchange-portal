@@ -21,6 +21,7 @@ import {
 } from "src/utils/helperFunctions/metadataFilters";
 import { Timeframe, timeframeOptions } from "src/types/timeframes";
 import { isValidIsoString } from "src/utils/helperFunctions/date";
+import debounce from "src/utils/helperFunctions/debounce";
 
 interface SearchOptionsProps {
   forSubmissions?: boolean;
@@ -50,12 +51,16 @@ function SearchOptions({
     const tf = searchParams.get("timeframe") as Timeframe;
     const jd = searchParams.get("jurisdiction");
     const senderId = searchParams.get("sender_id");
+    const startDateTime = searchParams.get("start_date");
+    const endDateTime = searchParams.get("end_date");
 
     if (streamId) setDataStreamId(streamId);
     if (route) setDataRoute(route);
     if (tf) setTimeframe(tf);
     if (jd) setJurisdiction(jd);
     if (senderId) setSenderId(senderId);
+    if (startDateTime) setStartDate(startDateTime);
+    if (endDateTime) setEndDate(endDateTime);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -68,6 +73,8 @@ function SearchOptions({
       jurisdiction,
       sender_id,
       timeframe,
+      start_date: timeframe == Timeframe.Custom ? startDate : "",
+      end_date: timeframe == Timeframe.Custom ? endDate : "",
     });
   }, [
     data_stream_id,
@@ -75,6 +82,8 @@ function SearchOptions({
     jurisdiction,
     sender_id,
     timeframe,
+    startDate,
+    endDate,
     handleFilter,
     setSearchParams,
   ]);
@@ -211,7 +220,7 @@ function SearchOptions({
             className="padding-right-2 flex-1 search-option"
             id="startDate"
             label="Start Date"
-            onChange={handleStartDate}
+            onChange={debounce(handleStartDate, 750)}
             placeholder="YYYY-MM-DDTHH:MM:SSZ"
             defaultValue={startDate}
             validationStatus={!startDateIsValid ? "error" : null}
@@ -221,7 +230,7 @@ function SearchOptions({
             className="padding-right-2 flex-1 search-option"
             id="endDate"
             label="End Date"
-            onChange={handleEndDate}
+            onChange={debounce(handleEndDate, 750)}
             placeholder="YYYY-MM-DDTHH:MM:SSZ"
             defaultValue={endDate}
             validationStatus={!endDateIsValid ? "error" : null}
