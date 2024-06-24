@@ -3,10 +3,13 @@ import { useRecoilValue } from "recoil";
 import {
   dataRouteAtom,
   dataStreamIdAtom,
-  timeFrameAtom,
+  endDateAtom,
   jurisdictionAtom,
   senderIdAtom,
+  startDateAtom,
+  timeFrameAtom,
 } from "src/state/searchParams";
+import { Timeframe } from "src/types/timeframes";
 
 import { Button, Pill } from "@us-gov-cdc/cdc-react";
 
@@ -54,9 +57,11 @@ function Submissions() {
 
   const dataStreamId = useRecoilValue(dataStreamIdAtom);
   const dataRoute = useRecoilValue(dataRouteAtom);
-  const timeframe = useRecoilValue(timeFrameAtom);
+  const endDate = useRecoilValue(endDateAtom);
   const jurisdiction = useRecoilValue(jurisdictionAtom);
   const senderId = useRecoilValue(senderIdAtom);
+  const startDate = useRecoilValue(startDateAtom);
+  const timeframe = useRecoilValue(timeFrameAtom);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSubmission, setSelectedSubmission] = useState<FileSubmission>(
@@ -124,8 +129,8 @@ function Submissions() {
         auth.user?.access_token || "",
         dataStreamId,
         dataRoute != "All" ? dataRoute : "",
-        getPastDate(timeframe),
-        new Date().toISOString(),
+        timeframe == Timeframe.Custom ? startDate : getPastDate(timeframe),
+        timeframe == Timeframe.Custom ? endDate : new Date().toISOString(),
         sorting.length > 0 ? sorting[0].id : "timestamp",
         sortDirection(),
         pagination.pageIndex + 1,

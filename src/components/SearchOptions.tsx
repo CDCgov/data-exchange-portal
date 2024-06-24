@@ -207,6 +207,7 @@ function SearchOptions({
             label="Start Date"
             onChange={handleStartDate}
             placeholder="YYYY-MM-DDTHH:MM:SSZ"
+            defaultValue={startDate}
           />
           <TextInput
             className="padding-right-2 flex-1 search-option"
@@ -214,6 +215,7 @@ function SearchOptions({
             label="End Date"
             onChange={handleEndDate}
             placeholder="YYYY-MM-DDTHH:MM:SSZ"
+            defaultValue={endDate}
           />
         </>
       )}

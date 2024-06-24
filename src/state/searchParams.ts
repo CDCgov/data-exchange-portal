@@ -18,12 +18,12 @@ export const timeFrameAtom = atom<Timeframe>({
 
 export const startDateAtom = atom<string>({
   key: "startDate",
-  default: "",
+  default: new Date().toISOString(),
 });
 
 export const endDateAtom = atom<string>({
   key: "endDate",
-  default: "",
+  default: new Date().toISOString(),
 });
 
 export const jurisdictionAtom = atom<string>({
