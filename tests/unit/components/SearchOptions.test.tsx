@@ -1,18 +1,8 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { RecoilRoot } from "recoil";
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect } from "vitest";
 import { MemoryRouter } from "react-router-dom";
 import SearchOptions from "src/components/SearchOptions";
-import { dataStreamsAtom } from "src/state/dataStreams";
-import {
-  dataRouteAtom,
-  dataStreamIdAtom,
-  endDateAtom,
-  jurisdictionAtom,
-  senderIdAtom,
-  startDateAtom,
-  timeFrameAtom,
-} from "src/state/searchParams";
 import { Timeframe } from "src/types/timeframes";
 
 const setup = (props = {}) => {

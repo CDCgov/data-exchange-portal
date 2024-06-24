@@ -162,9 +162,11 @@ function Submissions() {
     auth,
     dataStreamId,
     dataRoute,
+    endDate,
     jurisdiction,
     senderId,
     sorting,
+    startDate,
     timeframe,
     pagination,
   ]);
