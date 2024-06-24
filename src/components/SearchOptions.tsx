@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
@@ -20,6 +20,7 @@ import {
   getRoutesOptions,
 } from "src/utils/helperFunctions/metadataFilters";
 import { Timeframe, timeframeOptions } from "src/types/timeframes";
+import { isValidIsoString } from "src/utils/helperFunctions/date";
 
 interface SearchOptionsProps {
   forSubmissions?: boolean;
@@ -39,6 +40,9 @@ function SearchOptions({
   const [sender_id, setSenderId] = useRecoilState(senderIdAtom);
   const [startDate, setStartDate] = useRecoilState(startDateAtom);
   const dataStreams = useRecoilValue(dataStreamsAtom);
+
+  const [startDateIsValid, setStartDateIsValid] = useState(true);
+  const [endDateIsValid, setEndDateIsValid] = useState(true);
 
   useEffect(() => {
     const streamId = searchParams.get("data_stream_id");
@@ -93,11 +97,13 @@ function SearchOptions({
 
   const handleStartDate = (e: React.ChangeEvent<HTMLInputElement>) => {
     const date = e.target.value;
+    setStartDateIsValid(isValidIsoString(date));
     setStartDate(date);
   };
 
   const handleEndDate = (e: React.ChangeEvent<HTMLInputElement>) => {
     const date = e.target.value;
+    setEndDateIsValid(isValidIsoString(date));
     setEndDate(date);
   };
 
@@ -208,6 +214,8 @@ function SearchOptions({
             onChange={handleStartDate}
             placeholder="YYYY-MM-DDTHH:MM:SSZ"
             defaultValue={startDate}
+            validationStatus={!startDateIsValid ? "error" : null}
+            errorMessage={!startDateIsValid ? "Invalid ISO string" : ""}
           />
           <TextInput
             className="padding-right-2 flex-1 search-option"
@@ -216,6 +224,8 @@ function SearchOptions({
             onChange={handleEndDate}
             placeholder="YYYY-MM-DDTHH:MM:SSZ"
             defaultValue={endDate}
+            validationStatus={!endDateIsValid ? "error" : null}
+            errorMessage={!endDateIsValid ? "Invalid ISO string" : ""}
           />
         </>
       )}
