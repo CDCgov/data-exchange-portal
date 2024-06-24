@@ -137,13 +137,17 @@ function UploadFiles() {
                   Choose file
                 </Button>
                 <input
+                  data-testid="file-uploader"
                   type="file"
                   id="file-uploader"
                   name="file-uploader"
                   multiple
                   onChange={(e) => handleFileNameChange(e)}
                 />
-                <p id="file-name" className="text-italic text-normal">
+                <p
+                  id="file-name"
+                  data-testid="file-name"
+                  className="text-italic text-normal">
                   {formState.file.name ? formState.file.name : "No file chosen"}
                 </p>
               </div>
