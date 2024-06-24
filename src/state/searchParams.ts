@@ -16,6 +16,16 @@ export const timeFrameAtom = atom<Timeframe>({
   default: Timeframe.Last7Days,
 });
 
+export const startDateAtom = atom<string>({
+  key: "startDate",
+  default: "",
+});
+
+export const endDateAtom = atom<string>({
+  key: "endDate",
+  default: "",
+});
+
 export const jurisdictionAtom = atom<string>({
   key: "jurisdiction",
   default: "",
