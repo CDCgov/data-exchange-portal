@@ -54,7 +54,7 @@ export const Label = ({
       </label>
       {hint && (
         <div className="usa-hint" id={`${htmlFor}-hint`}>
-          hint
+          {hint}
         </div>
       )}
     </>
