@@ -3,7 +3,7 @@ import { useAuth } from "react-oidc-context";
 
 import ManifestDefinitions from "src/components/ManifestDefs";
 import { Button } from "../../src/components/Button";
-import { Alert } from "@us-gov-cdc/cdc-react";
+import { Alert, AlertProps } from "@us-gov-cdc/cdc-react";
 
 import * as tus from "tus-js-client";
 
@@ -28,7 +28,9 @@ function UploadFiles() {
     manifest: "",
   };
 
-  const [uploadFeedback, setUploadFeedback] = useState<Array<string>>(["", ""]);
+  const [uploadResultMessage, setUploadResultMessage] = useState("");
+  const [uploadResultAlert, setUploadResultAlert] =
+    useState<AlertProps["type"]>("info");
 
   function reducer(state: FileUpload, action: DispatchAction) {
     switch (action.type) {
@@ -97,14 +99,17 @@ function UploadFiles() {
         ...parsedJson,
       },
       onError: function (error) {
-        setUploadFeedback([`Upload failed: ${error.message}`, "error"]);
+        setUploadResultMessage(`Upload failed: ${error.message}`);
+        setUploadResultAlert("error");
       },
       onProgress: function (bytesUploaded, bytesTotal) {
         const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2);
-        setUploadFeedback([`Uploading: ${percentage}%`, "info"]);
+        setUploadResultMessage(`Uploading: ${percentage}%`);
+        setUploadResultAlert("info");
       },
       onSuccess: function () {
-        setUploadFeedback([`Upload successful`, "success"]);
+        setUploadResultMessage(`Upload successful`);
+        setUploadResultAlert("success");
       },
     });
 
@@ -115,9 +120,9 @@ function UploadFiles() {
     <>
       <section className="main_content padding-x-2">
         <h1 className="cdc-page-header padding-y-3 margin-0">Upload Files</h1>
-        {uploadFeedback[0] !== "" && (
-          <Alert className="margin-y-2" type="info">
-            Status: {uploadFeedback[0]}
+        {uploadResultMessage.length > 0 && (
+          <Alert className="margin-y-2" type={uploadResultAlert}>
+            Status: {uploadResultMessage}
           </Alert>
         )}
         <div className="grid-row flex-row">
