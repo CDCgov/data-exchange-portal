@@ -1,4 +1,4 @@
-import { ChangeEvent, useReducer, useState } from "react";
+import { ChangeEvent, useEffect, useReducer, useState } from "react";
 import { useAuth } from "react-oidc-context";
 
 import ManifestDefinitions from "src/components/ManifestDefs";
@@ -31,6 +31,7 @@ function UploadFiles() {
   const [uploadResultMessage, setUploadResultMessage] = useState("");
   const [uploadResultAlert, setUploadResultAlert] =
     useState<AlertProps["type"]>("info");
+  const [formIsEmpty, setFormIsEmpty] = useState(true);
 
   function reducer(state: FileUpload, action: DispatchAction) {
     switch (action.type) {
@@ -52,6 +53,13 @@ function UploadFiles() {
   }
 
   const [formState, dispatch] = useReducer(reducer, initialState);
+
+  useEffect(() => {
+    console.log(formState);
+    formState?.file.name !== "" && formState.manifest !== ""
+      ? setFormIsEmpty(false)
+      : setFormIsEmpty(true);
+  }, [formState]);
 
   const handleFileSelection = () => {
     document?.getElementById("file-uploader")?.click();
@@ -175,7 +183,11 @@ function UploadFiles() {
                 value={formState.manifest}></textarea>
               <hr className="margin-y-2 border-1px border-base-lighter" />
               <div className="margin-y-1">
-                <Button type="submit" id="upload-button" onClick={handleUpload}>
+                <Button
+                  disabled={formIsEmpty}
+                  type="submit"
+                  id="upload-button"
+                  onClick={handleUpload}>
                   Submit
                 </Button>
                 <Button
