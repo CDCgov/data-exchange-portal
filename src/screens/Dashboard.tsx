@@ -5,8 +5,11 @@ import { useRecoilValue } from "recoil";
 import {
   dataRouteAtom,
   dataStreamIdAtom,
+  endDateAtom,
+  startDateAtom,
   timeFrameAtom,
 } from "src/state/searchParams";
+import { Timeframe } from "src/types/timeframes";
 
 import PieChart from "src/components/PieChart";
 import SearchOptions from "src/components/SearchOptions";
@@ -25,6 +28,8 @@ function Dashboard() {
 
   const dataStreamId = useRecoilValue(dataStreamIdAtom);
   const dataRoute = useRecoilValue(dataRouteAtom);
+  const endDate = useRecoilValue(endDateAtom);
+  const startDate = useRecoilValue(startDateAtom);
   const timeframe = useRecoilValue(timeFrameAtom);
 
   useEffect(() => {
@@ -33,8 +38,8 @@ function Dashboard() {
         auth.user?.access_token || "",
         dataStreamId,
         dataRoute != "All" ? dataRoute : "",
-        getPastDate(timeframe),
-        new Date().toISOString()
+        timeframe == Timeframe.Custom ? startDate : getPastDate(timeframe),
+        timeframe == Timeframe.Custom ? endDate : new Date().toISOString()
       );
 
       // TODO: add UI feedback for failed report counts retrieval
@@ -51,7 +56,7 @@ function Dashboard() {
     };
 
     fetchCall();
-  }, [auth, dataStreamId, dataRoute, timeframe]);
+  }, [auth, dataStreamId, dataRoute, endDate, startDate, timeframe]);
 
   return (
     <section className="main_content padding-x-2">

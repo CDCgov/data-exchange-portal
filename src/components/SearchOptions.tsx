@@ -1,22 +1,27 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
   dataRouteAtom,
   dataStreamIdAtom,
+  endDateAtom,
   jurisdictionAtom,
   senderIdAtom,
+  startDateAtom,
   timeFrameAtom,
 } from "src/state/searchParams";
 import { dataStreamsAtom } from "src/state/dataStreams";
 
 import Select, { SelectOption } from "src/components/formFields/Select";
+import TextInput from "src/components/formFields/TextInput";
 import {
   getDataRoutes,
   getDataStreamOptions,
   getRoutesOptions,
 } from "src/utils/helperFunctions/metadataFilters";
 import { Timeframe, timeframeOptions } from "src/types/timeframes";
+import { isValidIsoString } from "src/utils/helperFunctions/date";
+import debounce from "src/utils/helperFunctions/debounce";
 
 interface SearchOptionsProps {
   forSubmissions?: boolean;
@@ -30,10 +35,15 @@ function SearchOptions({
   const [searchParams, setSearchParams] = useSearchParams();
   const [data_stream_id, setDataStreamId] = useRecoilState(dataStreamIdAtom);
   const [data_route, setDataRoute] = useRecoilState(dataRouteAtom);
+  const [endDate, setEndDate] = useRecoilState(endDateAtom);
   const [timeframe, setTimeframe] = useRecoilState(timeFrameAtom);
   const [jurisdiction, setJurisdiction] = useRecoilState(jurisdictionAtom);
   const [sender_id, setSenderId] = useRecoilState(senderIdAtom);
+  const [startDate, setStartDate] = useRecoilState(startDateAtom);
   const dataStreams = useRecoilValue(dataStreamsAtom);
+
+  const [startDateIsValid, setStartDateIsValid] = useState(true);
+  const [endDateIsValid, setEndDateIsValid] = useState(true);
 
   useEffect(() => {
     const streamId = searchParams.get("data_stream_id");
@@ -41,12 +51,16 @@ function SearchOptions({
     const tf = searchParams.get("timeframe") as Timeframe;
     const jd = searchParams.get("jurisdiction");
     const senderId = searchParams.get("sender_id");
+    const startDateTime = searchParams.get("start_date");
+    const endDateTime = searchParams.get("end_date");
 
     if (streamId) setDataStreamId(streamId);
     if (route) setDataRoute(route);
     if (tf) setTimeframe(tf);
     if (jd) setJurisdiction(jd);
     if (senderId) setSenderId(senderId);
+    if (startDateTime) setStartDate(startDateTime);
+    if (endDateTime) setEndDate(endDateTime);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -59,6 +73,8 @@ function SearchOptions({
       jurisdiction,
       sender_id,
       timeframe,
+      start_date: timeframe == Timeframe.Custom ? startDate : "",
+      end_date: timeframe == Timeframe.Custom ? endDate : "",
     });
   }, [
     data_stream_id,
@@ -66,6 +82,8 @@ function SearchOptions({
     jurisdiction,
     sender_id,
     timeframe,
+    startDate,
+    endDate,
     handleFilter,
     setSearchParams,
   ]);
@@ -84,6 +102,18 @@ function SearchOptions({
   const handleTimeframe = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const timeframe = e.target.value as Timeframe;
     setTimeframe(timeframe);
+  };
+
+  const handleStartDate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const date = e.target.value;
+    setStartDateIsValid(isValidIsoString(date));
+    setStartDate(date);
+  };
+
+  const handleEndDate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const date = e.target.value;
+    setEndDateIsValid(isValidIsoString(date));
+    setEndDate(date);
   };
 
   const handleJurisdiction = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -159,12 +189,9 @@ function SearchOptions({
   ];
 
   return (
-    <div
-      className={`display-flex flex-justify padding-bottom-4 ${
-        forSubmissions ? "" : "dashboard-search"
-      }`}>
+    <div className={`display-flex flex-justify-start padding-bottom-4`}>
       <Select
-        className="padding-right-2 flex-1"
+        className="padding-right-2 flex-1 search-option"
         id="data-stream-filter"
         label="Data Stream"
         onChange={handleDataStreamId}
@@ -172,7 +199,7 @@ function SearchOptions({
         defaultValue={data_stream_id}
       />
       <Select
-        className="padding-right-2 flex-1"
+        className="padding-right-2 flex-1 search-option"
         id="data-route-filter"
         label="Data Route"
         onChange={handleDataRoute}
@@ -180,17 +207,41 @@ function SearchOptions({
         defaultValue={data_route}
       />
       <Select
-        className="padding-right-2 flex-1"
+        className="padding-right-2 flex-1 search-option"
         id="timeframe-filter"
         label="Timeframe"
         onChange={handleTimeframe}
         options={timeframeOptions}
         defaultValue={timeframe}
       />
+      {timeframe == Timeframe.Custom && (
+        <>
+          <TextInput
+            className="padding-right-2 flex-1 search-option"
+            id="startDate"
+            label="Start Date"
+            onChange={debounce(handleStartDate, 750)}
+            placeholder="YYYY-MM-DDTHH:MM:SSZ"
+            defaultValue={startDate}
+            validationStatus={!startDateIsValid ? "error" : null}
+            errorMessage={!startDateIsValid ? "Invalid ISO string" : ""}
+          />
+          <TextInput
+            className="padding-right-2 flex-1 search-option"
+            id="endDate"
+            label="End Date"
+            onChange={debounce(handleEndDate, 750)}
+            placeholder="YYYY-MM-DDTHH:MM:SSZ"
+            defaultValue={endDate}
+            validationStatus={!endDateIsValid ? "error" : null}
+            errorMessage={!endDateIsValid ? "Invalid ISO string" : ""}
+          />
+        </>
+      )}
       {forSubmissions && (
         <>
           <Select
-            className="padding-right-2 flex-1"
+            className="padding-right-2 flex-1 search-option"
             id="jurisdiction-filter"
             label="Jurisdiction"
             onChange={handleJurisdiction}
@@ -198,7 +249,7 @@ function SearchOptions({
             defaultValue={jurisdiction}
           />
           <Select
-            className="padding-right-2 flex-1"
+            className="padding-right-2 flex-1 search-option"
             id="sender-id-filter"
             label="Sender"
             onChange={handleSender}

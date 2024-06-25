@@ -12,7 +12,7 @@ export const ErrorMessage = ({
   className,
   id,
 }: ErrorMessageProps): React.ReactElement => {
-  const classes = classnames("usa-error-message", className);
+  const classes = classnames("usa-error-message", "font-sans-xs", className);
 
   return (
     <span data-testid="errorMessage" className={classes} id={id} role="alert">

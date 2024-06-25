@@ -1,4 +1,5 @@
 import { Timeframe } from "src/types/timeframes";
+import { parseISO, isValid } from "date-fns";
 
 const dataToString = (date: Date): string => {
   return date.toISOString();
@@ -19,4 +20,11 @@ export const getPastDate = (daysBefore: Timeframe): string => {
     default:
       return dataToString(new Date(new Date().setDate(today.getDate() - 1)));
   }
+};
+
+export const isValidIsoString = (isoString: string): boolean => {
+  if (!isoString) return false;
+
+  const date = parseISO(isoString);
+  return isValid(date);
 };
