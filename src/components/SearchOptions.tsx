@@ -106,14 +106,16 @@ function SearchOptions({
 
   const handleStartDate = (e: React.ChangeEvent<HTMLInputElement>) => {
     const date = e.target.value;
-    setStartDateIsValid(isValidIsoString(date));
-    setStartDate(date);
+    const isValid = isValidIsoString(date);
+    setStartDateIsValid(isValid);
+    if (isValid) setStartDate(date);
   };
 
   const handleEndDate = (e: React.ChangeEvent<HTMLInputElement>) => {
     const date = e.target.value;
-    setEndDateIsValid(isValidIsoString(date));
-    setEndDate(date);
+    const isValid = isValidIsoString(date);
+    setEndDateIsValid(isValid);
+    if (isValid) setEndDate(date);
   };
 
   const handleJurisdiction = (e: React.ChangeEvent<HTMLSelectElement>) => {
