@@ -201,14 +201,11 @@ function SearchOptions({
     { value: "PR-LA", display: "PR-LA" },
   ];
 
-  const getStartDateError = () => {
-    if (!startDateIsValid) return "Invalid ISO string";
-    if (!startBeforeEnd) return "Start date must be before end date";
-    return "";
-  };
-
-  const getEndDateError = () => {
-    if (!endDateIsValid) return "Invalid ISO string";
+  const getDateError = (
+    dateIsValid: boolean,
+    startBeforeEnd: boolean
+  ): string => {
+    if (!dateIsValid) return "Invalid ISO string";
     if (!startBeforeEnd) return "Start date must be before end date";
     return "";
   };
@@ -251,7 +248,7 @@ function SearchOptions({
             validationStatus={
               !startDateIsValid || !startBeforeEnd ? "error" : null
             }
-            errorMessage={getStartDateError()}
+            errorMessage={getDateError(startDateIsValid, startBeforeEnd)}
           />
           <TextInput
             className="padding-right-2 flex-1 search-option"
@@ -263,7 +260,7 @@ function SearchOptions({
             validationStatus={
               !endDateIsValid || !startBeforeEnd ? "error" : null
             }
-            errorMessage={getEndDateError()}
+            errorMessage={getDateError(endDateIsValid, startBeforeEnd)}
           />
         </>
       )}

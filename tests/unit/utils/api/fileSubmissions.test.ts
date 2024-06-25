@@ -4,12 +4,14 @@ import mockSubmissions, {
 } from "src/mocks/data/fileSubmissions";
 
 const earliestDate: string = new Date("2021-01-01T05:00:00Z").toISOString();
+const currentDate: string = new Date().toISOString();
 
 describe("fileSubmissions", () => {
   it("should fetch aims-csv file submissions", async () => {
     const payload = getSubmissions(
       mockSubmissions.aimsCsv,
       earliestDate,
+      currentDate,
       "timestamp",
       "ascending",
       1,
@@ -39,6 +41,7 @@ describe("fileSubmissions", () => {
     const payload = getSubmissions(
       mockSubmissions.daartHl7,
       earliestDate,
+      currentDate,
       "timestamp",
       "ascending",
       1,
