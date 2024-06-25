@@ -5,6 +5,7 @@ export enum Timeframe {
   Last15Days = "Last 15 Days",
   Last7Days = "Last 7 Days",
   LastDay = "Last Day",
+  Custom = "Custom",
 }
 
 const timeframes: Timeframe[] = [
@@ -12,6 +13,7 @@ const timeframes: Timeframe[] = [
   Timeframe.Last15Days,
   Timeframe.Last7Days,
   Timeframe.LastDay,
+  Timeframe.Custom,
 ];
 
 export const timeframeOptions: SelectOption[] = timeframes.map(
