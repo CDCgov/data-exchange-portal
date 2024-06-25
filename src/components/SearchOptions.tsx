@@ -44,6 +44,7 @@ function SearchOptions({
 
   const [startDateIsValid, setStartDateIsValid] = useState(true);
   const [endDateIsValid, setEndDateIsValid] = useState(true);
+  const [startBeforeEnd, setStartBeforeEnd] = useState(true);
 
   useEffect(() => {
     const streamId = searchParams.get("data_stream_id");
@@ -108,14 +109,24 @@ function SearchOptions({
     const date = e.target.value;
     const isValid = isValidIsoString(date);
     setStartDateIsValid(isValid);
-    if (isValid) setStartDate(date);
+
+    if (!isValid) return;
+
+    const startIsBeforeEnd = date <= endDate;
+    setStartBeforeEnd(startIsBeforeEnd);
+    if (startIsBeforeEnd) setStartDate(date);
   };
 
   const handleEndDate = (e: React.ChangeEvent<HTMLInputElement>) => {
     const date = e.target.value;
     const isValid = isValidIsoString(date);
     setEndDateIsValid(isValid);
-    if (isValid) setEndDate(date);
+
+    if (!isValid) return;
+
+    const startIsBeforeEnd = date >= startDate;
+    setStartBeforeEnd(startIsBeforeEnd);
+    if (startIsBeforeEnd) setEndDate(date);
   };
 
   const handleJurisdiction = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -190,6 +201,18 @@ function SearchOptions({
     { value: "PR-LA", display: "PR-LA" },
   ];
 
+  const getStartDateError = () => {
+    if (!startDateIsValid) return "Invalid ISO string";
+    if (!startBeforeEnd) return "Start date must be before end date";
+    return "";
+  };
+
+  const getEndDateError = () => {
+    if (!endDateIsValid) return "Invalid ISO string";
+    if (!startBeforeEnd) return "Start date must be before end date";
+    return "";
+  };
+
   return (
     <div className={`display-flex flex-justify-start padding-bottom-4`}>
       <Select
@@ -225,8 +248,10 @@ function SearchOptions({
             onChange={debounce(handleStartDate, 750)}
             placeholder="YYYY-MM-DDTHH:MM:SSZ"
             defaultValue={startDate}
-            validationStatus={!startDateIsValid ? "error" : null}
-            errorMessage={!startDateIsValid ? "Invalid ISO string" : ""}
+            validationStatus={
+              !startDateIsValid || !startBeforeEnd ? "error" : null
+            }
+            errorMessage={getStartDateError()}
           />
           <TextInput
             className="padding-right-2 flex-1 search-option"
@@ -235,8 +260,10 @@ function SearchOptions({
             onChange={debounce(handleEndDate, 750)}
             placeholder="YYYY-MM-DDTHH:MM:SSZ"
             defaultValue={endDate}
-            validationStatus={!endDateIsValid ? "error" : null}
-            errorMessage={!endDateIsValid ? "Invalid ISO string" : ""}
+            validationStatus={
+              !endDateIsValid || !startBeforeEnd ? "error" : null
+            }
+            errorMessage={getEndDateError()}
           />
         </>
       )}

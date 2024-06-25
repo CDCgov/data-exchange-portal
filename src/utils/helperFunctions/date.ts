@@ -27,10 +27,11 @@ export const getPastDate = (daysBefore: Timeframe): string => {
 export const isValidIsoString = (isoString: string): boolean => {
   if (!isoString) return false;
 
-  if (!isoStringRegex.test(isoString)) {
-    return false;
-  }
+  if (!isoStringRegex.test(isoString)) return false;
 
   const date = parseISO(isoString);
-  return isValid(date);
+  if (!isValid(date)) return false;
+
+  const now = new Date();
+  return date <= now;
 };
