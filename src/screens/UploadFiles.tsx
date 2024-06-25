@@ -1,4 +1,4 @@
-import { ChangeEvent, useReducer, useState } from "react";
+import { ChangeEvent, useEffect, useReducer, useState } from "react";
 import { useAuth } from "react-oidc-context";
 
 import ManifestDefinitions from "src/components/ManifestDefs";
@@ -31,6 +31,7 @@ function UploadFiles() {
   const [uploadResultMessage, setUploadResultMessage] = useState("");
   const [uploadResultAlert, setUploadResultAlert] =
     useState<AlertProps["type"]>("info");
+  const [formIsEmpty, setFormIsEmpty] = useState(true);
 
   function reducer(state: FileUpload, action: DispatchAction) {
     switch (action.type) {
@@ -44,14 +45,22 @@ function UploadFiles() {
           ...state,
           manifest: action.value,
         };
-      case "reset":
+      case "reset": {
+        setUploadResultMessage("");
         return initialState;
+      }
       default:
         throw new Error("Unrecognized action type provided to form reducer");
     }
   }
 
   const [formState, dispatch] = useReducer(reducer, initialState);
+
+  useEffect(() => {
+    formState?.file.name !== "" && formState.manifest !== ""
+      ? setFormIsEmpty(false)
+      : setFormIsEmpty(true);
+  }, [formState]);
 
   const handleFileSelection = () => {
     document?.getElementById("file-uploader")?.click();
@@ -86,34 +95,38 @@ function UploadFiles() {
   // Todo: Disable submit when one is uploading. This will prevent any additional uploads from
   // starting which could create some confusion.
   const handleUpload = () => {
-    const parsedJson = JSON.parse(formState.manifest);
+    try {
+      const parsedJson = JSON.parse(formState.manifest);
+      const upload = new tus.Upload(formState.file, {
+        endpoint: API_ENDPOINTS.upload,
+        retryDelays: [0, 3000, 5000, 10000, 20000],
+        headers: {
+          Authorization: `Bearer ${auth.user?.access_token}`,
+        },
+        metadata: {
+          received_filename: formState.file.name,
+          ...parsedJson,
+        },
+        onError: function (error) {
+          setUploadResultMessage(`Upload failed: ${error.message}`);
+          setUploadResultAlert("error");
+        },
+        onProgress: function (bytesUploaded, bytesTotal) {
+          const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2);
+          setUploadResultMessage(`Uploading: ${percentage}%`);
+          setUploadResultAlert("info");
+        },
+        onSuccess: function () {
+          setUploadResultMessage(`Upload successful`);
+          setUploadResultAlert("success");
+        },
+      });
 
-    const upload = new tus.Upload(formState.file, {
-      endpoint: API_ENDPOINTS.upload,
-      retryDelays: [0, 3000, 5000, 10000, 20000],
-      headers: {
-        Authorization: `Bearer ${auth.user?.access_token}`,
-      },
-      metadata: {
-        received_filename: formState.file.name,
-        ...parsedJson,
-      },
-      onError: function (error) {
-        setUploadResultMessage(`Upload failed: ${error.message}`);
-        setUploadResultAlert("error");
-      },
-      onProgress: function (bytesUploaded, bytesTotal) {
-        const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2);
-        setUploadResultMessage(`Uploading: ${percentage}%`);
-        setUploadResultAlert("info");
-      },
-      onSuccess: function () {
-        setUploadResultMessage(`Upload successful`);
-        setUploadResultAlert("success");
-      },
-    });
-
-    upload.start();
+      upload.start();
+    } catch (error) {
+      setUploadResultMessage(`Upload failed: error parsing JSON`);
+      setUploadResultAlert("error");
+    }
   };
 
   return (
@@ -121,8 +134,11 @@ function UploadFiles() {
       <section className="main_content padding-x-2">
         <h1 className="cdc-page-header padding-y-3 margin-0">Upload Files</h1>
         {uploadResultMessage.length > 0 && (
-          <Alert className="margin-y-2" type={uploadResultAlert}>
-            Status: {uploadResultMessage}
+          <Alert
+            data-testid="error-alert"
+            className="margin-y-2"
+            type={uploadResultAlert}>
+            {uploadResultMessage}
           </Alert>
         )}
         <div className="grid-row flex-row">
@@ -137,13 +153,17 @@ function UploadFiles() {
                   Choose file
                 </Button>
                 <input
+                  data-testid="file-uploader"
                   type="file"
                   id="file-uploader"
                   name="file-uploader"
                   multiple
                   onChange={(e) => handleFileNameChange(e)}
                 />
-                <p id="file-name" className="text-italic text-normal">
+                <p
+                  id="file-name"
+                  data-testid="file-name"
+                  className="text-italic text-normal">
                   {formState.file.name ? formState.file.name : "No file chosen"}
                 </p>
               </div>
@@ -171,7 +191,11 @@ function UploadFiles() {
                 value={formState.manifest}></textarea>
               <hr className="margin-y-2 border-1px border-base-lighter" />
               <div className="margin-y-1">
-                <Button type="submit" id="upload-button" onClick={handleUpload}>
+                <Button
+                  disabled={formIsEmpty}
+                  type="submit"
+                  id="upload-button"
+                  onClick={handleUpload}>
                   Submit
                 </Button>
                 <Button
