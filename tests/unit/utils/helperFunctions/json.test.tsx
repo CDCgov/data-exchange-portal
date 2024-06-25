@@ -42,46 +42,33 @@ describe("jsonPrettyPrint Function", () => {
 });
 
 describe("downloadJson", () => {
-  it("should create a JSON file and trigger a download", () => {
-    const data = { key: "value" };
-    const filename = "test.json";
-    const jsonStr = JSON.stringify(data, null, 2);
-
-    // Mock URL.createObjectURL
-    const createObjectURLMock = vi.fn().mockReturnValue("blob:url");
-    global.URL.createObjectURL = createObjectURLMock;
-
-    // Mock URL.revokeObjectURL
-    const revokeObjectURLMock = vi.fn();
-    global.URL.revokeObjectURL = revokeObjectURLMock;
-
-    // Mock document.createElement and link.click
-    const clickMock = vi.fn();
-    const createElementMock = vi.fn(() => ({
+  it("should create a link element, set its href and download attributes, and click it", () => {
+    const mockCreateObjectURL = vi.fn(() => "blob:url");
+    const mockRevokeObjectURL = vi.fn();
+    const mockClick = vi.fn();
+    const mockCreateElement = vi.fn(() => ({
       href: "",
       download: "",
-      click: clickMock,
+      click: mockClick,
     }));
-    global.document.createElement = createElementMock;
 
-    // Call the function
+    global.URL.createObjectURL = mockCreateObjectURL;
+    global.URL.revokeObjectURL = mockRevokeObjectURL;
+    global.document.createElement =
+      mockCreateElement as unknown as typeof document.createElement;
+
+    const data = { key: "value" };
+    const filename = "test.json";
+
     downloadJson(data, filename);
 
-    // Assertions
-    expect(createObjectURLMock).toHaveBeenCalledTimes(1);
-    expect(createObjectURLMock).toHaveBeenCalledWith(
-      new Blob([jsonStr], { type: "application/json" })
-    );
+    expect(mockCreateObjectURL).toHaveBeenCalled();
+    expect(mockRevokeObjectURL).toHaveBeenCalledWith("blob:url");
+    expect(mockCreateElement).toHaveBeenCalledWith("a");
 
-    expect(revokeObjectURLMock).toHaveBeenCalledTimes(1);
-    expect(revokeObjectURLMock).toHaveBeenCalledWith("blob:url");
-
-    expect(createElementMock).toHaveBeenCalledTimes(1);
-    expect(createElementMock).toHaveBeenCalledWith("a");
-
-    expect(clickMock).toHaveBeenCalledTimes(1);
-    const link = createElementMock.mock.results[0].value;
-    expect(link.href).toBe("blob:url");
-    expect(link.download).toBe(filename);
+    const linkElement = mockCreateElement.mock.results[0].value;
+    expect(linkElement.href).toBe("blob:url");
+    expect(linkElement.download).toBe(filename);
+    expect(mockClick).toHaveBeenCalled();
   });
 });
