@@ -7,24 +7,26 @@ test("should render header text on screen", () => {
   expect(header).toBeInTheDocument();
 });
 
-test("should display selected file name after selection", async () => {
+test("should display selected file name after selection", () => {
   const file = new File([""], "test.txt", { type: "text" });
 
   const { getByTestId } = render(<UploadFiles />);
 
-  let uploader = getByTestId("file-uploader");
+  const uploader = getByTestId("file-uploader");
 
   // simulate upload event and wait until finish
-  await waitFor(() =>
+  waitFor(() =>
     fireEvent.change(uploader, {
       target: { files: [file] },
     })
   );
 
-  let fileResult = document.getElementById("file-uploader");
+  const fileInput: HTMLInputElement = document.getElementById(
+    "file-uploader"
+  ) as HTMLInputElement;
 
-  expect(fileResult?.files.length).toBe(1);
-  expect(fileResult?.files[0].name).toBe("test.txt");
+  expect(fileInput?.files?.length).toBe(1);
+  expect(fileInput?.files?.[0].name).toBe("test.txt");
 });
 
 test("should not display file name if no file selected", () => {
@@ -37,49 +39,65 @@ test("should not display file name if no file selected", () => {
 test("should update displayed manifest content on input change", () => {
   const { getByLabelText } = render(<UploadFiles />);
 
-  const manifestInput = getByLabelText("Input the Submission Manifest");
+  const manifestInput = getByLabelText(
+    "Input the Submission Manifest"
+  ) as HTMLInputElement;
   const expectedManifest = '{"key": "value"}';
   fireEvent.change(manifestInput, { target: { value: expectedManifest } });
 
   expect(manifestInput?.value).toEqual(expectedManifest);
 });
 
-test("should clear selected file name and manifest content on reset click", async () => {
+test("should clear selected file name and manifest content on reset click", () => {
   const file = new File([""], "test.txt", { type: "text" });
 
   const { getByTestId, getByLabelText, getByRole } = render(<UploadFiles />);
 
-  let uploader = getByTestId("file-uploader");
+  const uploader = getByTestId("file-uploader");
 
   // simulate upload event and wait until finish
-  await waitFor(() =>
+  waitFor(() =>
     fireEvent.change(uploader, {
       target: { files: [file] },
     })
   );
 
-  let fileResult = document.getElementById("file-uploader");
   const fileName = getByTestId("file-name");
 
-  const manifestInput = getByLabelText("Input the Submission Manifest");
+  const manifestInput = getByLabelText(
+    "Input the Submission Manifest"
+  ) as HTMLInputElement;
   const expectedManifest = '{"key": "value"}';
   fireEvent.change(manifestInput, { target: { value: expectedManifest } });
 
   const resetButton = getByRole("button", { name: "Reset" });
-  await fireEvent.click(resetButton);
+  fireEvent.click(resetButton);
 
   expect(manifestInput.value).toEqual("");
   expect(fileName.textContent).toEqual("No file chosen");
 });
 
-test("should display json parse error with invalid json entered into manifest", async () => {
-  const { getByLabelText, getByText, getByRole } = render(<UploadFiles />);
+test("should display json parse error with invalid json entered into manifest", () => {
+  const file = new File([""], "test.txt", { type: "text" });
+
+  const { getByLabelText, getByText, getByRole, getByTestId } = render(
+    <UploadFiles />
+  );
+
+  const uploader = getByTestId("file-uploader");
+
+  // simulate upload event and wait until finish
+  waitFor(() =>
+    fireEvent.change(uploader, {
+      target: { files: [file] },
+    })
+  );
 
   const manifestInput = getByLabelText("Input the Submission Manifest");
-  await fireEvent.change(manifestInput, { target: { value: "{" } });
+  fireEvent.change(manifestInput, { target: { value: "{" } });
 
   const submitButton = getByRole("button", { name: "Submit" });
-  await fireEvent.click(submitButton);
+  fireEvent.click(submitButton);
 
-  expect(getByText("Upload failed: error parsing JSON")).toBet;
+  expect(getByText("Upload failed: error parsing JSON")).toBe;
 });
