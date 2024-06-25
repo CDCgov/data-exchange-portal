@@ -5,6 +5,8 @@ const dataToString = (date: Date): string => {
   return date.toISOString();
 };
 
+const isoStringRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/;
+
 export const getPastDate = (daysBefore: Timeframe): string => {
   const today = new Date();
 
@@ -24,6 +26,10 @@ export const getPastDate = (daysBefore: Timeframe): string => {
 
 export const isValidIsoString = (isoString: string): boolean => {
   if (!isoString) return false;
+
+  if (!isoStringRegex.test(isoString)) {
+    return false;
+  }
 
   const date = parseISO(isoString);
   return isValid(date);
