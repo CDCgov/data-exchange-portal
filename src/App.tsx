@@ -20,7 +20,6 @@ import UploadFiles from "./screens/UploadFiles.tsx";
 import Profile from "src/screens/Profile";
 import Submissions from "src/screens/Submissions";
 
-import AuthRetrieval from "./components/AuthRetrieval.tsx";
 import ProtectedRoute from "src/components/ProtectedRoute";
 
 function App() {
@@ -33,36 +32,34 @@ function App() {
 
   return (
     <Router>
-      <AuthRetrieval>
-        <Routes>
-          {/* Protected Routes */}
+      <Routes>
+        {/* Protected Routes */}
+        <Route
+          path="home/*"
+          element={
+            <AuthWrapper>
+              <Shell />
+            </AuthWrapper>
+          }>
+          <Route path="dashboard" element={<Dashboard />}></Route>
           <Route
-            path="home/*"
-            element={
-              <AuthWrapper>
-                <Shell />
-              </AuthWrapper>
-            }>
-            <Route path="dashboard" element={<Dashboard />}></Route>
-            <Route
-              path="metadata-management"
-              element={<MetadataManagement />}></Route>
-            <Route path="user-management" element={<UserManagement />}></Route>
-            <Route path="upload" element={<UploadFiles />}></Route>
-            <Route path="profile" element={<Profile />}></Route>
-            <Route path="submissions" element={<Submissions />}></Route>
+            path="metadata-management"
+            element={<MetadataManagement />}></Route>
+          <Route path="user-management" element={<UserManagement />}></Route>
+          <Route path="upload" element={<UploadFiles />}></Route>
+          <Route path="profile" element={<Profile />}></Route>
+          <Route path="submissions" element={<Submissions />}></Route>
 
-            <Route path="*" element={<Navigate replace to="dashboard" />} />
-          </Route>
+          <Route path="*" element={<Navigate replace to="dashboard" />} />
+        </Route>
 
-          {/* Public Routes */}
-          <Route path="login" element={<Login />} />
-          <Route path="oauth_callback" element={<Callback />} />
-          <Route path="logout" element={<Logout />} />
+        {/* Public Routes */}
+        <Route path="login" element={<Login />} />
+        <Route path="oauth_callback" element={<Callback />} />
+        <Route path="logout" element={<Logout />} />
 
-          <Route path="*" element={<Navigate replace to="home/dashboard" />} />
-        </Routes>
-      </AuthRetrieval>
+        <Route path="*" element={<Navigate replace to="home/dashboard" />} />
+      </Routes>
     </Router>
   );
 }
