@@ -11,16 +11,23 @@ function ProtectedRoute({ children }: PropsWithChildren) {
   useEffect(() => {
     const expires_in = auth.user?.expires_in ?? 0;
 
+    console.log("expires_in: ", expires_in);
     if ((!auth.isAuthenticated && !auth.isLoading) || expires_in <= 0) {
       const oidcStorage = window.localStorage.getItem(
         `oidc.user:${getEnv("VITE_SAMS_AUTHORITY_URL")}:${getEnv(
           "VITE_SAMS_CLIENT_ID"
         )}`
       );
+      console.log("oidcStorage: ", oidcStorage);
 
       if (oidcStorage) {
-        auth.signinSilent()?.catch(() => navigate("/login", { replace: true }));
+        console.log("in if statement");
+        auth.signinSilent()?.catch(() => {
+          console.log("in signinSilent catch");
+          navigate("/login", { replace: true });
+        });
       } else {
+        console.log("in else statement");
         navigate("/login", { replace: true });
       }
     }
