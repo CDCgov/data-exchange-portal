@@ -30,8 +30,8 @@ function ProtectedRoute({ children }: PropsWithChildren) {
         });
       } else {
         console.log("No valid token found, redirecting to login page");
-        navigate("/login", { replace: true });
         setHasTriedSignin(true);
+        navigate("/login", { replace: true });
       }
     }
   }, [auth, hasTriedSignin, location, navigate]);
