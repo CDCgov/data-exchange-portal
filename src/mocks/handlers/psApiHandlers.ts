@@ -17,6 +17,8 @@ export const psApiHandlers = [
     const dataStreamId = url.searchParams.get("data_stream_id");
     const dataRoute = url.searchParams.get("data_stream_route");
     const startDate = url.searchParams.get("date_start") ?? earliestDate;
+    const endDate =
+      url.searchParams.get("date_end") ?? new Date().toISOString();
     const sortBy = url.searchParams.get("sort_by") ?? "filename";
     const sortOrder = url.searchParams.get("sort_order") ?? "descending";
     const pageNumber = url.searchParams.get("page_number");
@@ -29,6 +31,7 @@ export const psApiHandlers = [
         getSubmissions(
           submissions,
           startDate,
+          endDate,
           sortBy,
           sortOrder,
           pageNumber ? parseInt(pageNumber) : 1,
@@ -59,6 +62,8 @@ export const psApiHandlers = [
     const dataStreamId = url.searchParams.get("data_stream_id");
     const dataRoute = url.searchParams.get("data_stream_route");
     const startDate = url.searchParams.get("date_start") ?? earliestDate;
+    const endDate =
+      url.searchParams.get("date_end") ?? new Date().toISOString();
 
     const countsResponse = (submissions: FileSubmission[]) => {
       return HttpResponse.json(
@@ -66,6 +71,7 @@ export const psApiHandlers = [
           getSubmissions(
             submissions,
             startDate,
+            endDate,
             "filename",
             "descending",
             1,

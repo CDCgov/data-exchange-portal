@@ -36,7 +36,7 @@ describe("Get Past Date - Timeframes", () => {
 
 describe("isValidIsoString", () => {
   it("should return true for a valid ISO string", () => {
-    const validISODate = "2023-06-24T10:30:00Z";
+    const validISODate = "2019-06-24T10:30:00Z";
     expect(isValidIsoString(validISODate)).toBe(true);
   });
 
@@ -58,5 +58,15 @@ describe("isValidIsoString", () => {
   it("should return false for a non-ISO date string", () => {
     const nonISODateString = "June 24, 2023";
     expect(isValidIsoString(nonISODateString)).toBe(false);
+  });
+
+  it("should return false for a future ISO string", () => {
+    const futureISODate = "3000-06-24T10:30:00Z";
+    expect(isValidIsoString(futureISODate)).toBe(false);
+  });
+
+  it("should return true for a current date ISO string", () => {
+    const now = new Date().toISOString().split(".")[0] + "Z";
+    expect(isValidIsoString(now)).toBe(true);
   });
 });
