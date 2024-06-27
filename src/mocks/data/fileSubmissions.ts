@@ -92,10 +92,16 @@ const generateSummary = (
 
 const dateFilter = (
   submissions: FileSubmission[],
-  date: string
+  startDate: string,
+  endDate: string
 ): FileSubmission[] => {
   const newSubmissions: FileSubmission[] = submissions.filter(
-    (el: FileSubmission) => new Date(el.timestamp) > new Date(date)
+    (el: FileSubmission) => {
+      const date = new Date(el.timestamp);
+      const startingDate = new Date(startDate);
+      const endingDate = new Date(endDate);
+      return date >= startingDate && date <= endingDate;
+    }
   );
   return newSubmissions;
 };
@@ -203,6 +209,7 @@ const submissionsItemsAimsAll: FileSubmission[] = shuffleArray([
 export const getSubmissions = (
   submissions: FileSubmission[],
   startDate: string,
+  endDate: string,
   sortBy: string,
   sortOrder: string,
   pageNumber: number,
@@ -210,7 +217,7 @@ export const getSubmissions = (
   jurisdiction: string,
   senderId: string
 ): FileSubmissions => {
-  const dateFilteredItems = dateFilter(submissions, startDate);
+  const dateFilteredItems = dateFilter(submissions, startDate, endDate);
 
   const jurisdictionFilter = jurisdiction
     ? dateFilteredItems.filter(
