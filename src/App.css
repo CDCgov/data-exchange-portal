@@ -31,13 +31,3 @@ button#choose-file svg {
 .cdc-react .usa-alert .usa-alert__text {
   font-family: sans-serif !important;
 }
-
-.cdc-sort-columnheader button {
-  border: none;
-  background: none;
-  font: inherit;
-  cursor: pointer;
-  display: flex;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-}

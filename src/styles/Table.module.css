@@ -1,3 +1,13 @@
-.pagination {
+.cdc-pagination {
   background-color: #f5f5f5 !important;
+}
+
+.cdc-sort-columnheader button {
+  border: none;
+  background: none;
+  font: inherit;
+  cursor: pointer;
+  display: flex;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }

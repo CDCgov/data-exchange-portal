@@ -1,4 +1,5 @@
 import { Table as TanStackTable, flexRender } from "@tanstack/react-table";
+import styles from "src/styles/Table.module.css";
 
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
 import Pagination from "src/components/table/Pagination";
@@ -18,7 +19,7 @@ function PortalTable<TData>({ table }: PortalTableProps<TData>) {
                 {headerGroup.headers.map((header) => {
                   return (
                     <th
-                      className="cdc-sort-columnheader"
+                      className={styles["cdc-sort-columnheader"]}
                       key={header.id}
                       id={`column-${header.id}`}>
                       {header.column.getCanSort() ? (

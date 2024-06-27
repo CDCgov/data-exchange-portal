@@ -61,7 +61,7 @@ export const Pagination = ({
   ...props
 }: PaginationProps & JSX.IntrinsicElements["nav"]): React.ReactElement => {
   const navClasses = classnames(
-    styles["pagination"],
+    styles["cdc-pagination"],
     "usa-pagination",
     className
   );
