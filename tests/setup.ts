@@ -11,6 +11,7 @@ beforeAll(() => server.listen());
 beforeEach(() => {
   vi.mock("react-oidc-context", () => ({
     useAuth: vi.fn(),
+    hasAuthParams: vi.fn(),
   }));
 });
 // Reset any request handlers that we may add during the tests,
