@@ -36,6 +36,10 @@ function ProtectedRoute({ children }: PropsWithChildren) {
     }
   }, [auth, hasTriedSignin, location, navigate]);
 
+  if (!auth.isAuthenticated) {
+    return null;
+  }
+
   return children;
 }
 
