@@ -31,7 +31,7 @@ function UploadFiles() {
   const [uploadResultMessage, setUploadResultMessage] = useState("");
   const [uploadResultAlert, setUploadResultAlert] =
     useState<AlertProps["type"]>("info");
-  const [formIsEmpty, setFormIsEmpty] = useState(true);
+  const [formInProgress, setFormInProgress] = useState(true);
   const [isUploading, setIsUploading] = useState(false);
 
   function reducer(state: FileUpload, action: DispatchAction) {
@@ -60,8 +60,8 @@ function UploadFiles() {
 
   useEffect(() => {
     formState?.file.name !== "" && formState.manifest !== ""
-      ? setFormIsEmpty(false)
-      : setFormIsEmpty(true);
+      ? setFormInProgress(false)
+      : setFormInProgress(true);
   }, [formState]);
 
   const handleFileSelection = () => {
@@ -96,7 +96,7 @@ function UploadFiles() {
 
   const handleUpload = () => {
     setIsUploading(true);
-    setUploadResultMessage(`Connecting...`);
+    setUploadResultMessage(`Starting...`);
     setUploadResultAlert("info");
     try {
       const parsedJson = JSON.parse(formState.manifest);
@@ -198,7 +198,7 @@ function UploadFiles() {
               <hr className="margin-y-2 border-1px border-base-lighter" />
               <div className="margin-y-1">
                 <Button
-                  disabled={formIsEmpty || isUploading}
+                  disabled={formInProgress || isUploading}
                   type="submit"
                   id="upload-button"
                   onClick={handleUpload}>
