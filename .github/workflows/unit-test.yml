@@ -1,4 +1,4 @@
-name: "PR Checks - Unit Tests"
+name: PR Checks - Unit Tests
 
 on:
   pull_request:
@@ -10,7 +10,7 @@ on:
 
 jobs:
   unit-test:
-    name: "Run Vitest"
+    name: Run Vitest
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

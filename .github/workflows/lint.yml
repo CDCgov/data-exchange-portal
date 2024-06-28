@@ -1,4 +1,4 @@
-name: "PR Check - ESLint"
+name: PR Check - ESLint
 
 on:
   pull_request:
@@ -9,7 +9,7 @@ on:
 
 jobs:
   unit-test:
-    name: "Run ESLint"
+    name: Run ESLint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
