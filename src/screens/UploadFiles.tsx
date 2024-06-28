@@ -29,6 +29,7 @@ function UploadFiles() {
   };
 
   const [uploadResultMessage, setUploadResultMessage] = useState("");
+  const [uploadResultHeading, setUploadResultHeading] = useState("");
   const [uploadResultAlert, setUploadResultAlert] =
     useState<AlertProps["type"]>("info");
   const [formInProgress, setFormInProgress] = useState(true);
@@ -96,8 +97,9 @@ function UploadFiles() {
 
   const handleUpload = () => {
     setIsUploading(true);
+    setUploadResultHeading(`Upload is in Progress`);
     setUploadResultMessage(`Starting...`);
-    setUploadResultAlert("info");
+    setUploadResultAlert("warning");
     try {
       const parsedJson = JSON.parse(formState.manifest);
       const upload = new tus.Upload(formState.file, {
@@ -111,16 +113,19 @@ function UploadFiles() {
           ...parsedJson,
         },
         onError: function (error) {
-          setUploadResultMessage(`Upload failed: ${error.message}`);
+          setUploadResultHeading(`Upload failed`);
+          setUploadResultMessage(`${error.message}`);
           setUploadResultAlert("error");
           setIsUploading(false);
         },
         onProgress: function (bytesUploaded, bytesTotal) {
           const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2);
-          setUploadResultMessage(`Uploading: ${percentage}%`);
-          setUploadResultAlert("info");
+          setUploadResultHeading(`Upload is in Progress`);
+          setUploadResultMessage(`Percent complete: ${percentage}%`);
+          setUploadResultAlert("warning");
         },
         onSuccess: function () {
+          setUploadResultHeading(`Upload successfully submitted`);
           setUploadResultMessage(`Upload successful`);
           setUploadResultAlert("success");
           setIsUploading(false);
@@ -129,7 +134,10 @@ function UploadFiles() {
 
       upload.start();
     } catch (error) {
-      setUploadResultMessage(`Upload failed: error parsing JSON`);
+      setUploadResultHeading(`Upload failed`);
+      setUploadResultMessage(
+        `Failed to parse JSON. Verify JSON provided is valid.`
+      );
       setUploadResultAlert("error");
       setIsUploading(false);
     }
@@ -139,16 +147,17 @@ function UploadFiles() {
     <>
       <section className="main_content padding-x-2">
         <h1 className="cdc-page-header padding-y-3 margin-0">Upload Files</h1>
-        {uploadResultMessage.length > 0 && (
-          <Alert
-            data-testid="error-alert"
-            className="margin-y-2"
-            type={uploadResultAlert}>
-            {uploadResultMessage}
-          </Alert>
-        )}
         <div className="grid-row flex-row">
           <div className="grid-col flex-2">
+            {uploadResultMessage.length > 0 && (
+              <Alert
+                data-testid="error-alert"
+                className="margin-right-2 margin-bottom-2"
+                type={uploadResultAlert}
+                heading={uploadResultHeading}>
+                {uploadResultMessage}
+              </Alert>
+            )}
             <div className="border border-base-lighter bg-white radius-md padding-3 margin-right-2">
               <div className="display-flex flex-row flex-justify-start flex-align-center margin-right-2">
                 <Button
