@@ -1,13 +1,21 @@
-name: "STG - Deploy Frontend"
+name: STG - Deploy Frontend
 
 on:
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: Branch to deploy
+        required: false
   push:
     tags:
-      - "**-rc"
+      - "*"
+
+env:
+  ENVIRONMENT: stg
 
 jobs:
   create-rc:
-    name: "Create Release Candidate"
+    name: Create Release Candidate
     environment: Stage
     runs-on: ubuntu-latest
     steps:
@@ -32,18 +40,18 @@ jobs:
           echo "build_number=${NEXT_VERSION}_${SHORT_SHA}" >> $GITHUB_OUTPUT
       - name: Create stg environment variables
         run: |
-          touch .env.stg
-          echo VITE_SAMS_AUTHORITY_URL=https://apigw-stg.cdc.gov >> .env.stg
-          echo VITE_SAMS_CLIENT_ID=${{ secrets.SAMS_CLIENT_ID_STG }} >> .env.stg
-          echo VITE_SAMS_AUTH_URL=https://apigw-stg.cdc.gov:8443/auth/oauth/v2/authorize >> .env.stg
-          echo VITE_SAMS_USER_INFO_URL=https://apigw-stg.cdc.gov:8443/openid/connect/v1/userinfo >> .env.stg
-          echo VITE_OAUTH_CALLBACK_URL=https://dexstg.cdc.gov/oauth_callback >> .env.stg
-          echo VITE_OAUTH_TOKEN_URL=https://dexstg.cdc.gov/api/token >> .env.stg
-          echo VITE_APP_BUILD_NUMBER=${{ steps.gen_build_number.outputs.build_number }} >> .env.stg
-          echo VITE_APP_CONFIG_CONNECTION_STRING="${{ secrets.APP_CONFIG_CONNECTION_STRING }}" >> .env.stg
-          echo VITE_UPLOAD_API_ENDPOINT="${{ secrets.UPLOAD_API_ENDPOINT }}" >> .env.dev
+          touch .env.${{ env.ENVIRONMENT }}
+          echo VITE_SAMS_AUTHORITY_URL=https://apigw-stg.cdc.gov >> .env.${{ env.ENVIRONMENT }}
+          echo VITE_SAMS_CLIENT_ID=${{ secrets.SAMS_CLIENT_ID_STG }} >> .env.${{ env.ENVIRONMENT }}
+          echo VITE_SAMS_AUTH_URL=https://apigw-stg.cdc.gov:8443/auth/oauth/v2/authorize >> .env.${{ env.ENVIRONMENT }}
+          echo VITE_SAMS_USER_INFO_URL=https://apigw-stg.cdc.gov:8443/openid/connect/v1/userinfo >> .env.${{ env.ENVIRONMENT }}
+          echo VITE_OAUTH_CALLBACK_URL=https://dexstg.cdc.gov/oauth_callback >> .env.${{ env.ENVIRONMENT }}
+          echo VITE_OAUTH_TOKEN_URL=https://dexstg.cdc.gov/api/token >> .env.${{ env.ENVIRONMENT }}
+          echo VITE_APP_BUILD_NUMBER=${{ steps.gen_build_number.outputs.build_number }} >> .env.${{ env.ENVIRONMENT }}
+          echo VITE_APP_CONFIG_CONNECTION_STRING="${{ secrets.APP_CONFIG_CONNECTION_STRING }}" >> .env.${{ env.ENVIRONMENT }}
+          echo VITE_UPLOAD_API_ENDPOINT="${{ secrets.UPLOAD_API_ENDPOINT }}" >> .env.${{ env.ENVIRONMENT }}
       - name: Build frontend
-        run: yarn build:stg
+        run: yarn build:${{ env.ENVIRONMENT }}
       - name: Build API
         working-directory: api
         run: npm run build
@@ -69,11 +77,11 @@ jobs:
           asset_name: ${{ github.ref_name }}.zip
           asset_content_type: application/zip
       - name: Deploy
-        run: swa deploy ./dist --api-location ./api -d ${{ secrets.AZURE_SWA_DEPLOY_TOKEN }} --api-language node --api-version 18 --env stg -w .
+        run: swa deploy ./dist --api-location ./api -d ${{ secrets.AZURE_SWA_DEPLOY_TOKEN }} --api-language node --api-version 18 --env ${{ env.ENVIRONMENT }} -w .
 
   e2e:
     needs: create-rc
-    name: "Run e2e regression tests"
+    name: Run e2e regression tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -87,7 +95,7 @@ jobs:
         run: npx playwright install --with-deps
       - name: Run Playwright tests
         env:
-          PLAYWRIGHT_TEST_BASE_URL: https://dexstg.cdc.gov
+          PLAYWRIGHT_TEST_BASE_URL: https://dex${{ env.ENVIRONMENT }}.cdc.gov
           SAMS_USERNAME: ${{ secrets.SAMS_USERNAME }}
           SAMS_PASSWORD: ${{ secrets.SAMS_PASSWORD }}
         run: npx playwright test

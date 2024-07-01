@@ -1,4 +1,4 @@
-name: "PR Check - Code Format"
+name: PR Check - Code Format
 
 on:
   pull_request:
@@ -9,7 +9,7 @@ on:
 
 jobs:
   unit-test:
-    name: "Run Prettier"
+    name: Run Prettier
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
