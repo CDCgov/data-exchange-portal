@@ -31,7 +31,8 @@ function UploadFiles() {
   const [uploadResultMessage, setUploadResultMessage] = useState("");
   const [uploadResultAlert, setUploadResultAlert] =
     useState<AlertProps["type"]>("info");
-  const [formIsEmpty, setFormIsEmpty] = useState(true);
+  const [formInProgress, setFormInProgress] = useState(true);
+  const [isUploading, setIsUploading] = useState(false);
 
   function reducer(state: FileUpload, action: DispatchAction) {
     switch (action.type) {
@@ -47,6 +48,7 @@ function UploadFiles() {
         };
       case "reset": {
         setUploadResultMessage("");
+        setIsUploading(false);
         return initialState;
       }
       default:
@@ -58,8 +60,8 @@ function UploadFiles() {
 
   useEffect(() => {
     formState?.file.name !== "" && formState.manifest !== ""
-      ? setFormIsEmpty(false)
-      : setFormIsEmpty(true);
+      ? setFormInProgress(false)
+      : setFormInProgress(true);
   }, [formState]);
 
   const handleFileSelection = () => {
@@ -92,9 +94,10 @@ function UploadFiles() {
     if (inputElement) inputElement.value = ""; // Set to an empty string to clear
   };
 
-  // Todo: Disable submit when one is uploading. This will prevent any additional uploads from
-  // starting which could create some confusion.
   const handleUpload = () => {
+    setIsUploading(true);
+    setUploadResultMessage(`Starting...`);
+    setUploadResultAlert("info");
     try {
       const parsedJson = JSON.parse(formState.manifest);
       const upload = new tus.Upload(formState.file, {
@@ -110,6 +113,7 @@ function UploadFiles() {
         onError: function (error) {
           setUploadResultMessage(`Upload failed: ${error.message}`);
           setUploadResultAlert("error");
+          setIsUploading(false);
         },
         onProgress: function (bytesUploaded, bytesTotal) {
           const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2);
@@ -119,6 +123,7 @@ function UploadFiles() {
         onSuccess: function () {
           setUploadResultMessage(`Upload successful`);
           setUploadResultAlert("success");
+          setIsUploading(false);
         },
       });
 
@@ -126,6 +131,7 @@ function UploadFiles() {
     } catch (error) {
       setUploadResultMessage(`Upload failed: error parsing JSON`);
       setUploadResultAlert("error");
+      setIsUploading(false);
     }
   };
 
@@ -192,7 +198,7 @@ function UploadFiles() {
               <hr className="margin-y-2 border-1px border-base-lighter" />
               <div className="margin-y-1">
                 <Button
-                  disabled={formIsEmpty}
+                  disabled={formInProgress || isUploading}
                   type="submit"
                   id="upload-button"
                   onClick={handleUpload}>
