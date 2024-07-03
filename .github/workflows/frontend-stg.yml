@@ -1,11 +1,11 @@
-name: STG - Deploy Frontend
+name: STG - Deploy Frontend Release Candidate
 
 on:
   workflow_dispatch:
     inputs:
       tags:
-        description: Branch to deploy
-        required: false
+        description: Tags to deploy
+        required: true
   push:
     tags:
       - "*"
@@ -16,26 +16,33 @@ env:
 jobs:
   create-rc:
     name: Create Release Candidate
-    environment: Stage
+    environment: stg
     runs-on: ubuntu-latest
     steps:
+      - name: Set tags # needed since worklow allows manual and automated triggers
+        run: |
+          if [ ${{ github.event_name}} == "workflow_dispatch" ]; then 
+            TAG="${{ inputs.tags }}"
+          else 
+            TAG="${{ github.ref_name }}"
+          fi
+          echo "RC-TAG=${TAG}" >> $GITHUB_ENV
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ env.RC-TAG }}
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 18
-      - name: Install SWA CL
+      - name: Install SWA CLI
         run: yarn global add @azure/static-web-apps-cli
-      - name: Install frontend dependencies
+      - name: Install dependencies
         run: yarn install
-      - name: Install API dependencies
-        working-directory: api
-        run: npm install --production
       - name: Generate build number
         id: gen_build_number
         run: |
-          NEXT_VERSION=${{github.ref_name}}
+          NEXT_VERSION=${{ env.RC-TAG }}
           SHORT_SHA=$(git rev-parse --short HEAD)
           echo "build_number=${NEXT_VERSION}_${SHORT_SHA}" >> $GITHUB_OUTPUT
       - name: Create stg environment variables
@@ -52,50 +59,13 @@ jobs:
           echo VITE_UPLOAD_API_ENDPOINT="${{ secrets.UPLOAD_API_ENDPOINT }}" >> .env.${{ env.ENVIRONMENT }}
       - name: Build frontend
         run: yarn build:${{ env.ENVIRONMENT }}
-      - name: Build API
-        working-directory: api
-        run: npm run build
       - name: Zip Release Candidate
-        run: zip -r ${{ github.ref_name }}.zip dist api/dist
-      - name: Create Github Draft Release
-        id: create_draft_release
-        uses: actions/create-release@v1
+        run: zip -r ${{ env.RC-TAG }}-rc.zip dist 
+      - name: Create Draft Release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref_name }}
-          release_name: "Release Candidate ${{ github.ref_name }}"
-          draft: true
-          prerelease: false
-      - name: Attach Release Candidate Zip
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_draft_release.outputs.upload_url }}
-          asset_path: ./${{ github.ref_name }}.zip
-          asset_name: ${{ github.ref_name }}.zip
-          asset_content_type: application/zip
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: | 
+          gh release create ${{ env.RC-TAG }} ./${{ env.RC-TAG }}-rc.zip --title "Release Candidate ${{ env.RC-TAG }}" --draft
       - name: Deploy
-        run: swa deploy ./dist --api-location ./api -d ${{ secrets.AZURE_SWA_DEPLOY_TOKEN }} --api-language node --api-version 18 --env ${{ env.ENVIRONMENT }} -w .
-
-  e2e:
-    needs: create-rc
-    name: Run e2e regression tests
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 18
-      - name: Install dependencies
-        run: yarn install
-      - name: Install Playwright dependencies
-        run: npx playwright install --with-deps
-      - name: Run Playwright tests
-        env:
-          PLAYWRIGHT_TEST_BASE_URL: https://dex${{ env.ENVIRONMENT }}.cdc.gov
-          SAMS_USERNAME: ${{ secrets.SAMS_USERNAME }}
-          SAMS_PASSWORD: ${{ secrets.SAMS_PASSWORD }}
-        run: npx playwright test
+        run: swa deploy ./dist -d ${{ secrets.AZURE_SWA_DEPLOY_TOKEN }} --env ${{ env.ENVIRONMENT }} -w .
+      

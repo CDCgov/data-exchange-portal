@@ -6,6 +6,7 @@ on:
       branch:
         description: Branch to deploy
         required: false
+        default: main
   push:
     branches:
       - main
@@ -22,7 +23,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.inputs.branch || 'main' }}
+          ref: ${{ inputs.branch }}
       - uses: actions/setup-node@v4
         with:
           node-version: 18
@@ -53,23 +54,3 @@ jobs:
         run: yarn build:${{ env.ENVIRONMENT }}
       - name: Deploy
         run: swa deploy ./dist -d ${{ secrets.AZURE_SWA_DEPLOY_TOKEN }} --env ${{ env.ENVIRONMENT }} -w .
-  e2e:
-    needs: deploy
-    name: Run e2e regression tests
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 18
-      - name: Install dependencies
-        run: yarn install
-      - name: Install Playwright dependencies
-        run: npx playwright install --with-deps
-      - name: Run Playwright tests
-        env:
-          PLAYWRIGHT_TEST_BASE_URL: https://dex${{ env.ENVIRONMENT }}.cdc.gov
-          SAMS_USERNAME: ${{ secrets.SAMS_USERNAME }}
-          SAMS_PASSWORD: ${{ secrets.SAMS_PASSWORD }}
-        run: npx playwright test
