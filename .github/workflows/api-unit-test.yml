@@ -1,12 +1,13 @@
-name: "PR Checks - API Unit Tests"
+name: PR Checks - Backend (API) Unit Tests
 
 on:
+  workflow_dispatch:
   pull_request:
-    branches:
-      - main
     paths:
       - api/**
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 defaults:
   run:
@@ -14,7 +15,7 @@ defaults:
 
 jobs:
   unit-test:
-    name: "Run Gradle Test"
+    name: Run Gradle Test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
