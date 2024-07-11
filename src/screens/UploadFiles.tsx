@@ -14,12 +14,13 @@ import { dataStreamsAtom } from "src/state/dataStreams";
 import {
   getDataStreamOptions,
   getRoutesOptions,
-} from "src/utils/helperFunctions/metadataFilters";
+} from "src/utils/helperFunctions/upload";
 import { getManifests } from "src/utils/api/manifests";
 
 interface FileUpload {
   file: File;
-  manifest: string;
+  datastream: string;
+  route: string;
 }
 
 interface DispatchAction {
@@ -33,27 +34,16 @@ function UploadFiles() {
 
   const initialState: FileUpload = {
     file: new File([""], ""),
-    manifest: "",
+    datastream: "",
+    route: "",
   };
 
   const dataStreams = useRecoilValue(dataStreamsAtom);
-  const [datastream, setDatastream] = useState("");
-  const [route, setRoute] = useState("");
   const [uploadResultMessage, setUploadResultMessage] = useState("");
   const [uploadResultAlert, setUploadResultAlert] =
     useState<AlertProps["type"]>("info");
   const [formInProgress, setFormInProgress] = useState(true);
   const [isUploading, setIsUploading] = useState(false);
-
-  const handleDataStreamId = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const dataStreamId = e.target.value;
-    setDatastream(dataStreamId);
-    setRoute("");
-  };
-
-  const handleDataRoute = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setRoute(e.target.value);
-  };
 
   function reducer(state: FileUpload, action: DispatchAction) {
     switch (action.type) {
@@ -62,10 +52,15 @@ function UploadFiles() {
           ...state,
           file: action.value,
         };
-      case "updateManifest":
+      case "updateDatastream":
         return {
           ...state,
-          manifest: action.value,
+          datastream: action.value,
+        };
+      case "updateRoute":
+        return {
+          ...state,
+          route: action.value,
         };
       case "reset": {
         setUploadResultMessage("");
@@ -78,32 +73,6 @@ function UploadFiles() {
   }
 
   const [formState, dispatch] = useReducer(reducer, initialState);
-
-  useEffect(() => {
-    const handleGetManifest = async () => {
-      const res = await getManifests(
-        auth.user?.access_token ?? "",
-        datastream,
-        route
-      );
-
-      if (res.status != 200) {
-        // TODO messaging for manifest can't be retrieved
-        return;
-      }
-
-      const manifestJSON = await res.json();
-      console.log(manifestJSON);
-    };
-
-    if (datastream && route) handleGetManifest();
-  }, [auth, datastream, route]);
-
-  useEffect(() => {
-    formState?.file.name !== "" && formState.manifest !== ""
-      ? setFormInProgress(false)
-      : setFormInProgress(true);
-  }, [formState]);
 
   const handleFileSelection = () => {
     document?.getElementById("file-uploader")?.click();
@@ -118,12 +87,49 @@ function UploadFiles() {
     }
   };
 
-  const handleManifestInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+  const handleDatastream = (e: React.ChangeEvent<HTMLSelectElement>) => {
     dispatch({
-      type: "updateManifest",
+      type: "updateDatastream",
+      value: e.target.value,
+    });
+    dispatch({
+      type: "updateRoute",
+      value: "",
+    });
+  };
+
+  const handleRoute = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    dispatch({
+      type: "updateRoute",
       value: e.target.value,
     });
   };
+
+  useEffect(() => {
+    const handleGetManifest = async () => {
+      const res = await getManifests(
+        auth.user?.access_token ?? "",
+        formState.datastream,
+        formState.route
+      );
+
+      if (res.status != 200) {
+        // TODO messaging for manifest can't be retrieved
+        return;
+      }
+
+      const manifestJSON = await res.json();
+      console.log(manifestJSON);
+    };
+
+    if (formState.datastream && formState.route) handleGetManifest();
+  }, [auth, formState.datastream, formState.route]);
+
+  useEffect(() => {
+    formState?.file.name !== ""
+      ? setFormInProgress(false)
+      : setFormInProgress(true);
+  }, [formState]);
 
   const handleReset = () => {
     dispatch({ type: "reset" });
@@ -140,7 +146,7 @@ function UploadFiles() {
     setUploadResultMessage(`Starting...`);
     setUploadResultAlert("info");
     try {
-      const parsedJson = JSON.parse(formState.manifest);
+      // const parsedJson = JSON.parse(formState.manifest);
       const upload = new tus.Upload(formState.file, {
         endpoint: API_ENDPOINTS.upload,
         retryDelays: [0, 3000, 5000, 10000, 20000],
@@ -149,7 +155,7 @@ function UploadFiles() {
         },
         metadata: {
           received_filename: formState.file.name,
-          ...parsedJson,
+          // ...parsedJson,
         },
         onError: function (error) {
           setUploadResultMessage(`Upload failed: ${error.message}`);
@@ -228,30 +234,20 @@ function UploadFiles() {
                 className="padding-top-2 flex-1 search-option"
                 id="data-stream-filter"
                 label="Data Stream"
-                onChange={handleDataStreamId}
+                onChange={handleDatastream}
                 options={getDataStreamOptions(dataStreams)}
-                defaultValue={datastream}
+                defaultValue={formState.datastream}
               />
-              <Select
-                className="padding-top-2 flex-1 search-option"
-                id="data-route-filter"
-                label="Data Route"
-                onChange={handleDataRoute}
-                options={getRoutesOptions(dataStreams, datastream, true)}
-                defaultValue={route}
-              />
-              <label className="usa-label" htmlFor="manifest">
-                Input the Submission Manifest
-              </label>
-              <span id="manifest-hint" className="usa-hint">
-                Supported format: JSON
-              </span>
-              <textarea
-                className="usa-textarea"
-                id="manifest"
-                name="manifest"
-                onChange={handleManifestInputChange}
-                value={formState.manifest}></textarea>
+              {formState.datastream && (
+                <Select
+                  className="padding-top-2 flex-1 search-option"
+                  id="data-route-filter"
+                  label="Data Route"
+                  onChange={handleRoute}
+                  options={getRoutesOptions(dataStreams, formState.datastream)}
+                  defaultValue={formState.route}
+                />
+              )}
               <hr className="margin-y-2 border-1px border-base-lighter" />
               <div className="margin-y-1">
                 <Button
