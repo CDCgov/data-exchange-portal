@@ -44,16 +44,16 @@ jobs:
         run: |
           NEXT_VERSION=${{ env.RC-TAG }}
           SHORT_SHA=$(git rev-parse --short HEAD)
-          echo "build_number=${NEXT_VERSION}_${SHORT_SHA}" >> $GITHUB_OUTPUT
+          echo "build_number=${NEXT_VERSION}" >> $GITHUB_OUTPUT
       - name: Create stg environment variables
         run: |
           touch .env.${{ env.ENVIRONMENT }}
           echo VITE_SAMS_AUTHORITY_URL=https://apigw-stg.cdc.gov >> .env.${{ env.ENVIRONMENT }}
-          echo VITE_SAMS_CLIENT_ID=${{ secrets.SAMS_CLIENT_ID_STG }} >> .env.${{ env.ENVIRONMENT }}
+          echo VITE_SAMS_CLIENT_ID=${{ secrets.SAMS_CLIENT_ID }} >> .env.${{ env.ENVIRONMENT }}
           echo VITE_SAMS_AUTH_URL=https://apigw-stg.cdc.gov:8443/auth/oauth/v2/authorize >> .env.${{ env.ENVIRONMENT }}
           echo VITE_SAMS_USER_INFO_URL=https://apigw-stg.cdc.gov:8443/openid/connect/v1/userinfo >> .env.${{ env.ENVIRONMENT }}
-          echo VITE_OAUTH_CALLBACK_URL=https://dexstg.cdc.gov/oauth_callback >> .env.${{ env.ENVIRONMENT }}
-          echo VITE_OAUTH_TOKEN_URL=https://dexstg.cdc.gov/api/token >> .env.${{ env.ENVIRONMENT }}
+          echo VITE_OAUTH_CALLBACK_URL=https://dex${{ env.ENVIRONMENT }}.cdc.gov/oauth_callback >> .env.${{ env.ENVIRONMENT }}
+          echo VITE_API_BASE_URL=https://ede-${{ env.ENVIRONMENT }}-portal-api.azurewebsites.net >> .env.${{ env.ENVIRONMENT }}
           echo VITE_APP_BUILD_NUMBER=${{ steps.gen_build_number.outputs.build_number }} >> .env.${{ env.ENVIRONMENT }}
           echo VITE_APP_CONFIG_CONNECTION_STRING="${{ secrets.APP_CONFIG_CONNECTION_STRING }}" >> .env.${{ env.ENVIRONMENT }}
           echo VITE_UPLOAD_API_ENDPOINT="${{ secrets.UPLOAD_API_ENDPOINT }}" >> .env.${{ env.ENVIRONMENT }}
