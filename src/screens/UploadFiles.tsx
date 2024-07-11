@@ -1,13 +1,21 @@
 import { ChangeEvent, useEffect, useReducer, useState } from "react";
 import { useAuth } from "react-oidc-context";
+import { useRecoilValue } from "recoil";
 
 import ManifestDefinitions from "src/components/ManifestDefs";
 import { Button } from "../../src/components/Button";
+import Select from "src/components/formFields/Select";
 import { Alert, AlertProps } from "@us-gov-cdc/cdc-react";
 
 import * as tus from "tus-js-client";
 
 import API_ENDPOINTS from "src/config/api";
+import { dataStreamsAtom } from "src/state/dataStreams";
+import {
+  getDataStreamOptions,
+  getRoutesOptions,
+} from "src/utils/helperFunctions/metadataFilters";
+import { getManifests } from "src/utils/api/manifests";
 
 interface FileUpload {
   file: File;
@@ -28,11 +36,24 @@ function UploadFiles() {
     manifest: "",
   };
 
+  const dataStreams = useRecoilValue(dataStreamsAtom);
+  const [datastream, setDatastream] = useState("");
+  const [route, setRoute] = useState("");
   const [uploadResultMessage, setUploadResultMessage] = useState("");
   const [uploadResultAlert, setUploadResultAlert] =
     useState<AlertProps["type"]>("info");
   const [formInProgress, setFormInProgress] = useState(true);
   const [isUploading, setIsUploading] = useState(false);
+
+  const handleDataStreamId = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const dataStreamId = e.target.value;
+    setDatastream(dataStreamId);
+    setRoute("");
+  };
+
+  const handleDataRoute = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setRoute(e.target.value);
+  };
 
   function reducer(state: FileUpload, action: DispatchAction) {
     switch (action.type) {
@@ -57,6 +78,26 @@ function UploadFiles() {
   }
 
   const [formState, dispatch] = useReducer(reducer, initialState);
+
+  useEffect(() => {
+    const handleGetManifest = async () => {
+      const res = await getManifests(
+        auth.user?.access_token ?? "",
+        datastream,
+        route
+      );
+
+      if (res.status != 200) {
+        // TODO messaging for manifest can't be retrieved
+        return;
+      }
+
+      const manifestJSON = await res.json();
+      console.log(manifestJSON);
+    };
+
+    if (datastream && route) handleGetManifest();
+  }, [auth, datastream, route]);
 
   useEffect(() => {
     formState?.file.name !== "" && formState.manifest !== ""
@@ -183,6 +224,22 @@ function UploadFiles() {
                 communicated to each organization during onboarding. Any
                 questions should be directed to your organization admin.
               </Alert>
+              <Select
+                className="padding-top-2 flex-1 search-option"
+                id="data-stream-filter"
+                label="Data Stream"
+                onChange={handleDataStreamId}
+                options={getDataStreamOptions(dataStreams)}
+                defaultValue={datastream}
+              />
+              <Select
+                className="padding-top-2 flex-1 search-option"
+                id="data-route-filter"
+                label="Data Route"
+                onChange={handleDataRoute}
+                options={getRoutesOptions(dataStreams, datastream, true)}
+                defaultValue={route}
+              />
               <label className="usa-label" htmlFor="manifest">
                 Input the Submission Manifest
               </label>

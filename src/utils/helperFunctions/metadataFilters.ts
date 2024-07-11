@@ -40,7 +40,8 @@ export const getDataStreamOptions = (
 
 export const getRoutesOptions = (
   data: DataStreamWithRoutes[],
-  dataStreamName: string
+  dataStreamName: string,
+  forUpload: boolean = false
 ): SelectOption[] => {
   const dataStream: DataStreamWithRoutes | undefined = data.find(
     (el: DataStreamWithRoutes) => el.datastream.name == dataStreamName
@@ -53,7 +54,7 @@ export const getRoutesOptions = (
     display: r.name,
   }));
 
-  if (routeNames.length > 1)
+  if (routeNames.length > 1 && !forUpload)
     return [{ value: "All", display: "All" }, ...routeNames];
 
   return routeNames;
