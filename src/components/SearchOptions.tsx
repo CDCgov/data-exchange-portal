@@ -15,9 +15,8 @@ import { dataStreamsAtom } from "src/state/dataStreams";
 import Select, { SelectOption } from "src/components/formFields/Select";
 import TextInput from "src/components/formFields/TextInput";
 import {
+  getDataStreamIds,
   getDataRoutes,
-  getDataStreamOptions,
-  getRoutesOptions,
 } from "src/utils/helperFunctions/metadataFilters";
 import { Timeframe, timeframeOptions } from "src/types/timeframes";
 import { isValidIsoString } from "src/utils/helperFunctions/date";
@@ -217,7 +216,7 @@ function SearchOptions({
         id="data-stream-filter"
         label="Data Stream"
         onChange={handleDataStreamId}
-        options={getDataStreamOptions(dataStreams)}
+        options={getDataStreamIds(dataStreams)}
         defaultValue={data_stream_id}
       />
       <Select
@@ -225,7 +224,7 @@ function SearchOptions({
         id="data-route-filter"
         label="Data Route"
         onChange={handleDataRoute}
-        options={getRoutesOptions(dataStreams, data_stream_id)}
+        options={getDataRoutes(dataStreams, data_stream_id)}
         defaultValue={data_route}
       />
       <Select

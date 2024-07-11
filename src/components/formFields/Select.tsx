@@ -9,9 +9,11 @@ export type SelectOption = {
   display: string | JSX.Element;
 };
 
+export type SelectOptionType = SelectOption | string;
+
 export type SelectProps = {
   id: string;
-  options: SelectOption[];
+  options: SelectOptionType[];
   className?: string;
   labelClassName?: string;
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
@@ -45,6 +47,10 @@ export const Select = ({
   defaultValue = "",
   disabled = false,
 }: SelectProps): React.ReactElement => {
+  const transformedOptions: SelectOption[] = options.map((option) =>
+    typeof option === "string" ? { value: option, display: option } : option
+  );
+
   const [currentVal, setCurrentVal] = useState(defaultValue);
 
   useEffect(() => {
@@ -88,7 +94,7 @@ export const Select = ({
         ref={inputRef}>
         <>
           <option>- Select -</option>
-          {options.map(({ value, display }: SelectOption) => (
+          {transformedOptions.map(({ value, display }: SelectOption) => (
             <option key={value} value={value}>
               {display}
             </option>

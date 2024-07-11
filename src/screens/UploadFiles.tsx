@@ -12,20 +12,23 @@ import * as tus from "tus-js-client";
 import API_ENDPOINTS from "src/config/api";
 import { dataStreamsAtom } from "src/state/dataStreams";
 import {
-  getDataStreamOptions,
-  getRoutesOptions,
-} from "src/utils/helperFunctions/upload";
-import { getManifests } from "src/utils/api/manifests";
+  getDataStreamIds,
+  getDataRoutes,
+} from "src/utils/helperFunctions/metadataFilters";
+import { getManifests, Manifest, ManifestField } from "src/utils/api/manifests";
+import { renderDynamicField } from "src/utils/helperFunctions/upload";
 
 interface FileUpload {
   file: File;
   datastream: string;
   route: string;
+  dynamicFields: ManifestField[];
 }
 
-interface DispatchAction {
+export interface DispatchAction {
   type: string;
   /* eslint-disable @typescript-eslint/no-explicit-any */
+  fieldName?: string;
   value?: any;
 }
 
@@ -36,6 +39,7 @@ function UploadFiles() {
     file: new File([""], ""),
     datastream: "",
     route: "",
+    dynamicFields: [],
   };
 
   const dataStreams = useRecoilValue(dataStreamsAtom);
@@ -61,6 +65,20 @@ function UploadFiles() {
         return {
           ...state,
           route: action.value,
+        };
+      case "setDynamicFields":
+        return {
+          ...state,
+          dynamicFields: action.value, // Update dynamic fields
+        };
+      case "updateDynamicField":
+        return {
+          ...state,
+          dynamicFields: state.dynamicFields.map((field) =>
+            field.field_name === action.fieldName
+              ? { ...field, value: action.value }
+              : field
+          ),
         };
       case "reset": {
         setUploadResultMessage("");
@@ -96,6 +114,10 @@ function UploadFiles() {
       type: "updateRoute",
       value: "",
     });
+    dispatch({
+      type: "setDynamicFields",
+      value: [],
+    });
   };
 
   const handleRoute = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -118,8 +140,14 @@ function UploadFiles() {
         return;
       }
 
-      const manifestJSON = await res.json();
-      console.log(manifestJSON);
+      const manifest: Manifest = (await res.json()) as Manifest;
+      const fields: ManifestField[] =
+        manifest?.config?.metadata_config?.fields ?? [];
+
+      if (fields?.length) {
+        dispatch({ type: "setDynamicFields", value: fields });
+        console.log(fields);
+      }
     };
 
     if (formState.datastream && formState.route) handleGetManifest();
@@ -231,22 +259,29 @@ function UploadFiles() {
                 questions should be directed to your organization admin.
               </Alert>
               <Select
-                className="padding-top-2 flex-1 search-option"
+                className="padding-top-2 flex-1"
                 id="data-stream-filter"
                 label="Data Stream"
                 onChange={handleDatastream}
-                options={getDataStreamOptions(dataStreams)}
+                options={getDataStreamIds(dataStreams)}
                 defaultValue={formState.datastream}
               />
               {formState.datastream && (
                 <Select
-                  className="padding-top-2 flex-1 search-option"
+                  className="padding-top-2 flex-1"
                   id="data-route-filter"
                   label="Data Route"
                   onChange={handleRoute}
-                  options={getRoutesOptions(dataStreams, formState.datastream)}
+                  options={getDataRoutes(
+                    dataStreams,
+                    formState.datastream,
+                    true
+                  )}
                   defaultValue={formState.route}
                 />
+              )}
+              {formState.dynamicFields.map((field: ManifestField) =>
+                renderDynamicField(field, dispatch)
               )}
               <hr className="margin-y-2 border-1px border-base-lighter" />
               <div className="margin-y-1">

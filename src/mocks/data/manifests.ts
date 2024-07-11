@@ -1,6 +1,6 @@
-import { Manifest } from "src/utils/api/manifests";
+import { Config, Manifest } from "src/utils/api/manifests";
 
-const manifest1 = {
+const manifest1: Config = {
   metadata_config: {
     version: "2.0",
     fields: [
@@ -270,7 +270,7 @@ const manifest1 = {
   },
 };
 
-const manifest2 = {
+const manifest2: Config = {
   metadata_config: {
     version: "2.0",
     fields: [
@@ -392,7 +392,7 @@ const manifest2 = {
   },
 };
 
-const manifest3 = {
+const manifest3: Config = {
   metadata_config: {
     version: "2.0",
     fields: [
