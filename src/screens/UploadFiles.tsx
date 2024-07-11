@@ -18,18 +18,23 @@ import {
 } from "src/utils/helperFunctions/metadataFilters";
 import { getManifests, Manifest, ManifestField } from "src/utils/api/manifests";
 import {
+  isFormValid,
   knownFieldNames,
   renderField,
   santizeFields,
 } from "src/utils/helperFunctions/upload";
 
-interface FileUpload {
-  file: File;
+export interface UploadField extends ManifestField {
+  value: string;
+}
+
+export interface FileUpload {
+  file: File | null;
   datastream: string;
   route: string;
   version: string;
-  knownFields: ManifestField[];
-  extraFields: ManifestField[];
+  knownFields: UploadField[];
+  extraFields: UploadField[];
 }
 
 export interface DispatchAction {
@@ -55,7 +60,6 @@ function UploadFiles() {
   const [uploadResultMessage, setUploadResultMessage] = useState("");
   const [uploadResultAlert, setUploadResultAlert] =
     useState<AlertProps["type"]>("info");
-  const [formInProgress, setFormInProgress] = useState(true);
   const [isUploading, setIsUploading] = useState(false);
 
   function reducer(state: FileUpload, action: DispatchAction) {
@@ -65,10 +69,14 @@ function UploadFiles() {
           ...state,
           file: action.value,
         };
-      case "updateDatastream":
+      case "updateDatastreamAndReset":
         return {
           ...state,
           datastream: action.value,
+          route: "",
+          version: "",
+          knownFields: [],
+          extraFields: [],
         };
       case "updateRoute":
         return {
@@ -136,32 +144,6 @@ function UploadFiles() {
     }
   };
 
-  const handleDatastream = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    dispatch({
-      type: "updateDatastream",
-      value: e.target.value,
-    });
-    dispatch({
-      type: "updateRoute",
-      value: "",
-    });
-    dispatch({
-      type: "updateVersion",
-      value: "",
-    });
-    dispatch({
-      type: "setFields",
-      value: [],
-    });
-  };
-
-  const handleRoute = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    dispatch({
-      type: "updateRoute",
-      value: e.target.value,
-    });
-  };
-
   useEffect(() => {
     const handleGetManifest = async () => {
       const res = await getManifests(
@@ -192,12 +174,6 @@ function UploadFiles() {
 
     if (formState.datastream && formState.route) handleGetManifest();
   }, [auth, formState.datastream, formState.route]);
-
-  useEffect(() => {
-    formState?.file.name !== ""
-      ? setFormInProgress(false)
-      : setFormInProgress(true);
-  }, [formState]);
 
   const handleReset = () => {
     dispatch({ type: "reset" });
@@ -302,7 +278,12 @@ function UploadFiles() {
                 className="padding-top-2 flex-1"
                 id="data-stream-id"
                 label="data_stream_id"
-                onChange={handleDatastream}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                  dispatch({
+                    type: "updateDatastreamAndReset",
+                    value: e.target.value,
+                  });
+                }}
                 options={getDataStreamIds(dataStreams)}
                 defaultValue={formState.datastream}
               />
@@ -311,7 +292,12 @@ function UploadFiles() {
                   className="padding-top-2 flex-1"
                   id="data-route"
                   label="data_stream_route"
-                  onChange={handleRoute}
+                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                    dispatch({
+                      type: "updateRoute",
+                      value: e.target.value,
+                    });
+                  }}
                   options={getDataRoutes(
                     dataStreams,
                     formState.datastream,
@@ -320,7 +306,7 @@ function UploadFiles() {
                   defaultValue={formState.route}
                 />
               )}
-              {formState.knownFields.map((field: ManifestField) =>
+              {formState.knownFields.map((field: UploadField) =>
                 renderField(field, "known", dispatch)
               )}
               {formState.version && (
@@ -338,17 +324,21 @@ function UploadFiles() {
                   defaultValue={formState.version}
                 />
               )}
-              <hr className="margin-y-2 border-1px border-base-lighter" />
-              <h3 className="font-sans-lg text-normal padding-y-1">
-                Additional Fields
-              </h3>
-              {formState.extraFields.map((field: ManifestField) =>
+              {!!formState.extraFields.length && (
+                <>
+                  <hr className="margin-y-2 border-1px border-base-lighter" />
+                  <h3 className="font-sans-lg text-normal padding-y-1">
+                    Additional Fields
+                  </h3>
+                </>
+              )}
+              {formState.extraFields.map((field: UploadField) =>
                 renderField(field, "extra", dispatch)
               )}
               <hr className="margin-y-2 border-1px border-base-lighter" />
               <div className="margin-y-1">
                 <Button
-                  disabled={formInProgress || isUploading}
+                  disabled={!isFormValid(formState) || isUploading}
                   type="submit"
                   id="upload-button"
                   onClick={handleUpload}>

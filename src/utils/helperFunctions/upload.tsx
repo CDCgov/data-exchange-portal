@@ -1,4 +1,8 @@
-import { DispatchAction } from "src/screens/UploadFiles";
+import {
+  DispatchAction,
+  FileUpload,
+  UploadField,
+} from "src/screens/UploadFiles";
 import Select from "src/components/formFields/Select";
 import TextInput from "src/components/formFields/TextInput";
 import { ManifestField } from "src/utils/api/manifests";
@@ -9,18 +13,42 @@ export const knownFieldNames = [
   "sender_id",
 ];
 
+export const isFormValid = (state: FileUpload) => {
+  if (!state.file?.name) return false;
+
+  if (!state.datastream || !state.route || !state.version) return false;
+
+  for (const field of state.knownFields) {
+    if (field.required && !field.value) {
+      return false;
+    }
+  }
+
+  for (const field of state.extraFields) {
+    if (field.required && !field.value) {
+      return false;
+    }
+  }
+
+  return true;
+};
+
 export const santizeFields = (fields: ManifestField[]) => {
-  const withoutDataStreamAndRoute = fields.filter(
+  const withoutDataStreamAndRoute: ManifestField[] = fields.filter(
     (field: ManifestField) =>
       field.field_name != "data_stream_id" &&
       field.field_name != "data_stream_route"
   );
 
-  return withoutDataStreamAndRoute;
+  const fieldsWithValue: UploadField[] = withoutDataStreamAndRoute.map(
+    (field: ManifestField) => ({ ...field, value: "" })
+  );
+
+  return fieldsWithValue;
 };
 
 export const renderField = (
-  field: ManifestField,
+  field: UploadField,
   type: "known" | "extra",
   dispatch: React.Dispatch<DispatchAction>
 ) => {
@@ -44,6 +72,7 @@ export const renderField = (
             value: e.target.value,
           })
         }
+        defaultValue={field.value}
       />
     );
   }
@@ -63,6 +92,7 @@ export const renderField = (
           value: e.target.value,
         })
       }
+      defaultValue={field.value}
     />
   );
 };
