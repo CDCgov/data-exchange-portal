@@ -19,6 +19,7 @@ import {
 import { getManifests, Manifest, ManifestField } from "src/utils/api/manifests";
 import {
   isFormValid,
+  generateFormData,
   knownFieldNames,
   renderField,
   santizeFields,
@@ -190,7 +191,8 @@ function UploadFiles() {
     setUploadResultMessage(`Starting...`);
     setUploadResultAlert("info");
     try {
-      // const parsedJson = JSON.parse(formState.manifest);
+      const formData = generateFormData(formState);
+      console.log(formData);
       const upload = new tus.Upload(formState.file, {
         endpoint: API_ENDPOINTS.upload,
         retryDelays: [0, 3000, 5000, 10000, 20000],
@@ -199,7 +201,7 @@ function UploadFiles() {
         },
         metadata: {
           received_filename: formState.file.name,
-          // ...parsedJson,
+          ...formData,
         },
         onError: function (error) {
           setUploadResultMessage(`Upload failed: ${error.message}`);
@@ -220,6 +222,7 @@ function UploadFiles() {
 
       upload.start();
     } catch (error) {
+      console.log(error);
       setUploadResultMessage(`Upload failed: error parsing JSON`);
       setUploadResultAlert("error");
       setIsUploading(false);

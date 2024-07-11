@@ -13,6 +13,24 @@ export const knownFieldNames = [
   "sender_id",
 ];
 
+export const generateFormData = (state: FileUpload) => {
+  const formData: any = {
+    data_stream_id: state.datastream,
+    data_stream_route: state.route,
+    version: state.version,
+  };
+
+  state.knownFields.forEach((field: UploadField) => {
+    formData[field.field_name] = field.value;
+  });
+
+  state.extraFields.forEach((field: UploadField) => {
+    formData[field.field_name] = field.value;
+  });
+
+  return formData;
+};
+
 export const isFormValid = (state: FileUpload) => {
   if (!state.file?.name) return false;
 
@@ -31,20 +49,6 @@ export const isFormValid = (state: FileUpload) => {
   }
 
   return true;
-};
-
-export const santizeFields = (fields: ManifestField[]) => {
-  const withoutDataStreamAndRoute: ManifestField[] = fields.filter(
-    (field: ManifestField) =>
-      field.field_name != "data_stream_id" &&
-      field.field_name != "data_stream_route"
-  );
-
-  const fieldsWithValue: UploadField[] = withoutDataStreamAndRoute.map(
-    (field: ManifestField) => ({ ...field, value: "" })
-  );
-
-  return fieldsWithValue;
 };
 
 export const renderField = (
@@ -95,4 +99,18 @@ export const renderField = (
       defaultValue={field.value}
     />
   );
+};
+
+export const santizeFields = (fields: ManifestField[]) => {
+  const withoutDataStreamAndRoute: ManifestField[] = fields.filter(
+    (field: ManifestField) =>
+      field.field_name != "data_stream_id" &&
+      field.field_name != "data_stream_route"
+  );
+
+  const fieldsWithValue: UploadField[] = withoutDataStreamAndRoute.map(
+    (field: ManifestField) => ({ ...field, value: "" })
+  );
+
+  return fieldsWithValue;
 };
