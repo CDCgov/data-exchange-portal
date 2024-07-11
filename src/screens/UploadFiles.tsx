@@ -16,13 +16,18 @@ import {
   getDataRoutes,
 } from "src/utils/helperFunctions/metadataFilters";
 import { getManifests, Manifest, ManifestField } from "src/utils/api/manifests";
-import { renderDynamicField } from "src/utils/helperFunctions/upload";
+import {
+  knownFieldNames,
+  renderField,
+  santizeFields,
+} from "src/utils/helperFunctions/upload";
 
 interface FileUpload {
   file: File;
   datastream: string;
   route: string;
-  dynamicFields: ManifestField[];
+  knownFields: ManifestField[];
+  extraFields: ManifestField[];
 }
 
 export interface DispatchAction {
@@ -39,7 +44,8 @@ function UploadFiles() {
     file: new File([""], ""),
     datastream: "",
     route: "",
-    dynamicFields: [],
+    knownFields: [],
+    extraFields: [],
   };
 
   const dataStreams = useRecoilValue(dataStreamsAtom);
@@ -66,15 +72,32 @@ function UploadFiles() {
           ...state,
           route: action.value,
         };
-      case "setDynamicFields":
+      case "setFields": {
+        const knownFields = action.value.filter((field: ManifestField) =>
+          knownFieldNames.includes(field.field_name)
+        );
+        const extraFields = action.value.filter(
+          (field: ManifestField) => !knownFieldNames.includes(field.field_name)
+        );
         return {
           ...state,
-          dynamicFields: action.value, // Update dynamic fields
+          knownFields,
+          extraFields,
         };
-      case "updateDynamicField":
+      }
+      case "updateKnownField":
         return {
           ...state,
-          dynamicFields: state.dynamicFields.map((field) =>
+          knownFields: state.knownFields.map((field) =>
+            field.field_name === action.fieldName
+              ? { ...field, value: action.value }
+              : field
+          ),
+        };
+      case "updateExtraField":
+        return {
+          ...state,
+          extraFields: state.extraFields.map((field) =>
             field.field_name === action.fieldName
               ? { ...field, value: action.value }
               : field
@@ -115,7 +138,7 @@ function UploadFiles() {
       value: "",
     });
     dispatch({
-      type: "setDynamicFields",
+      type: "setFields",
       value: [],
     });
   };
@@ -145,7 +168,8 @@ function UploadFiles() {
         manifest?.config?.metadata_config?.fields ?? [];
 
       if (fields?.length) {
-        dispatch({ type: "setDynamicFields", value: fields });
+        const sanitizedFields = santizeFields(fields);
+        dispatch({ type: "setFields", value: sanitizedFields });
         console.log(fields);
       }
     };
@@ -280,8 +304,15 @@ function UploadFiles() {
                   defaultValue={formState.route}
                 />
               )}
-              {formState.dynamicFields.map((field: ManifestField) =>
-                renderDynamicField(field, dispatch)
+              {formState.knownFields.map((field: ManifestField) =>
+                renderField(field, "known", dispatch)
+              )}
+              <hr className="margin-y-2 border-1px border-base-lighter" />
+              <h3 className="font-sans-lg text-normal padding-y-1">
+                Additional Fields
+              </h3>
+              {formState.extraFields.map((field: ManifestField) =>
+                renderField(field, "extra", dispatch)
               )}
               <hr className="margin-y-2 border-1px border-base-lighter" />
               <div className="margin-y-1">
