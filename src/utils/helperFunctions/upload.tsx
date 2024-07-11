@@ -1,13 +1,12 @@
 import { DispatchAction } from "src/screens/UploadFiles";
-import { Select } from "src/components/formFields/Select";
-import { TextInput } from "src/components/formFields/TextInput";
+import Select from "src/components/formFields/Select";
+import TextInput from "src/components/formFields/TextInput";
 import { ManifestField } from "src/utils/api/manifests";
 
 export const knownFieldNames = [
   "data_producer_id",
   "jurisdiction",
   "sender_id",
-  "version",
 ];
 
 export const santizeFields = (fields: ManifestField[]) => {
@@ -16,6 +15,7 @@ export const santizeFields = (fields: ManifestField[]) => {
       field.field_name != "data_stream_id" &&
       field.field_name != "data_stream_route"
   );
+
   return withoutDataStreamAndRoute;
 };
 
@@ -25,7 +25,7 @@ export const renderField = (
   dispatch: React.Dispatch<DispatchAction>
 ) => {
   const updateActionType =
-    type === "known" ? "updateKnownField" : "updateExtraField";
+    type == "known" ? "updateKnownField" : "updateExtraField";
 
   if (field.allowed_values) {
     return (
@@ -34,7 +34,7 @@ export const renderField = (
         key={field.field_name}
         id={field.field_name}
         label={field.field_name}
-        hint={field.description}
+        hint={type == "known" ? undefined : field.description}
         required={field.required}
         options={field.allowed_values}
         onChange={(e) =>
@@ -54,7 +54,7 @@ export const renderField = (
       key={field.field_name}
       id={field.field_name}
       label={field.field_name}
-      hint={field.description}
+      hint={type == "known" ? undefined : field.description}
       required={field.required}
       onChange={(e) =>
         dispatch({

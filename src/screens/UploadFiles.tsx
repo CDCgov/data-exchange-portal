@@ -5,6 +5,7 @@ import { useRecoilValue } from "recoil";
 import ManifestDefinitions from "src/components/ManifestDefs";
 import { Button } from "../../src/components/Button";
 import Select from "src/components/formFields/Select";
+import TextInput from "src/components/formFields/TextInput";
 import { Alert, AlertProps } from "@us-gov-cdc/cdc-react";
 
 import * as tus from "tus-js-client";
@@ -26,6 +27,7 @@ interface FileUpload {
   file: File;
   datastream: string;
   route: string;
+  version: string;
   knownFields: ManifestField[];
   extraFields: ManifestField[];
 }
@@ -44,6 +46,7 @@ function UploadFiles() {
     file: new File([""], ""),
     datastream: "",
     route: "",
+    version: "",
     knownFields: [],
     extraFields: [],
   };
@@ -71,6 +74,11 @@ function UploadFiles() {
         return {
           ...state,
           route: action.value,
+        };
+      case "updateVersion":
+        return {
+          ...state,
+          version: action.value,
         };
       case "setFields": {
         const knownFields = action.value.filter((field: ManifestField) =>
@@ -138,6 +146,10 @@ function UploadFiles() {
       value: "",
     });
     dispatch({
+      type: "updateVersion",
+      value: "",
+    });
+    dispatch({
       type: "setFields",
       value: [],
     });
@@ -166,11 +178,15 @@ function UploadFiles() {
       const manifest: Manifest = (await res.json()) as Manifest;
       const fields: ManifestField[] =
         manifest?.config?.metadata_config?.fields ?? [];
+      const version = manifest?.config?.metadata_config?.version ?? "";
 
       if (fields?.length) {
         const sanitizedFields = santizeFields(fields);
         dispatch({ type: "setFields", value: sanitizedFields });
-        console.log(fields);
+        dispatch({
+          type: "updateVersion",
+          value: version,
+        });
       }
     };
 
@@ -284,8 +300,8 @@ function UploadFiles() {
               </Alert>
               <Select
                 className="padding-top-2 flex-1"
-                id="data-stream-filter"
-                label="Data Stream"
+                id="data-stream-id"
+                label="data_stream_id"
                 onChange={handleDatastream}
                 options={getDataStreamIds(dataStreams)}
                 defaultValue={formState.datastream}
@@ -293,8 +309,8 @@ function UploadFiles() {
               {formState.datastream && (
                 <Select
                   className="padding-top-2 flex-1"
-                  id="data-route-filter"
-                  label="Data Route"
+                  id="data-route"
+                  label="data_stream_route"
                   onChange={handleRoute}
                   options={getDataRoutes(
                     dataStreams,
@@ -306,6 +322,21 @@ function UploadFiles() {
               )}
               {formState.knownFields.map((field: ManifestField) =>
                 renderField(field, "known", dispatch)
+              )}
+              {formState.version && (
+                <TextInput
+                  className="padding-top-2 flex-1"
+                  id="version"
+                  label="version"
+                  required={true}
+                  onChange={(e) =>
+                    dispatch({
+                      type: "updateVersion",
+                      value: e.target.value,
+                    })
+                  }
+                  defaultValue={formState.version}
+                />
               )}
               <hr className="margin-y-2 border-1px border-base-lighter" />
               <h3 className="font-sans-lg text-normal padding-y-1">
