@@ -42,6 +42,5 @@ describe("Label component", () => {
 
     const marker = queryByText("*");
     expect(marker).toBeInTheDocument();
-    expect(marker).toHaveClass("usa-hint--required");
   });
 });

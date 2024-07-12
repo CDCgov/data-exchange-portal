@@ -14,6 +14,7 @@ export const knownFieldNames = [
 ];
 
 export const generateFormData = (state: FileUpload) => {
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   const formData: any = {
     data_stream_id: state.datastream,
     data_stream_route: state.route,

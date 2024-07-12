@@ -2,11 +2,11 @@ import { ChangeEvent } from "react";
 import { Button } from "../../src/components/Button";
 
 export interface FileSelectorProps {
-  filename: string;
+  file?: File;
   handleFileChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
-function FileSelector({ filename, handleFileChange }: FileSelectorProps) {
+function FileSelector({ file, handleFileChange }: FileSelectorProps) {
   const handleFileSelection = () => {
     document?.getElementById("file-uploader")?.click();
   };
@@ -32,7 +32,7 @@ function FileSelector({ filename, handleFileChange }: FileSelectorProps) {
         id="file-name"
         data-testid="file-name"
         className="text-italic text-normal">
-        {filename != "" ? filename : "No file chosen"}
+        {file?.name ? file.name : "No file chosen"}
       </p>
     </div>
   );

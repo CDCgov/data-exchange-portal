@@ -241,7 +241,7 @@ function UploadFiles() {
           <div className="grid-col flex-2">
             <div className="border border-base-lighter bg-white radius-md padding-3 margin-right-2">
               <FileSelector
-                filename={formState.file.name}
+                file={formState.file}
                 handleFileChange={handleFileNameChange}
               />
               <hr className="margin-y-2 border-1px border-base-lighter" />
