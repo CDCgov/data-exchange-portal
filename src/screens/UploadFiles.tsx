@@ -6,6 +6,7 @@ import FileSelector from "src/components/FileSelector";
 import ManifestDefinitions from "src/components/ManifestDefs";
 import { Button } from "../../src/components/Button";
 import Select from "src/components/formFields/Select";
+import ErrorMessage from "src/components/formFields/ErrorMessage";
 import TextInput from "src/components/formFields/TextInput";
 import { Alert, AlertProps } from "@us-gov-cdc/cdc-react";
 
@@ -20,29 +21,34 @@ import {
 import { getManifests, Manifest, ManifestField } from "src/utils/api/manifests";
 import {
   isFormValid,
+  isSubmitDisabled,
   generateFormData,
   knownFieldNames,
   renderField,
   santizeFields,
 } from "src/utils/helperFunctions/upload";
+import { ValidationStatus } from "src/types/validationStatus";
 
 export interface UploadField extends ManifestField {
   value: string;
+  validationStatus: ValidationStatus;
 }
 
 export interface FileUpload {
   file: File | null;
+  fileValidationStatus: ValidationStatus;
   datastream: string;
   route: string;
   version: string;
+  versionValidationStatus: ValidationStatus;
   knownFields: UploadField[];
   extraFields: UploadField[];
 }
 
 export interface DispatchAction {
   type: string;
-  /* eslint-disable @typescript-eslint/no-explicit-any */
   fieldName?: string;
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   value?: any;
 }
 
@@ -51,9 +57,11 @@ function UploadFiles() {
 
   const initialState: FileUpload = {
     file: new File([""], ""),
+    fileValidationStatus: null,
     datastream: "",
     route: "",
     version: "",
+    versionValidationStatus: null,
     knownFields: [],
     extraFields: [],
   };
@@ -70,6 +78,12 @@ function UploadFiles() {
         return {
           ...state,
           file: action.value,
+          fileValidationStatus: null,
+        };
+      case "validateFile":
+        return {
+          ...state,
+          fileValidationStatus: action.value,
         };
       case "updateDatastreamAndReset":
         return {
@@ -92,6 +106,12 @@ function UploadFiles() {
         return {
           ...state,
           version: action.value,
+          versionValidationStatus: null,
+        };
+      case "validateVersion":
+        return {
+          ...state,
+          versionValidationStatus: action.value,
         };
       case "setFields": {
         const knownFields = action.value.filter((field: ManifestField) =>
@@ -111,7 +131,16 @@ function UploadFiles() {
           ...state,
           knownFields: state.knownFields.map((field) =>
             field.field_name === action.fieldName
-              ? { ...field, value: action.value }
+              ? { ...field, value: action.value, validationStatus: null }
+              : field
+          ),
+        };
+      case "validateKnownField":
+        return {
+          ...state,
+          knownFields: state.knownFields.map((field) =>
+            field.field_name === action.fieldName
+              ? { ...field, validationStatus: action.value }
               : field
           ),
         };
@@ -120,7 +149,16 @@ function UploadFiles() {
           ...state,
           extraFields: state.extraFields.map((field) =>
             field.field_name === action.fieldName
-              ? { ...field, value: action.value }
+              ? { ...field, value: action.value, validationStatus: null }
+              : field
+          ),
+        };
+      case "validateExtraField":
+        return {
+          ...state,
+          extraFields: state.extraFields.map((field) =>
+            field.field_name === action.fieldName
+              ? { ...field, validationStatus: action.value }
               : field
           ),
         };
@@ -187,6 +225,14 @@ function UploadFiles() {
   };
 
   const handleUpload = () => {
+    if (!isFormValid(formState, dispatch)) {
+      setUploadResultMessage(
+        "All required fields must be completed and a file must be selected."
+      );
+      setUploadResultAlert("error");
+      return;
+    }
+
     setIsUploading(true);
     setUploadResultMessage(`Starting...`);
     setUploadResultAlert("info");
@@ -221,8 +267,9 @@ function UploadFiles() {
 
       upload.start();
     } catch (error) {
-      console.log(error);
-      setUploadResultMessage(`Upload failed: error parsing JSON`);
+      setUploadResultMessage(
+        "Upload failed: please confirm all details and try again."
+      );
       setUploadResultAlert("error");
       setIsUploading(false);
     }
@@ -247,6 +294,9 @@ function UploadFiles() {
                 file={formState.file}
                 handleFileChange={handleFileNameChange}
               />
+              {formState.fileValidationStatus == "error" && (
+                <ErrorMessage> A file must be selected</ErrorMessage>
+              )}
               <hr className="margin-y-2 border-1px border-base-lighter" />
               <h2 className="font-sans-lg text-normal padding-bottom-1">
                 Submission Details
@@ -301,6 +351,7 @@ function UploadFiles() {
                     })
                   }
                   defaultValue={formState.version}
+                  validationStatus={formState.versionValidationStatus}
                 />
               )}
               {!!formState.extraFields.length && (
@@ -317,7 +368,7 @@ function UploadFiles() {
               <hr className="margin-y-2 border-1px border-base-lighter" />
               <div className="margin-y-1">
                 <Button
-                  disabled={!isFormValid(formState) || isUploading}
+                  disabled={!isSubmitDisabled(formState) || isUploading}
                   type="submit"
                   id="upload-button"
                   onClick={handleUpload}>

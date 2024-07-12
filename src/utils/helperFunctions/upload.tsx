@@ -32,21 +32,63 @@ export const generateFormData = (state: FileUpload) => {
   return formData;
 };
 
-export const isFormValid = (state: FileUpload) => {
-  if (!state.file?.name) return false;
+export const isFormValid = (
+  state: FileUpload,
+  dispatch: React.Dispatch<DispatchAction>
+) => {
+  let isValid = true;
 
-  if (!state.datastream || !state.route || !state.version) return false;
+  if (!state.file?.name) {
+    dispatch({
+      type: "validateFile",
+      value: "error",
+    });
+    isValid = false;
+  }
+
+  if (!state.datastream || !state.route) isValid = false;
+
+  if (!state.version) {
+    dispatch({
+      type: "validateVersion",
+      value: "error",
+    });
+    isValid = false;
+  }
 
   for (const field of state.knownFields) {
     if (field.required && !field.value) {
-      return false;
+      dispatch({
+        type: "validateKnownField",
+        fieldName: field.field_name,
+        value: "error",
+      });
+      isValid = false;
     }
   }
 
   for (const field of state.extraFields) {
     if (field.required && !field.value) {
-      return false;
+      dispatch({
+        type: "validateExtraField",
+        fieldName: field.field_name,
+        value: "error",
+      });
+      isValid = false;
     }
+  }
+
+  return isValid;
+};
+
+export const isSubmitDisabled = (state: FileUpload) => {
+  if (
+    !state.datastream ||
+    state.datastream == "- Select -" ||
+    !state.route ||
+    state.route == "- Select -"
+  ) {
+    return false;
   }
 
   return true;
@@ -91,6 +133,7 @@ export const renderField = (
           })
         }
         defaultValue={field.value}
+        validationStatus={field.validationStatus}
       />
     );
   }
@@ -111,6 +154,7 @@ export const renderField = (
         })
       }
       defaultValue={field.value}
+      validationStatus={field.validationStatus}
     />
   );
 };
@@ -123,7 +167,7 @@ export const santizeFields = (fields: ManifestField[]) => {
   );
 
   const fieldsWithValue: UploadField[] = withoutDataStreamAndRoute.map(
-    (field: ManifestField) => ({ ...field, value: "" })
+    (field: ManifestField) => ({ ...field, value: "", validationStatus: null })
   );
 
   return fieldsWithValue;
