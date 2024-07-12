@@ -60,13 +60,26 @@ export const renderField = (
   const updateActionType =
     type == "known" ? "updateKnownField" : "updateExtraField";
 
+  const getLabel = (fieldName: string) => {
+    switch (fieldName) {
+      case "data_producer_id":
+        return "Data Producer";
+      case "sender_id":
+        return "Data Sender";
+      case "jurisdiction":
+        return "Jurisdiction";
+      default:
+        return fieldName;
+    }
+  };
+
   if (field.allowed_values) {
     return (
       <Select
         className="padding-top-2 flex-1"
         key={field.field_name}
         id={field.field_name}
-        label={field.field_name}
+        label={getLabel(field.field_name)}
         hint={type == "known" ? undefined : field.description}
         required={field.required}
         options={field.allowed_values}
@@ -87,7 +100,7 @@ export const renderField = (
       className="padding-top-2 flex-1"
       key={field.field_name}
       id={field.field_name}
-      label={field.field_name}
+      label={getLabel(field.field_name)}
       hint={type == "known" ? undefined : field.description}
       required={field.required}
       onChange={(e) =>

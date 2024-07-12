@@ -6,7 +6,7 @@ export default function ManifestDefinitions() {
       </h2>
       <dl>
         <dt className="font-mono-md padding-bottom-1">
-          <strong>data_stream_id</strong>
+          <strong>Data Stream (data_stream_id)</strong>
         </dt>
         <dd>
           An alphabetical code that identifies the CDC program receiving the
@@ -14,7 +14,7 @@ export default function ManifestDefinitions() {
         </dd>
         <hr className="margin-y-2 border-1px border-base-lighter" />
         <dt className="font-mono-md padding-bottom-1">
-          <strong>data_stream_route</strong>
+          <strong>Route (data_stream_route)</strong>
         </dt>
         <dd>
           The name of the folder destination for the data file. Typically this
@@ -22,7 +22,7 @@ export default function ManifestDefinitions() {
         </dd>
         <hr className="margin-y-2 border-1px border-base-lighter" />
         <dt className="font-mono-md padding-bottom-1">
-          <strong>data_producer_id</strong>
+          <strong>Data Producer (data_producer_id)</strong>
         </dt>
         <dd>
           An alphabetical code that identifies the public health authority that
@@ -32,15 +32,7 @@ export default function ManifestDefinitions() {
         </dd>
         <hr className="margin-y-2 border-1px border-base-lighter" />
         <dt className="font-mono-md padding-bottom-1">
-          <strong>jurisdiction</strong>
-        </dt>
-        <dd>
-          An alphabetical code that identifies the city, county, state, tribe,
-          or territory of the sender. This code is provided during onboarding.
-        </dd>
-        <hr className="margin-y-2 border-1px border-base-lighter" />
-        <dt className="font-mono-md padding-bottom-1">
-          <strong>sender_id</strong>
+          <strong>Data Sender (sender_id)</strong>
         </dt>
         <dd>
           An alphabetical code that identifies the sender, machine, or
@@ -49,7 +41,15 @@ export default function ManifestDefinitions() {
         </dd>
         <hr className="margin-y-2 border-1px border-base-lighter" />
         <dt className="font-mono-md padding-bottom-1">
-          <strong>version</strong>
+          <strong>Jurisdiction</strong>
+        </dt>
+        <dd>
+          An alphabetical code that identifies the city, county, state, tribe,
+          or territory of the sender. This code is provided during onboarding.
+        </dd>
+        <hr className="margin-y-2 border-1px border-base-lighter" />
+        <dt className="font-mono-md padding-bottom-1">
+          <strong>Version</strong>
         </dt>
         <dd>
           The version of the metadata being sent. In all new cases, this field

@@ -84,6 +84,9 @@ function UploadFiles() {
         return {
           ...state,
           route: action.value,
+          version: "",
+          knownFields: [],
+          extraFields: [],
         };
       case "updateVersion":
         return {
@@ -251,7 +254,7 @@ function UploadFiles() {
               <Select
                 className="padding-top-2 flex-1"
                 id="data-stream-id"
-                label="data_stream_id"
+                label="Data Stream"
                 required
                 onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                   dispatch({
@@ -262,11 +265,11 @@ function UploadFiles() {
                 options={getDataStreamIds(dataStreams)}
                 defaultValue={formState.datastream}
               />
-              {formState.datastream && (
+              {formState.datastream && formState.datastream != "- Select -" && (
                 <Select
                   className="padding-top-2 flex-1"
                   id="data-route"
-                  label="data_stream_route"
+                  label="Route"
                   required
                   onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                     dispatch({
@@ -285,11 +288,11 @@ function UploadFiles() {
               {formState.knownFields.map((field: UploadField) =>
                 renderField(field, "known", dispatch)
               )}
-              {formState.version && (
+              {!!formState.knownFields.length && (
                 <TextInput
                   className="padding-top-2 flex-1"
                   id="version"
-                  label="version"
+                  label="Version"
                   required
                   onChange={(e) =>
                     dispatch({
