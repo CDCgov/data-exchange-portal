@@ -11,16 +11,38 @@ import { ManifestField } from "src/utils/api/manifests";
 describe("Helper Functions For UploadFiles Screen", () => {
   const initialState: FileUpload = {
     file: new File([""], "test.txt"),
+    fileValidationStatus: null,
     datastream: "datastream1",
     route: "route1",
     version: "1.0",
+    versionValidationStatus: null,
     knownFields: [
-      { field_name: "data_producer_id", value: "producer1", required: true },
-      { field_name: "jurisdiction", value: "", required: true },
+      {
+        field_name: "data_producer_id",
+        value: "producer1",
+        required: true,
+        validationStatus: null,
+      },
+      {
+        field_name: "jurisdiction",
+        value: "",
+        required: true,
+        validationStatus: null,
+      },
     ],
     extraFields: [
-      { field_name: "extraField1", value: "value1", required: true },
-      { field_name: "extraField2", value: "", required: false },
+      {
+        field_name: "extraField1",
+        value: "value1",
+        required: true,
+        validationStatus: null,
+      },
+      {
+        field_name: "extraField2",
+        value: "",
+        required: false,
+        validationStatus: null,
+      },
     ],
   };
 
@@ -38,16 +60,27 @@ describe("Helper Functions For UploadFiles Screen", () => {
   });
 
   it("should validate form correctly", () => {
-    expect(isFormValid(initialState)).toBe(false);
+    const dispatch = vi.fn();
+    expect(isFormValid(initialState, dispatch)).toBe(false);
 
     const validState = {
       ...initialState,
       knownFields: [
-        { field_name: "data_producer_id", value: "producer1", required: true },
-        { field_name: "jurisdiction", value: "jurisdiction1", required: true },
+        {
+          field_name: "data_producer_id",
+          value: "producer1",
+          required: true,
+          validationStatus: null,
+        },
+        {
+          field_name: "jurisdiction",
+          value: "jurisdiction1",
+          required: true,
+          validationStatus: null,
+        },
       ],
     };
-    expect(isFormValid(validState)).toBe(true);
+    expect(isFormValid(validState, dispatch)).toBe(true);
   });
 
   it("should sanitize fields correctly", () => {
@@ -80,6 +113,7 @@ describe("Helper Functions For UploadFiles Screen", () => {
         description: "desc1",
         allowed_values: [],
         value: "",
+        validationStatus: null,
       },
     ]);
   });
@@ -89,6 +123,7 @@ describe("Helper Functions For UploadFiles Screen", () => {
     const field: UploadField = {
       field_name: "testField",
       value: "",
+      validationStatus: null,
       required: true,
       allowed_values: ["option1", "option2"],
       description: "A test field",
