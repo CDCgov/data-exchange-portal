@@ -1,11 +1,6 @@
 name: STG - Deploy Frontend Release Candidate
 
 on:
-  workflow_dispatch:
-    inputs:
-      tags:
-        description: Tags to deploy
-        required: true
   push:
     tags:
       - "*"
@@ -14,58 +9,11 @@ env:
   ENVIRONMENT: stg
 
 jobs:
-  create-rc:
-    name: Create Release Candidate
-    environment: stg
-    runs-on: ubuntu-latest
-    steps:
-      - name: Set tags # needed since worklow allows manual and automated triggers
-        run: |
-          if [ ${{ github.event_name}} == "workflow_dispatch" ]; then 
-            TAG="${{ inputs.tags }}"
-          else 
-            TAG="${{ github.ref_name }}"
-          fi
-          echo "RC-TAG=${TAG}" >> $GITHUB_ENV
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ env.RC-TAG }}
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-      - name: Install SWA CLI
-        run: yarn global add @azure/static-web-apps-cli
-      - name: Install dependencies
-        run: yarn install
-      - name: Generate build number
-        id: gen_build_number
-        run: |
-          NEXT_VERSION=${{ env.RC-TAG }}
-          SHORT_SHA=$(git rev-parse --short HEAD)
-          echo "build_number=${NEXT_VERSION}_${SHORT_SHA}" >> $GITHUB_OUTPUT
-      - name: Create stg environment variables
-        run: |
-          touch .env.${{ env.ENVIRONMENT }}
-          echo VITE_SAMS_AUTHORITY_URL=https://apigw-stg.cdc.gov >> .env.${{ env.ENVIRONMENT }}
-          echo VITE_SAMS_CLIENT_ID=${{ secrets.SAMS_CLIENT_ID_STG }} >> .env.${{ env.ENVIRONMENT }}
-          echo VITE_SAMS_AUTH_URL=https://apigw-stg.cdc.gov:8443/auth/oauth/v2/authorize >> .env.${{ env.ENVIRONMENT }}
-          echo VITE_SAMS_USER_INFO_URL=https://apigw-stg.cdc.gov:8443/openid/connect/v1/userinfo >> .env.${{ env.ENVIRONMENT }}
-          echo VITE_OAUTH_CALLBACK_URL=https://dexstg.cdc.gov/oauth_callback >> .env.${{ env.ENVIRONMENT }}
-          echo VITE_OAUTH_TOKEN_URL=https://dexstg.cdc.gov/api/token >> .env.${{ env.ENVIRONMENT }}
-          echo VITE_APP_BUILD_NUMBER=${{ steps.gen_build_number.outputs.build_number }} >> .env.${{ env.ENVIRONMENT }}
-          echo VITE_APP_CONFIG_CONNECTION_STRING="${{ secrets.APP_CONFIG_CONNECTION_STRING }}" >> .env.${{ env.ENVIRONMENT }}
-          echo VITE_UPLOAD_API_ENDPOINT="${{ secrets.UPLOAD_API_ENDPOINT }}" >> .env.${{ env.ENVIRONMENT }}
-      - name: Build frontend
-        run: yarn build:${{ env.ENVIRONMENT }}
-      - name: Zip Release Candidate
-        run: zip -r ${{ env.RC-TAG }}-rc.zip dist 
-      - name: Create Draft Release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: | 
-          gh release create ${{ env.RC-TAG }} ./${{ env.RC-TAG }}-rc.zip --title "Release Candidate ${{ env.RC-TAG }}" --draft
-      - name: Deploy
-        run: swa deploy ./dist -d ${{ secrets.AZURE_SWA_DEPLOY_TOKEN }} --env ${{ env.ENVIRONMENT }} -w .
-      
+  remote-trigger:
+      uses: ./.github/workflows/remote-trigger-template.yml
+      with:
+        WORKFLOW: frontend-stg.yml
+        REF: '${{ github.ref_name }}'  # Resolves to the tag that is pushed
+      secrets: inherit
+  
+        
