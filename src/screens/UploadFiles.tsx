@@ -2,6 +2,7 @@ import { ChangeEvent, useEffect, useReducer, useState } from "react";
 import { useAuth } from "react-oidc-context";
 import { useRecoilValue } from "recoil";
 
+import FileSelector from "src/components/FileSelector";
 import ManifestDefinitions from "src/components/ManifestDefs";
 import { Button } from "../../src/components/Button";
 import Select from "src/components/formFields/Select";
@@ -132,10 +133,6 @@ function UploadFiles() {
 
   const [formState, dispatch] = useReducer(reducer, initialState);
 
-  const handleFileSelection = () => {
-    document?.getElementById("file-uploader")?.click();
-  };
-
   const handleFileNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       dispatch({
@@ -192,7 +189,6 @@ function UploadFiles() {
     setUploadResultAlert("info");
     try {
       const formData = generateFormData(formState);
-      console.log(formData);
       const upload = new tus.Upload(formState.file, {
         endpoint: API_ENDPOINTS.upload,
         retryDelays: [0, 3000, 5000, 10000, 20000],
@@ -244,43 +240,19 @@ function UploadFiles() {
         <div className="grid-row flex-row">
           <div className="grid-col flex-2">
             <div className="border border-base-lighter bg-white radius-md padding-3 margin-right-2">
-              <div className="display-flex flex-row flex-justify-start flex-align-center margin-right-2">
-                <Button
-                  className="usa-button usa-button--outline margin-y-1"
-                  id="choose-file"
-                  type="button"
-                  onClick={handleFileSelection}>
-                  Choose file
-                </Button>
-                <input
-                  data-testid="file-uploader"
-                  type="file"
-                  id="file-uploader"
-                  name="file-uploader"
-                  multiple
-                  onChange={(e) => handleFileNameChange(e)}
-                />
-                <p
-                  id="file-name"
-                  data-testid="file-name"
-                  className="text-italic text-normal">
-                  {formState.file.name ? formState.file.name : "No file chosen"}
-                </p>
-              </div>
+              <FileSelector
+                filename={formState.file.name}
+                handleFileChange={handleFileNameChange}
+              />
               <hr className="margin-y-2 border-1px border-base-lighter" />
-              <h2 className="font-sans-lg text-normal padding-bottom-2">
-                Manifest
+              <h2 className="font-sans-lg text-normal padding-bottom-1">
+                Submission Details
               </h2>
-              <Alert type="info">
-                Each file submission must be accompanied by details in JSON
-                format. The specific data expected to be provided is
-                communicated to each organization during onboarding. Any
-                questions should be directed to your organization admin.
-              </Alert>
               <Select
                 className="padding-top-2 flex-1"
                 id="data-stream-id"
                 label="data_stream_id"
+                required
                 onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                   dispatch({
                     type: "updateDatastreamAndReset",
@@ -295,6 +267,7 @@ function UploadFiles() {
                   className="padding-top-2 flex-1"
                   id="data-route"
                   label="data_stream_route"
+                  required
                   onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                     dispatch({
                       type: "updateRoute",
@@ -317,7 +290,7 @@ function UploadFiles() {
                   className="padding-top-2 flex-1"
                   id="version"
                   label="version"
-                  required={true}
+                  required
                   onChange={(e) =>
                     dispatch({
                       type: "updateVersion",
@@ -329,10 +302,10 @@ function UploadFiles() {
               )}
               {!!formState.extraFields.length && (
                 <>
-                  <hr className="margin-y-2 border-1px border-base-lighter" />
-                  <h3 className="font-sans-lg text-normal padding-y-1">
-                    Additional Fields
-                  </h3>
+                  <hr className="margin-y-3 border-1px border-base-lighter" />
+                  <h2 className="font-sans-lg text-normal padding-bottom-1">
+                    Additional Details
+                  </h2>
                 </>
               )}
               {formState.extraFields.map((field: UploadField) =>
@@ -357,12 +330,7 @@ function UploadFiles() {
               </div>
             </div>
           </div>
-          <div className="grid-col border border-base-lighter bg-white padding-3 radius-md">
-            <h2 className="font-sans-lg text-normal margin-bottom-2">
-              Help: Submission Manifest Fields
-            </h2>
-            <ManifestDefinitions />
-          </div>
+          <ManifestDefinitions />
         </div>
       </section>
     </>

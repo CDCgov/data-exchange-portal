@@ -3,6 +3,7 @@ import classnames from "classnames";
 import { ValidationStatus } from "src/types/validationStatus";
 import Label from "src/components/formFields/Label";
 import ErrorMessage from "src/components/formFields/ErrorMessage";
+import styles from "src/styles/FormFields.module.css";
 
 export type SelectOption = {
   value: string | number;
@@ -59,7 +60,7 @@ export const Select = ({
 
   const isError = validationStatus === "error";
   const isSuccess = validationStatus === "success";
-  const classes = classnames("usa-select", {
+  const classes = classnames("usa-select", styles["form-field"], {
     "usa-input--error": isError,
     "usa-input--success": isSuccess,
   });
