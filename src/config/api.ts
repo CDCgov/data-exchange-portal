@@ -7,16 +7,16 @@ const PS_API_PREFIX = "ps-api";
 
 const API_ENDPOINTS = {
   // mms routes
-  currentUserDatastreamRoutes: `${API_URL}/${MMS_PREFIX}/current-user/datastreams-with-routes`,
-  dataStreams: `${API_URL}/${MMS_PREFIX}/datastreams`,
-  entities: `${API_URL}/${MMS_PREFIX}/entities`,
-  groups: `${API_URL}/${MMS_PREFIX}/groups`,
-  identities: `${API_URL}/${MMS_PREFIX}/identities`,
-  dataStreamRouteGroups: `${API_URL}/${MMS_PREFIX}/datastream-routes-groups`,
+  currentUserDatastreamRoutes: `${API_URL}/api/${MMS_PREFIX}/current-user/datastreams-with-routes`,
+  dataStreams: `${API_URL}/api/${MMS_PREFIX}/datastreams`,
+  entities: `${API_URL}/api/${MMS_PREFIX}/entities`,
+  groups: `${API_URL}/api/${MMS_PREFIX}/groups`,
+  identities: `${API_URL}/api/${MMS_PREFIX}/identities`,
+  dataStreamRouteGroups: `${API_URL}/api/${MMS_PREFIX}/datastream-routes-groups`,
   // ps api routes
-  fileSubmissions: `${API_URL}/${PS_API_PREFIX}/file-submissions`,
-  reportCounts: `${API_URL}/${PS_API_PREFIX}/report-counts`,
-  submissionDetails: `${API_URL}/${PS_API_PREFIX}/submission-details`,
+  fileSubmissions: `${API_URL}/api/${PS_API_PREFIX}/file-submissions`,
+  reportCounts: `${API_URL}/api/${PS_API_PREFIX}/report-counts`,
+  submissionDetails: `${API_URL}/api/${PS_API_PREFIX}/submission-details`,
   // auth
   tokenCallback: `${API_URL}/api/token`,
   // upload
