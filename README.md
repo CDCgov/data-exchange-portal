@@ -18,10 +18,8 @@ To set your front end environment variables, first make a file called `.env` in 
 - `VITE_SAMS_CLIENT_ID` - This is the client ID given by SAMS when registering this app. You can find this value in the [dex-portal-sams-client-id](https://portal.azure.com/#@cdc.onmicrosoft.com/asset/Microsoft_Azure_KeyVault/Secret/https://tf-ede-envar-vault.vault.azure.net/secrets/dex-portal-sams-client-id) Azure Key Vault secret.
 - `VITE_SAMS_AUTH_URL` - This is the full URL of the SAMS API endpoint for logging in a user. For our purposes, this is the endpoint that opens the SAMS login portal. A copy of the SAMS API documentation can be found in the DEX sharepoint [here](https://cdc.sharepoint.com/:b:/r/teams/CDC-Data-Exchange/Shared%20Documents/Build%20-%20DEX%20Portal/sams_docs.pdf?csf=1&web=1&e=OsHEAY).
 - `VITE_SAMS_USER_INFO_URL` - This is the full URL of the SAMS API endpoint for getting user profile information in JSON format provided a valid authentication token. For our purposes, this is the data the portal uses to populate the user's profile components.
-- `VITE_OAUTH_TOKEN_URL` - This is the full URL of the endpoint that will exchange an auth code for a valid auth token and refresh token.
 - `VITE_OAUTH_CALLBACK_URL` - The URL that the SAMS client will redirect the client after a successful login attempt. It should have `/oauth_callback` set as its path to match the front end routing configuration of this app.
 - `VITE_UPLOAD_API_ENDPOINT` - The URL used by the 'ugly portal'
-- `VITE_API_BASE_URL` - The base URL pointing to the Kotlin api. All api routes will be configured off of this base in `src/config/api.ts`
 - `VITE_DEV_MOCKING_ENABLED` - A boolean that decides if Mock Service Worker (MSW) is enabled or not for local development (see section about MSW below)
 
 To set your backend environment variables, first make a file called `.vars` within the `api` directory. Next, add the following content to the file, filling in the environment variables with the appropriate values:
@@ -85,7 +83,7 @@ This should install docker desktop along with docker/docker-compose cmdline/term
 
 The SWA CLI provides convenient commands and arguments for serving the front end and backend at the same time. In addition, it serves the app up on a single URL and port, and even takes care of the reverse proxying for you, so no need to set up CORS in the backend just for local development. This can be done with the following command:
 
-`swa start http://localhost:5173 --run "yarn dev" --api-devserver-url http://localhost:{API_PORT} --swa-config-location ./ -p {APP_PORT}`
+`npx swa start http://localhost:5173 --run "yarn dev" --api-devserver-url http://0.0.0.0:{API_PORT}`
 
 ## Manual Deployments to the Dev Environment
 

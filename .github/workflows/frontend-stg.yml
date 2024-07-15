@@ -21,9 +21,9 @@ jobs:
     steps:
       - name: Set tags # needed since worklow allows manual and automated triggers
         run: |
-          if [ ${{ github.event_name}} == "workflow_dispatch" ]; then 
+          if [ ${{ github.event_name}} == "workflow_dispatch" ]; then
             TAG="${{ inputs.tags }}"
-          else 
+          else
             TAG="${{ github.ref_name }}"
           fi
           echo "RC-TAG=${TAG}" >> $GITHUB_ENV
@@ -53,19 +53,18 @@ jobs:
           echo VITE_SAMS_AUTH_URL=https://apigw-stg.cdc.gov:8443/auth/oauth/v2/authorize >> .env.${{ env.ENVIRONMENT }}
           echo VITE_SAMS_USER_INFO_URL=https://apigw-stg.cdc.gov:8443/openid/connect/v1/userinfo >> .env.${{ env.ENVIRONMENT }}
           echo VITE_OAUTH_CALLBACK_URL=https://dexstg.cdc.gov/oauth_callback >> .env.${{ env.ENVIRONMENT }}
-          echo VITE_OAUTH_TOKEN_URL=https://dexstg.cdc.gov/api/token >> .env.${{ env.ENVIRONMENT }}
           echo VITE_APP_BUILD_NUMBER=${{ steps.gen_build_number.outputs.build_number }} >> .env.${{ env.ENVIRONMENT }}
           echo VITE_APP_CONFIG_CONNECTION_STRING="${{ secrets.APP_CONFIG_CONNECTION_STRING }}" >> .env.${{ env.ENVIRONMENT }}
           echo VITE_UPLOAD_API_ENDPOINT="${{ secrets.UPLOAD_API_ENDPOINT }}" >> .env.${{ env.ENVIRONMENT }}
       - name: Build frontend
         run: yarn build:${{ env.ENVIRONMENT }}
       - name: Zip Release Candidate
-        run: zip -r ${{ env.RC-TAG }}-rc.zip dist 
+        run: zip -r ${{ env.RC-TAG }}-rc.zip dist
       - name: Create Draft Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: | 
+        run: |
           gh release create ${{ env.RC-TAG }} ./${{ env.RC-TAG }}-rc.zip --title "Release Candidate ${{ env.RC-TAG }}" --draft
       - name: Deploy
         run: swa deploy ./dist -d ${{ secrets.AZURE_SWA_DEPLOY_TOKEN }} --env ${{ env.ENVIRONMENT }} -w .
-      
+
