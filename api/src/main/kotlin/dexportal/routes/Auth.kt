@@ -13,7 +13,7 @@ import dexportal.config.ConfigLoader
 import io.ktor.client.request.forms.*
 
 fun Route.authRoutes(client: HttpClient) {
-    post("/api/token") {
+    post("/token") {
         val formParameters = call.receiveParameters()
         val authCode = formParameters["code"]
         if (authCode == null) {

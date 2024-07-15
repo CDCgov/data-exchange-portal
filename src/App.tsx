@@ -1,4 +1,3 @@
-import React from "react";
 import "@us-gov-cdc/cdc-react/dist/style.css";
 
 import "src/App.css";
@@ -23,13 +22,6 @@ import Submissions from "src/screens/Submissions";
 import ProtectedRoute from "src/components/ProtectedRoute";
 
 function App() {
-  // ignore Auth if running locally
-  const AuthWrapper =
-    window.location.hostname === "localhost" ||
-    window.location.hostname === "127.0.0.1"
-      ? React.Fragment
-      : ProtectedRoute;
-
   return (
     <Router>
       <Routes>
@@ -37,9 +29,9 @@ function App() {
         <Route
           path="home/*"
           element={
-            <AuthWrapper>
+            <ProtectedRoute>
               <Shell />
-            </AuthWrapper>
+            </ProtectedRoute>
           }>
           <Route path="dashboard" element={<Dashboard />}></Route>
           <Route
