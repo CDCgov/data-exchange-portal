@@ -1,4 +1,4 @@
-import { ChangeEvent } from "react";
+import { ChangeEvent, useRef } from "react";
 import { Button } from "../../src/components/Button";
 
 export interface FileSelectorProps {
@@ -7,8 +7,10 @@ export interface FileSelectorProps {
 }
 
 function FileSelector({ file, handleFileChange }: FileSelectorProps) {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const handleFileSelection = () => {
-    document?.getElementById("file-uploader")?.click();
+    fileInputRef.current?.click();
   };
 
   return (
@@ -26,6 +28,7 @@ function FileSelector({ file, handleFileChange }: FileSelectorProps) {
         id="file-uploader"
         name="file-uploader"
         multiple
+        ref={fileInputRef}
         onChange={(e) => handleFileChange(e)}
       />
       <p

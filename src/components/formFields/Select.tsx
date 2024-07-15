@@ -94,7 +94,7 @@ export const Select = ({
         name={id}
         ref={inputRef}>
         <>
-          <option>- Select -</option>
+          <option value="">- Select -</option>
           {transformedOptions.map(({ value, display }: SelectOption) => (
             <option key={value} value={value}>
               {display}

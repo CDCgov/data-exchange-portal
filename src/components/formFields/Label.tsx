@@ -5,8 +5,7 @@ import styles from "src/styles/FormFields.module.css";
 export const RequiredMarker = (): React.ReactElement => {
   return (
     <abbr title="required" className={styles["required-label-symbol"]}>
-      {" "}
-      *
+      &nbsp;*
     </abbr>
   );
 };

@@ -21,7 +21,6 @@ import {
 import { getManifests, Manifest, ManifestField } from "src/utils/api/manifests";
 import {
   isFormValid,
-  isSubmitDisabled,
   generateFormData,
   knownFieldNames,
   renderField,
@@ -315,7 +314,7 @@ function UploadFiles() {
                 options={getDataStreamIds(dataStreams)}
                 defaultValue={formState.datastream}
               />
-              {formState.datastream && formState.datastream != "- Select -" && (
+              {formState.datastream && (
                 <Select
                   className="padding-top-2 flex-1"
                   id="data-route"
@@ -368,7 +367,9 @@ function UploadFiles() {
               <hr className="margin-y-2 border-1px border-base-lighter" />
               <div className="margin-y-1">
                 <Button
-                  disabled={!isSubmitDisabled(formState) || isUploading}
+                  disabled={
+                    !formState.datastream || !formState.route || isUploading
+                  }
                   type="submit"
                   id="upload-button"
                   onClick={handleUpload}>

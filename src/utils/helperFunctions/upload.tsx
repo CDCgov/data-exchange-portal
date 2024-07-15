@@ -81,19 +81,6 @@ export const isFormValid = (
   return isValid;
 };
 
-export const isSubmitDisabled = (state: FileUpload) => {
-  if (
-    !state.datastream ||
-    state.datastream == "- Select -" ||
-    !state.route ||
-    state.route == "- Select -"
-  ) {
-    return false;
-  }
-
-  return true;
-};
-
 export const renderField = (
   field: UploadField,
   type: "known" | "extra",
