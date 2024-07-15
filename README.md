@@ -20,6 +20,7 @@ To set your front end environment variables, first make a file called `.env` in 
 - `VITE_SAMS_USER_INFO_URL` - This is the full URL of the SAMS API endpoint for getting user profile information in JSON format provided a valid authentication token. For our purposes, this is the data the portal uses to populate the user's profile components.
 - `VITE_OAUTH_CALLBACK_URL` - The URL that the SAMS client will redirect the client after a successful login attempt. It should have `/oauth_callback` set as its path to match the front end routing configuration of this app.
 - `VITE_UPLOAD_API_ENDPOINT` - The URL used by the 'ugly portal'
+- `VITE_API_BASE_URL` - The base URL pointing to the Kotlin api. All api routes will be configured off of this base in `src/config/api.ts`
 - `VITE_DEV_MOCKING_ENABLED` - A boolean that decides if Mock Service Worker (MSW) is enabled or not for local development (see section about MSW below)
 
 To set your backend environment variables, first make a file called `.vars` within the `api` directory. Next, add the following content to the file, filling in the environment variables with the appropriate values:

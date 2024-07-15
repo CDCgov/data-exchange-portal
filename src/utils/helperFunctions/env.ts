@@ -6,11 +6,14 @@ type EnvType =
   | "VITE_OAUTH_CALLBACK_URL"
   | "VITE_APP_BUILD_NUMBER"
   | "VITE_UPLOAD_API_ENDPOINT"
+  | "VITE_API_BASE_URL"
   | "VITE_DEV_MOCKING_ENABLED"
   | "VITE_APP_CONFIG_CONNECTION_STRING";
 
 export function getEnv(name: EnvType): string {
-  const envVar = import.meta.env[name] || "";
+  let envVar = import.meta.env[name] || "";
+
+  if (name == "VITE_API_BASE_URL" && envVar == "") envVar = "/";
 
   try {
     return JSON.parse(envVar);
