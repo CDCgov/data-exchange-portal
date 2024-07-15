@@ -11,9 +11,7 @@ type EnvType =
   | "VITE_APP_CONFIG_CONNECTION_STRING";
 
 export function getEnv(name: EnvType): string {
-  let envVar = import.meta.env[name] || "";
-
-  if (name == "VITE_API_BASE_URL" && envVar == "") envVar = "/";
+  const envVar = import.meta.env[name] || "";
 
   try {
     return JSON.parse(envVar);
