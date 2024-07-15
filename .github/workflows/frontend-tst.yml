@@ -43,7 +43,6 @@ jobs:
           echo VITE_SAMS_USER_INFO_URL=https://apigw-stg.cdc.gov:8443/openid/connect/v1/userinfo >> .env.${{ env.ENVIRONMENT }}
           echo VITE_OAUTH_CALLBACK_URL=https://dex${{ env.ENVIRONMENT }}.cdc.gov/oauth_callback >> .env.${{ env.ENVIRONMENT }}
           echo VITE_APP_BUILD_NUMBER=${{ steps.gen_build_number.outputs.build_number }} >> .env.${{ env.ENVIRONMENT }}
-          echo VITE_APP_CONFIG_CONNECTION_STRING="${{ secrets.APP_CONFIG_CONNECTION_STRING }}" >> .env.${{ env.ENVIRONMENT }}
           echo VITE_UPLOAD_API_ENDPOINT="${{ secrets.UPLOAD_API_ENDPOINT }}" >> .env.${{ env.ENVIRONMENT }}
       - name: Build frontend
         run: yarn build:${{ env.ENVIRONMENT }}
