@@ -37,8 +37,8 @@ describe("SearchOptions component", () => {
       "Timeframe"
     ) as HTMLSelectElement;
 
-    expect(dataStreamSelect.value).toBe("- Select -");
-    expect(dataRouteSelect.value).toBe("- Select -");
+    expect(dataStreamSelect.value).toBe("");
+    expect(dataRouteSelect.value).toBe("");
     expect(timeframeSelect.value).toBe("Last 7 Days");
   });
 
