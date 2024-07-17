@@ -14,7 +14,7 @@ const generateReference = () => ({
   value: `/path/to/file?${faker.string.uuid()}`,
 });
 
-const generateReport = (submission: FileSubmission, stage: string): Report => {
+const generateReport = (submission: FileSubmission): Report => {
   return {
     stage: faker.helpers.arrayElement([
       "DEX Upload",
