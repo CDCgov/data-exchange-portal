@@ -116,6 +116,17 @@ function DetailsModal({
     downloadJson(details, `dex-${submission.upload_id}`);
   };
 
+  const getAlertType = (level: string): "error" | "warning" | "info" => {
+    switch (level) {
+      case "error":
+        return "error";
+      case "warning":
+        return "warning";
+      default:
+        return "info";
+    }
+  };
+
   return (
     <Modal
       isOpen={isModalOpen}
@@ -137,6 +148,31 @@ function DetailsModal({
             icon={displayValues.pillIcon}
           />
         </span>
+        <div>
+          {details.reports.length === 0 ? (
+            <p>No reports available</p>
+          ) : (
+            details.reports.map((report, index) => {
+              const firstIssueLevel =
+                report.issues.length > 0 ? report.issues[0].level : "default";
+              const alertType = getAlertType(firstIssueLevel);
+              return (
+                <Alert
+                  key={index}
+                  heading={`${report.issues.length} error(s) returned in stage ${report.stage} - ${report.action}`}
+                  type={alertType}>
+                  <p>
+                    {alertType === "error"
+                      ? "Please review and address these errors."
+                      : alertType === "warning"
+                      ? "Please review these warnings"
+                      : ""}
+                  </p>
+                </Alert>
+              );
+            })
+          )}
+        </div>
         {getContent()}
         <Divider className="margin-y-2" height={4} stroke="#E0E0E0" />
         <div className="grid-row margin-y-1">

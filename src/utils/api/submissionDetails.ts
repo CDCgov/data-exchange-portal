@@ -1,15 +1,36 @@
 import API_ENDPOINTS from "src/config/api";
 
 export interface ReportContent {
-  schema_version: string;
-  schema_name: string;
+  messageUUID: string;
+  messageHash: string;
+  singleOrBatch: string;
+  messageIndex: number;
+}
+
+export interface Issue {
+  level: string;
+  message: string;
+}
+
+export interface Reference {
+  type: string;
+  key: string;
+  value: string;
 }
 
 export interface Report {
-  report_id: string;
-  stage_name: string;
+  stage: string;
+  action: string;
+  schemaName: string;
+  schemaVersion: string;
+  dataStreamId: string;
+  dataStreamRoute: string;
+  jurisdiction: string;
+  status: string;
   timestamp: string;
-  content: ReportContent;
+  messageMetadata: ReportContent;
+  issues: Issue[];
+  references: Reference[];
 }
 
 export interface SubmissionDetails {

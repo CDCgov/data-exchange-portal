@@ -3,15 +3,55 @@ import { Report, SubmissionDetails } from "src/utils/api/submissionDetails";
 import { FileSubmission } from "src/utils/api/fileSubmissions";
 import mockSubmissions from "src/mocks/data/fileSubmissions";
 
+const generateIssue = () => ({
+  level: faker.helpers.arrayElement(["error", "warning", "info"]),
+  message: faker.lorem.sentence(),
+});
+
+const generateReference = () => ({
+  type: "data",
+  key: "blob_url",
+  value: `/path/to/file?${faker.string.uuid()}`,
+});
+
 const generateReport = (submission: FileSubmission, stage: string): Report => {
   return {
-    report_id: faker.string.uuid(),
-    stage_name: stage,
+    stage: faker.helpers.arrayElement([
+      "DEX Upload",
+      "DEX Routing",
+      "DEX HL7 v2",
+    ]),
+    action: faker.helpers.arrayElement([
+      "verify",
+      "debatch",
+      "process",
+      "validate",
+    ]),
+    schemaName: faker.helpers.arrayElement(["hl7", "fhir"]),
+    schemaVersion: faker.system.semver(),
+    dataStreamId: faker.helpers.arrayElement([
+      "aims-celr",
+      "aims-hl7",
+      "aims-fhir",
+    ]),
+    dataStreamRoute: faker.helpers.arrayElement(["csv", "json", "xml"]),
+    jurisdiction: faker.location.state({ abbreviated: true }),
+    status: faker.helpers.arrayElement(["completed", "failed", "processing"]),
     timestamp: submission.timestamp,
-    content: {
-      schema_name: "mock_schema",
-      schema_version: "0.0.1",
+    messageMetadata: {
+      messageUUID: faker.string.uuid(),
+      messageHash: faker.string.hexadecimal(),
+      singleOrBatch: faker.helpers.arrayElement(["single", "batch"]),
+      messageIndex: faker.number.int({ min: 1, max: 10 }),
     },
+    issues: Array.from(
+      { length: faker.number.int({ min: 0, max: 5 }) },
+      generateIssue
+    ),
+    references: Array.from(
+      { length: faker.number.int({ min: 0, max: 3 }) },
+      generateReference
+    ),
   };
 };
 
