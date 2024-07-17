@@ -3,15 +3,18 @@ import classnames from "classnames";
 import { ValidationStatus } from "src/types/validationStatus";
 import Label from "src/components/formFields/Label";
 import ErrorMessage from "src/components/formFields/ErrorMessage";
+import styles from "src/styles/FormFields.module.css";
 
 export type SelectOption = {
   value: string | number;
   display: string | JSX.Element;
 };
 
+export type SelectOptionType = SelectOption | string;
+
 export type SelectProps = {
   id: string;
-  options: SelectOption[];
+  options: SelectOptionType[];
   className?: string;
   labelClassName?: string;
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
@@ -45,6 +48,10 @@ export const Select = ({
   defaultValue = "",
   disabled = false,
 }: SelectProps): React.ReactElement => {
+  const transformedOptions: SelectOption[] = options.map((option) =>
+    typeof option === "string" ? { value: option, display: option } : option
+  );
+
   const [currentVal, setCurrentVal] = useState(defaultValue);
 
   useEffect(() => {
@@ -53,7 +60,7 @@ export const Select = ({
 
   const isError = validationStatus === "error";
   const isSuccess = validationStatus === "success";
-  const classes = classnames("usa-select", {
+  const classes = classnames("usa-select", styles["form-field"], {
     "usa-input--error": isError,
     "usa-input--success": isSuccess,
   });
@@ -87,8 +94,8 @@ export const Select = ({
         name={id}
         ref={inputRef}>
         <>
-          <option>- Select -</option>
-          {options.map(({ value, display }: SelectOption) => (
+          <option value="">- Select -</option>
+          {transformedOptions.map(({ value, display }: SelectOption) => (
             <option key={value} value={value}>
               {display}
             </option>

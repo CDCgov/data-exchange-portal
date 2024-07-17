@@ -105,10 +105,10 @@ export const mmsHandlers = [
       const manifestRoute = routes.find((r: Route) => r.name == route);
       if (!manifestRoute) return HttpResponse.json([]);
 
-      const manifests = mockManifests.filter(
+      const manifest = mockManifests.find(
         (el: Manifest) => el.dataStreamRouteID == manifestRoute.id
       );
-      return HttpResponse.json(manifests);
+      return HttpResponse.json(manifest);
     }
   ),
   http.post(

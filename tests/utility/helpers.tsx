@@ -82,6 +82,12 @@ export function createMockedAuthContext({
   };
 }
 
+export function recoilWrapper(
+  children: React.ReactElement
+): React.ReactElement {
+  return <RecoilRoot>{children}</RecoilRoot>;
+}
+
 export function withMemoryRouter(
   children: React.ReactElement,
   path: string,

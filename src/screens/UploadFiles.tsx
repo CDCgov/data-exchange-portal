@@ -1,21 +1,52 @@
 import { ChangeEvent, useEffect, useReducer, useState } from "react";
 import { useAuth } from "react-oidc-context";
+import { useRecoilValue } from "recoil";
 
+import FileSelector from "src/components/FileSelector";
 import ManifestDefinitions from "src/components/ManifestDefs";
 import { Button } from "../../src/components/Button";
+import Select from "src/components/formFields/Select";
+import ErrorMessage from "src/components/formFields/ErrorMessage";
+import TextInput from "src/components/formFields/TextInput";
 import { Alert, AlertProps } from "@us-gov-cdc/cdc-react";
 
 import * as tus from "tus-js-client";
 
 import API_ENDPOINTS from "src/config/api";
+import { dataStreamsAtom } from "src/state/dataStreams";
+import {
+  getDataStreamIds,
+  getDataRoutes,
+} from "src/utils/helperFunctions/metadataFilters";
+import { getManifests, Manifest, ManifestField } from "src/utils/api/manifests";
+import {
+  isFormValid,
+  generateFormData,
+  knownFieldNames,
+  renderField,
+  santizeFields,
+} from "src/utils/helperFunctions/upload";
+import { ValidationStatus } from "src/types/validationStatus";
 
-interface FileUpload {
-  file: File;
-  manifest: string;
+export interface UploadField extends ManifestField {
+  value: string;
+  validationStatus: ValidationStatus;
 }
 
-interface DispatchAction {
+export interface FileUpload {
+  file: File | null;
+  fileValidationStatus: ValidationStatus;
+  datastream: string;
+  route: string;
+  version: string;
+  versionValidationStatus: ValidationStatus;
+  knownFields: UploadField[];
+  extraFields: UploadField[];
+}
+
+export interface DispatchAction {
   type: string;
+  fieldName?: string;
   /* eslint-disable @typescript-eslint/no-explicit-any */
   value?: any;
 }
@@ -25,13 +56,19 @@ function UploadFiles() {
 
   const initialState: FileUpload = {
     file: new File([""], ""),
-    manifest: "",
+    fileValidationStatus: null,
+    datastream: "",
+    route: "",
+    version: "",
+    versionValidationStatus: null,
+    knownFields: [],
+    extraFields: [],
   };
 
+  const dataStreams = useRecoilValue(dataStreamsAtom);
   const [uploadResultMessage, setUploadResultMessage] = useState("");
   const [uploadResultAlert, setUploadResultAlert] =
     useState<AlertProps["type"]>("info");
-  const [formInProgress, setFormInProgress] = useState(true);
   const [isUploading, setIsUploading] = useState(false);
 
   function reducer(state: FileUpload, action: DispatchAction) {
@@ -40,11 +77,89 @@ function UploadFiles() {
         return {
           ...state,
           file: action.value,
+          fileValidationStatus: null,
         };
-      case "updateManifest":
+      case "validateFile":
         return {
           ...state,
-          manifest: action.value,
+          fileValidationStatus: action.value,
+        };
+      case "updateDatastreamAndReset":
+        return {
+          ...state,
+          datastream: action.value,
+          route: "",
+          version: "",
+          knownFields: [],
+          extraFields: [],
+        };
+      case "updateRoute":
+        return {
+          ...state,
+          route: action.value,
+          version: "",
+          knownFields: [],
+          extraFields: [],
+        };
+      case "updateVersion":
+        return {
+          ...state,
+          version: action.value,
+          versionValidationStatus: null,
+        };
+      case "validateVersion":
+        return {
+          ...state,
+          versionValidationStatus: action.value,
+        };
+      case "setFields": {
+        const knownFields = action.value.filter((field: ManifestField) =>
+          knownFieldNames.includes(field.field_name)
+        );
+        const extraFields = action.value.filter(
+          (field: ManifestField) => !knownFieldNames.includes(field.field_name)
+        );
+        return {
+          ...state,
+          knownFields,
+          extraFields,
+        };
+      }
+      case "updateKnownField":
+        return {
+          ...state,
+          knownFields: state.knownFields.map((field) =>
+            field.field_name === action.fieldName
+              ? { ...field, value: action.value, validationStatus: null }
+              : field
+          ),
+        };
+      case "validateKnownField":
+        return {
+          ...state,
+          knownFields: state.knownFields.map((field) =>
+            field.field_name === action.fieldName
+              ? { ...field, validationStatus: action.value }
+              : field
+          ),
+        };
+      case "updateExtraField":
+        return {
+          ...state,
+          extraFields: state.extraFields.map((field) =>
+            field.field_name === action.fieldName
+              ? { ...field, value: action.value, validationStatus: null }
+              : field
+          ),
+        };
+      case "validateExtraField":
+        return {
+          ...state,
+          extraFields: state.extraFields.map((field) =>
+            field.field_name === action.fieldName
+              ? { ...field, validationStatus: action.value }
+              : field
+          ),
         };
       case "reset": {
         setUploadResultMessage("");
@@ -58,16 +173,6 @@ function UploadFiles() {
 
   const [formState, dispatch] = useReducer(reducer, initialState);
 
-  useEffect(() => {
-    formState?.file.name !== "" && formState.manifest !== ""
-      ? setFormInProgress(false)
-      : setFormInProgress(true);
-  }, [formState]);
-
-  const handleFileSelection = () => {
-    document?.getElementById("file-uploader")?.click();
-  };
-
   const handleFileNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       dispatch({
@@ -77,12 +182,36 @@ function UploadFiles() {
     }
   };
 
-  const handleManifestInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    dispatch({
-      type: "updateManifest",
-      value: e.target.value,
-    });
-  };
+  useEffect(() => {
+    const handleGetManifest = async () => {
+      const res = await getManifests(
+        auth.user?.access_token ?? "",
+        formState.datastream,
+        formState.route
+      );
+
+      if (res.status != 200) {
+        // TODO messaging for manifest can't be retrieved
+        return;
+      }
+
+      const manifest: Manifest = (await res.json()) as Manifest;
+      const fields: ManifestField[] =
+        manifest?.config?.metadata_config?.fields ?? [];
+      const version = manifest?.config?.metadata_config?.version ?? "";
+
+      if (fields?.length) {
+        const sanitizedFields = santizeFields(fields);
+        dispatch({ type: "setFields", value: sanitizedFields });
+        dispatch({
+          type: "updateVersion",
+          value: version,
+        });
+      }
+    };
+
+    if (formState.datastream && formState.route) handleGetManifest();
+  }, [auth, formState.datastream, formState.route]);
 
   const handleReset = () => {
     dispatch({ type: "reset" });
@@ -95,11 +224,19 @@ function UploadFiles() {
   };
 
   const handleUpload = () => {
+    if (!isFormValid(formState, dispatch)) {
+      setUploadResultMessage(
+        "All required fields must be completed and a file must be selected."
+      );
+      setUploadResultAlert("error");
+      return;
+    }
+
     setIsUploading(true);
     setUploadResultMessage(`Starting...`);
     setUploadResultAlert("info");
     try {
-      const parsedJson = JSON.parse(formState.manifest);
+      const formData = generateFormData(formState);
       const upload = new tus.Upload(formState.file, {
         endpoint: API_ENDPOINTS.upload,
         retryDelays: [0, 3000, 5000, 10000, 20000],
@@ -108,7 +245,7 @@ function UploadFiles() {
         },
         metadata: {
           received_filename: formState.file.name,
-          ...parsedJson,
+          ...formData,
         },
         onError: function (error) {
           setUploadResultMessage(`Upload failed: ${error.message}`);
@@ -129,7 +266,9 @@ function UploadFiles() {
 
       upload.start();
     } catch (error) {
-      setUploadResultMessage(`Upload failed: error parsing JSON`);
+      setUploadResultMessage(
+        "Upload failed: please confirm all details and try again."
+      );
       setUploadResultAlert("error");
       setIsUploading(false);
     }
@@ -150,55 +289,87 @@ function UploadFiles() {
         <div className="grid-row flex-row">
           <div className="grid-col flex-2">
             <div className="border border-base-lighter bg-white radius-md padding-3 margin-right-2">
-              <div className="display-flex flex-row flex-justify-start flex-align-center margin-right-2">
-                <Button
-                  className="usa-button usa-button--outline margin-y-1"
-                  id="choose-file"
-                  type="button"
-                  onClick={handleFileSelection}>
-                  Choose file
-                </Button>
-                <input
-                  data-testid="file-uploader"
-                  type="file"
-                  id="file-uploader"
-                  name="file-uploader"
-                  multiple
-                  onChange={(e) => handleFileNameChange(e)}
-                />
-                <p
-                  id="file-name"
-                  data-testid="file-name"
-                  className="text-italic text-normal">
-                  {formState.file.name ? formState.file.name : "No file chosen"}
-                </p>
-              </div>
+              <FileSelector
+                file={formState.file}
+                handleFileChange={handleFileNameChange}
+              />
+              {formState.fileValidationStatus == "error" && (
+                <ErrorMessage> A file must be selected</ErrorMessage>
+              )}
               <hr className="margin-y-2 border-1px border-base-lighter" />
-              <h2 className="font-sans-lg text-normal padding-bottom-2">
-                Manifest
+              <h2 className="font-sans-lg text-normal padding-bottom-1">
+                Submission Details
               </h2>
-              <Alert type="info">
-                Each file submission must be accompanied by details in JSON
-                format. The specific data expected to be provided is
-                communicated to each organization during onboarding. Any
-                questions should be directed to your organization admin.
-              </Alert>
-              <label className="usa-label" htmlFor="manifest">
-                Input the Submission Manifest
-              </label>
-              <span id="manifest-hint" className="usa-hint">
-                Supported format: JSON
-              </span>
-              <textarea
-                className="usa-textarea"
-                id="manifest"
-                name="manifest"
-                onChange={handleManifestInputChange}
-                value={formState.manifest}></textarea>
+              <Select
+                className="padding-top-2 flex-1"
+                id="data-stream-id"
+                label="Data Stream"
+                required
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                  dispatch({
+                    type: "updateDatastreamAndReset",
+                    value: e.target.value,
+                  });
+                }}
+                options={getDataStreamIds(dataStreams)}
+                defaultValue={formState.datastream}
+              />
+              {formState.datastream && (
+                <Select
+                  className="padding-top-2 flex-1"
+                  id="data-route"
+                  label="Route"
+                  required
+                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                    dispatch({
+                      type: "updateRoute",
+                      value: e.target.value,
+                    });
+                  }}
+                  options={getDataRoutes(
+                    dataStreams,
+                    formState.datastream,
+                    true
+                  )}
+                  defaultValue={formState.route}
+                />
+              )}
+              {formState.knownFields.map((field: UploadField) =>
+                renderField(field, "known", dispatch)
+              )}
+              {!!formState.knownFields.length && (
+                <TextInput
+                  className="padding-top-2 flex-1"
+                  id="version"
+                  label="Version"
+                  required
+                  onChange={(e) =>
+                    dispatch({
+                      type: "updateVersion",
+                      value: e.target.value,
+                    })
+                  }
+                  defaultValue={formState.version}
+                  validationStatus={formState.versionValidationStatus}
+                />
+              )}
+              {!!formState.extraFields.length && (
+                <>
+                  <hr className="margin-y-3 border-1px border-base-lighter" />
+                  <h2 className="font-sans-lg text-normal padding-bottom-1">
+                    Additional Details
+                  </h2>
+                </>
+              )}
+              {formState.extraFields.map((field: UploadField) =>
+                renderField(field, "extra", dispatch)
+              )}
               <hr className="margin-y-2 border-1px border-base-lighter" />
               <div className="margin-y-1">
                 <Button
-                  disabled={formInProgress || isUploading}
+                  disabled={
+                    !formState.datastream || !formState.route || isUploading
+                  }
                   type="submit"
                   id="upload-button"
                   onClick={handleUpload}>
@@ -214,12 +385,7 @@ function UploadFiles() {
               </div>
             </div>
           </div>
-          <div className="grid-col border border-base-lighter bg-white padding-3 radius-md">
-            <h2 className="font-sans-lg text-normal margin-bottom-2">
-              Help: Submission Manifest Fields
-            </h2>
-            <ManifestDefinitions />
-          </div>
+          <ManifestDefinitions />
         </div>
       </section>
     </>
