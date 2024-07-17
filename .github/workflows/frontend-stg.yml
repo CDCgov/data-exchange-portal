@@ -34,7 +34,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
       - name: Install SWA CLI
         run: yarn global add @azure/static-web-apps-cli
       - name: Install dependencies
@@ -49,7 +49,7 @@ jobs:
         run: |
           touch .env.${{ env.ENVIRONMENT }}
           echo VITE_SAMS_AUTHORITY_URL=https://apigw-stg.cdc.gov >> .env.${{ env.ENVIRONMENT }}
-          echo VITE_SAMS_CLIENT_ID=${{ secrets.SAMS_CLIENT_ID_STG }} >> .env.${{ env.ENVIRONMENT }}
+          echo VITE_SAMS_CLIENT_ID=${{ secrets.SAMS_CLIENT_ID }} >> .env.${{ env.ENVIRONMENT }}
           echo VITE_SAMS_AUTH_URL=https://apigw-stg.cdc.gov:8443/auth/oauth/v2/authorize >> .env.${{ env.ENVIRONMENT }}
           echo VITE_SAMS_USER_INFO_URL=https://apigw-stg.cdc.gov:8443/openid/connect/v1/userinfo >> .env.${{ env.ENVIRONMENT }}
           echo VITE_OAUTH_CALLBACK_URL=https://dexstg.cdc.gov/oauth_callback >> .env.${{ env.ENVIRONMENT }}
@@ -57,13 +57,13 @@ jobs:
           echo VITE_UPLOAD_API_ENDPOINT="${{ secrets.UPLOAD_API_ENDPOINT }}" >> .env.${{ env.ENVIRONMENT }}
       - name: Build frontend
         run: yarn build:${{ env.ENVIRONMENT }}
-      - name: Zip Release Candidate
-        run: zip -r ${{ env.RC-TAG }}-rc.zip dist
-      - name: Create Draft Release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh release create ${{ env.RC-TAG }} ./${{ env.RC-TAG }}-rc.zip --title "Release Candidate ${{ env.RC-TAG }}" --draft
+      # - name: Zip Release Candidate
+      #   run: zip -r ${{ env.RC-TAG }}-rc.zip dist
+      # - name: Create Draft Release
+      #   env:
+      #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   run: |
+      #     gh release create ${{ env.RC-TAG }} ./${{ env.RC-TAG }}-rc.zip --title "Release Candidate ${{ env.RC-TAG }}" --draft
       - name: Deploy
         run: swa deploy ./dist -d ${{ secrets.AZURE_SWA_DEPLOY_TOKEN }} --env ${{ env.ENVIRONMENT }} -w .
 

@@ -38,7 +38,6 @@
     "tus-js-client": "^4.0.1"
   },
   "devDependencies": {
-    "@azure/static-web-apps-cli": "^1.1.4",
     "@playwright/test": "^1.38.1",
     "@testing-library/jest-dom": "^6.1.2",
     "@testing-library/react": "^15.0.2",
