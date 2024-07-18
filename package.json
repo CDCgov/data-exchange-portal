@@ -16,6 +16,7 @@
     "e2e": "npx playwright test"
   },
   "dependencies": {
+    "@axe-core/cli": "^4.9.1",
     "@axe-core/playwright": "^4.8.5",
     "@azure/app-configuration": "^1.6.0",
     "@nivo/core": "^0.85.1",
@@ -54,6 +55,7 @@
     "msw": "^2.2.1",
     "prettier": "^3.0.1",
     "sass": "^1.65.1",
+    "ts-node": "^10.9.2",
     "typescript": "^5.0.2",
     "vite": "^4.5.3",
     "vite-plugin-static-copy": "^1.0.0",

@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { getEnv } from "tests/utility/utils";
 
-import { Check508Compliance } from "../utility/utils";
+import { Check508Compliance } from "../../utility/utils";
 
 test.describe("Landing Page", () => {
   test.beforeEach(async ({ page }) => {
@@ -11,6 +11,7 @@ test.describe("Landing Page", () => {
   test("Check 508 Compliance", async ({ page }) => {
     try {
       const violations = await Check508Compliance(page);
+      console.log(violations);
 
       if (violations?.length > 0) {
         console.log("PAGE URL: " + page.url());

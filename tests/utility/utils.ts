@@ -1,3 +1,6 @@
+import dotenv from "dotenv";
+dotenv.config({ path: "tests/e2e/config/.env" });
+
 type EnvType = "DEX_URL" | "SAMS_USERNAME" | "SAMS_PASSWORD";
 
 import AxeBuilder from "@axe-core/playwright";
