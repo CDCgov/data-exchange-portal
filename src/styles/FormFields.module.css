@@ -1,0 +1,9 @@
+.required-label-symbol {
+  color: #b50909;
+  font-weight: 700;
+  text-decoration: none !important;
+}
+
+.form-field {
+  border-radius: 3px !important;
+}
