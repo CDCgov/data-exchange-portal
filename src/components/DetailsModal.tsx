@@ -165,7 +165,7 @@ function DetailsModal({
                     {alertType === "error"
                       ? "Please review and address these errors."
                       : alertType === "warning"
-                      ? "Please review these warnings"
+                      ? "Please review these warnings."
                       : ""}
                   </p>
                 </Alert>
