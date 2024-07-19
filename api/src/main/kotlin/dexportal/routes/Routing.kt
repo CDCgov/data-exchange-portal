@@ -18,13 +18,15 @@ fun Application.configureRouting() {
     }
 
     routing {
-        get("/") {
-            call.respondText("Status: OK")
+        route("/api") {
+            get {
+                call.respondText("Status: OK")
+            }
+            healthCheck(client)
+            authRoutes(client)
+            mms(client)
+            psAPI(client)
         }
-        healthCheck(client)
-        authRoutes(client)
-        mms(client)
-        psAPI(client)
     }
 
     environment.monitor.subscribe(ApplicationStopped) {

@@ -14,7 +14,7 @@ const oidcConfig: AuthProviderProps = {
   client_id: getEnv("VITE_SAMS_CLIENT_ID"),
   redirect_uri: getEnv("VITE_OAUTH_CALLBACK_URL"),
   response_type: "code",
-  scope: "openid profile email dex:status",
+  scope: "openid profile email dex:status dex:upload",
   disablePKCE: true,
   loadUserInfo: true,
   userStore: new WebStorageStateStore({ store: window.localStorage }),

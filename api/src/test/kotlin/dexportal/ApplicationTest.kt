@@ -14,7 +14,7 @@ class ApplicationTest {
             configureAuthentication()
             configureRouting()
         }
-        client.get("/").apply {
+        client.get("/api").apply {
             assertEquals(HttpStatusCode.OK, status)
             assertEquals("Status: OK", bodyAsText())
         }

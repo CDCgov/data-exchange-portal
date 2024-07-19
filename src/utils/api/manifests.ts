@@ -5,10 +5,28 @@ export interface CreateManifestBody {
   config: any;
 }
 
+export interface ManifestField {
+  field_name: string;
+  required: boolean;
+  allowed_values?: string[] | null;
+  description?: string;
+  compat_field_name?: string;
+}
+
+export interface MetadataConfig {
+  version: string;
+  fields: ManifestField[];
+}
+
+export interface Config {
+  metadata_config: MetadataConfig;
+  copy_config: any;
+}
+
 export interface Manifest {
   id: number;
   dataStreamRouteID: number;
-  config: any;
+  config: Config;
 }
 
 export const getManifests = async (

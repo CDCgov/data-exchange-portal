@@ -3,6 +3,7 @@ import classnames from "classnames";
 import { ValidationStatus } from "src/types/validationStatus";
 import Label from "src/components/formFields/Label";
 import ErrorMessage from "src/components/formFields/ErrorMessage";
+import styles from "src/styles/FormFields.module.css";
 
 export type TextInputRef =
   | string
@@ -65,7 +66,7 @@ export const TextInput = ({
   const isSmall = inputSize === "small";
   const isMedium = inputSize === "medium";
 
-  const classes = classnames("usa-input", {
+  const classes = classnames("usa-input", styles["form-field"], {
     "usa-input--error": isError,
     "usa-input--success": isSuccess,
     "usa-input--small": isSmall,
