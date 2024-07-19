@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "react-oidc-context";
+import styles from "src/styles/DetailsModal.module.css";
 
 import {
   Accordion,
@@ -82,7 +83,7 @@ function DetailsModal({
     const messages = getErrorMessages();
     if (messages.length > 0) {
       return (
-        <Alert heading="Failed" type="error">
+        <Alert className={styles["alert"]} heading="Failed" type="error">
           {messages.length} Error(s) were detected
           {messages.map((issue: string) => (
             <p
@@ -97,7 +98,7 @@ function DetailsModal({
 
     if (submission.status.toLowerCase().includes("complete")) {
       return (
-        <Alert heading="Complete" type="success">
+        <Alert className={styles["alert"]} heading="Complete" type="success">
           File submission is complete
         </Alert>
       );
@@ -105,7 +106,7 @@ function DetailsModal({
 
     if (submission.status.toLowerCase().includes("uploading")) {
       return (
-        <Alert heading="Processing" type="info">
+        <Alert className={styles["alert"]} heading="Processing" type="info">
           File submission is processing
         </Alert>
       );
@@ -158,6 +159,7 @@ function DetailsModal({
               const alertType = getAlertType(firstIssueLevel);
               return (
                 <Alert
+                  className={styles["alert"]}
                   key={index}
                   heading={`${report.issues.length} error(s) returned in stage ${report.stage} - ${report.action}`}
                   type={alertType}>
