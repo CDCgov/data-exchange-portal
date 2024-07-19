@@ -10,7 +10,8 @@ export interface ManifestField {
   required: boolean;
   allowed_values?: string[] | null;
   description?: string;
-  compat_field_name?: string;
+  default_value?: string;
+  compat_field_name?: string | null;
 }
 
 export interface MetadataConfig {
