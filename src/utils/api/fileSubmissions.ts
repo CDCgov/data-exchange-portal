@@ -2,10 +2,12 @@
 import API_ENDPOINTS from "src/config/api";
 
 export interface FileSubmissionsSummary {
-  page_number: number;
-  number_of_pages: number;
-  page_size: number;
-  total_items: number;
+  pageNumber: number;
+  numberOfPages: number;
+  pageSize: number;
+  totalItems: number;
+  jurisdictions: string[];
+  senderIds: string[];
 }
 
 export interface FileSubmission {
@@ -17,6 +19,7 @@ export interface FileSubmission {
   sender: string;
   metadata?: any;
   issues?: string[];
+  file_size_bytes?: number;
 }
 
 export interface FileSubmissions {
@@ -25,10 +28,12 @@ export interface FileSubmissions {
 }
 
 export const defaultSubmissionSummary: FileSubmissionsSummary = {
-  page_number: 1,
-  number_of_pages: 0,
-  page_size: 10,
-  total_items: 0,
+  pageNumber: 1,
+  numberOfPages: 0,
+  pageSize: 10,
+  totalItems: 0,
+  jurisdictions: [],
+  senderIds: [],
 };
 
 export const defaultSubmissionItem: FileSubmission = {
