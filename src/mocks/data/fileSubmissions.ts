@@ -6,13 +6,13 @@ import {
 } from "src/utils/api/fileSubmissions";
 
 const weightedStatuses = [
-  "UploadComplete",
-  "UploadComplete",
-  "UploadComplete",
-  "UploadComplete",
-  "FailedMetadata",
-  "FailedMetadata",
-  "Uploading",
+  "DELIVERED",
+  "DELIVERED",
+  "DELIVERED",
+  "DELIVERED",
+  "FAILED",
+  "FAILED",
+  "PROCESSING",
 ];
 
 const getIssues = (status: string, route: string): string[] => {

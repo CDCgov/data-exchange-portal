@@ -15,38 +15,38 @@ const defaultComputedValue: StatusDisplayValues = {
   pillColor: "info",
   pillIcon: <></>,
   color: "#F5F5F5",
-  label: "unknown",
+  label: "UNKNOWN",
 };
 
 const computedStatusValues: StatusDisplayValuesMap = {
-  completed: {
+  delivered: {
     pillColor: "success",
     pillIcon: <Icons.PillCircle />,
     color: "#84BC49",
-    label: "Completed",
+    label: "DELIVERED",
   },
   failed: {
     pillColor: "error",
     pillIcon: <Icons.PillSquare />,
     color: "#E57373",
-    label: "Failed",
+    label: "FAILED",
   },
   processing: {
     pillColor: "busy",
     pillIcon: <Icons.PillTriangle />,
     color: "#88C3EA",
-    label: "Processing",
+    label: "PROCESSING",
   },
 };
 
 export function getStatusDisplayValuesById(id: string): StatusDisplayValues {
   switch (id) {
-    case "uploading":
-      return computedStatusValues.processing;
+    case "delivered":
+      return computedStatusValues.delivered;
     case "failed":
       return computedStatusValues.failed;
-    case "uploaded":
-      return computedStatusValues.completed;
+    case "processing":
+      return computedStatusValues.processing;
     default:
       return defaultComputedValue;
   }
@@ -56,12 +56,12 @@ export function getStatusDisplayValuesByName(
   status: string
 ): StatusDisplayValues {
   switch (status) {
-    case "Uploading":
-      return computedStatusValues.processing;
-    case "FailedMetadata":
+    case "DELIVERED":
+      return computedStatusValues.delivered;
+    case "FAILED":
       return computedStatusValues.failed;
-    case "UploadComplete":
-      return computedStatusValues.completed;
+    case "PROCESSING":
+      return computedStatusValues.processing;
     default:
       return defaultComputedValue;
   }

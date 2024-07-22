@@ -4,27 +4,27 @@ import { FileSubmissions, FileSubmission } from "src/utils/api/fileSubmissions";
 
 export const generateCounts = (submissions: FileSubmissions): ReportCounts => {
   const total = submissions.summary.total_items;
-  const completed = submissions.items.filter((el: FileSubmission) =>
-    el.status.toLowerCase().includes("complete")
+  const completed = submissions.items.filter(
+    (el: FileSubmission) => el.status == "DELIVERED"
   );
-  const failed = submissions.items.filter((el: FileSubmission) =>
-    el.status.toLowerCase().includes("failed")
+  const failed = submissions.items.filter(
+    (el: FileSubmission) => el.status == "FAILED"
   );
-  const processing = submissions.items.filter((el: FileSubmission) =>
-    el.status.toLowerCase().includes("uploading")
+  const processing = submissions.items.filter(
+    (el: FileSubmission) => el.status == "PROCESSING"
   );
 
   return {
     total_counts: total,
     status_counts: {
-      uploaded: {
+      delivered: {
         counts: completed.length,
       },
       failed: {
         counts: failed.length,
         reasons: {},
       },
-      uploading: {
+      processing: {
         counts: processing.length,
       },
     },
