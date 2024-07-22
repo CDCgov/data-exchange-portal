@@ -16,7 +16,7 @@ const generateReference = () => ({
 
 const generateReport = (submission: FileSubmission): Report => {
   return {
-    stage: faker.helpers.arrayElement([
+    service: faker.helpers.arrayElement([
       "DEX Upload",
       "DEX Routing",
       "DEX HL7 v2",
@@ -29,13 +29,6 @@ const generateReport = (submission: FileSubmission): Report => {
     ]),
     schemaName: faker.helpers.arrayElement(["hl7", "fhir"]),
     schemaVersion: faker.system.semver(),
-    dataStreamId: faker.helpers.arrayElement([
-      "aims-celr",
-      "aims-hl7",
-      "aims-fhir",
-    ]),
-    dataStreamRoute: faker.helpers.arrayElement(["csv", "json", "xml"]),
-    jurisdiction: faker.location.state({ abbreviated: true }),
     status: faker.helpers.arrayElement(["completed", "failed", "processing"]),
     timestamp: submission.timestamp,
     messageMetadata: {
@@ -55,11 +48,11 @@ const generateReport = (submission: FileSubmission): Report => {
   };
 };
 
-const getReports = (submission: FileSubmission, stage: string): Report[] => {
+const getReports = (submission: FileSubmission): Report[] => {
   const numOfReports = faker.number.int({ min: 1, max: 3 });
   const reports: Report[] = [];
   for (let i = 0; i < numOfReports; i++) {
-    reports.push(generateReport(submission, stage));
+    reports.push(generateReport(submission));
   }
   return reports;
 };
@@ -67,14 +60,20 @@ const getReports = (submission: FileSubmission, stage: string): Report[] => {
 const generateSubmissionDetails = (
   submission: FileSubmission
 ): SubmissionDetails => {
-  const route = submission.metadata?.data_stream_route;
-  const stage = route == "hl7" ? "dex-hl7" : "dex-upload";
+  const reports = getReports(submission);
 
   const details: SubmissionDetails = {
-    upload_id: submission.upload_id,
-    data_stream_id: submission.metadata?.data_stream_id,
-    data_stream_route: submission.metadata?.data_stream_route,
-    reports: getReports(submission, stage),
+    status: submission.status,
+    lastService: reports[0].service,
+    lastAction: reports[0].action,
+    filename: submission.filename,
+    uploadId: submission.upload_id,
+    dexIngestTimestamp: submission.timestamp,
+    dataStreamId: submission.metadata?.data_stream_id,
+    dataStreamRoute: submission.metadata?.data_stream_route,
+    jurisdiction: submission.jurisdiction,
+    senderId: submission.sender,
+    reports: reports,
   };
   return details;
 };
@@ -92,7 +91,7 @@ const buildMockDetails = (): SubmissionDetails[] => {
 export const mockDetails = buildMockDetails();
 
 const getMockDetails = (upload_id: string): SubmissionDetails | undefined => {
-  return mockDetails.find((el: SubmissionDetails) => el.upload_id == upload_id);
+  return mockDetails.find((el: SubmissionDetails) => el.uploadId == upload_id);
 };
 
 export default getMockDetails;

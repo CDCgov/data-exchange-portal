@@ -19,13 +19,10 @@ export interface Reference {
 }
 
 export interface Report {
-  stage: string;
+  service: string;
   action: string;
   schemaName: string;
   schemaVersion: string;
-  dataStreamId: string;
-  dataStreamRoute: string;
-  jurisdiction: string;
   status: string;
   timestamp: string;
   messageMetadata: ReportContent;
@@ -34,9 +31,16 @@ export interface Report {
 }
 
 export interface SubmissionDetails {
-  upload_id: string;
-  data_stream_id: string;
-  data_stream_route: string;
+  status: string;
+  lastService: string;
+  lastAction: string;
+  filename: string;
+  uploadId: string;
+  dexIngestTimestamp: string;
+  dataStreamId: string;
+  dataStreamRoute: string;
+  jurisdiction: string;
+  senderId: string;
   reports: Report[];
 }
 
