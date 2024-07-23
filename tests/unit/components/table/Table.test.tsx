@@ -21,7 +21,7 @@ describe("PortalTable component", () => {
     upload_id: "1234",
     filename: "file1.txt",
     jurisdiction: "State",
-    sender: "Sender1",
+    sender_id: "Sender1",
     status: "Uploaded",
     timestamp: "2024-06-27T12:00:00Z",
   };

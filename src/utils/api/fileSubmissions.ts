@@ -16,7 +16,7 @@ export interface FileSubmission {
   upload_id: string;
   timestamp: string;
   jurisdiction: string;
-  sender: string;
+  sender_id: string;
   metadata?: any;
   issues?: string[];
   file_size_bytes?: number;
@@ -41,7 +41,7 @@ export const defaultSubmissionItem: FileSubmission = {
   filename: "",
   status: "",
   jurisdiction: "",
-  sender: "",
+  sender_id: "",
   timestamp: "",
   metadata: {},
 };

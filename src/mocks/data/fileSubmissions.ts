@@ -70,8 +70,8 @@ const generateFileSubmission = (
     status: status,
     timestamp: faker.date.recent({ days: 40 }).toISOString(),
     jurisdiction: jurisdiction,
-    sender: createSentBy(),
-    file_size_bytes: faker.number.int(),
+    sender_id: createSentBy(),
+    file_size_bytes: faker.number.int(10000000),
     metadata: {
       data_stream_id: dataStream,
       data_stream_route: route,
@@ -171,8 +171,8 @@ const sortSubmissions = (
   }
   if (sortBy == "sender") {
     itemCopies.sort((a: FileSubmission, b: FileSubmission) => {
-      const nameA = a.sender.toLowerCase();
-      const nameB = b.sender.toLowerCase();
+      const nameA = a.sender_id.toLowerCase();
+      const nameB = b.sender_id.toLowerCase();
 
       if (nameA < nameB) {
         return sortOrder == "ascending" ? -1 : 1;
@@ -249,7 +249,7 @@ export const getSubmissions = (
     new Set(submissions.map((sub: FileSubmission) => sub.jurisdiction))
   );
   const uniqueSenders = Array.from(
-    new Set(submissions.map((sub: FileSubmission) => sub.sender))
+    new Set(submissions.map((sub: FileSubmission) => sub.sender_id))
   );
 
   const dateFilteredItems = dateFilter(submissions, startDate, endDate);
@@ -263,7 +263,7 @@ export const getSubmissions = (
 
   const senderFilter = senderId
     ? jurisdictionFilter.filter(
-        (el: FileSubmission) => senderId == "All" || el.sender == senderId
+        (el: FileSubmission) => senderId == "All" || el.sender_id == senderId
       )
     : jurisdictionFilter;
 

@@ -8,12 +8,6 @@ const generateIssue = () => ({
   message: faker.lorem.sentence(),
 });
 
-const generateReference = () => ({
-  type: "data",
-  key: "blob_url",
-  value: `/path/to/file?${faker.string.uuid()}`,
-});
-
 const generateReport = (submission: FileSubmission): Report => {
   return {
     service: faker.helpers.arrayElement([
@@ -40,10 +34,6 @@ const generateReport = (submission: FileSubmission): Report => {
     issues: Array.from(
       { length: faker.number.int({ min: 0, max: 5 }) },
       generateIssue
-    ),
-    references: Array.from(
-      { length: faker.number.int({ min: 0, max: 3 }) },
-      generateReference
     ),
   };
 };
@@ -72,7 +62,7 @@ const generateSubmissionDetails = (
     dataStreamId: submission.metadata?.data_stream_id,
     dataStreamRoute: submission.metadata?.data_stream_route,
     jurisdiction: submission.jurisdiction,
-    senderId: submission.sender,
+    senderId: submission.sender_id,
     reports: reports,
   };
   return details;

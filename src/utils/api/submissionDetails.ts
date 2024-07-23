@@ -12,12 +12,6 @@ export interface Issue {
   message: string;
 }
 
-export interface Reference {
-  type: string;
-  key: string;
-  value: string;
-}
-
 export interface Report {
   service: string;
   action: string;
@@ -27,7 +21,6 @@ export interface Report {
   timestamp: string;
   messageMetadata: ReportContent;
   issues: Issue[];
-  references: Reference[];
 }
 
 export interface SubmissionDetails {
