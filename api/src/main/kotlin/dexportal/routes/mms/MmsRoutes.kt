@@ -12,11 +12,19 @@ fun Route.mms(client: HttpClient) {
     route("/mms") {
         get("/health") { }
 
-        datastreamRouteGroups()
-        datastreams()
-        entities()
-        identities()
-        manifests()
+        authGroupUserJoinsRouting()
+        dataStreamRouting()
+        entityRouting()
+        manifestRouting()
+        organizationAuthGroupsRouting()
+        organizationDataStreamsRouting()
+        organizationUsersRouting()
+        organizationsRouting()
+        programAuthGroupsRouting()
+        programDataStreamsRouting()
+        programUsersRouting()
+        programsRouting()
+        usersRouting()
 
         intercept(ApplicationCallPipeline.Call) {
             if (call.request.uri.startsWith("/mms")) {
