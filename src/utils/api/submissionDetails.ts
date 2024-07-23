@@ -1,5 +1,20 @@
 import API_ENDPOINTS from "src/config/api";
 
+export enum SubmissionStatus {
+  DELIVERED = "DELIVERED",
+  FAILED = "FAILED",
+  PROCESSING = "PROCESSING",
+  UNKNOWN = "UNKNOWN",
+}
+export enum ReportStatus {
+  SUCCESS = "SUCCESS",
+  FAILURE = "FAILURE",
+}
+export enum IssueLevel {
+  ERROR = "ERROR",
+  WARNING = "WARNING",
+}
+
 export interface ReportContent {
   messageUUID: string;
   messageHash: string;
@@ -8,7 +23,7 @@ export interface ReportContent {
 }
 
 export interface Issue {
-  level: string;
+  level: IssueLevel;
   message: string;
 }
 
@@ -17,14 +32,14 @@ export interface Report {
   action: string;
   schemaName: string;
   schemaVersion: string;
-  status: string;
+  status: ReportStatus;
   timestamp: string;
   messageMetadata: ReportContent;
   issues: Issue[];
 }
 
 export interface SubmissionDetails {
-  status: string;
+  status: SubmissionStatus;
   lastService: string;
   lastAction: string;
   filename: string;

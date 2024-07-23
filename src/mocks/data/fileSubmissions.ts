@@ -4,15 +4,16 @@ import {
   FileSubmission,
   FileSubmissionsSummary,
 } from "src/utils/api/fileSubmissions";
+import { SubmissionStatus } from "src/utils/api/submissionDetails";
 
 const weightedStatuses = [
-  "DELIVERED",
-  "DELIVERED",
-  "DELIVERED",
-  "DELIVERED",
-  "FAILED",
-  "FAILED",
-  "PROCESSING",
+  SubmissionStatus.DELIVERED,
+  SubmissionStatus.DELIVERED,
+  SubmissionStatus.DELIVERED,
+  SubmissionStatus.DELIVERED,
+  SubmissionStatus.FAILED,
+  SubmissionStatus.FAILED,
+  SubmissionStatus.PROCESSING,
 ];
 
 const jurisdictions = [

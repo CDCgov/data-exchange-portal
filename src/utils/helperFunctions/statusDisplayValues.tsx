@@ -1,4 +1,5 @@
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
+import { SubmissionStatus } from "../api/submissionDetails";
 
 export interface StatusDisplayValues {
   pillColor: string;
@@ -15,7 +16,7 @@ const defaultComputedValue: StatusDisplayValues = {
   pillColor: "info",
   pillIcon: <></>,
   color: "#F5F5F5",
-  label: "UNKNOWN",
+  label: SubmissionStatus.UNKNOWN,
 };
 
 const computedStatusValues: StatusDisplayValuesMap = {
@@ -23,19 +24,19 @@ const computedStatusValues: StatusDisplayValuesMap = {
     pillColor: "success",
     pillIcon: <Icons.PillCircle />,
     color: "#84BC49",
-    label: "DELIVERED",
+    label: SubmissionStatus.DELIVERED,
   },
   failed: {
     pillColor: "error",
     pillIcon: <Icons.PillSquare />,
     color: "#E57373",
-    label: "FAILED",
+    label: SubmissionStatus.FAILED,
   },
   processing: {
     pillColor: "busy",
     pillIcon: <Icons.PillTriangle />,
     color: "#88C3EA",
-    label: "PROCESSING",
+    label: SubmissionStatus.PROCESSING,
   },
 };
 
@@ -56,11 +57,11 @@ export function getStatusDisplayValuesByName(
   status: string
 ): StatusDisplayValues {
   switch (status) {
-    case "DELIVERED":
+    case SubmissionStatus.DELIVERED:
       return computedStatusValues.delivered;
-    case "FAILED":
+    case SubmissionStatus.FAILED:
       return computedStatusValues.failed;
-    case "PROCESSING":
+    case SubmissionStatus.PROCESSING:
       return computedStatusValues.processing;
     default:
       return defaultComputedValue;

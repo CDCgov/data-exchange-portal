@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import API_ENDPOINTS from "src/config/api";
+import { SubmissionStatus } from "src/utils/api/submissionDetails";
 
 export interface FileSubmissionsSummary {
   pageNumber: number;
@@ -11,7 +12,7 @@ export interface FileSubmissionsSummary {
 }
 
 export interface FileSubmission {
-  status: string;
+  status: SubmissionStatus;
   filename: string;
   upload_id: string;
   timestamp: string;
@@ -39,7 +40,7 @@ export const defaultSubmissionSummary: FileSubmissionsSummary = {
 export const defaultSubmissionItem: FileSubmission = {
   upload_id: "",
   filename: "",
-  status: "",
+  status: SubmissionStatus.UNKNOWN,
   jurisdiction: "",
   sender_id: "",
   timestamp: "",

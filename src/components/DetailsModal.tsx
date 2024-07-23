@@ -23,8 +23,11 @@ import { fileSizeDisplay } from "src/utils/helperFunctions/fileSizeDisplay";
 import { downloadJson } from "src/utils/helperFunctions/json";
 import getSubmissionDetails, {
   Issue,
+  IssueLevel,
   Report,
+  ReportStatus,
   SubmissionDetails,
+  SubmissionStatus,
 } from "src/utils/api/submissionDetails";
 import { FileSubmission } from "src/utils/api/fileSubmissions";
 
@@ -116,7 +119,7 @@ function DetailsModal({
   };
 
   const getFailedContent = () => {
-    if (details.status.toLowerCase() != "failed") return null;
+    if (details.status != SubmissionStatus.FAILED) return null;
 
     const issues = details.reports[0]?.issues;
 
@@ -149,7 +152,7 @@ function DetailsModal({
 
   const hasFailedReports = () => {
     const failedReports = details.reports.filter(
-      (r: Report) => r.status == "FAILURE"
+      (r: Report) => r.status == ReportStatus.FAILURE
     );
     return failedReports.length > 0;
   };
@@ -180,7 +183,7 @@ function DetailsModal({
               <div
                 key={issue.message}
                 className="grid-row flex-row flex-align-center">
-                {issue.level.toLowerCase() == "error" ? (
+                {issue.level == IssueLevel.ERROR ? (
                   <Icons.ExclamationCircle className="text-secondary" />
                 ) : (
                   <Icons.ExclamationTriangle className="text-accent-warm" />

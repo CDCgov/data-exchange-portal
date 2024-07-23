@@ -1,21 +1,30 @@
 import { faker } from "@faker-js/faker";
-import { Report, SubmissionDetails } from "src/utils/api/submissionDetails";
+import {
+  IssueLevel,
+  ReportStatus,
+  Report,
+  SubmissionStatus,
+  SubmissionDetails,
+} from "src/utils/api/submissionDetails";
 import { FileSubmission } from "src/utils/api/fileSubmissions";
 import mockSubmissions from "src/mocks/data/fileSubmissions";
 
 const generateIssue = () => ({
-  level: faker.helpers.arrayElement(["ERROR", "WARNING"]),
+  level: faker.helpers.arrayElement([IssueLevel.ERROR, IssueLevel.WARNING]),
   message: faker.lorem.sentence(),
 });
 
 const generateReport = (submission: FileSubmission): Report => {
   const reportStatus =
-    submission.status == "FAILED"
-      ? "FAILURE"
-      : faker.helpers.arrayElement(["SUCCESS", "FAILURE"]);
+    submission.status == SubmissionStatus.FAILED
+      ? ReportStatus.FAILURE
+      : faker.helpers.arrayElement([
+          ReportStatus.SUCCESS,
+          ReportStatus.FAILURE,
+        ]);
 
   const reportIssues =
-    reportStatus == "FAILURE"
+    reportStatus == ReportStatus.FAILURE
       ? Array.from(
           { length: faker.number.int({ min: 0, max: 5 }) },
           generateIssue
