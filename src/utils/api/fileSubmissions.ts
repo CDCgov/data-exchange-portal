@@ -1,22 +1,26 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import API_ENDPOINTS from "src/config/api";
+import { SubmissionStatus } from "src/utils/api/submissionDetails";
 
 export interface FileSubmissionsSummary {
-  page_number: number;
-  number_of_pages: number;
-  page_size: number;
-  total_items: number;
+  pageNumber: number;
+  numberOfPages: number;
+  pageSize: number;
+  totalItems: number;
+  jurisdictions: string[];
+  senderIds: string[];
 }
 
 export interface FileSubmission {
-  status: string;
+  status: SubmissionStatus;
   filename: string;
   upload_id: string;
   timestamp: string;
   jurisdiction: string;
-  sender: string;
+  sender_id: string;
   metadata?: any;
   issues?: string[];
+  file_size_bytes?: number;
 }
 
 export interface FileSubmissions {
@@ -25,18 +29,20 @@ export interface FileSubmissions {
 }
 
 export const defaultSubmissionSummary: FileSubmissionsSummary = {
-  page_number: 1,
-  number_of_pages: 0,
-  page_size: 10,
-  total_items: 0,
+  pageNumber: 1,
+  numberOfPages: 0,
+  pageSize: 10,
+  totalItems: 0,
+  jurisdictions: [],
+  senderIds: [],
 };
 
 export const defaultSubmissionItem: FileSubmission = {
   upload_id: "",
   filename: "",
-  status: "",
+  status: SubmissionStatus.UNKNOWN,
   jurisdiction: "",
-  sender: "",
+  sender_id: "",
   timestamp: "",
   metadata: {},
 };
