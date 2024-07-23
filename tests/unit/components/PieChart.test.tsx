@@ -13,10 +13,10 @@ vi.mock("@nivo/pie", () => {
 const mockData: ReportCounts = {
   total_counts: 100,
   status_counts: {
-    uploaded: {
+    delivered: {
       counts: 50,
     },
-    uploading: {
+    processing: {
       counts: 30,
     },
     failed: {
@@ -33,9 +33,9 @@ describe("PieChart Component", () => {
 
   it("renders the legend with correct data", () => {
     render(<PieChart data={mockData} />);
-    expect(screen.getByText("Completed")).toBeInTheDocument();
-    expect(screen.getByText("Processing")).toBeInTheDocument();
-    expect(screen.getByText("Failed")).toBeInTheDocument();
+    expect(screen.getByText("DELIVERED")).toBeInTheDocument();
+    expect(screen.getByText("PROCESSING")).toBeInTheDocument();
+    expect(screen.getByText("FAILED")).toBeInTheDocument();
   });
 
   it("calculates percentages correctly", () => {

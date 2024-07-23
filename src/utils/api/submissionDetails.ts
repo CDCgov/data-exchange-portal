@@ -1,21 +1,54 @@
 import API_ENDPOINTS from "src/config/api";
 
+export enum SubmissionStatus {
+  DELIVERED = "DELIVERED",
+  FAILED = "FAILED",
+  PROCESSING = "PROCESSING",
+  UNKNOWN = "UNKNOWN",
+}
+export enum ReportStatus {
+  SUCCESS = "SUCCESS",
+  FAILURE = "FAILURE",
+}
+export enum IssueLevel {
+  ERROR = "ERROR",
+  WARNING = "WARNING",
+}
+
 export interface ReportContent {
-  schema_version: string;
-  schema_name: string;
+  messageUUID: string;
+  messageHash: string;
+  singleOrBatch: string;
+  messageIndex: number;
+}
+
+export interface Issue {
+  level: IssueLevel;
+  message: string;
 }
 
 export interface Report {
-  report_id: string;
-  stage_name: string;
+  service: string;
+  action: string;
+  schemaName: string;
+  schemaVersion: string;
+  status: ReportStatus;
   timestamp: string;
-  content: ReportContent;
+  messageMetadata: ReportContent;
+  issues: Issue[];
 }
 
 export interface SubmissionDetails {
-  upload_id: string;
-  data_stream_id: string;
-  data_stream_route: string;
+  status: SubmissionStatus;
+  lastService: string;
+  lastAction: string;
+  filename: string;
+  uploadId: string;
+  dexIngestTimestamp: string;
+  dataStreamId: string;
+  dataStreamRoute: string;
+  jurisdiction: string;
+  senderId: string;
   reports: Report[];
 }
 

@@ -79,7 +79,7 @@ function Submissions() {
       header: () => <span className="text-left">Jurisdiction</span>,
       cell: (info) => info.getValue(),
     }),
-    columnHelper.accessor("sender", {
+    columnHelper.accessor("sender_id", {
       header: () => <span className="text-left">Sent By</span>,
       cell: (info) => info.getValue(),
     }),
@@ -185,7 +185,7 @@ function Submissions() {
     onSortingChange: handleSetSorting,
     manualSorting: true,
     onPaginationChange: setPagination,
-    pageCount: dataSummary.number_of_pages,
+    pageCount: dataSummary.numberOfPages,
     manualPagination: true,
     columns,
     getCoreRowModel: getCoreRowModel(),
@@ -214,7 +214,7 @@ function Submissions() {
       ) : (
         <>
           <div className="text-base font-sans-sm">
-            Showing {currentPageData.length} items of {dataSummary.total_items}
+            Showing {currentPageData.length} items of {dataSummary.totalItems}
           </div>
           <PortalTable table={table} />
           <>

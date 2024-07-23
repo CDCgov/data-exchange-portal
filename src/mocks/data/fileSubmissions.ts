@@ -4,32 +4,56 @@ import {
   FileSubmission,
   FileSubmissionsSummary,
 } from "src/utils/api/fileSubmissions";
+import { SubmissionStatus } from "src/utils/api/submissionDetails";
 
 const weightedStatuses = [
-  "UploadComplete",
-  "UploadComplete",
-  "UploadComplete",
-  "UploadComplete",
-  "FailedMetadata",
-  "FailedMetadata",
-  "Uploading",
+  SubmissionStatus.DELIVERED,
+  SubmissionStatus.DELIVERED,
+  SubmissionStatus.DELIVERED,
+  SubmissionStatus.DELIVERED,
+  SubmissionStatus.FAILED,
+  SubmissionStatus.FAILED,
+  SubmissionStatus.PROCESSING,
 ];
 
-const getIssues = (status: string, route: string): string[] => {
-  if (status.toLowerCase().includes("failed")) {
-    return route == "csv"
-      ? [
-          "Missing required metadata field, 'meta_field1'.",
-          "Metadata field, 'meta_field2' is set to 'value3' and does not contain one of the allowed values: [ 'value1', value2' ]",
-        ]
-      : ["Hl7 Validation Error -- See validation report"];
-  }
-
-  return [];
-};
+const jurisdictions = [
+  "USA-AL",
+  "USA-AL",
+  "USA-AL",
+  "USA-IN",
+  "USA-MD",
+  "USA-MD",
+  "USA-MD",
+  "USA-MD",
+  "USA-MD",
+  "USA-MD",
+  "USA-MD",
+  "USA-NE",
+  "USA-SC",
+  "USA-SC",
+  "USA-SC",
+  "USA-SC",
+  "USA-WV",
+  "USA-WY",
+];
 
 const createSentBy = () => {
-  const prefix = ["PH", "ST", "LB", "CO", "HO", "PR"];
+  const prefix = [
+    "PH",
+    "ST",
+    "ST",
+    "ST",
+    "LB",
+    "CO",
+    "CO",
+    "CO",
+    "CO",
+    "CO",
+    "CO",
+    "CO",
+    "HO",
+    "PR",
+  ];
   const randomPrefix = faker.helpers.arrayElement(prefix);
 
   return `${randomPrefix}-LA`;
@@ -40,18 +64,19 @@ const generateFileSubmission = (
   route: string
 ): FileSubmission => {
   const status = faker.helpers.arrayElement(weightedStatuses);
+  const jurisdiction = faker.helpers.arrayElement(jurisdictions);
   const submission: FileSubmission = {
     upload_id: faker.string.uuid(),
     filename: faker.system.commonFileName(route),
     status: status,
     timestamp: faker.date.recent({ days: 40 }).toISOString(),
-    jurisdiction: `USA-${faker.location.state({ abbreviated: true })}`,
-    sender: createSentBy(),
+    jurisdiction: jurisdiction,
+    sender_id: createSentBy(),
+    file_size_bytes: faker.number.int(10000000),
     metadata: {
       data_stream_id: dataStream,
       data_stream_route: route,
     },
-    issues: getIssues(status, route),
   };
   return submission;
 };
@@ -80,13 +105,17 @@ const shuffleArray = (array: FileSubmission[]) => {
 const generateSummary = (
   submissions: FileSubmission[],
   pageNumber: number,
-  pageSize: number
-) => {
+  pageSize: number,
+  js: string[],
+  senders: string[]
+): FileSubmissionsSummary => {
   return {
-    page_number: pageNumber,
-    number_of_pages: Math.ceil(submissions.length / pageSize),
-    page_size: pageSize,
-    total_items: submissions.length,
+    pageNumber: pageNumber,
+    numberOfPages: Math.ceil(submissions.length / pageSize),
+    pageSize: pageSize,
+    totalItems: submissions.length,
+    jurisdictions: js,
+    senderIds: senders,
   };
 };
 
@@ -143,8 +172,8 @@ const sortSubmissions = (
   }
   if (sortBy == "sender") {
     itemCopies.sort((a: FileSubmission, b: FileSubmission) => {
-      const nameA = a.sender.toLowerCase();
-      const nameB = b.sender.toLowerCase();
+      const nameA = a.sender_id.toLowerCase();
+      const nameB = b.sender_id.toLowerCase();
 
       if (nameA < nameB) {
         return sortOrder == "ascending" ? -1 : 1;
@@ -217,6 +246,13 @@ export const getSubmissions = (
   jurisdiction: string,
   senderId: string
 ): FileSubmissions => {
+  const uniqueJurisdictions = Array.from(
+    new Set(submissions.map((sub: FileSubmission) => sub.jurisdiction))
+  );
+  const uniqueSenders = Array.from(
+    new Set(submissions.map((sub: FileSubmission) => sub.sender_id))
+  );
+
   const dateFilteredItems = dateFilter(submissions, startDate, endDate);
 
   const jurisdictionFilter = jurisdiction
@@ -228,14 +264,16 @@ export const getSubmissions = (
 
   const senderFilter = senderId
     ? jurisdictionFilter.filter(
-        (el: FileSubmission) => senderId == "All" || el.sender == senderId
+        (el: FileSubmission) => senderId == "All" || el.sender_id == senderId
       )
     : jurisdictionFilter;
 
   const summary: FileSubmissionsSummary = generateSummary(
     senderFilter,
     pageNumber,
-    pageSize
+    pageSize,
+    uniqueJurisdictions,
+    uniqueSenders
   );
 
   const sortedItems: FileSubmission[] = sortSubmissions(

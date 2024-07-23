@@ -2,25 +2,30 @@ import { useEffect, useState } from "react";
 import { useAuth } from "react-oidc-context";
 
 import {
-  Accordion,
   Alert,
-  Button,
   Divider,
   Modal,
   ModalBody,
   ModalFooter,
   Pill,
 } from "@us-gov-cdc/cdc-react";
-import { format, parseISO } from "date-fns";
+import Button from "src/components/Button";
+import DetailsModalIssueSummary from "src/components/DetailsModalIssueSummary";
 
+import { format, parseISO } from "date-fns";
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
 import {
   getStatusDisplayValuesByName,
   StatusDisplayValues,
 } from "src/utils/helperFunctions/statusDisplayValues";
-import { jsonPrettyPrint, downloadJson } from "src/utils/helperFunctions/json";
+import { fileSizeDisplay } from "src/utils/helperFunctions/fileSizeDisplay";
+import { downloadJson } from "src/utils/helperFunctions/json";
 import getSubmissionDetails, {
+  Issue,
+  Report,
+  ReportStatus,
   SubmissionDetails,
+  SubmissionStatus,
 } from "src/utils/api/submissionDetails";
 import { FileSubmission } from "src/utils/api/fileSubmissions";
 
@@ -40,9 +45,16 @@ function DetailsModal({
   );
   const auth = useAuth();
   const [details, setDetails] = useState<SubmissionDetails>({
-    upload_id: submission.upload_id,
-    data_stream_id: submission.metadata?.data_stream_id,
-    data_stream_route: submission.metadata?.data_stream_route,
+    status: submission.status,
+    lastService: "",
+    lastAction: "",
+    filename: submission.filename,
+    uploadId: submission.upload_id,
+    dexIngestTimestamp: submission.timestamp,
+    dataStreamId: submission.metadata?.data_stream_id,
+    dataStreamRoute: submission.metadata?.data_stream_route,
+    jurisdiction: submission.jurisdiction,
+    senderId: submission.sender_id,
     reports: [],
   });
 
@@ -72,44 +84,109 @@ function DetailsModal({
     }
   }, [auth, submission, isModalOpen]);
 
-  const getErrorMessages = (): string[] => {
-    if (!submission.issues?.length) return [];
-
-    return submission.issues;
+  const getHeaderContent = () => {
+    return (
+      <>
+        <div className="grid-row flex-row flex-align-center padding-bottom-2">
+          <Icons.PaperLines />
+          <h2 className="font-sans-md text-bold padding-left-1">
+            {details.filename}
+          </h2>
+        </div>
+        <span className="padding-bottom-2">
+          <Pill
+            variation="info"
+            altText={displayValues.label}
+            label={displayValues.label}
+            color={displayValues.pillColor}
+            icon={displayValues.pillIcon}
+          />
+        </span>
+        <span className="font-sans-md padding-bottom-2">
+          Stage: {details.lastService} - {details.lastAction}
+        </span>
+      </>
+    );
   };
 
-  const getContent = () => {
-    const messages = getErrorMessages();
-    if (messages.length > 0) {
-      return (
-        <Alert heading="Failed" type="error">
-          {messages.length} Error(s) were detected
-          {messages.map((issue: string) => (
-            <p
-              key={issue}
-              className="border-1px radius-md border-secondary-light margin-y-2 padding-105">
-              {issue}
-            </p>
-          ))}
-        </Alert>
-      );
-    }
+  const getFailedContent = () => {
+    if (details.status != SubmissionStatus.FAILED) return null;
 
-    if (submission.status.toLowerCase().includes("complete")) {
-      return (
-        <Alert heading="Complete" type="success">
-          File submission is complete
-        </Alert>
-      );
-    }
+    const issues = details.reports[0]?.issues;
 
-    if (submission.status.toLowerCase().includes("uploading")) {
+    if (!issues.length)
       return (
-        <Alert heading="Processing" type="info">
-          File submission is processing
+        <Alert
+          className="margin-y-1"
+          heading={`Error in stage ${details.lastService} - ${details.lastAction}`}
+          type="error">
+          No specifics were given, please see full attached report below.
         </Alert>
       );
-    }
+
+    return (
+      <Alert
+        className="margin-y-1"
+        heading={`${issues.length} error(s) returned in stage ${details.lastService} - ${details.lastAction}`}
+        type="error">
+        Please review and address these errors.
+        {issues.map((issue: Issue) => (
+          <p
+            key={issue.message}
+            className="border-1px radius-md border-secondary-light margin-y-2 padding-105">
+            {issue.message}
+          </p>
+        ))}
+      </Alert>
+    );
+  };
+
+  const hasFailedReports = () => {
+    const failedReports = details.reports.filter(
+      (r: Report) => r.status == ReportStatus.FAILURE
+    );
+    return failedReports.length > 0;
+  };
+
+  const getTopLevelDetails = () => {
+    return (
+      <>
+        <div className="grid-row margin-y-1">
+          <div className="grid-col-3">Started</div>
+          <div className="grid-col-9">
+            {formatDate(details.dexIngestTimestamp)}
+          </div>
+        </div>
+        <div className="grid-row margin-y-1">
+          <div className="grid-col-3">Sent By</div>
+          <div className="grid-col-9">{details.senderId}</div>
+        </div>
+        <div className="grid-row margin-y-1">
+          <div className="grid-col-3">Data Stream</div>
+          <div className="grid-col-9">{details.dataStreamId}</div>
+        </div>
+        <div className="grid-row margin-y-1">
+          <div className="grid-col-3">Route</div>
+          <div className="grid-col-9">{details.dataStreamRoute}</div>
+        </div>
+        <div className="grid-row margin-y-1">
+          <div className="grid-col-3">Jurisdiction</div>
+          <div className="grid-col-9">{details.jurisdiction}</div>
+        </div>
+        {submission.file_size_bytes && (
+          <div className="grid-row margin-y-1">
+            <div className="grid-col-3">File Size</div>
+            <div className="grid-col-9">
+              {fileSizeDisplay(submission.file_size_bytes)}
+            </div>
+          </div>
+        )}
+        <div className="grid-row margin-y-1">
+          <div className="grid-col-3">Upload ID</div>
+          <div className="grid-col-9">{details.uploadId}</div>
+        </div>
+      </>
+    );
   };
 
   const handleDownloadJson = () => {
@@ -122,56 +199,17 @@ function DetailsModal({
       modalTitle="Submission Details"
       onClose={handleModalClose}>
       <ModalBody>
-        <div className="grid-row flex-row flex-align-center padding-bottom-3">
-          <Icons.PaperLines />
-          <h2 className="font-sans-md text-bold padding-left-1">
-            {submission.filename}
-          </h2>
-        </div>
-        <span className="padding-bottom-3">
-          <Pill
-            variation="info"
-            altText={displayValues.label}
-            label={displayValues.label}
-            color={displayValues.pillColor}
-            icon={displayValues.pillIcon}
-          />
-        </span>
-        {getContent()}
+        {getHeaderContent()}
+        {getFailedContent()}
         <Divider className="margin-y-2" height={4} stroke="#E0E0E0" />
-        <div className="grid-row margin-y-1">
-          <div className="grid-col-4">
-            <strong>Upload date</strong>
-          </div>
-          <div className="grid-col-8">{formatDate(submission?.timestamp)}</div>
-        </div>
-        <div className="grid-row margin-y-1">
-          <div className="grid-col-4">
-            <strong>Upload ID</strong>
-          </div>
-          <div className="grid-col-8">{submission.upload_id}</div>
-        </div>
-        <div className="grid-row margin-top-3">
-          <Accordion
-            items={[
-              {
-                id: "1",
-                title: "Submitted details",
-                content: jsonPrettyPrint(details),
-              },
-            ]}
-          />
-        </div>
+        {getTopLevelDetails()}
+        {hasFailedReports() && <DetailsModalIssueSummary details={details} />}
       </ModalBody>
       <ModalFooter>
-        <Button
-          ariaLabel="download submission details"
-          onClick={handleDownloadJson}>
-          Download Report JSON
+        <Button outline type="button" onClick={handleDownloadJson}>
+          Download Full Report
         </Button>
-        <Button
-          ariaLabel="close submissions details"
-          onClick={handleModalClose}>
+        <Button type="button" onClick={handleModalClose}>
           Close
         </Button>
       </ModalFooter>

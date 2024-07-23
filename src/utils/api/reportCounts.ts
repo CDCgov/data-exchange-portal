@@ -9,9 +9,9 @@ interface CountsDetails {
 
 interface StatusCounts {
   [key: string]: CountsDetails;
-  uploading: CountsDetails;
+  delivered: CountsDetails;
   failed: CountsDetails;
-  uploaded: CountsDetails;
+  processing: CountsDetails;
 }
 
 export interface ReportCounts {
@@ -22,9 +22,9 @@ export interface ReportCounts {
 export const defaultReportCounts: ReportCounts = {
   total_counts: 0,
   status_counts: {
-    uploading: { counts: 0 },
+    delivered: { counts: 0 },
     failed: { counts: 0, reasons: {} },
-    uploaded: { counts: 0 },
+    processing: { counts: 0 },
   },
 };
 
