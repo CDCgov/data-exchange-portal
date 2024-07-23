@@ -9,6 +9,7 @@
     "build:dev": "tsc && vite build --mode dev",
     "build:tst": "tsc && vite build --mode tst",
     "build:stg": "tsc && vite build --mode stg",
+    "build:prd": "tsc && vite build --mode prd",
     "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,css,scss,json,md}\"",
     "format:write": "prettier \"src/**/*.{js,jsx,ts,tsx,css,scss,json,md}\" --write",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
@@ -38,7 +39,6 @@
     "tus-js-client": "^4.0.1"
   },
   "devDependencies": {
-    "@azure/static-web-apps-cli": "^1.1.4",
     "@playwright/test": "^1.38.1",
     "@testing-library/jest-dom": "^6.1.2",
     "@testing-library/react": "^15.0.2",
