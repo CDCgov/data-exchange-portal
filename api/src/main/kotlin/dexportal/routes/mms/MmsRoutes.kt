@@ -27,8 +27,8 @@ fun Route.mms(client: HttpClient) {
         usersRouting()
 
         intercept(ApplicationCallPipeline.Call) {
-            if (call.request.uri.startsWith("/mms")) {
-                requestProxy(client, mmsUrl, "/mms")
+            if (call.request.uri.startsWith("/api/mms")) {
+                requestProxy(client, mmsUrl, "/api/mms")
                 finish()
             }
         }

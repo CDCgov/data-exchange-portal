@@ -61,7 +61,7 @@ function Shell() {
     if (streams.length > 0) setUserDatastreams();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [streams]);
 
   const menuItems: MenuItemType[] = [
     {

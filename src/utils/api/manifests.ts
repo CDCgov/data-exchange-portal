@@ -35,7 +35,7 @@ export const getManifests = async (
   datastream: string,
   route: string
 ): Promise<Response> => {
-  const url = `${API_ENDPOINTS.dataStreams}/${datastream}/routes/${route}/manifests`;
+  const url = `${API_ENDPOINTS.dataStreams}/${datastream}/routes/${route}/manifest`;
 
   const response = await fetch(url, {
     method: "GET",
@@ -54,7 +54,7 @@ export const createManifest = async (
   route: string,
   config: any
 ): Promise<Response> => {
-  const url = `${API_ENDPOINTS.dataStreams}/${datastream}/routes/${route}/manifests`;
+  const url = `${API_ENDPOINTS.dataStreams}/${datastream}/routes/${route}/manifest`;
 
   const body = JSON.stringify({
     config,
