@@ -88,59 +88,61 @@ function DetailsModal({
     }
   }, [auth, submission, isModalOpen]);
 
-  const getErrorMessages = (): string[] => {
-    if (!submission.issues?.length) return [];
-
-    return submission.issues;
+  const getHeaderContent = () => {
+    return (
+      <>
+        <div className="grid-row flex-row flex-align-center padding-bottom-2">
+          <Icons.PaperLines />
+          <h2 className="font-sans-md text-bold padding-left-1">
+            {details.filename}
+          </h2>
+        </div>
+        <span className="padding-bottom-2">
+          <Pill
+            variation="info"
+            altText={displayValues.label}
+            label={displayValues.label}
+            color={displayValues.pillColor}
+            icon={displayValues.pillIcon}
+          />
+        </span>
+        <span className="font-sans-md padding-bottom-2">
+          Stage: {details.lastService} - {details.lastAction}
+        </span>
+      </>
+    );
   };
 
-  const getContent = () => {
-    const messages = getErrorMessages();
-    if (messages.length > 0) {
+  const getFailedContent = () => {
+    if (details.status.toLowerCase() != "failed") return null;
+
+    const issues = details.reports[0]?.issues;
+
+    if (!issues.length)
       return (
-        <Alert className="margin-top-1" heading="Failed" type="error">
-          {messages.length} Error(s) were detected
-          {messages.map((issue: string) => (
-            <p
-              key={issue}
-              className="border-1px radius-md border-secondary-light margin-y-2 padding-105">
-              {issue}
-            </p>
-          ))}
+        <Alert
+          className="margin-y-1"
+          heading={`Error in stage ${details.lastService} - ${details.lastAction}`}
+          type="error">
+          No specifics were given, please see full attached report below.
         </Alert>
       );
-    }
 
-    if (submission.status.toLowerCase().includes("complete")) {
-      return (
-        <Alert className="margin-top-1" heading="Complete" type="success">
-          File submission is complete
-        </Alert>
-      );
-    }
-
-    if (submission.status.toLowerCase().includes("uploading")) {
-      return (
-        <Alert className="margin-top-1" heading="Processing" type="info">
-          File submission is processing
-        </Alert>
-      );
-    }
-  };
-
-  const handleDownloadJson = () => {
-    downloadJson(details, `dex-${submission.upload_id}`);
-  };
-
-  const getAlertType = (level: string): "error" | "warning" | "info" => {
-    switch (level) {
-      case "error":
-        return "error";
-      case "warning":
-        return "warning";
-      default:
-        return "info";
-    }
+    return (
+      <Alert
+        className="margin-y-1"
+        heading={`${issues.length} error(s) returned in stage ${details.lastService} - ${details.lastAction}`}
+        type="error">
+        Please review and address these errors.
+        {issues.map((issue: Issue) => (
+          <p
+            key={issue.message}
+            className="border-1px radius-md border-secondary-light margin-y-2 padding-105">
+            {issue.message}
+          </p>
+        ))}
+      </Alert>
+    );
   };
 
   const getIssues = () => {
@@ -162,7 +164,14 @@ function DetailsModal({
     return (
       <div className="border border-base-lighter radius-md bg-base-lightest">
         {issueSummary.map((i: IssueSummary) => (
-          <div className="border-bottom border-base-lighter flex-row flex-align-center margin-x-1 padding-y-1">
+          <div
+            key={i.message}
+            className="border-bottom border-base-lighter grid-row flex-row flex-align-center margin-x-1 padding-y-1">
+            {i.level.toLowerCase() == "error" ? (
+              <Icons.ExclamationCircle className="text-secondary" />
+            ) : (
+              <Icons.ExclamationTriangle className="text-accent-warm" />
+            )}
             <span className="font-sans-sm padding-left-1">
               {i.service} - <strong>{i.action}</strong>
             </span>
@@ -213,57 +222,18 @@ function DetailsModal({
     );
   };
 
+  const handleDownloadJson = () => {
+    downloadJson(details, `dex-${submission.upload_id}`);
+  };
+
   return (
     <Modal
       isOpen={isModalOpen}
       modalTitle="Submission Details"
       onClose={handleModalClose}>
       <ModalBody>
-        <div className="grid-row flex-row flex-align-center padding-bottom-2">
-          <Icons.PaperLines />
-          <h2 className="font-sans-md text-bold padding-left-1">
-            {details.filename}
-          </h2>
-        </div>
-        <span className="padding-bottom-2">
-          <Pill
-            variation="info"
-            altText={displayValues.label}
-            label={displayValues.label}
-            color={displayValues.pillColor}
-            icon={displayValues.pillIcon}
-          />
-        </span>
-        <span className="font-sans-md padding-bottom-2">
-          Stage: {details.lastService} - {details.lastAction}
-        </span>
-        <div>
-          {details.reports.length === 0 ? (
-            <p>No reports available</p>
-          ) : (
-            details.reports.map((report, index) => {
-              const firstIssueLevel =
-                report.issues.length > 0 ? report.issues[0].level : "default";
-              const alertType = getAlertType(firstIssueLevel);
-              return (
-                <Alert
-                  className="margin-top-1"
-                  key={index}
-                  heading={`${report.issues.length} error(s) returned in stage ${report.service} - ${report.action}`}
-                  type={alertType}>
-                  <p>
-                    {alertType === "error"
-                      ? "Please review and address these errors."
-                      : alertType === "warning"
-                      ? "Please review these warnings."
-                      : ""}
-                  </p>
-                </Alert>
-              );
-            })
-          )}
-        </div>
-        {getContent()}
+        {getHeaderContent()}
+        {getFailedContent()}
         <div className="grid-row margin-y-1">
           <Accordion
             items={[

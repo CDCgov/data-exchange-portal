@@ -4,7 +4,7 @@ import { FileSubmission } from "src/utils/api/fileSubmissions";
 import mockSubmissions from "src/mocks/data/fileSubmissions";
 
 const generateIssue = () => ({
-  level: faker.helpers.arrayElement(["error", "warning", "info"]),
+  level: faker.helpers.arrayElement(["ERROR", "WARNING"]),
   message: faker.lorem.sentence(),
 });
 
