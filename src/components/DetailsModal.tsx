@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import { useAuth } from "react-oidc-context";
 
 import {
-  Accordion,
-  AccordionItemProps,
   Alert,
   Divider,
   Modal,
@@ -12,6 +10,7 @@ import {
   Pill,
 } from "@us-gov-cdc/cdc-react";
 import Button from "src/components/Button";
+import DetailsModalIssueSummary from "src/components/DetailsModalIssueSummary";
 
 import { format, parseISO } from "date-fns";
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
@@ -23,7 +22,6 @@ import { fileSizeDisplay } from "src/utils/helperFunctions/fileSizeDisplay";
 import { downloadJson } from "src/utils/helperFunctions/json";
 import getSubmissionDetails, {
   Issue,
-  IssueLevel,
   Report,
   ReportStatus,
   SubmissionDetails,
@@ -35,13 +33,6 @@ interface PropTypes {
   submission: FileSubmission;
   isModalOpen: boolean;
   handleModalClose: () => void;
-}
-
-interface IssueSummary {
-  service: string;
-  action: string;
-  level: string;
-  message: string;
 }
 
 function DetailsModal({
@@ -157,50 +148,6 @@ function DetailsModal({
     return failedReports.length > 0;
   };
 
-  const getIssues = () => {
-    const issueSummary: IssueSummary[] = details.reports.flatMap(
-      (report: Report) => {
-        const internalIssues: IssueSummary[] = report.issues.map(
-          (issue: Issue) => ({
-            service: report.service,
-            action: report.action,
-            level: issue.level,
-            message: issue.message,
-          })
-        );
-
-        return internalIssues;
-      }
-    );
-
-    return (
-      <Accordion
-        multiselectable
-        items={issueSummary.map((issue: IssueSummary, i: number) => {
-          const item: AccordionItemProps = {
-            id: i.toString(),
-            title: (
-              <div
-                key={issue.message}
-                className="grid-row flex-row flex-align-center">
-                {issue.level == IssueLevel.ERROR ? (
-                  <Icons.ExclamationCircle className="text-secondary" />
-                ) : (
-                  <Icons.ExclamationTriangle className="text-accent-warm" />
-                )}
-                <span className="font-sans-sm padding-left-1">
-                  {issue.service} - <strong>{issue.action}</strong>
-                </span>
-              </div>
-            ),
-            content: issue.message,
-          };
-          return item;
-        })}
-      />
-    );
-  };
-
   const getTopLevelDetails = () => {
     return (
       <>
@@ -256,15 +203,7 @@ function DetailsModal({
         {getFailedContent()}
         <Divider className="margin-y-2" height={4} stroke="#E0E0E0" />
         {getTopLevelDetails()}
-        {hasFailedReports() && (
-          <>
-            <Divider className="margin-top-2" height={4} stroke="#E0E0E0" />
-            <span className="font-sans-md padding-y-2">
-              Submission Issue Summary
-            </span>
-            {getIssues()}
-          </>
-        )}
+        {hasFailedReports() && <DetailsModalIssueSummary details={details} />}
       </ModalBody>
       <ModalFooter>
         <Button outline type="button" onClick={handleDownloadJson}>
