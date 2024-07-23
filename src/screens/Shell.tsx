@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { useAuth } from "react-oidc-context";
 import {
   MenuItemType,
   PopupMenuItemType,
@@ -10,12 +9,10 @@ import dexLogo from "src/assets/dex_logo.svg";
 import { useSetRecoilState } from "recoil";
 import { dataRouteAtom, dataStreamIdAtom } from "src/state/searchParams";
 import { dataStreamsAtom } from "src/state/dataStreams";
-import {
-  getDataStreamsAndRoutes,
-  DataStreamWithRoutes,
-} from "src/utils/api/dataStreams";
+import { DataStreamWithRoutes } from "src/utils/api/dataStreams";
 import { Route } from "src/utils/api/routes";
 import { getDataRoutes } from "src/utils/helperFunctions/metadataFilters";
+import { mockDataStreamsWithRoutes } from "src/mocks/data/dataStreams";
 
 import {
   ProfileHeader,
@@ -29,7 +26,6 @@ import { Icons } from "@us-gov-cdc/cdc-react-icons";
 
 function Shell() {
   const navigate = useNavigate();
-  const auth = useAuth();
   const [searchParams] = useSearchParams();
 
   const logo = <ProfileHeaderLogo image={dexLogo} classNames={["dex-logo"]} />;
@@ -39,16 +35,10 @@ function Shell() {
   const setDataRoute = useSetRecoilState(dataRouteAtom);
 
   useEffect(() => {
-    const fetchCall = async () => {
+    const setUserDatastreams = async () => {
       try {
-        const res = await getDataStreamsAndRoutes(
-          auth.user?.access_token || ""
-        );
-
-        if (res.status != 200) return;
-
-        const data = await res.json();
-        const streams = data as DataStreamWithRoutes[];
+        // TODO: use B2C token down the line
+        const streams = mockDataStreamsWithRoutes;
         setDataStreams(streams);
 
         const streamId = searchParams.get("data_stream_id");
@@ -70,9 +60,11 @@ function Shell() {
         console.error("Failed to parse JSON:", error);
       }
     };
-    fetchCall();
+
+    setUserDatastreams();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [auth]);
+  }, []);
 
   const menuItems: MenuItemType[] = [
     {

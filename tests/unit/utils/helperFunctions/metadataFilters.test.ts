@@ -7,14 +7,14 @@ import { DataStreamWithRoutes } from "src/utils/api/dataStreams";
 
 const mockData: DataStreamWithRoutes[] = [
   {
-    datastream: { id: 1, programID: 1, name: "Stream1" },
+    datastream: { id: 1, name: "Stream1" },
     routes: [
       { id: 1, dataStreamID: 1, name: "Route1" },
       { id: 2, dataStreamID: 1, name: "Route2" },
     ],
   },
   {
-    datastream: { id: 2, programID: 1, name: "Stream2" },
+    datastream: { id: 2, name: "Stream2" },
     routes: [{ id: 3, dataStreamID: 2, name: "Route3" }],
   },
 ];

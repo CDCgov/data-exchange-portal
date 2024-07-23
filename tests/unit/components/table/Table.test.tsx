@@ -11,6 +11,7 @@ import {
 import { FileSubmission } from "src/utils/api/fileSubmissions";
 import PortalTable from "src/components/table/Table";
 import { describe, it, expect, vi } from "vitest";
+import { SubmissionStatus } from "src/utils/api/submissionDetails";
 
 vi.mock("recoil", () => ({
   useRecoilValue: vi.fn(),
@@ -22,7 +23,7 @@ describe("PortalTable component", () => {
     filename: "file1.txt",
     jurisdiction: "State",
     sender_id: "Sender1",
-    status: "Uploaded",
+    status: SubmissionStatus.DELIVERED,
     timestamp: "2024-06-27T12:00:00Z",
   };
 
@@ -75,7 +76,7 @@ describe("PortalTable component", () => {
     expect(screen.getByText("Submitted")).toBeInTheDocument();
 
     expect(screen.getByText("file1.txt")).toBeInTheDocument();
-    expect(screen.getByText("Uploaded")).toBeInTheDocument();
+    expect(screen.getByText(SubmissionStatus.DELIVERED)).toBeInTheDocument();
     expect(
       screen.getByText(new Date("2024-06-27T12:00:00Z").toLocaleString())
     ).toBeInTheDocument();

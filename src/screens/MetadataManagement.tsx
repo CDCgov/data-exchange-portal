@@ -38,7 +38,6 @@ function MetadataManagement() {
   const [entityId, setEntityId] = useState("");
 
   const [programName, setProgramName] = useState("");
-  const [programId, setProgramId] = useState("");
 
   const [datastreamName, setDatastreamName] = useState("");
   const [datastreamId, setDatastreamId] = useState("");
@@ -104,16 +103,10 @@ function MetadataManagement() {
     setApiResponse(json);
   };
   const handleCreateDatastream = async () => {
-    const res = await createDataStream(
-      authToken,
-      datastreamName,
-      parseInt(programId)
-    );
+    const res = await createDataStream(authToken, datastreamName);
 
     if (res.status != 200) {
-      setApiResponse(
-        "Bad request: programId id and datastream name are required"
-      );
+      setApiResponse("Bad request: datastream name is required");
       return;
     }
 
@@ -287,17 +280,6 @@ function MetadataManagement() {
       case "Datastreams":
         return (
           <div className="margin-bottom-8">
-            <label className="usa-label" htmlFor="program_id">
-              Program ID
-            </label>
-            <input
-              className="usa-input"
-              value={programId}
-              id="program_id"
-              type="number"
-              name="program_id"
-              onChange={(e) => setProgramId(e.target.value)}
-            />
             <label className="usa-label" htmlFor="datastream_name">
               Datastream Name
             </label>
