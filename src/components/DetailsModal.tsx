@@ -145,6 +145,13 @@ function DetailsModal({
     );
   };
 
+  const hasFailedReports = () => {
+    const failedReports = details.reports.filter(
+      (r: Report) => r.status == "FAILURE"
+    );
+    return failedReports.length > 0;
+  };
+
   const getIssues = () => {
     const issueSummary: IssueSummary[] = details.reports.flatMap(
       (report: Report) => {
@@ -234,7 +241,7 @@ function DetailsModal({
       <ModalBody>
         {getHeaderContent()}
         {getFailedContent()}
-        {details?.reports?.length > 0 && (
+        {hasFailedReports() && (
           <div className="grid-row margin-y-1">
             <Accordion
               items={[

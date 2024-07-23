@@ -9,6 +9,19 @@ const generateIssue = () => ({
 });
 
 const generateReport = (submission: FileSubmission): Report => {
+  const reportStatus =
+    submission.status == "FAILED"
+      ? "FAILURE"
+      : faker.helpers.arrayElement(["SUCCESS", "FAILURE"]);
+
+  const reportIssues =
+    reportStatus == "FAILURE"
+      ? Array.from(
+          { length: faker.number.int({ min: 0, max: 5 }) },
+          generateIssue
+        )
+      : [];
+
   return {
     service: faker.helpers.arrayElement([
       "DEX Upload",
@@ -23,7 +36,7 @@ const generateReport = (submission: FileSubmission): Report => {
     ]),
     schemaName: faker.helpers.arrayElement(["hl7", "fhir"]),
     schemaVersion: faker.system.semver(),
-    status: faker.helpers.arrayElement(["completed", "failed", "processing"]),
+    status: reportStatus,
     timestamp: submission.timestamp,
     messageMetadata: {
       messageUUID: faker.string.uuid(),
@@ -31,10 +44,7 @@ const generateReport = (submission: FileSubmission): Report => {
       singleOrBatch: faker.helpers.arrayElement(["single", "batch"]),
       messageIndex: faker.number.int({ min: 1, max: 10 }),
     },
-    issues: Array.from(
-      { length: faker.number.int({ min: 0, max: 5 }) },
-      generateIssue
-    ),
+    issues: reportIssues,
   };
 };
 
