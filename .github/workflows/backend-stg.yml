@@ -9,7 +9,7 @@ jobs:
   remote-trigger:
       uses: ./.github/workflows/remote-trigger-template.yml
       with:
-        WORKFLOW: app-service-stg.yml
+        WORKFLOW: backend-stg.yml
         REF: '${{ github.ref_name }}'  # Resolves to the tag that is pushed
       secrets: inherit
   
