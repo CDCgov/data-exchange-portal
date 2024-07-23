@@ -82,7 +82,7 @@ export const mmsHandlers = [
 
   // --> Manifests
   http.get(
-    `${API_ENDPOINTS.dataStreams}/:dataStream/routes/:route/manifests`,
+    `${API_ENDPOINTS.dataStreams}/:dataStream/routes/:route/manifest`,
     ({ params }) => {
       const { dataStream, route } = params;
 
@@ -106,7 +106,7 @@ export const mmsHandlers = [
     }
   ),
   http.post(
-    `${API_ENDPOINTS.dataStreams}/:dataStream/routes/:route/manifests`,
+    `${API_ENDPOINTS.dataStreams}/:dataStream/routes/:route/manifest`,
     async ({ request, params }) => {
       const { dataStream, route } = params;
       const { config } = (await request.json()) as CreateManifestBody;

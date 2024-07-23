@@ -11,7 +11,7 @@ function IdentityLookUp() {
 
   const [identitiesList, setIdentitiesList] = useState([]);
 
-  const [apiResponse, _] = useState("API response will display here");
+  const [apiResponse] = useState("API response will display here");
 
   useEffect(() => {
     setAuthToken(auth.user?.access_token ?? "");
@@ -28,8 +28,10 @@ function IdentityLookUp() {
   }, [fetchIdentities]);
 
   const handleSetIdentities = async (
-    _: React.ChangeEvent<HTMLSelectElement>
-  ) => {};
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    console.log(e);
+  };
 
   const identitiesOptions: SelectOption[] = identitiesList.map(
     (i: Identity) => ({
