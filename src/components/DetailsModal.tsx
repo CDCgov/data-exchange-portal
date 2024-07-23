@@ -234,17 +234,19 @@ function DetailsModal({
       <ModalBody>
         {getHeaderContent()}
         {getFailedContent()}
-        <div className="grid-row margin-y-1">
-          <Accordion
-            items={[
-              {
-                id: "1",
-                title: "Submission Issue Summary",
-                content: getIssues(),
-              },
-            ]}
-          />
-        </div>
+        {details?.reports?.length > 0 && (
+          <div className="grid-row margin-y-1">
+            <Accordion
+              items={[
+                {
+                  id: "1",
+                  title: "Submission Issue Summary",
+                  content: getIssues(),
+                },
+              ]}
+            />
+          </div>
+        )}
         {getTopLevelDetails()}
       </ModalBody>
       <ModalFooter>

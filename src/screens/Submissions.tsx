@@ -79,7 +79,7 @@ function Submissions() {
       header: () => <span className="text-left">Jurisdiction</span>,
       cell: (info) => info.getValue(),
     }),
-    columnHelper.accessor("sender", {
+    columnHelper.accessor("sender_id", {
       header: () => <span className="text-left">Sent By</span>,
       cell: (info) => info.getValue(),
     }),
