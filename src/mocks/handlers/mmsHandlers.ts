@@ -14,10 +14,7 @@ import {
 } from "src/utils/api/authGroups";
 
 import mockAuthgroups from "src/mocks/data/authGroups";
-import {
-  mockDataStreams,
-  mockDataStreamsWithRoutes,
-} from "src/mocks/data/dataStreams";
+import { mockDataStreams } from "src/mocks/data/dataStreams";
 import mockEntities from "src/mocks/data/entities";
 import mockIdentities from "src/mocks/data/identities";
 import mockManifests from "src/mocks/data/manifests";
@@ -26,9 +23,6 @@ import { mockRoutes1, mockRoutes2 } from "src/mocks/data/routes";
 
 export const mmsHandlers = [
   // --> Datastreams
-  http.get(API_ENDPOINTS.currentUserDatastreamRoutes, () => {
-    return HttpResponse.json(mockDataStreamsWithRoutes);
-  }),
   http.get(API_ENDPOINTS.dataStreams, () => {
     return HttpResponse.json(mockDataStreams);
   }),
@@ -50,13 +44,13 @@ export const mmsHandlers = [
     return HttpResponse.json(dataStream);
   }),
   http.post(API_ENDPOINTS.dataStreams, async ({ request }) => {
-    const { name, programID } = (await request.json()) as CreateDataStreamBody;
+    const { name } = (await request.json()) as CreateDataStreamBody;
 
-    if (!name || !programID) {
+    if (!name) {
       return new HttpResponse(null, { status: 400 });
     }
 
-    return HttpResponse.json({ id: 1, programID, name });
+    return HttpResponse.json({ id: 1, name });
   }),
 
   // --> Entities
@@ -303,16 +297,6 @@ export const mmsHandlers = [
     }
     return new HttpResponse(null, { status: 200 });
   }),
-  http.get(
-    `${API_ENDPOINTS.identities}/:identity_id/datastreams-with-routes`,
-    ({ params }) => {
-      const { identity_id } = params;
-      if (!identity_id || identity_id == "NaN") {
-        return new HttpResponse(null, { status: 400 });
-      }
-      return HttpResponse.json(mockDataStreamsWithRoutes);
-    }
-  ),
 
   // --> UserToAuthGroup
   http.post(

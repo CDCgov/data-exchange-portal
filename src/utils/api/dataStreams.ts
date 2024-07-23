@@ -1,38 +1,21 @@
 import API_ENDPOINTS from "src/config/api";
-import { Route } from "src/utils/api/routes";
+import { RouteWithPermissions } from "src/utils/api/routes";
 
 export interface CreateDataStreamBody {
   name: string;
-  programID: number | string;
+  description?: string;
 }
 
 export interface DataStream {
   id: number;
-  programID: number;
-  serviceLineID?: number;
   name: string;
+  description?: string;
 }
 
 export interface DataStreamWithRoutes {
   datastream: DataStream;
-  routes: Route[];
+  routes: RouteWithPermissions[];
 }
-
-export const getDataStreamsAndRoutes = async (
-  access_token: string
-): Promise<Response> => {
-  const url = `${API_ENDPOINTS.currentUserDatastreamRoutes}`;
-
-  const response = await fetch(url, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + access_token,
-    },
-  }).catch();
-
-  return response;
-};
 
 export const getDataStreams = async (
   access_token: string
@@ -69,14 +52,12 @@ export const getDataStream = async (
 
 export const createDataStream = async (
   access_token: string,
-  data_stream_name: string,
-  program_id: number
+  data_stream_name: string
 ): Promise<Response> => {
   const url = `${API_ENDPOINTS.dataStreams}`;
 
   const body = JSON.stringify({
     name: data_stream_name,
-    programID: program_id,
   });
 
   const response = await fetch(url, {
