@@ -3,7 +3,9 @@ import { useAuth } from "react-oidc-context";
 
 import {
   Accordion,
+  AccordionItemProps,
   Alert,
+  Divider,
   Modal,
   ModalBody,
   ModalFooter,
@@ -169,22 +171,30 @@ function DetailsModal({
     );
 
     return (
-      <div className="border border-base-lighter radius-md bg-base-lightest">
-        {issueSummary.map((i: IssueSummary) => (
-          <div
-            key={i.message}
-            className="border-bottom border-base-lighter grid-row flex-row flex-align-center margin-x-1 padding-y-1">
-            {i.level.toLowerCase() == "error" ? (
-              <Icons.ExclamationCircle className="text-secondary" />
-            ) : (
-              <Icons.ExclamationTriangle className="text-accent-warm" />
-            )}
-            <span className="font-sans-sm padding-left-1">
-              {i.service} - <strong>{i.action}</strong>
-            </span>
-          </div>
-        ))}
-      </div>
+      <Accordion
+        multiselectable
+        items={issueSummary.map((issue: IssueSummary, i: number) => {
+          const item: AccordionItemProps = {
+            id: i.toString(),
+            title: (
+              <div
+                key={issue.message}
+                className="grid-row flex-row flex-align-center">
+                {issue.level.toLowerCase() == "error" ? (
+                  <Icons.ExclamationCircle className="text-secondary" />
+                ) : (
+                  <Icons.ExclamationTriangle className="text-accent-warm" />
+                )}
+                <span className="font-sans-sm padding-left-1">
+                  {issue.service} - <strong>{issue.action}</strong>
+                </span>
+              </div>
+            ),
+            content: issue.message,
+          };
+          return item;
+        })}
+      />
     );
   };
 
@@ -241,20 +251,17 @@ function DetailsModal({
       <ModalBody>
         {getHeaderContent()}
         {getFailedContent()}
-        {hasFailedReports() && (
-          <div className="grid-row margin-y-1">
-            <Accordion
-              items={[
-                {
-                  id: "1",
-                  title: "Submission Issue Summary",
-                  content: getIssues(),
-                },
-              ]}
-            />
-          </div>
-        )}
+        <Divider className="margin-y-2" height={4} stroke="#E0E0E0" />
         {getTopLevelDetails()}
+        {hasFailedReports() && (
+          <>
+            <Divider className="margin-top-2" height={4} stroke="#E0E0E0" />
+            <span className="font-sans-md padding-y-2">
+              Submission Issue Summary
+            </span>
+            {getIssues()}
+          </>
+        )}
       </ModalBody>
       <ModalFooter>
         <Button outline type="button" onClick={handleDownloadJson}>
