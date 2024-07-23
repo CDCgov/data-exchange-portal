@@ -191,7 +191,8 @@ function UploadFiles() {
       );
 
       if (res.status != 200) {
-        // TODO messaging for manifest can't be retrieved
+        setUploadResultMessage("There was an issue retrieving the manifest.");
+        setUploadResultAlert("error");
         return;
       }
 
