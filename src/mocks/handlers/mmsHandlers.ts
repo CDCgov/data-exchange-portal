@@ -1,7 +1,11 @@
 import { http, HttpResponse } from "msw";
 import API_ENDPOINTS from "src/config/api";
 
-import { CreateDataStreamBody, DataStream } from "src/utils/api/dataStreams";
+import {
+  CreateDataStreamBody,
+  DataStream,
+  DataStreamWithRoutes,
+} from "src/utils/api/dataStreams";
 import { CreateEntityBody, Entity } from "src/utils/api/entities";
 import { CreateIdentityBody } from "src/utils/api/identities";
 import { CreateManifestBody, Manifest } from "src/utils/api/manifests";
@@ -14,7 +18,10 @@ import {
 } from "src/utils/api/authGroups";
 
 import mockAuthgroups from "src/mocks/data/authGroups";
-import { mockDataStreams } from "src/mocks/data/dataStreams";
+import {
+  mockDataStreams,
+  mockDataStreamsWithRoutes,
+} from "src/mocks/data/dataStreams";
 import mockEntities from "src/mocks/data/entities";
 import mockIdentities from "src/mocks/data/identities";
 import mockManifests from "src/mocks/data/manifests";
@@ -90,12 +97,13 @@ export const mmsHandlers = [
         return new HttpResponse(null, { status: 400 });
       }
 
-      const manifestDataStream = mockDataStreams.find(
-        (d: DataStream) => d.name == dataStream
+      const manifestDataStream = mockDataStreamsWithRoutes.find(
+        (d: DataStreamWithRoutes) => d.datastream.name == dataStream
       );
       if (!manifestDataStream) return HttpResponse.json([]);
 
-      const routes = manifestDataStream.id == 1 ? mockRoutes1 : mockRoutes2;
+      const routes = manifestDataStream.routes;
+
       const manifestRoute = routes.find((r: Route) => r.name == route);
       if (!manifestRoute) return HttpResponse.json([]);
 

@@ -9,6 +9,10 @@ export const mockDataStreams: DataStream[] = [
     id: 2,
     name: "daart",
   },
+  {
+    id: 3,
+    name: "eicr",
+  },
 ];
 
 export const mockDataStreamsWithRoutes: DataStreamWithRoutes[] = [
@@ -54,7 +58,7 @@ export const mockDataStreamsWithRoutes: DataStreamWithRoutes[] = [
     routes: [
       {
         id: 4,
-        dataStreamID: 2,
+        dataStreamID: 3,
         name: "csv",
         writePermissions: true,
       },
