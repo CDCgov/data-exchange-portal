@@ -50,7 +50,10 @@ function Shell() {
         if (!userHasDataStream || !dataStreamHasRoute) {
           const dataStreamId = streams[0].datastream.name;
           setDataStreamId(dataStreamId);
-          const route = getDataRoutes(streams, dataStreamId)[0];
+          const route = getDataRoutes({
+            data: streams,
+            dataStreamName: dataStreamId,
+          })[0];
           setDataRoute(route);
         }
       } catch (error) {

@@ -91,7 +91,10 @@ function SearchOptions({
   const handleDataStreamId = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const dataStreamId = e.target.value;
     setDataStreamId(dataStreamId);
-    const route = getDataRoutes(dataStreams, dataStreamId)[0];
+    const route = getDataRoutes({
+      data: dataStreams,
+      dataStreamName: dataStreamId,
+    })[0];
     setDataRoute(route);
   };
 
@@ -216,7 +219,7 @@ function SearchOptions({
         id="data-stream-filter"
         label="Data Stream"
         onChange={handleDataStreamId}
-        options={getDataStreamIds(dataStreams)}
+        options={getDataStreamIds({ data: dataStreams })}
         defaultValue={data_stream_id}
       />
       <Select
@@ -224,7 +227,10 @@ function SearchOptions({
         id="data-route-filter"
         label="Data Route"
         onChange={handleDataRoute}
-        options={getDataRoutes(dataStreams, data_stream_id)}
+        options={getDataRoutes({
+          data: dataStreams,
+          dataStreamName: data_stream_id,
+        })}
         defaultValue={data_route}
       />
       <Select
