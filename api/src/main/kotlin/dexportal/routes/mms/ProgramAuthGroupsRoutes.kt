@@ -5,10 +5,10 @@ import io.ktor.server.routing.*
 fun Route.programAuthGroupsRouting() {
 
     route("/programs") {
-        get("{programId}/auth-groups") { }
-        get("{programId}/auth-groups/{authGroupId}") { }
-        post("{programId}/auth-groups") { }
-        put("{programId}/auth-groups/{authGroupId}") { }
-        delete("{programId}/auth-groups/{authGroupId}") { }
+        get("{prog_id}/auth-groups") { }
+        get("{prog_id}/auth-groups/{authgroup_id}") { }
+        post("{prog_id}/auth-groups") { }
+        put("{prog_id}/auth-groups/{authgroup_id}") { }
+        delete("{prog_id}/auth-groups/{authgroup_id}") { }
     }
 }

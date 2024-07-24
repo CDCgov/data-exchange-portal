@@ -5,9 +5,9 @@ import io.ktor.server.routing.*
 fun Route.organizationUsersRouting() {
 
     route("/organizations") {
-        get("{organizationId}/users") { }
-        get("{organizationId}/users/{userId}") { }
-        post("{organizationId}/users/{userId}") { }
-        delete("{organizationId}/users/{userId}") { }
+        get("{org_id}/users") { }
+        get("{org_id}/users/{user_id}") { }
+        post("{org_id}/users/{user_id}") { }
+        delete("{org_id}/users/{user_id}") { }
     }
 }

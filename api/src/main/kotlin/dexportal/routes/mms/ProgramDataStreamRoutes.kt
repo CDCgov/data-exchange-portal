@@ -5,9 +5,9 @@ import io.ktor.server.routing.*
 fun Route.programDataStreamsRouting() {
 
     route("/programs") {
-        get("{programId}/datastreams") { }
-        get("{programId}/datastreams/{dataStreamId}") { }
-        post("{programId}/datastreams/{dataStreamId}") { }
-        delete("{programId}/datastreams/{dataStreamId}") { }
+        get("{prog_id}/datastreams") { }
+        get("{prog_id}/datastreams/{datastream_id}") { }
+        post("{prog_id}/datastreams/{datastream_id}") { }
+        delete("{prog_id}/datastreams/{datastream_id}") { }
     }
 }
