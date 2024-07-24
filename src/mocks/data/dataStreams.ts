@@ -42,7 +42,7 @@ export const mockDataStreamsWithRoutes: DataStreamWithRoutes[] = [
         id: 3,
         dataStreamID: 2,
         name: "hl7",
-        writePermissions: true,
+        writePermissions: false,
       },
     ],
   },
