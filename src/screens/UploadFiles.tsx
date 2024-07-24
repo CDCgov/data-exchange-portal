@@ -15,8 +15,8 @@ import * as tus from "tus-js-client";
 import API_ENDPOINTS from "src/config/api";
 import { dataStreamsAtom } from "src/state/dataStreams";
 import {
-  getDataStreamIds,
-  getDataRoutes,
+  getDataStreamIdsWriteOnly,
+  getDataRoutesWriteOnly,
 } from "src/utils/helperFunctions/metadataFilters";
 import { getManifests, Manifest, ManifestField } from "src/utils/api/manifests";
 import {
@@ -315,7 +315,7 @@ function UploadFiles() {
                     value: e.target.value,
                   });
                 }}
-                options={getDataStreamIds(dataStreams)}
+                options={getDataStreamIdsWriteOnly(dataStreams)}
                 defaultValue={formState.datastream}
               />
               {formState.datastream && (
@@ -330,7 +330,7 @@ function UploadFiles() {
                       value: e.target.value,
                     });
                   }}
-                  options={getDataRoutes(
+                  options={getDataRoutesWriteOnly(
                     dataStreams,
                     formState.datastream,
                     true

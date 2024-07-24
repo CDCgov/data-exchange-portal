@@ -22,7 +22,7 @@ export const mockDataStreamsWithRoutes: DataStreamWithRoutes[] = [
         id: 1,
         dataStreamID: 1,
         name: "csv",
-        writePermissions: true,
+        writePermissions: false,
       },
       {
         id: 2,

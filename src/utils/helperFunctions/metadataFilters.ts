@@ -1,11 +1,8 @@
 import { DataStreamWithRoutes } from "src/utils/api/dataStreams";
-import { Route } from "src/utils/api/routes";
+import { RouteWithPermissions } from "src/utils/api/routes";
 
 export const getDataStreamIds = (data: DataStreamWithRoutes[]) => {
-  const dataStreamIds: string[] = data.map(
-    (el: DataStreamWithRoutes) => el.datastream.name
-  );
-  return dataStreamIds;
+  return data.map((el: DataStreamWithRoutes) => el.datastream.name);
 };
 
 export const getDataRoutes = (
@@ -13,13 +10,37 @@ export const getDataRoutes = (
   dataStreamName: string,
   forUpload: boolean = false
 ): string[] => {
-  const dataStream: DataStreamWithRoutes | undefined = data.find(
+  const dataStream = data.find(
     (el: DataStreamWithRoutes) => el.datastream.name == dataStreamName
   );
 
   if (!dataStream) return [];
 
-  const routeNames = dataStream.routes.map((r: Route) => r.name);
+  const routeNames = dataStream.routes.map((r: RouteWithPermissions) => r.name);
+
+  if (routeNames.length > 1 && !forUpload) return ["All", ...routeNames];
+
+  return routeNames;
+};
+
+export const getDataStreamIdsWriteOnly = (data: DataStreamWithRoutes[]) => {
+  return data
+    .filter((ds) => ds.routes.some((route) => route.writePermissions))
+    .map((ds) => ds.datastream.name);
+};
+
+export const getDataRoutesWriteOnly = (
+  data: DataStreamWithRoutes[],
+  dataStreamName: string,
+  forUpload: boolean = false
+): string[] => {
+  const dataStream = data.find((el) => el.datastream.name == dataStreamName);
+
+  if (!dataStream) return [];
+
+  const routeNames = dataStream.routes
+    .filter((route) => route.writePermissions)
+    .map((route) => route.name);
 
   if (routeNames.length > 1 && !forUpload) return ["All", ...routeNames];
 
