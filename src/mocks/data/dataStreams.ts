@@ -60,4 +60,18 @@ export const mockDataStreamsWithRoutes: DataStreamWithRoutes[] = [
       },
     ],
   },
+  {
+    datastream: {
+      id: 4,
+      name: "eicr",
+    },
+    routes: [
+      {
+        id: 5,
+        dataStreamID: 4,
+        name: "fhir",
+        writePermissions: true,
+      },
+    ],
+  },
 ];
