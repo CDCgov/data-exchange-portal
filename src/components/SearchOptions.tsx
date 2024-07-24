@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
@@ -15,8 +15,8 @@ import { dataStreamsAtom } from "src/state/dataStreams";
 import Select, { SelectOption } from "src/components/formFields/Select";
 import TextInput from "src/components/formFields/TextInput";
 import {
-  getDataStreamIds,
-  getDataRoutes,
+  getDatastreamNames,
+  getDatastreamRouteNames,
 } from "src/utils/helperFunctions/metadataFilters";
 import { Timeframe, timeframeOptions } from "src/types/timeframes";
 import { isValidIsoString } from "src/utils/helperFunctions/date";
@@ -45,6 +45,21 @@ function SearchOptions({
   const [endDateIsValid, setEndDateIsValid] = useState(true);
   const [startBeforeEnd, setStartBeforeEnd] = useState(true);
 
+  const [routeOptions, setRouteOptions] = useState<string[]>([]);
+
+  const loadDataStream = useCallback(
+    (streamName: string | null) => {
+      const userHasDataStream = dataStreams.find(
+        (stream) => stream.datastream.name == streamName
+      );
+
+      if (!userHasDataStream) return dataStreams[0]?.datastream?.name;
+
+      return userHasDataStream.datastream.name;
+    },
+    [dataStreams]
+  );
+
   useEffect(() => {
     const streamId = searchParams.get("data_stream_id");
     const route = searchParams.get("data_route");
@@ -54,7 +69,8 @@ function SearchOptions({
     const startDateTime = searchParams.get("start_date");
     const endDateTime = searchParams.get("end_date");
 
-    if (streamId) setDataStreamId(streamId);
+    setDataStreamId(loadDataStream(streamId));
+    // TODO: Ensure User has access to route, jurisdiction, and sender
     if (route) setDataRoute(route);
     if (tf) setTimeframe(tf);
     if (jd) setJurisdiction(jd);
@@ -62,7 +78,7 @@ function SearchOptions({
     if (startDateTime) setStartDate(startDateTime);
     if (endDateTime) setEndDate(endDateTime);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [dataStreams, loadDataStream]);
 
   useEffect(() => {
     if (handleFilter) handleFilter();
@@ -88,24 +104,12 @@ function SearchOptions({
     setSearchParams,
   ]);
 
-  const handleDataStreamId = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const dataStreamId = e.target.value;
-    setDataStreamId(dataStreamId);
-    const route = getDataRoutes({
-      data: dataStreams,
-      dataStreamName: dataStreamId,
-    })[0];
-    setDataRoute(route);
-  };
-
-  const handleDataRoute = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setDataRoute(e.target.value);
-  };
-
-  const handleTimeframe = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const timeframe = e.target.value as Timeframe;
-    setTimeframe(timeframe);
-  };
+  useEffect(() => {
+    const routes = getDatastreamRouteNames(dataStreams, data_stream_id);
+    const routesWithAll = routes.length > 1 ? ["All", ...routes] : routes;
+    setRouteOptions(routesWithAll);
+    setDataRoute(routesWithAll[0]);
+  }, [dataStreams, data_stream_id, setDataRoute, setRouteOptions]);
 
   const handleStartDate = (e: React.ChangeEvent<HTMLInputElement>) => {
     const date = e.target.value;
@@ -129,14 +133,6 @@ function SearchOptions({
     const startIsBeforeEnd = date >= startDate;
     setStartBeforeEnd(startIsBeforeEnd);
     if (startIsBeforeEnd) setEndDate(date);
-  };
-
-  const handleJurisdiction = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setJurisdiction(e.target.value);
-  };
-
-  const handleSender = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSenderId(e.target.value);
   };
 
   const jurisdictions: SelectOption[] = [
@@ -218,26 +214,23 @@ function SearchOptions({
         className="padding-right-2 flex-1 search-option"
         id="data-stream-filter"
         label="Data Stream"
-        onChange={handleDataStreamId}
-        options={getDataStreamIds({ data: dataStreams })}
+        onChange={(e) => setDataStreamId(e.target.value)}
+        options={getDatastreamNames(dataStreams)}
         defaultValue={data_stream_id}
       />
       <Select
         className="padding-right-2 flex-1 search-option"
         id="data-route-filter"
         label="Data Route"
-        onChange={handleDataRoute}
-        options={getDataRoutes({
-          data: dataStreams,
-          dataStreamName: data_stream_id,
-        })}
+        onChange={(e) => setDataRoute(e.target.value)}
+        options={routeOptions}
         defaultValue={data_route}
       />
       <Select
         className="padding-right-2 flex-1 search-option"
         id="timeframe-filter"
         label="Timeframe"
-        onChange={handleTimeframe}
+        onChange={(e) => setTimeframe(e.target.value as Timeframe)}
         options={timeframeOptions}
         defaultValue={timeframe}
       />
@@ -275,7 +268,7 @@ function SearchOptions({
             className="padding-right-2 flex-1 search-option"
             id="jurisdiction-filter"
             label="Jurisdiction"
-            onChange={handleJurisdiction}
+            onChange={(e) => setJurisdiction(e.target.value)}
             options={jurisdictions}
             defaultValue={jurisdiction}
           />
@@ -283,7 +276,7 @@ function SearchOptions({
             className="padding-right-2 flex-1 search-option"
             id="sender-id-filter"
             label="Sender"
-            onChange={handleSender}
+            onChange={(e) => setSenderId(e.target.value)}
             options={senders}
             defaultValue={sender_id}
           />

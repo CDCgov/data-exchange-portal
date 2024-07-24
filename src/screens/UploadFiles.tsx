@@ -15,8 +15,9 @@ import * as tus from "tus-js-client";
 import API_ENDPOINTS from "src/config/api";
 import { dataStreamsAtom } from "src/state/dataStreams";
 import {
-  getDataStreamIds,
-  getDataRoutes,
+  getDatastreamNames,
+  getDatastreamRouteNames,
+  getWriteOnlyDatastreamsWithRoutes,
 } from "src/utils/helperFunctions/metadataFilters";
 import { getManifests, Manifest, ManifestField } from "src/utils/api/manifests";
 import {
@@ -66,6 +67,7 @@ function UploadFiles() {
   };
 
   const dataStreams = useRecoilValue(dataStreamsAtom);
+  const writeOnlyDatastreams = getWriteOnlyDatastreamsWithRoutes(dataStreams);
   const [uploadResultMessage, setUploadResultMessage] = useState("");
   const [uploadResultAlert, setUploadResultAlert] =
     useState<AlertProps["type"]>("info");
@@ -315,10 +317,7 @@ function UploadFiles() {
                     value: e.target.value,
                   });
                 }}
-                options={getDataStreamIds({
-                  data: dataStreams,
-                  writeOnly: true,
-                })}
+                options={getDatastreamNames(writeOnlyDatastreams)}
                 defaultValue={formState.datastream}
               />
               {formState.datastream && (
@@ -333,12 +332,10 @@ function UploadFiles() {
                       value: e.target.value,
                     });
                   }}
-                  options={getDataRoutes({
-                    data: dataStreams,
-                    dataStreamName: formState.datastream,
-                    forUpload: true,
-                    writeOnly: true,
-                  })}
+                  options={getDatastreamRouteNames(
+                    writeOnlyDatastreams,
+                    formState.datastream
+                  )}
                   defaultValue={formState.route}
                 />
               )}

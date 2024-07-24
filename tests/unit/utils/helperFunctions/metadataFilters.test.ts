@@ -1,7 +1,8 @@
 import { describe, it, expect } from "vitest";
 import {
-  getDataStreamIds,
-  getDataRoutes,
+  getWriteOnlyDatastreamsWithRoutes,
+  getDatastreamNames,
+  getDatastreamRouteNames,
 } from "src/utils/helperFunctions/metadataFilters";
 import { DataStreamWithRoutes } from "src/utils/api/dataStreams";
 
@@ -23,45 +24,39 @@ const mockData: DataStreamWithRoutes[] = [
 
 describe("Helper Functions", () => {
   it("should return datastream names", () => {
-    const result = getDataStreamIds({ data: mockData });
+    const result = getDatastreamNames(mockData);
     expect(result).toEqual(["Stream1", "Stream2"]);
   });
 
   it("should return routes for a given datastream name", () => {
-    const result = getDataRoutes({ data: mockData, dataStreamName: "Stream1" });
-    expect(result).toEqual(["All", "Route1", "Route2"]);
+    const result = getDatastreamRouteNames(mockData, "Stream1");
+    expect(result).toEqual(["Route1", "Route2"]);
 
-    const result2 = getDataRoutes({
-      data: mockData,
-      dataStreamName: "Stream2",
-    });
+    const result2 = getDatastreamRouteNames(mockData, "Stream2");
     expect(result2).toEqual(["Route3"]);
 
-    const result3 = getDataRoutes({
-      data: mockData,
-      dataStreamName: "Non Existent Stream",
-    });
+    const result3 = getDatastreamRouteNames(mockData, "Non Existent Stream");
     expect(result3).toEqual([]);
   });
 
   it("should return only datastream names with routes that are write only permissions", () => {
-    const result = getDataStreamIds({ data: mockData, writeOnly: true });
+    const result = getDatastreamNames(
+      getWriteOnlyDatastreamsWithRoutes(mockData)
+    );
     expect(result).toEqual(["Stream1"]);
   });
 
   it("should return routes for a given datastream name that have write permissions", () => {
-    const result = getDataRoutes({
-      data: mockData,
-      dataStreamName: "Stream1",
-      writeOnly: true,
-    });
+    const result = getDatastreamRouteNames(
+      getWriteOnlyDatastreamsWithRoutes(mockData),
+      "Stream1"
+    );
     expect(result).toEqual(["Route1"]);
 
-    const result2 = getDataRoutes({
-      data: mockData,
-      dataStreamName: "Stream2",
-      writeOnly: true,
-    });
+    const result2 = getDatastreamRouteNames(
+      getWriteOnlyDatastreamsWithRoutes(mockData),
+      "Stream2"
+    );
     expect(result2).toEqual([]);
   });
 });

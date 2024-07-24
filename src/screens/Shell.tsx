@@ -1,17 +1,9 @@
-import { useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
 import {
   MenuItemType,
   PopupMenuItemType,
 } from "@us-gov-cdc/cdc-react/dist/src/@types";
 
 import dexLogo from "src/assets/dex_logo.svg";
-import { useSetRecoilState, useRecoilValue } from "recoil";
-import { dataRouteAtom, dataStreamIdAtom } from "src/state/searchParams";
-import { dataStreamsAtom } from "src/state/dataStreams";
-import { DataStreamWithRoutes } from "src/utils/api/dataStreams";
-import { Route } from "src/utils/api/routes";
-import { getDataRoutes } from "src/utils/helperFunctions/metadataFilters";
 import useDecodeAuthToken from "src/utils/hooks/useDecodeAuthToken";
 
 import {
@@ -27,44 +19,8 @@ import { Icons } from "@us-gov-cdc/cdc-react-icons";
 function Shell() {
   useDecodeAuthToken();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
 
   const logo = <ProfileHeaderLogo image={dexLogo} classNames={["dex-logo"]} />;
-
-  const streams = useRecoilValue(dataStreamsAtom);
-  const setDataStreamId = useSetRecoilState(dataStreamIdAtom);
-  const setDataRoute = useSetRecoilState(dataRouteAtom);
-
-  useEffect(() => {
-    const setUserDatastreams = async () => {
-      try {
-        const streamId = searchParams.get("data_stream_id");
-        const route = searchParams.get("data_route");
-        const userHasDataStream = streams.find(
-          (stream: DataStreamWithRoutes) => stream.datastream.name == streamId
-        );
-        const dataStreamHasRoute = userHasDataStream?.routes.find(
-          (r: Route) => r.name == route
-        );
-
-        if (!userHasDataStream || !dataStreamHasRoute) {
-          const dataStreamId = streams[0].datastream.name;
-          setDataStreamId(dataStreamId);
-          const route = getDataRoutes({
-            data: streams,
-            dataStreamName: dataStreamId,
-          })[0];
-          setDataRoute(route);
-        }
-      } catch (error) {
-        console.error("Failed to parse JSON:", error);
-      }
-    };
-
-    if (streams.length > 0) setUserDatastreams();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [streams]);
 
   const menuItems: MenuItemType[] = [
     {
