@@ -183,6 +183,9 @@ function UploadFiles() {
   };
 
   useEffect(() => {
+    setUploadResultMessage("");
+    setUploadResultAlert("info");
+
     const handleGetManifest = async () => {
       const res = await getManifests(
         auth.user?.access_token ?? "",
