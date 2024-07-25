@@ -16,6 +16,9 @@ fun Route.submissionDetails(apolloClient: ApolloClient) {
     route("/submission-details") {
         get {
             call.respond(HttpStatusCode.OK, "This is the /submission-details endpoint")
+        }
+    }
+}
 // fun Route.submissionDetails(client: HttpClient) {
 //     val psApiUrl = ConfigLoader.getPsApiEndpoint()
 //
@@ -34,6 +37,4 @@ fun Route.submissionDetails(apolloClient: ApolloClient) {
 //             } catch (e: Exception) {
 //                 call.respond(HttpStatusCode.InternalServerError, e.message ?: "An unknown error occurred")
 //             }
-        // }
-    }
-}
+// }

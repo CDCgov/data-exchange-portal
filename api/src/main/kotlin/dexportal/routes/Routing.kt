@@ -32,7 +32,7 @@ fun Application.configureRouting() {
             healthCheck(client)
             authRoutes(client)
             mms(client)
-            psAPI(client)
+            psAPI(apolloClient)
         }
     }
 

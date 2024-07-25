@@ -14,16 +14,17 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 import com.apollographql.apollo3.api.toJson
+import com.dexportal.SampleQuery
 
 fun Route.reportCounts(apolloClient: ApolloClient) {
     route("/report-counts") {
         get {
             // Make request to GraphQL endpoint, return it as json
-            // val response = apolloClient.query(RepoortCountsQuery()).execute()
-            // val jsonData = response.data?.toJson()
-            // call.respond(HttpStatusCode.OK, jsonData.toString())
+            val response = apolloClient.query(SampleQuery()).execute()
+            val jsonData = response.data?.toJson()
+            call.respond(HttpStatusCode.OK, jsonData.toString())
 
-            call.respond(HttpStatusCode.OK, "This is the /report-counts endpoint")
+//            call.respond(HttpStatusCode.OK, "This is the /report-counts endpoint")
         }
     }
 }
