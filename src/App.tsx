@@ -8,7 +8,7 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
-import Shell from "src/screens/Shell";
+import AppShell from "src/screens/AppShell";
 import Login from "src/screens/Login";
 import Callback from "src/components/Callback";
 import Logout from "src/components/Logout";
@@ -30,7 +30,7 @@ function App() {
           path="home/*"
           element={
             <ProtectedRoute>
-              <Shell />
+              <AppShell />
             </ProtectedRoute>
           }>
           <Route path="dashboard" element={<Dashboard />}></Route>

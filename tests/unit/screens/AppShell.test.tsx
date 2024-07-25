@@ -1,5 +1,5 @@
 import { screen, render } from "@testing-library/react";
-import Shell from "src/screens/Shell";
+import AppShell from "src/screens/AppShell";
 import { vi } from "vitest";
 import {
   createMockedAuthContext,
@@ -16,7 +16,7 @@ describe("Shell", () => {
   it("should show sidebar", () => {
     render(
       withMockedAuthProvider(
-        withMemoryRouter(<Shell />, "/home/dashboard", {
+        withMemoryRouter(<AppShell />, "/home/dashboard", {
           protected: true,
         }),
         createMockedAuthContext({ isAuthenticated: true, isLoading: false })
@@ -29,7 +29,7 @@ describe("Shell", () => {
   it("should not show sidebar when not authenticated", () => {
     render(
       withMockedAuthProvider(
-        withMemoryRouter(<Shell />, "/", { protected: true }),
+        withMemoryRouter(<AppShell />, "/", { protected: true }),
         createMockedAuthContext({ isAuthenticated: false, isLoading: false })
       )
     );
