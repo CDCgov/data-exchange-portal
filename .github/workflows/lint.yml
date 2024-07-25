@@ -1,22 +1,23 @@
-name: "PR Check - ESLint"
+name: PR Check - ESLint
 
 on:
   pull_request:
-    branches:
-      - main
     paths:
       - src/**
+  push:
+    branches:
+      - main
 
 jobs:
   unit-test:
-    name: "Run ESLint"
+    name: Run ESLint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+        uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
           cache: "npm"
       - name: Install dependencies
         run: yarn

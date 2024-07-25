@@ -1,4 +1,4 @@
-name: "DEV - Backend App Service"
+name: DEV - Deploy Backend
 
 on:
   workflow_dispatch:
@@ -6,12 +6,11 @@ on:
     branches:
       - main
     paths:
-      - dex-portal-api/**
+      - api/**
 
 jobs:
   remote-trigger:
     uses: ./.github/workflows/remote-trigger-template.yml
     with:
-      WORKFLOW: app-service-dev.yml
+      WORKFLOW: backend-dev.yml
     secrets: inherit
-

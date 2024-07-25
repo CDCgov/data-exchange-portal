@@ -1,0 +1,35 @@
+name: PR Checks - Backend (API) Unit Tests
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - api/**
+  push:
+    branches:
+      - main
+
+defaults:
+  run:
+    working-directory: api
+
+jobs:
+  unit-test:
+    name: Run Gradle Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: "microsoft"
+          java-version: 17
+      - name: Unit Test
+        env:
+          SAMS_CLIENT_ID: ${{ secrets.SAMS_CLIENT_ID }}
+          SAMS_CLIENT_SECRET: ${{ secrets.SAMS_CLIENT_SECRET }}
+          SAMS_URL: ${{ secrets.SAMS_URL }}
+          SAMS_REDIRECT_URL: ${{ secrets.SAMS_REDIRECT_URL }}
+          MMS_API_URL: ${{ secrets.MMS_API_URL }}
+          PS_API_URL: ${{ secrets.PS_API_URL }}
+        run: ./gradlew test

@@ -1,62 +1,83 @@
 import { http, HttpResponse } from "msw";
 import API_ENDPOINTS from "src/config/api";
 
-import { CreateDataStreamBody, DataStream } from "src/utils/api/dataStreams";
+import {
+  CreateDataStreamBody,
+  DataStream,
+  DataStreamWithRoutes,
+} from "src/utils/api/dataStreams";
 import { CreateEntityBody, Entity } from "src/utils/api/entities";
+import { CreateIdentityBody } from "src/utils/api/identities";
 import { CreateManifestBody, Manifest } from "src/utils/api/manifests";
 import { CreateProgramBody, Program } from "src/utils/api/programs";
 import { CreateRouteBody, Route } from "src/utils/api/routes";
+import {
+  CreateAuthGroupBody,
+  CreateIdentityGroupBody,
+  CreateDatastreamRouteGroupBody,
+} from "src/utils/api/authGroups";
 
-import mockDataStreams from "src/mocks/data/dataStreams";
+import mockAuthgroups from "src/mocks/data/authGroups";
+import {
+  mockDataStreams,
+  mockDataStreamsWithRoutes,
+} from "src/mocks/data/dataStreams";
 import mockEntities from "src/mocks/data/entities";
+import mockIdentities from "src/mocks/data/identities";
 import mockManifests from "src/mocks/data/manifests";
-import mockPrograms from "src/mocks/data/programs";
-import mockRoutes from "src/mocks/data/routes";
+import { mockPrograms1, mockPrograms2 } from "src/mocks/data/programs";
+import { mockRoutes1, mockRoutes2 } from "src/mocks/data/routes";
 
 export const mmsHandlers = [
   // --> Datastreams
   http.get(API_ENDPOINTS.dataStreams, () => {
     return HttpResponse.json(mockDataStreams);
   }),
-  http.get(API_ENDPOINTS.dataStream, ({ request }) => {
-    const url = new URL(request.url);
-    const dataStreamId = url.searchParams.get("datastream_id");
+  http.get(`${API_ENDPOINTS.dataStreams}/:datastream_id`, ({ params }) => {
+    const { datastream_id } = params;
 
-    if (!dataStreamId) {
+    if (!datastream_id || datastream_id == "NaN") {
       return new HttpResponse(null, { status: 400 });
     }
 
+    const datastreamIdStr = Array.isArray(datastream_id)
+      ? datastream_id[0]
+      : datastream_id;
+    const datastreamIdNumber = parseInt(datastreamIdStr, 10);
+
     const dataStream = mockDataStreams.find(
-      (el: DataStream) => el.id == dataStreamId
+      (el: DataStream) => el.id == datastreamIdNumber
     );
     return HttpResponse.json(dataStream);
   }),
-  http.post(API_ENDPOINTS.dataStream, async ({ request }) => {
-    const { name, programId } = (await request.json()) as CreateDataStreamBody;
+  http.post(API_ENDPOINTS.dataStreams, async ({ request }) => {
+    const { name } = (await request.json()) as CreateDataStreamBody;
 
-    if (!name || !programId) {
+    if (!name) {
       return new HttpResponse(null, { status: 400 });
     }
 
-    return HttpResponse.json({ id: 1, name, programId });
+    return HttpResponse.json({ id: 1, name });
   }),
 
   // --> Entities
   http.get(API_ENDPOINTS.entities, () => {
     return HttpResponse.json(mockEntities);
   }),
-  http.get(API_ENDPOINTS.entity, ({ request }) => {
-    const url = new URL(request.url);
-    const entityId = url.searchParams.get("entity_id");
+  http.get(`${API_ENDPOINTS.entities}/:entity_id`, ({ params }) => {
+    const { entity_id } = params;
 
-    if (!entityId) {
+    if (!entity_id || entity_id == "NaN") {
       return new HttpResponse(null, { status: 400 });
     }
 
-    const entity = mockEntities.find((el: Entity) => el.id == entityId);
+    const entityIdStr = Array.isArray(entity_id) ? entity_id[0] : entity_id;
+    const entityIdNumber = parseInt(entityIdStr, 10);
+
+    const entity = mockEntities.find((el: Entity) => el.id == entityIdNumber);
     return HttpResponse.json(entity);
   }),
-  http.post(API_ENDPOINTS.entity, async ({ request }) => {
+  http.post(API_ENDPOINTS.entities, async ({ request }) => {
     const { name } = (await request.json()) as CreateEntityBody;
 
     if (!name) {
@@ -67,119 +88,246 @@ export const mmsHandlers = [
   }),
 
   // --> Manifests
-  http.get(API_ENDPOINTS.manifests, ({ request }) => {
-    const url = new URL(request.url);
-    const datastreamId = url.searchParams.get("datastream_id");
-    const routeId = url.searchParams.get("route_id");
+  http.get(
+    `${API_ENDPOINTS.dataStreams}/:dataStream/routes/:route/manifest`,
+    ({ params }) => {
+      const { dataStream, route } = params;
 
-    if (!datastreamId || !routeId) {
-      return new HttpResponse(null, { status: 400 });
+      if (!dataStream || !route) {
+        return new HttpResponse(null, { status: 400 });
+      }
+
+      const manifestDataStream = mockDataStreamsWithRoutes.find(
+        (d: DataStreamWithRoutes) => d.datastream.name == dataStream
+      );
+      if (!manifestDataStream) return HttpResponse.json([]);
+
+      const routes = manifestDataStream.routes;
+
+      const manifestRoute = routes.find((r: Route) => r.name == route);
+      if (!manifestRoute) return HttpResponse.json([]);
+
+      const manifest = mockManifests.find(
+        (el: Manifest) => el.dataStreamRouteID == manifestRoute.id
+      );
+      return HttpResponse.json(manifest);
     }
+  ),
+  http.post(
+    `${API_ENDPOINTS.dataStreams}/:dataStream/routes/:route/manifest`,
+    async ({ request, params }) => {
+      const { dataStream, route } = params;
+      const { config } = (await request.json()) as CreateManifestBody;
 
-    const manifests = mockManifests.filter(
-      (el: Manifest) => el.datastreamId == datastreamId && el.routeId == routeId
-    );
-    return HttpResponse.json(manifests);
-  }),
-  http.get(API_ENDPOINTS.manifest, ({ request }) => {
-    const url = new URL(request.url);
-    const datastreamId = url.searchParams.get("datastream_id");
-    const routeId = url.searchParams.get("route_id");
-    const manifestId = url.searchParams.get("manifest_id");
+      if (!dataStream || !route || !config) {
+        return new HttpResponse(null, { status: 400 });
+      }
 
-    if (!datastreamId || !routeId || !manifestId) {
-      return new HttpResponse(null, { status: 400 });
+      const manifestDataStream = mockDataStreams.find(
+        (d: DataStream) => d.name == dataStream
+      );
+      if (!manifestDataStream) return new HttpResponse(null, { status: 400 });
+
+      const routes = manifestDataStream.id == 1 ? mockRoutes1 : mockRoutes2;
+      const manifestRoute = routes.find((r: Route) => r.name == route);
+      if (!manifestRoute) return new HttpResponse(null, { status: 400 });
+
+      return HttpResponse.json({
+        id: 1,
+        dataStreamRouteID: manifestRoute.id,
+        config,
+      });
     }
-
-    const route = mockManifests.find(
-      (el: Manifest) =>
-        el.id == routeId &&
-        el.datastreamId == datastreamId &&
-        el.id == manifestId
-    );
-    return HttpResponse.json(route);
-  }),
-  http.post(API_ENDPOINTS.manifest, async ({ request }) => {
-    const { datastreamId, routeId, manifestJson } =
-      (await request.json()) as CreateManifestBody;
-
-    if (!datastreamId || !routeId || !manifestJson) {
-      return new HttpResponse(null, { status: 400 });
-    }
-    return HttpResponse.json({ id: 1, datastreamId, routeId, manifestJson });
-  }),
+  ),
 
   // --> Programs
-  http.get(API_ENDPOINTS.programs, ({ request }) => {
-    const url = new URL(request.url);
-    const entityId = url.searchParams.get("entity_id");
+  http.get(`${API_ENDPOINTS.entities}/:entity_id/programs`, ({ params }) => {
+    const { entity_id } = params;
 
-    if (!entityId) {
+    if (!entity_id || entity_id == "NaN") {
       return new HttpResponse(null, { status: 400 });
     }
 
-    const programs = mockPrograms.filter(
-      (el: Program) => el.entityId == entityId
-    );
+    const entityIdStr = Array.isArray(entity_id) ? entity_id[0] : entity_id;
+    const entityIdNumber = parseInt(entityIdStr, 10);
+
+    const programs = entityIdNumber == 1 ? mockPrograms1 : mockPrograms2;
     return HttpResponse.json(programs);
   }),
-  http.get(API_ENDPOINTS.program, ({ request }) => {
-    const url = new URL(request.url);
-    const entityId = url.searchParams.get("entity_id");
-    const programId = url.searchParams.get("program_id");
+  http.get(
+    `${API_ENDPOINTS.entities}/:entity_id/programs/:program_id`,
+    ({ params }) => {
+      const { entity_id, program_id } = params;
 
-    if (!entityId || !programId) {
-      return new HttpResponse(null, { status: 400 });
+      if (
+        !entity_id ||
+        !program_id ||
+        entity_id == "NaN" ||
+        program_id == "NaN"
+      ) {
+        return new HttpResponse(null, { status: 400 });
+      }
+
+      const entityIdStr = Array.isArray(entity_id) ? entity_id[0] : entity_id;
+      const entityIdNumber = parseInt(entityIdStr, 10);
+      const programIdStr = Array.isArray(program_id)
+        ? program_id[0]
+        : program_id;
+      const programIdNumber = parseInt(programIdStr, 10);
+
+      const programs = entityIdNumber == 1 ? mockPrograms1 : mockPrograms2;
+      const program = programs.find((el: Program) => el.id == programIdNumber);
+      return HttpResponse.json(program);
     }
+  ),
+  http.post(
+    `${API_ENDPOINTS.entities}/:entity_id/programs`,
+    async ({ request, params }) => {
+      const { entity_id } = params;
+      const { name } = (await request.json()) as CreateProgramBody;
 
-    const program = mockPrograms.find(
-      (el: Program) => el.id == programId && el.entityId == entityId
-    );
-    return HttpResponse.json(program);
-  }),
-  http.post(API_ENDPOINTS.program, async ({ request }) => {
-    const { entityId, name } = (await request.json()) as CreateProgramBody;
+      if (!name || !entity_id || entity_id == "NaN") {
+        return new HttpResponse(null, { status: 400 });
+      }
 
-    if (!entityId || !name) {
-      return new HttpResponse(null, { status: 400 });
+      const entityIdStr = Array.isArray(entity_id) ? entity_id[0] : entity_id;
+      const entityIdNumber = parseInt(entityIdStr, 10);
+
+      return HttpResponse.json({ id: 1, entityID: entityIdNumber, name });
     }
-    return HttpResponse.json({ id: 1, entityId, name });
-  }),
+  ),
 
   // --> Routes
-  http.get(API_ENDPOINTS.routes, ({ request }) => {
-    const url = new URL(request.url);
-    const datastreamId = url.searchParams.get("datastream_id");
+  http.get(
+    `${API_ENDPOINTS.dataStreams}/:datastream_id/routes`,
+    ({ params }) => {
+      const { datastream_id } = params;
 
-    if (!datastreamId) {
+      if (!datastream_id || datastream_id == "NaN") {
+        return new HttpResponse(null, { status: 400 });
+      }
+
+      const datastreamIdStr = Array.isArray(datastream_id)
+        ? datastream_id[0]
+        : datastream_id;
+      const datastreamIdNumber = parseInt(datastreamIdStr, 10);
+
+      const routes = datastreamIdNumber == 1 ? mockRoutes1 : mockRoutes2;
+      return HttpResponse.json(routes);
+    }
+  ),
+  http.get(
+    `${API_ENDPOINTS.dataStreams}/:datastream_id/routes/:route_id`,
+    ({ params }) => {
+      const { datastream_id, route_id } = params;
+
+      if (
+        !datastream_id ||
+        !route_id ||
+        datastream_id == "NaN" ||
+        route_id == "NaN"
+      ) {
+        return new HttpResponse(null, { status: 400 });
+      }
+
+      const datastreamIdStr = Array.isArray(datastream_id)
+        ? datastream_id[0]
+        : datastream_id;
+      const datastreamIdNumber = parseInt(datastreamIdStr, 10);
+      const routeIdStr = Array.isArray(route_id) ? route_id[0] : route_id;
+      const routeIdNumber = parseInt(routeIdStr, 10);
+
+      const routes = datastreamIdNumber == 1 ? mockRoutes1 : mockRoutes2;
+      const route = routes.find((el: Route) => el.id == routeIdNumber);
+      return HttpResponse.json(route);
+    }
+  ),
+  http.post(
+    `${API_ENDPOINTS.dataStreams}/:datastream_id/routes`,
+    async ({ request, params }) => {
+      const { datastream_id } = params;
+      const { name } = (await request.json()) as CreateRouteBody;
+
+      if (!datastream_id || datastream_id == "NaN" || !name) {
+        return new HttpResponse(null, { status: 400 });
+      }
+
+      const datastreamIdStr = Array.isArray(datastream_id)
+        ? datastream_id[0]
+        : datastream_id;
+      const datastreamIdNumber = parseInt(datastreamIdStr, 10);
+
+      return HttpResponse.json({
+        id: 1,
+        dataStreamID: datastreamIdNumber,
+        name,
+      });
+    }
+  ),
+
+  // --> AuthGroups
+  http.get(`${API_ENDPOINTS.entities}/:entity_id/groups`, ({ params }) => {
+    const { entity_id } = params;
+
+    if (!entity_id || entity_id == "NaN") {
       return new HttpResponse(null, { status: 400 });
     }
 
-    const routes = mockRoutes.filter(
-      (el: Route) => el.datastreamId == datastreamId
-    );
-    return HttpResponse.json(routes);
+    return HttpResponse.json(mockAuthgroups);
   }),
-  http.get(API_ENDPOINTS.route, ({ request }) => {
-    const url = new URL(request.url);
-    const datastreamId = url.searchParams.get("datastream_id");
-    const routeId = url.searchParams.get("route_id");
 
-    if (!datastreamId || !routeId) {
-      return new HttpResponse(null, { status: 400 });
+  http.post(
+    `${API_ENDPOINTS.entities}/:entity_id/groups`,
+    async ({ request, params }) => {
+      const { entity_id } = params;
+      const { name } = (await request.json()) as CreateAuthGroupBody;
+
+      if (!entity_id || entity_id == "NaN") {
+        return new HttpResponse(null, { status: 404 });
+      }
+
+      if (!name || name == "NaN") {
+        return new HttpResponse(null, { status: 400 });
+      }
+      return new HttpResponse(null, { status: 200 });
     }
+  ),
 
-    const route = mockRoutes.find(
-      (el: Route) => el.id == routeId && el.datastreamId == datastreamId
-    );
-    return HttpResponse.json(route);
+  // --> Identities
+  http.get(`${API_ENDPOINTS.identities}`, () => {
+    return HttpResponse.json(mockIdentities);
   }),
-  http.post(API_ENDPOINTS.route, async ({ request }) => {
-    const { datastreamId, name } = (await request.json()) as CreateRouteBody;
+  http.post(API_ENDPOINTS.identities, async ({ request }) => {
+    const { idpClientID } = (await request.json()) as CreateIdentityBody;
 
-    if (!datastreamId || !name) {
+    if (!idpClientID) {
       return new HttpResponse(null, { status: 400 });
     }
-    return HttpResponse.json({ id: 1, datastreamId, name });
+    return new HttpResponse(null, { status: 200 });
+  }),
+
+  // --> UserToAuthGroup
+  http.post(
+    `${API_ENDPOINTS.groups}/:authgroup_id/identities`,
+    async ({ request, params }) => {
+      const { authgroup_id } = params;
+      const { identityID } = (await request.json()) as CreateIdentityGroupBody;
+
+      if (!authgroup_id || !identityID || authgroup_id == "NaN") {
+        return new HttpResponse(null, { status: 400 });
+      }
+      return new HttpResponse(null, { status: 200 });
+    }
+  ),
+
+  // --> DataStreamRouteGroups
+  http.post(`${API_ENDPOINTS.dataStreamRouteGroups}`, async ({ request }) => {
+    const { authgroupID, datastreamRouteID } =
+      (await request.json()) as CreateDatastreamRouteGroupBody;
+
+    if (!authgroupID || !datastreamRouteID) {
+      return new HttpResponse(null, { status: 400 });
+    }
+    return new HttpResponse(null, { status: 200 });
   }),
 ];

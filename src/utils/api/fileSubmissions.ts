@@ -1,19 +1,26 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import API_ENDPOINTS from "src/config/api";
+import { SubmissionStatus } from "src/utils/api/submissionDetails";
 
 export interface FileSubmissionsSummary {
-  number_of_pages: number;
-  page_number: number;
-  page_size: number;
-  total_items: number;
+  pageNumber: number;
+  numberOfPages: number;
+  pageSize: number;
+  totalItems: number;
+  jurisdictions: string[];
+  senderIds: string[];
 }
 
 export interface FileSubmission {
-  upload_id: string;
+  status: SubmissionStatus;
   filename: string;
-  status: string;
+  upload_id: string;
   timestamp: string;
-  data_stream_id: string;
-  data_stream_route: string;
+  jurisdiction: string;
+  sender_id: string;
+  metadata?: any;
+  issues?: string[];
+  file_size_bytes?: number;
 }
 
 export interface FileSubmissions {
@@ -22,19 +29,22 @@ export interface FileSubmissions {
 }
 
 export const defaultSubmissionSummary: FileSubmissionsSummary = {
-  number_of_pages: 0,
-  page_number: 1,
-  page_size: 10,
-  total_items: 0,
+  pageNumber: 1,
+  numberOfPages: 0,
+  pageSize: 10,
+  totalItems: 0,
+  jurisdictions: [],
+  senderIds: [],
 };
 
 export const defaultSubmissionItem: FileSubmission = {
   upload_id: "",
   filename: "",
-  status: "",
+  status: SubmissionStatus.UNKNOWN,
+  jurisdiction: "",
+  sender_id: "",
   timestamp: "",
-  data_stream_id: "",
-  data_stream_route: "",
+  metadata: {},
 };
 
 export const getFileSubmissions = async (
@@ -46,7 +56,9 @@ export const getFileSubmissions = async (
   sort_by?: string,
   sort_order?: string,
   page_number?: number,
-  page_size?: number
+  page_size?: number,
+  jurisdiction?: string,
+  senderId?: string
 ): Promise<Response> => {
   const params = new URLSearchParams();
 
@@ -58,6 +70,8 @@ export const getFileSubmissions = async (
   if (sort_order) params.append("sort_order", sort_order);
   if (page_size) params.append("page_size", page_size.toString());
   if (page_number) params.append("page_number", page_number.toString());
+  if (jurisdiction) params.append("jurisdiction", jurisdiction);
+  if (senderId) params.append("sender_id", senderId);
 
   const url = `${API_ENDPOINTS.fileSubmissions}?${params.toString()}`;
 

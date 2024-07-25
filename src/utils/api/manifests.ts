@@ -1,50 +1,41 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import API_ENDPOINTS from "src/config/api";
 
 export interface CreateManifestBody {
-  datastreamId: number | string;
-  routeId: number | string;
-  manifestJson: string;
+  config: any;
+}
+
+export interface ManifestField {
+  field_name: string;
+  required: boolean;
+  allowed_values?: string[] | null;
+  description?: string;
+  default_value?: string;
+  compat_field_name?: string | null;
+}
+
+export interface MetadataConfig {
+  version: string;
+  fields: ManifestField[];
+}
+
+export interface Config {
+  metadata_config: MetadataConfig;
+  copy_config: any;
 }
 
 export interface Manifest {
-  id: number | string;
-  datastreamId: number | string;
-  routeId: number | string;
-  manifestJson: string;
+  id: number;
+  dataStreamRouteID: number;
+  config: Config;
 }
 
 export const getManifests = async (
   access_token: string,
-  datastream_id: number,
-  route_id: number
+  datastream: string,
+  route: string
 ): Promise<Response> => {
-  const params = new URLSearchParams();
-  if (datastream_id) params.append("datastream_id", datastream_id.toString());
-  if (route_id) params.append("route_id", route_id.toString());
-  const url = `${API_ENDPOINTS.manifests}?${params.toString()}`;
-
-  const response = await fetch(url, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + access_token,
-    },
-  }).catch();
-
-  return response;
-};
-
-export const getManifest = async (
-  access_token: string,
-  datastream_id: number,
-  route_id: number,
-  manifest_id: number
-): Promise<Response> => {
-  const params = new URLSearchParams();
-  if (datastream_id) params.append("datastream_id", datastream_id.toString());
-  if (route_id) params.append("route_id", route_id.toString());
-  if (manifest_id) params.append("manifest_id", manifest_id.toString());
-  const url = `${API_ENDPOINTS.manifest}?${params.toString()}`;
+  const url = `${API_ENDPOINTS.dataStreams}/${datastream}/routes/${route}/manifest`;
 
   const response = await fetch(url, {
     method: "GET",
@@ -59,16 +50,14 @@ export const getManifest = async (
 
 export const createManifest = async (
   access_token: string,
-  datastream_id: number,
-  route_id: number,
-  manifest_json: string
+  datastream: string,
+  route: string,
+  config: any
 ): Promise<Response> => {
-  const url = `${API_ENDPOINTS.manifest}`;
+  const url = `${API_ENDPOINTS.dataStreams}/${datastream}/routes/${route}/manifest`;
 
   const body = JSON.stringify({
-    datastreamId: datastream_id,
-    routeId: route_id,
-    manifestJson: manifest_json,
+    config,
   });
 
   const response = await fetch(url, {

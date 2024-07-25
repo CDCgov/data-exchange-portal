@@ -1,9 +1,10 @@
 import {
+  DataStream,
   getDataStreams,
   getDataStream,
   createDataStream,
 } from "src/utils/api/dataStreams";
-import mockDataStreams from "src/mocks/data/dataStreams";
+import { mockDataStreams } from "src/mocks/data/dataStreams";
 
 describe("dataStreams", () => {
   it("should fetch data streams", async () => {
@@ -26,9 +27,8 @@ describe("dataStream", () => {
   });
   it("should return new data stream", async () => {
     const name = "test_name";
-    const programId = 1;
-    const payload = { id: 1, name, programId };
-    const res = await createDataStream("mock_auth_token", name, 1);
+    const payload: DataStream = { id: 1, name };
+    const res = await createDataStream("mock_auth_token", name);
     const data = await res.json();
 
     expect(data).toStrictEqual(payload);

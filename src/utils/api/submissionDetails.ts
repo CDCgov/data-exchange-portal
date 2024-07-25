@@ -1,31 +1,55 @@
 import API_ENDPOINTS from "src/config/api";
 
-export interface ValidationReport {
-  line: number;
-  column: number;
-  path: string;
-  description: string;
-  category: string;
-  classification: string;
+export enum SubmissionStatus {
+  DELIVERED = "DELIVERED",
+  FAILED = "FAILED",
+  PROCESSING = "PROCESSING",
+  UNKNOWN = "UNKNOWN",
+}
+export enum ReportStatus {
+  SUCCESS = "SUCCESS",
+  FAILURE = "FAILURE",
+}
+export enum IssueLevel {
+  ERROR = "ERROR",
+  WARNING = "WARNING",
 }
 
-export interface SubmissionInfo {
-  status: string;
-  stage_name: string;
-  file_name: string;
-  file_size_bytes: number;
-  bytes_uploaded: number;
-  upload_id: string;
-  uploaded_by: string;
+export interface ReportContent {
+  messageUUID: string;
+  messageHash: string;
+  singleOrBatch: string;
+  messageIndex: number;
+}
+
+export interface Issue {
+  level: IssueLevel;
+  message: string;
+}
+
+export interface Report {
+  service: string;
+  action: string;
+  schemaName: string;
+  schemaVersion: string;
+  status: ReportStatus;
   timestamp: string;
-  data_stream_id: string;
-  data_stream_route: string;
+  messageMetadata: ReportContent;
+  issues: Issue[];
 }
 
 export interface SubmissionDetails {
-  info: SubmissionInfo;
-  issues: string[];
-  reports: ValidationReport[];
+  status: SubmissionStatus;
+  lastService: string;
+  lastAction: string;
+  filename: string;
+  uploadId: string;
+  dexIngestTimestamp: string;
+  dataStreamId: string;
+  dataStreamRoute: string;
+  jurisdiction: string;
+  senderId: string;
+  reports: Report[];
 }
 
 export const getSubmissionDetails = async (

@@ -1,18 +1,21 @@
-import { PropsWithChildren, useEffect } from "react";
+import { PropsWithChildren, useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth, hasAuthParams } from "react-oidc-context";
-import { useNavigate } from "react-router-dom";
 import { getEnv } from "src/utils/helperFunctions/env";
 
-export function ProtectedRoute({ children }: PropsWithChildren) {
+function ProtectedRoute({ children }: PropsWithChildren) {
   const auth = useAuth();
+  const location = useLocation();
   const navigate = useNavigate();
+  const [hasTriedSignin, setHasTriedSignin] = useState(false);
 
   useEffect(() => {
     if (
       !hasAuthParams() &&
       !auth.isAuthenticated &&
       !auth.activeNavigator &&
-      !auth.isLoading
+      !auth.isLoading &&
+      !hasTriedSignin
     ) {
       const oidcStorage = window.localStorage.getItem(
         `oidc.user:${getEnv("VITE_SAMS_AUTHORITY_URL")}:${getEnv(
@@ -21,12 +24,23 @@ export function ProtectedRoute({ children }: PropsWithChildren) {
       );
 
       if (oidcStorage) {
-        auth.signinSilent();
+        auth.signinSilent()?.catch((e) => {
+          console.log("Silent sign-in failed:", e);
+          navigate("/login", { replace: true });
+        });
       } else {
+        console.log("No valid token found, redirecting to login page");
         navigate("/login", { replace: true });
+        setHasTriedSignin(true);
       }
     }
-  }, [auth, navigate]);
+  }, [auth, hasTriedSignin, location, navigate]);
+
+  if (!auth.isAuthenticated) {
+    return null;
+  }
 
   return children;
 }
+
+export default ProtectedRoute;

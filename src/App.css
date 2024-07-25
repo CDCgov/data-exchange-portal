@@ -3,3 +3,31 @@
 #root {
   height: 100%;
 }
+
+.cdc-react .dropdown-items {
+  overflow: scroll;
+}
+
+.cdc-react .header-button {
+  background: none;
+  border: none;
+  flex-grow: 2;
+  font-weight: bold;
+  font-size: 0.825rem;
+}
+
+.search-option {
+  max-width: 15rem;
+}
+
+#file-uploader {
+  display: none;
+}
+
+button#choose-file svg {
+  margin-right: 0.35rem;
+}
+
+.cdc-react .usa-alert .usa-alert__text {
+  font-family: sans-serif !important;
+}

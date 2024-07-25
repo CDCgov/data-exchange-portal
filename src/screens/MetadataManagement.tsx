@@ -1,25 +1,33 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "react-oidc-context";
 
-import { Button, Dropdown } from "@us-gov-cdc/cdc-react";
-import jsonPrettyPrint from "src/utils/helperFunctions/jsonPrettyPrint";
+import { Button } from "@us-gov-cdc/cdc-react";
+import Select, { SelectOption } from "src/components/formFields/Select";
+
+import { jsonPrettyPrint } from "src/utils/helperFunctions/json";
 
 import { getDataStreams, createDataStream } from "src/utils/api/dataStreams";
 import { getEntities, createEntity } from "src/utils/api/entities";
 import { getManifests, createManifest } from "src/utils/api/manifests";
 import { getPrograms, createProgram } from "src/utils/api/programs";
 import { getRoutes, createRoute } from "src/utils/api/routes";
+import { getAuthGroups, createAuthGroup } from "src/utils/api/authGroups";
+import { getIdentities, createIdentity } from "src/utils/api/identities";
 
 function MetadataManagement() {
   const auth = useAuth();
   const [authToken, setAuthToken] = useState("");
-  const formTypes = [
-    "Entities",
-    "Programs",
-    "Datastreams",
-    "Routes",
-    "Manifests",
+
+  const formTypes: SelectOption[] = [
+    { value: "Entities", display: "Entities" },
+    { value: "Programs", display: "Programs" },
+    { value: "Datastreams", display: "Datastreams" },
+    { value: "Routes", display: "Routes" },
+    { value: "Manifests", display: "Manifests" },
+    { value: "AuthGroups", display: "AuthGroups" },
+    { value: "Identities", display: "Identities" },
   ];
+
   const [formType, setFormType] = useState(formTypes[0]);
 
   useEffect(() => {
@@ -30,15 +38,17 @@ function MetadataManagement() {
   const [entityId, setEntityId] = useState("");
 
   const [programName, setProgramName] = useState("");
-  const [programId, setProgramId] = useState("");
 
   const [datastreamName, setDatastreamName] = useState("");
   const [datastreamId, setDatastreamId] = useState("");
 
   const [routeName, setRouteName] = useState("");
-  const [routeId, setRouteId] = useState("");
 
   const [manifestJson, setManifestJson] = useState("");
+
+  const [authGroupName, setAuthGroupName] = useState("");
+
+  const [identityClientID, setIdentityClientID] = useState("");
 
   const [apiResponse, setApiResponse] = useState(
     "API response will display here"
@@ -93,16 +103,10 @@ function MetadataManagement() {
     setApiResponse(json);
   };
   const handleCreateDatastream = async () => {
-    const res = await createDataStream(
-      authToken,
-      datastreamName,
-      parseInt(programId)
-    );
+    const res = await createDataStream(authToken, datastreamName);
 
     if (res.status != 200) {
-      setApiResponse(
-        "Bad request: programId id and datastream name are required"
-      );
+      setApiResponse("Bad request: datastream name is required");
       return;
     }
 
@@ -136,14 +140,12 @@ function MetadataManagement() {
 
   // Manifests
   const handleGetManifest = async () => {
-    const res = await getManifests(
-      authToken,
-      parseInt(datastreamId),
-      parseInt(routeId)
-    );
+    const res = await getManifests(authToken, datastreamName, routeName);
 
     if (res.status != 200) {
-      setApiResponse("Bad request: datastream id and route id are required");
+      setApiResponse(
+        "Bad request: datastream name and route name are required"
+      );
       return;
     }
 
@@ -151,16 +153,17 @@ function MetadataManagement() {
     setApiResponse(json);
   };
   const handleCreateManifest = async () => {
+    const manifestObject = JSON.parse(manifestJson);
     const res = await createManifest(
       authToken,
-      parseInt(datastreamId),
-      parseInt(routeId),
-      manifestJson
+      datastreamName,
+      routeName,
+      manifestObject
     );
 
     if (res.status != 200) {
       setApiResponse(
-        "Bad request: datastream id, route id, and manifestJson are required"
+        "Bad request: datastream name, route name, and config are required"
       );
       return;
     }
@@ -169,9 +172,55 @@ function MetadataManagement() {
     setApiResponse(json);
   };
 
+  // Authgroups
+  const handleGetAuthGroups = async () => {
+    const res = await getAuthGroups(authToken, entityId);
+
+    if (res.status != 200) {
+      setApiResponse("Bad request: entityId is required");
+      return;
+    }
+
+    const json = await res.json();
+    setApiResponse(json);
+  };
+  const handleCreateAuthGroup = async () => {
+    const res = await createAuthGroup(authToken, entityId, authGroupName);
+
+    if (res.status != 200) {
+      setApiResponse("Bad request: entityId and authGroupName are required");
+      return;
+    }
+
+    const json = await res.json();
+    setApiResponse(json);
+  };
+
+  // Identities
+  const handleGetIdentities = async () => {
+    const res = await getIdentities(authToken);
+    const json = await res.json();
+    setApiResponse(json);
+  };
+  const handleCreateIdentity = async () => {
+    const res = await createIdentity(authToken, identityClientID);
+
+    if (res.status != 200) {
+      setApiResponse("Bad request: idenenty client_id is required");
+      return;
+    }
+
+    const json = await res.json();
+    setApiResponse(json);
+  };
+
+  const handleFormTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFormType({ value: e.target.value, display: e.target.value });
+  };
+
   const renderFormType = () => {
-    switch (formType) {
-      case formTypes[0]:
+    switch (formType.value) {
+      case "Entities":
         return (
           <div className="margin-bottom-8">
             <label className="usa-label" htmlFor="entity_name">
@@ -194,7 +243,7 @@ function MetadataManagement() {
             </div>
           </div>
         );
-      case formTypes[1]:
+      case "Programs":
         return (
           <div className="margin-bottom-8">
             <label className="usa-label" htmlFor="entity_id">
@@ -228,20 +277,9 @@ function MetadataManagement() {
             </div>
           </div>
         );
-      case formTypes[2]:
+      case "Datastreams":
         return (
           <div className="margin-bottom-8">
-            <label className="usa-label" htmlFor="program_id">
-              Program ID
-            </label>
-            <input
-              className="usa-input"
-              value={programId}
-              id="program_id"
-              type="number"
-              name="program_id"
-              onChange={(e) => setProgramId(e.target.value)}
-            />
             <label className="usa-label" htmlFor="datastream_name">
               Datastream Name
             </label>
@@ -266,7 +304,7 @@ function MetadataManagement() {
             </div>
           </div>
         );
-      case formTypes[3]:
+      case "Routes":
         return (
           <div className="margin-bottom-8">
             <label className="usa-label" htmlFor="datastream_id">
@@ -300,39 +338,37 @@ function MetadataManagement() {
             </div>
           </div>
         );
-      case formTypes[4]:
+      case "Manifests":
         return (
           <div className="margin-bottom-8">
-            <label className="usa-label" htmlFor="datastream_id">
-              Datastream ID
+            <label className="usa-label" htmlFor="datastream_name">
+              Datastream Name
             </label>
             <input
               className="usa-input"
-              value={datastreamId}
-              type="number"
-              id="datastream_id"
-              name="datastream_id"
-              onChange={(e) => setDatastreamId(e.target.value)}
+              value={datastreamName}
+              id="datastream_name"
+              name="datastream_name"
+              onChange={(e) => setDatastreamName(e.target.value)}
             />
-            <label className="usa-label" htmlFor="route_id">
-              Route ID
+            <label className="usa-label" htmlFor="route_name">
+              Route Name
             </label>
             <input
               className="usa-input"
-              value={routeId}
-              type="number"
-              id="route_id"
-              name="route_id"
-              onChange={(e) => setRouteId(e.target.value)}
+              value={routeName}
+              id="route_name"
+              name="route_name"
+              onChange={(e) => setRouteName(e.target.value)}
             />
-            <label className="usa-label" htmlFor="manifest_json">
-              Manifest JSON
+            <label className="usa-label" htmlFor="config_json">
+              Config JSON
             </label>
             <textarea
               className="usa-textarea"
               value={manifestJson}
-              id="manifest_json"
-              name="manifest_json"
+              id="config_json"
+              name="config_json"
               onChange={(e) => setManifestJson(e.target.value)}
             />
             <div className="margin-top-2 display-flex flex-justify">
@@ -347,6 +383,63 @@ function MetadataManagement() {
             </div>
           </div>
         );
+      case "AuthGroups":
+        return (
+          <div className="margin-bottom-8">
+            {/* Todo: Fetch this list instead of it being an input value */}
+            <label className="usa-label" htmlFor="authgroup_name">
+              EntityID
+            </label>
+            <input
+              className="usa-input"
+              value={entityId}
+              id="entity_id"
+              name="entity_id"
+              onChange={(e) => setEntityId(e.target.value)}
+            />
+            <label className="usa-label" htmlFor="authgroup_name">
+              AuthGroup Name
+            </label>
+            <input
+              className="usa-input"
+              value={authGroupName}
+              id="authgroup_name"
+              name="authgroup_name"
+              onChange={(e) => setAuthGroupName(e.target.value)}
+            />
+            <div className="margin-top-2 display-flex flex-justify">
+              <Button ariaLabel="Create Entity" onClick={handleCreateAuthGroup}>
+                Create AuthGroup
+              </Button>
+              <Button ariaLabel="Get Entities" onClick={handleGetAuthGroups}>
+                Get AuthGroups
+              </Button>
+            </div>
+          </div>
+        );
+      case "Identities":
+        return (
+          <div className="margin-bottom-8">
+            <label className="usa-label" htmlFor="identity_client_id">
+              Identity Client ID
+            </label>
+            <input
+              className="usa-input"
+              value={identityClientID}
+              id="identity_client_id"
+              name="identity_client_id"
+              onChange={(e) => setIdentityClientID(e.target.value)}
+            />
+            <div className="margin-top-2 display-flex flex-justify">
+              <Button ariaLabel="Create Entity" onClick={handleCreateIdentity}>
+                Create Identity
+              </Button>
+              <Button ariaLabel="Get Entities" onClick={handleGetIdentities}>
+                Get Identities
+              </Button>
+            </div>
+          </div>
+        );
       default:
         return;
     }
@@ -357,13 +450,12 @@ function MetadataManagement() {
       <h1 className="cdc-page-header padding-y-3 margin-0">
         Metadata Management
       </h1>
-      <Dropdown
+      <Select
         className="padding-right-2"
-        items={["Entities", "Programs", "Datastreams", "Routes", "Manifests"]}
+        id="data-route-filter"
         label="Meta Data Object"
-        onSelect={setFormType}
-        srText="Meta Data Object"
-        defaultValue={formType}
+        onChange={handleFormTypeChange}
+        options={formTypes}
       />
       <div className="display-flex flex-justify-start">
         <div className="width-mobile-lg">{renderFormType()}</div>

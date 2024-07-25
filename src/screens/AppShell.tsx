@@ -1,17 +1,10 @@
-import { useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
-import { useAuth } from "react-oidc-context";
 import {
   MenuItemType,
   PopupMenuItemType,
 } from "@us-gov-cdc/cdc-react/dist/src/@types";
 
 import dexLogo from "src/assets/dex_logo.svg";
-import { useSetRecoilState } from "recoil";
-import { dataRouteAtom, dataStreamIdAtom } from "src/state/searchParams";
-import { dataStreamsAtom } from "src/state/dataStreams";
-import { getDataStreams, DataStream } from "src/utils/api/dataStreams";
-import { getDataRoutes } from "src/utils/helperFunctions/dataStreams";
+import useDecodeAuthToken from "src/utils/hooks/useDecodeAuthToken";
 
 import {
   ProfileHeader,
@@ -24,47 +17,10 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
 
 function Shell() {
+  useDecodeAuthToken();
   const navigate = useNavigate();
-  const auth = useAuth();
-  const [searchParams] = useSearchParams();
 
   const logo = <ProfileHeaderLogo image={dexLogo} classNames={["dex-logo"]} />;
-
-  const setDataStreams = useSetRecoilState(dataStreamsAtom);
-  const setDataStreamId = useSetRecoilState(dataStreamIdAtom);
-  const setDataRoute = useSetRecoilState(dataRouteAtom);
-
-  useEffect(() => {
-    const fetchCall = async () => {
-      const res = await getDataStreams(auth.user?.access_token || "");
-
-      try {
-        const data = await res.json();
-        const streams = data as DataStream[];
-        setDataStreams(streams);
-
-        const streamId = searchParams.get("data_stream_id");
-        const route = searchParams.get("data_route");
-        const userHasDataStream = streams.find(
-          (stream: DataStream) => stream.name == streamId
-        );
-        const dataStreamHasRoute = userHasDataStream?.routes.find(
-          (r: string) => r == route
-        );
-
-        if (!userHasDataStream || !dataStreamHasRoute) {
-          const dataStreamId = streams[0].name;
-          setDataStreamId(dataStreamId);
-          const route = getDataRoutes(streams, dataStreamId)[0];
-          setDataRoute(route);
-        }
-      } catch (error) {
-        console.error("Failed to parse JSON:", error);
-      }
-    };
-    fetchCall();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [auth]);
 
   const menuItems: MenuItemType[] = [
     {
@@ -127,8 +83,8 @@ function Shell() {
                 {
                   componentType: "a",
                   icon: <Icons.ArrowUp />,
-                  text: "Uploaded Files",
-                  onClick: () => navigate("/"),
+                  text: "Upload Files",
+                  onClick: () => navigate("/home/upload"),
                 },
                 {
                   componentType: "a",

@@ -7,12 +7,15 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "build:dev": "tsc && vite build --mode dev",
+    "build:tst": "tsc && vite build --mode tst",
     "build:stg": "tsc && vite build --mode stg",
+    "build:prd": "tsc && vite build --mode prd",
     "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,css,scss,json,md}\"",
     "format:write": "prettier \"src/**/*.{js,jsx,ts,tsx,css,scss,json,md}\" --write",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "test": "TZ=UTC vitest",
+    "test:coverage": "TZ=UTC vitest run --coverage",
     "e2e": "npx playwright test"
   },
   "dependencies": {
@@ -21,8 +24,10 @@
     "@faker-js/faker": "^8.4.1",
     "@nivo/core": "^0.85.1",
     "@nivo/pie": "^0.85.1",
-    "@us-gov-cdc/cdc-react": "^1.11.0",
-    "@us-gov-cdc/cdc-react-icons": "^2.5.0",
+    "@tanstack/react-table": "^8.17.3",
+    "@us-gov-cdc/cdc-react": "^1.13.0",
+    "@us-gov-cdc/cdc-react-icons": "^2.7.0",
+    "classnames": "^2.5.1",
     "date-fns": "^3.6.0",
     "msw": "^2.2.1",
     "oidc-client-ts": "^2.2.4",
@@ -34,7 +39,6 @@
     "tus-js-client": "^4.0.1"
   },
   "devDependencies": {
-    "@azure/static-web-apps-cli": "^1.1.4",
     "@playwright/test": "^1.38.1",
     "@testing-library/jest-dom": "^6.1.2",
     "@testing-library/react": "^15.0.2",
@@ -47,6 +51,7 @@
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "@vitejs/plugin-react": "^4.0.3",
+    "@vitest/coverage-v8": "^1.6.0",
     "dotenv": "^16.3.1",
     "eslint": "^8.47.0",
     "eslint-config-prettier": "^9.0.0",
@@ -60,6 +65,6 @@
     "typescript": "^5.0.2",
     "vite": "^4.5.3",
     "vite-plugin-static-copy": "^1.0.0",
-    "vitest": "^0.34.1"
+    "vitest": "^1.6.0"
   }
 }

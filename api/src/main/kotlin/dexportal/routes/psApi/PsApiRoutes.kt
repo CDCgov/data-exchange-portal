@@ -1,8 +1,8 @@
 package dexportal.routes.psApi
 
 import com.apollographql.apollo3.ApolloClient
+import io.ktor.client.*
 import io.ktor.server.routing.*
-import dexportal.middleware.authenticate
 
 fun Route.psAPI(apolloClient: ApolloClient) {
     route("/ps-api") {

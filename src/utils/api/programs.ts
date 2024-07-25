@@ -1,23 +1,20 @@
 import API_ENDPOINTS from "src/config/api";
 
 export interface CreateProgramBody {
-  entityId: number | string;
   name: string;
 }
 
 export interface Program {
-  id: number | string;
-  entityId: number | string;
+  id: number;
+  entityID?: number;
   name: string;
 }
 
 export const getPrograms = async (
   access_token: string,
-  entity_id: number
+  entity_id: number | string
 ): Promise<Response> => {
-  const params = new URLSearchParams();
-  if (entity_id) params.append("entity_id", entity_id.toString());
-  const url = `${API_ENDPOINTS.programs}?${params.toString()}`;
+  const url = `${API_ENDPOINTS.entities}/${entity_id}/programs`;
 
   const response = await fetch(url, {
     method: "GET",
@@ -32,14 +29,10 @@ export const getPrograms = async (
 
 export const getProgram = async (
   access_token: string,
-  entity_id: number,
-  program_id: number
+  entity_id: number | string,
+  program_id: number | string
 ): Promise<Response> => {
-  const params = new URLSearchParams();
-  if (entity_id) params.append("entity_id", entity_id.toString());
-  if (program_id) params.append("program_id", program_id.toString());
-
-  const url = `${API_ENDPOINTS.program}?${params.toString()}`;
+  const url = `${API_ENDPOINTS.entities}/${entity_id}/programs/${program_id}`;
 
   const response = await fetch(url, {
     method: "GET",
@@ -54,13 +47,12 @@ export const getProgram = async (
 
 export const createProgram = async (
   access_token: string,
-  entity_id: number,
+  entity_id: number | string,
   program_name: string
 ): Promise<Response> => {
-  const url = `${API_ENDPOINTS.program}`;
+  const url = `${API_ENDPOINTS.entities}/${entity_id}/programs`;
 
   const body = JSON.stringify({
-    entityId: entity_id,
     name: program_name,
   });
 

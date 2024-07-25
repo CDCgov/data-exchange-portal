@@ -1,4 +1,3 @@
-import React from "react";
 import "@us-gov-cdc/cdc-react/dist/style.css";
 
 import "src/App.css";
@@ -9,25 +8,20 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
-import Shell from "src/screens/Shell";
+import AppShell from "src/screens/AppShell";
 import Login from "src/screens/Login";
 import Callback from "src/components/Callback";
 import Logout from "src/components/Logout";
 import Dashboard from "src/screens/Dashboard";
 import MetadataManagement from "./screens/MetadataManagement";
+import UserManagement from "./screens/UserManagement";
+import UploadFiles from "./screens/UploadFiles.tsx";
 import Profile from "src/screens/Profile";
 import Submissions from "src/screens/Submissions";
 
-import { ProtectedRoute } from "src/components/ProtectedRoute";
+import ProtectedRoute from "src/components/ProtectedRoute";
 
 function App() {
-  // ignore Auth if running locally
-  const AuthWrapper =
-    window.location.hostname === "localhost" ||
-    window.location.hostname === "127.0.0.1"
-      ? React.Fragment
-      : ProtectedRoute;
-
   return (
     <Router>
       <Routes>
@@ -35,14 +29,16 @@ function App() {
         <Route
           path="home/*"
           element={
-            <AuthWrapper>
-              <Shell />
-            </AuthWrapper>
+            <ProtectedRoute>
+              <AppShell />
+            </ProtectedRoute>
           }>
           <Route path="dashboard" element={<Dashboard />}></Route>
           <Route
             path="metadata-management"
             element={<MetadataManagement />}></Route>
+          <Route path="user-management" element={<UserManagement />}></Route>
+          <Route path="upload" element={<UploadFiles />}></Route>
           <Route path="profile" element={<Profile />}></Route>
           <Route path="submissions" element={<Submissions />}></Route>
 

@@ -1,77 +1,97 @@
 import { faker } from "@faker-js/faker";
 import {
+  IssueLevel,
+  ReportStatus,
+  Report,
+  SubmissionStatus,
   SubmissionDetails,
-  ValidationReport,
 } from "src/utils/api/submissionDetails";
 import { FileSubmission } from "src/utils/api/fileSubmissions";
 import mockSubmissions from "src/mocks/data/fileSubmissions";
 
-const getIssues = (submission: FileSubmission): string[] => {
-  if (submission.status != "failed") return [];
+const generateIssue = () => ({
+  level: faker.helpers.arrayElement([IssueLevel.ERROR, IssueLevel.WARNING]),
+  message: faker.lorem.sentence(),
+});
 
-  return submission.data_stream_route == "csv"
-    ? [
-        "Missing required metadata field, 'meta_field1'.",
-        "Metadata field, 'meta_field2' is set to 'value3' and does not contain one of the allowed values: [ 'value1', value2' ]",
-      ]
-    : ["Hl7 Validation Error -- See validation report"];
-};
+const generateReport = (submission: FileSubmission): Report => {
+  const reportStatus =
+    submission.status == SubmissionStatus.FAILED
+      ? ReportStatus.FAILURE
+      : faker.helpers.arrayElement([
+          ReportStatus.SUCCESS,
+          ReportStatus.FAILURE,
+        ]);
 
-const getValidationReport = (): ValidationReport => {
+  const reportIssues =
+    reportStatus == ReportStatus.FAILURE
+      ? Array.from(
+          { length: faker.number.int({ min: 0, max: 5 }) },
+          generateIssue
+        )
+      : [];
+
   return {
-    line: faker.number.int({ min: 1, max: 5 }),
-    column: faker.number.int({ min: 1, max: 100 }),
-    path: "OBX[1]-5[1]",
-    description:
-      "The primitive Field OBX-5 (Observation Value) contains at least one unescaped delimiter",
-    category: "Unescaped Separator",
-    classification: "Error",
+    service: faker.helpers.arrayElement([
+      "DEX Upload",
+      "DEX Routing",
+      "DEX HL7 v2",
+    ]),
+    action: faker.helpers.arrayElement([
+      "verify",
+      "debatch",
+      "process",
+      "validate",
+    ]),
+    schemaName: faker.helpers.arrayElement(["hl7", "fhir"]),
+    schemaVersion: faker.system.semver(),
+    status: reportStatus,
+    timestamp: submission.timestamp,
+    messageMetadata: {
+      messageUUID: faker.string.uuid(),
+      messageHash: faker.string.hexadecimal(),
+      singleOrBatch: faker.helpers.arrayElement(["single", "batch"]),
+      messageIndex: faker.number.int({ min: 1, max: 10 }),
+    },
+    issues: reportIssues,
   };
 };
 
-const getReports = (submission: FileSubmission): ValidationReport[] => {
-  if (submission.status == "failed" && submission.data_stream_route == "hl7") {
-    const numOfReports = faker.number.int({ min: 1, max: 3 });
-    const reports: ValidationReport[] = [];
-    for (let i = 0; i < numOfReports; i++) {
-      reports.push(getValidationReport());
-    }
-    return reports;
+const getReports = (submission: FileSubmission): Report[] => {
+  const numOfReports = faker.number.int({ min: 1, max: 3 });
+  const reports: Report[] = [];
+  for (let i = 0; i < numOfReports; i++) {
+    reports.push(generateReport(submission));
   }
-  return [];
+  return reports;
 };
 
 const generateSubmissionDetails = (
   submission: FileSubmission
 ): SubmissionDetails => {
-  const fileSize = faker.number.int({ min: 1000000, max: 200000000 });
+  const reports = getReports(submission);
+
   const details: SubmissionDetails = {
-    info: {
-      status: submission.status,
-      stage_name:
-        submission.data_stream_route == "hl7"
-          ? "dex-hl7-validation"
-          : "dex-uploading",
-      file_name: submission.filename,
-      file_size_bytes: fileSize,
-      bytes_uploaded: faker.number.int({ min: 0, max: fileSize }),
-      upload_id: submission.upload_id,
-      uploaded_by: faker.internet.userName(),
-      timestamp: submission.timestamp,
-      data_stream_id: submission.data_stream_id,
-      data_stream_route: submission.data_stream_route,
-    },
-    issues: getIssues(submission),
-    reports: getReports(submission),
+    status: submission.status,
+    lastService: reports[0].service,
+    lastAction: reports[0].action,
+    filename: submission.filename,
+    uploadId: submission.upload_id,
+    dexIngestTimestamp: submission.timestamp,
+    dataStreamId: submission.metadata?.data_stream_id,
+    dataStreamRoute: submission.metadata?.data_stream_route,
+    jurisdiction: submission.jurisdiction,
+    senderId: submission.sender_id,
+    reports: reports,
   };
   return details;
 };
 
 const buildMockDetails = (): SubmissionDetails[] => {
-  const detailsAims: SubmissionDetails[] = mockSubmissions.aimsAll.items.map(
+  const detailsAims: SubmissionDetails[] = mockSubmissions.aimsAll.map(
     (el: FileSubmission) => generateSubmissionDetails(el)
   );
-  const detailsDaart: SubmissionDetails[] = mockSubmissions.daartHl7.items.map(
+  const detailsDaart: SubmissionDetails[] = mockSubmissions.daartHl7.map(
     (el: FileSubmission) => generateSubmissionDetails(el)
   );
   return [...detailsAims, ...detailsDaart];
@@ -80,9 +100,7 @@ const buildMockDetails = (): SubmissionDetails[] => {
 export const mockDetails = buildMockDetails();
 
 const getMockDetails = (upload_id: string): SubmissionDetails | undefined => {
-  return mockDetails.find(
-    (el: SubmissionDetails) => el.info.upload_id == upload_id
-  );
+  return mockDetails.find((el: SubmissionDetails) => el.uploadId == upload_id);
 };
 
 export default getMockDetails;

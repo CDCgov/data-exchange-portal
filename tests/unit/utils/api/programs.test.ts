@@ -4,11 +4,11 @@ import {
   getProgram,
   createProgram,
 } from "src/utils/api/programs";
-import mockPrograms from "src/mocks/data/programs";
+import { mockPrograms1 } from "src/mocks/data/programs";
 
 describe("programs", () => {
   it("should fetch programs", async () => {
-    const payload = mockPrograms.filter((el: Program) => el.entityId == 1);
+    const payload = mockPrograms1;
     const res = await getPrograms("mock_auth_token", 1);
     const data = await res.json();
 
@@ -18,18 +18,16 @@ describe("programs", () => {
 
 describe("program", () => {
   it("should fetch a particular program", async () => {
-    const program = mockPrograms.find(
-      (el: Program) => el.id == 1 && el.entityId == 1
-    );
+    const program = mockPrograms1.find((el: Program) => el.id == 1);
     const res = await getProgram("mock_auth_token", 1, 1);
     const data = await res.json();
     expect(data).toStrictEqual(program);
   });
   it("should return new program", async () => {
-    const entityId = 1;
+    const entityID = 1;
     const name = "test_name";
-    const payload: Program = { id: 1, entityId, name };
-    const res = await createProgram("mock_auth_token", entityId, name);
+    const payload: Program = { id: 1, entityID, name };
+    const res = await createProgram("mock_auth_token", entityID, name);
     const data = await res.json();
 
     expect(data).toStrictEqual(payload);

@@ -1,23 +1,24 @@
 import { ReportCounts } from "src/utils/api/reportCounts";
-import mockSubmissions from "src/mocks/data/fileSubmissions";
+
 import { FileSubmissions, FileSubmission } from "src/utils/api/fileSubmissions";
+import { SubmissionStatus } from "src/utils/api/submissionDetails";
 
 export const generateCounts = (submissions: FileSubmissions): ReportCounts => {
-  const total = submissions.summary.total_items;
+  const total = submissions.summary.totalItems;
   const completed = submissions.items.filter(
-    (el: FileSubmission) => el.status == "completed"
+    (el: FileSubmission) => el.status == SubmissionStatus.DELIVERED
   );
   const failed = submissions.items.filter(
-    (el: FileSubmission) => el.status == "failed"
+    (el: FileSubmission) => el.status == SubmissionStatus.FAILED
   );
   const processing = submissions.items.filter(
-    (el: FileSubmission) => el.status == "processing"
+    (el: FileSubmission) => el.status == SubmissionStatus.PROCESSING
   );
 
   return {
     total_counts: total,
     status_counts: {
-      completed: {
+      delivered: {
         counts: completed.length,
       },
       failed: {
@@ -30,19 +31,3 @@ export const generateCounts = (submissions: FileSubmissions): ReportCounts => {
     },
   };
 };
-
-interface MockCounts {
-  aimsCsv: ReportCounts;
-  aimsHl7: ReportCounts;
-  aimsAll: ReportCounts;
-  daartHl7: ReportCounts;
-}
-
-const reportCounts: MockCounts = {
-  aimsCsv: generateCounts(mockSubmissions.aimsCsv),
-  aimsHl7: generateCounts(mockSubmissions.aimsHl7),
-  aimsAll: generateCounts(mockSubmissions.aimsAll),
-  daartHl7: generateCounts(mockSubmissions.daartHl7),
-};
-
-export default reportCounts;

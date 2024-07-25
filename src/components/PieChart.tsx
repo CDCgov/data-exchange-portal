@@ -5,7 +5,7 @@ import { Pie } from "@nivo/pie";
 import { Pill } from "@us-gov-cdc/cdc-react";
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
 import { ReportCounts } from "src/utils/api/reportCounts";
-import getStatusDisplayValuesById from "src/utils/helperFunctions/statusDisplayValues";
+import { getStatusDisplayValuesById } from "src/utils/helperFunctions/statusDisplayValues";
 
 interface PieData {
   id: string;
