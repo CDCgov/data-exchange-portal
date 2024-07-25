@@ -43,5 +43,7 @@ dependencies {
 apollo {
     service("service") {
         packageName.set("com.dexportal")
+        schemaFile.set(file("src/main/graphql/com/dexportal/schema.graphqls"))
+        generateKotlinModels.set(true)
     }
  }

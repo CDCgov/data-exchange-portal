@@ -38,5 +38,6 @@ fun Application.configureRouting() {
 
     environment.monitor.subscribe(ApplicationStopped) {
         client.close()
+        apolloClient.close()
     }
 }
