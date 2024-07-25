@@ -28,7 +28,7 @@ fun Route.countsRoute(apolloClient: ApolloClient) {
                     CountsQuery(
                         dataStream, dataRoute, cleanedDateStart, cleanedDateEnd
                     )
-                ).addHttpHeader(name = "Authorization", value = authToken).execute()
+                ).addHttpHeader("Authorization", authToken).execute()
                 val jsonData = response.data?.toJson()
                 call.respond(HttpStatusCode.OK, jsonData.toString())
             } catch (e: Exception) {

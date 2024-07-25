@@ -29,7 +29,7 @@ fun Application.configureRouting() {
             get {
                 call.respondText("Status: OK")
             }
-            healthCheck(client)
+            healthCheck(client, apolloClient)
             authRoutes(client)
             mms(client)
             psAPI(apolloClient)
