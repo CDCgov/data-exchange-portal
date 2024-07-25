@@ -15,8 +15,9 @@ import * as tus from "tus-js-client";
 import API_ENDPOINTS from "src/config/api";
 import { dataStreamsAtom } from "src/state/dataStreams";
 import {
-  getDataStreamIds,
-  getDataRoutes,
+  getDatastreamNames,
+  getDatastreamRouteNames,
+  getWriteOnlyDatastreamsWithRoutes,
 } from "src/utils/helperFunctions/metadataFilters";
 import { getManifests, Manifest, ManifestField } from "src/utils/api/manifests";
 import {
@@ -66,6 +67,7 @@ function UploadFiles() {
   };
 
   const dataStreams = useRecoilValue(dataStreamsAtom);
+  const writeOnlyDatastreams = getWriteOnlyDatastreamsWithRoutes(dataStreams);
   const [uploadResultMessage, setUploadResultMessage] = useState("");
   const [uploadResultAlert, setUploadResultAlert] =
     useState<AlertProps["type"]>("info");
@@ -183,6 +185,9 @@ function UploadFiles() {
   };
 
   useEffect(() => {
+    setUploadResultMessage("");
+    setUploadResultAlert("info");
+
     const handleGetManifest = async () => {
       const res = await getManifests(
         auth.user?.access_token ?? "",
@@ -191,7 +196,8 @@ function UploadFiles() {
       );
 
       if (res.status != 200) {
-        // TODO messaging for manifest can't be retrieved
+        setUploadResultMessage("There was an issue retrieving the manifest.");
+        setUploadResultAlert("error");
         return;
       }
 
@@ -311,7 +317,7 @@ function UploadFiles() {
                     value: e.target.value,
                   });
                 }}
-                options={getDataStreamIds(dataStreams)}
+                options={getDatastreamNames(writeOnlyDatastreams)}
                 defaultValue={formState.datastream}
               />
               {formState.datastream && (
@@ -326,10 +332,9 @@ function UploadFiles() {
                       value: e.target.value,
                     });
                   }}
-                  options={getDataRoutes(
-                    dataStreams,
-                    formState.datastream,
-                    true
+                  options={getDatastreamRouteNames(
+                    writeOnlyDatastreams,
+                    formState.datastream
                   )}
                   defaultValue={formState.route}
                 />

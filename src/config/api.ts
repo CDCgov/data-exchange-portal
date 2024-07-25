@@ -7,7 +7,6 @@ const PS_API_PREFIX = "ps-api";
 
 const API_ENDPOINTS = {
   // mms routes
-  currentUserDatastreamRoutes: `${API_URL}/api/${MMS_PREFIX}/current-user/datastreams-with-routes`,
   dataStreams: `${API_URL}/api/${MMS_PREFIX}/datastreams`,
   entities: `${API_URL}/api/${MMS_PREFIX}/entities`,
   groups: `${API_URL}/api/${MMS_PREFIX}/groups`,

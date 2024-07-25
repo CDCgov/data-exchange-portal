@@ -3,10 +3,11 @@ package dexportal.routes.mms
 
 import io.ktor.server.routing.*
 
-fun Route.manifests() {
-    route("/datastreams/{stream}/routes/{route}/manifests") {
+fun Route.manifestRouting() {
+    route("/datastreams/{stream}/routes/{route}/manifest") {
         get { }
         post { }
-        delete("{id}") { }
+        put { }
+        delete { }
     }
 }

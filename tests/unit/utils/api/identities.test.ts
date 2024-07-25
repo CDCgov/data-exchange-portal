@@ -1,10 +1,5 @@
-import {
-  createIdentity,
-  getIdentities,
-  getIdentityDatastreamsAndRoutes,
-} from "src/utils/api/identities";
+import { createIdentity, getIdentities } from "src/utils/api/identities";
 import mockIdentities from "src/mocks/data/identities";
-import { mockDataStreamsWithRoutes } from "src/mocks/data/dataStreams";
 
 describe("identities -- GET", () => {
   it("should fetch entities", async () => {
@@ -26,15 +21,5 @@ describe("identities -- POST", () => {
     const res = await createIdentity("mock_auth_token", "");
 
     expect(res.status).toStrictEqual(400);
-  });
-});
-
-describe("identities -- datastreams and routes", () => {
-  it("should return datastreams and routes", async () => {
-    const payload = mockDataStreamsWithRoutes;
-    const res = await getIdentityDatastreamsAndRoutes("mock_auth_token", 1);
-    const data = await res.json();
-
-    expect(data).toStrictEqual(payload);
   });
 });

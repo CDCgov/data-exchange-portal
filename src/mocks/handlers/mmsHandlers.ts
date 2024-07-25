@@ -1,7 +1,11 @@
 import { http, HttpResponse } from "msw";
 import API_ENDPOINTS from "src/config/api";
 
-import { CreateDataStreamBody, DataStream } from "src/utils/api/dataStreams";
+import {
+  CreateDataStreamBody,
+  DataStream,
+  DataStreamWithRoutes,
+} from "src/utils/api/dataStreams";
 import { CreateEntityBody, Entity } from "src/utils/api/entities";
 import { CreateIdentityBody } from "src/utils/api/identities";
 import { CreateManifestBody, Manifest } from "src/utils/api/manifests";
@@ -26,9 +30,6 @@ import { mockRoutes1, mockRoutes2 } from "src/mocks/data/routes";
 
 export const mmsHandlers = [
   // --> Datastreams
-  http.get(API_ENDPOINTS.currentUserDatastreamRoutes, () => {
-    return HttpResponse.json(mockDataStreamsWithRoutes);
-  }),
   http.get(API_ENDPOINTS.dataStreams, () => {
     return HttpResponse.json(mockDataStreams);
   }),
@@ -50,13 +51,13 @@ export const mmsHandlers = [
     return HttpResponse.json(dataStream);
   }),
   http.post(API_ENDPOINTS.dataStreams, async ({ request }) => {
-    const { name, programID } = (await request.json()) as CreateDataStreamBody;
+    const { name } = (await request.json()) as CreateDataStreamBody;
 
-    if (!name || !programID) {
+    if (!name) {
       return new HttpResponse(null, { status: 400 });
     }
 
-    return HttpResponse.json({ id: 1, programID, name });
+    return HttpResponse.json({ id: 1, name });
   }),
 
   // --> Entities
@@ -88,7 +89,7 @@ export const mmsHandlers = [
 
   // --> Manifests
   http.get(
-    `${API_ENDPOINTS.dataStreams}/:dataStream/routes/:route/manifests`,
+    `${API_ENDPOINTS.dataStreams}/:dataStream/routes/:route/manifest`,
     ({ params }) => {
       const { dataStream, route } = params;
 
@@ -96,12 +97,13 @@ export const mmsHandlers = [
         return new HttpResponse(null, { status: 400 });
       }
 
-      const manifestDataStream = mockDataStreams.find(
-        (d: DataStream) => d.name == dataStream
+      const manifestDataStream = mockDataStreamsWithRoutes.find(
+        (d: DataStreamWithRoutes) => d.datastream.name == dataStream
       );
       if (!manifestDataStream) return HttpResponse.json([]);
 
-      const routes = manifestDataStream.id == 1 ? mockRoutes1 : mockRoutes2;
+      const routes = manifestDataStream.routes;
+
       const manifestRoute = routes.find((r: Route) => r.name == route);
       if (!manifestRoute) return HttpResponse.json([]);
 
@@ -112,7 +114,7 @@ export const mmsHandlers = [
     }
   ),
   http.post(
-    `${API_ENDPOINTS.dataStreams}/:dataStream/routes/:route/manifests`,
+    `${API_ENDPOINTS.dataStreams}/:dataStream/routes/:route/manifest`,
     async ({ request, params }) => {
       const { dataStream, route } = params;
       const { config } = (await request.json()) as CreateManifestBody;
@@ -303,16 +305,6 @@ export const mmsHandlers = [
     }
     return new HttpResponse(null, { status: 200 });
   }),
-  http.get(
-    `${API_ENDPOINTS.identities}/:identity_id/datastreams-with-routes`,
-    ({ params }) => {
-      const { identity_id } = params;
-      if (!identity_id || identity_id == "NaN") {
-        return new HttpResponse(null, { status: 400 });
-      }
-      return HttpResponse.json(mockDataStreamsWithRoutes);
-    }
-  ),
 
   // --> UserToAuthGroup
   http.post(

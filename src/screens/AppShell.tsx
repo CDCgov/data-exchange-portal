@@ -1,21 +1,10 @@
-import { useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
-import { useAuth } from "react-oidc-context";
 import {
   MenuItemType,
   PopupMenuItemType,
 } from "@us-gov-cdc/cdc-react/dist/src/@types";
 
 import dexLogo from "src/assets/dex_logo.svg";
-import { useSetRecoilState } from "recoil";
-import { dataRouteAtom, dataStreamIdAtom } from "src/state/searchParams";
-import { dataStreamsAtom } from "src/state/dataStreams";
-import {
-  getDataStreamsAndRoutes,
-  DataStreamWithRoutes,
-} from "src/utils/api/dataStreams";
-import { Route } from "src/utils/api/routes";
-import { getDataRoutes } from "src/utils/helperFunctions/metadataFilters";
+import useDecodeAuthToken from "src/utils/hooks/useDecodeAuthToken";
 
 import {
   ProfileHeader,
@@ -28,51 +17,10 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { Icons } from "@us-gov-cdc/cdc-react-icons";
 
 function Shell() {
+  useDecodeAuthToken();
   const navigate = useNavigate();
-  const auth = useAuth();
-  const [searchParams] = useSearchParams();
 
   const logo = <ProfileHeaderLogo image={dexLogo} classNames={["dex-logo"]} />;
-
-  const setDataStreams = useSetRecoilState(dataStreamsAtom);
-  const setDataStreamId = useSetRecoilState(dataStreamIdAtom);
-  const setDataRoute = useSetRecoilState(dataRouteAtom);
-
-  useEffect(() => {
-    const fetchCall = async () => {
-      try {
-        const res = await getDataStreamsAndRoutes(
-          auth.user?.access_token || ""
-        );
-
-        if (res.status != 200) return;
-
-        const data = await res.json();
-        const streams = data as DataStreamWithRoutes[];
-        setDataStreams(streams);
-
-        const streamId = searchParams.get("data_stream_id");
-        const route = searchParams.get("data_route");
-        const userHasDataStream = streams.find(
-          (stream: DataStreamWithRoutes) => stream.datastream.name == streamId
-        );
-        const dataStreamHasRoute = userHasDataStream?.routes.find(
-          (r: Route) => r.name == route
-        );
-
-        if (!userHasDataStream || !dataStreamHasRoute) {
-          const dataStreamId = streams[0].datastream.name;
-          setDataStreamId(dataStreamId);
-          const route = getDataRoutes(streams, dataStreamId)[0];
-          setDataRoute(route);
-        }
-      } catch (error) {
-        console.error("Failed to parse JSON:", error);
-      }
-    };
-    fetchCall();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [auth]);
 
   const menuItems: MenuItemType[] = [
     {

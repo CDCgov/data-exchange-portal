@@ -245,6 +245,76 @@ const manifest3: Config = {
   },
 };
 
+const manifest4 = {
+  metadata_config: {
+    version: "2.0",
+    fields: [
+      {
+        field_name: "data_stream_id",
+        required: true,
+        allowed_values: ["ehdi"],
+        description: "This field is the identifier for the data stream.",
+      },
+      {
+        field_name: "data_stream_route",
+        required: true,
+        allowed_values: ["csv"],
+        description: "This recieved is the route of the data stream.",
+      },
+      {
+        field_name: "sender_id",
+        required: true,
+        allowed_values: [
+          "RI-PHA",
+          "IN-PHA",
+          "UT-PHA",
+          "IA-PHA",
+          "LA-PHA",
+          "NJ-PHA",
+          "ND-PHA",
+          "NE-PHA",
+          "MI-PHA",
+        ],
+        description: "This field is the identifier for the sender of the data.",
+      },
+      {
+        field_name: "data_producer_id",
+        required: true,
+        allowed_values: [
+          "RI-PHA",
+          "IN-PHA",
+          "UT-PHA",
+          "IA-PHA",
+          "LA-PHA",
+          "NJ-PHA",
+          "ND-PHA",
+          "NE-PHA",
+          "MI-PHA",
+        ],
+        description: "This field is the identifier for the data producer.",
+      },
+      {
+        field_name: "jurisdiction",
+        required: true,
+        allowed_values: ["RI", "IN", "UT", "IA", "LA", "NJ", "ND", "NE", "MI"],
+        description:
+          "This field indicates the jurisdiction associated with the data. If not provided, populate with null.",
+      },
+      {
+        field_name: "received_filename",
+        required: true,
+        description:
+          "This field is the name of the file when uploaded by the sender.",
+      },
+    ],
+  },
+  copy_config: {
+    filename_suffix: "upload_id",
+    folder_structure: "date_YYYY_MM_DD",
+    targets: ["routing"],
+  },
+};
+
 const mockManifests: Manifest[] = [
   {
     id: 1,
@@ -260,6 +330,11 @@ const mockManifests: Manifest[] = [
     id: 3,
     dataStreamRouteID: 3,
     config: manifest3,
+  },
+  {
+    id: 4,
+    dataStreamRouteID: 4,
+    config: manifest4,
   },
 ];
 

@@ -11,6 +11,10 @@ export interface Route {
   name: string;
 }
 
+export interface RouteWithPermissions extends Route {
+  writePermissions?: boolean;
+}
+
 export const getRoutes = async (
   access_token: string,
   datastream_id: number | string

@@ -1,13 +1,17 @@
 import { http, HttpResponse } from "msw";
 import API_ENDPOINTS from "src/config/api";
 
-import { FileSubmission } from "src/utils/api/fileSubmissions";
+import {
+  defaultSubmissionSummary,
+  FileSubmission,
+} from "src/utils/api/fileSubmissions";
 
 import { generateCounts } from "src/mocks/data/reportCounts";
 import mockSubmissions, {
   getSubmissions,
 } from "src/mocks/data/fileSubmissions";
 import getMockDetails from "src/mocks/data/submissionDetails";
+import { defaultReportCounts } from "src/utils/api/reportCounts";
 
 const earliestDate: string = new Date("2021-01-01T05:00:00Z").toISOString();
 
@@ -54,7 +58,10 @@ export const psApiHandlers = [
       return submissionsResponse(mockSubmissions.aimsAll);
     }
 
-    return submissionsResponse(mockSubmissions.daartHl7);
+    if (dataStreamId == "daart")
+      return submissionsResponse(mockSubmissions.daartHl7);
+
+    return HttpResponse.json({ summary: defaultSubmissionSummary, items: [] });
   }),
 
   http.get(API_ENDPOINTS.reportCounts, ({ request }) => {
@@ -93,7 +100,10 @@ export const psApiHandlers = [
       return countsResponse(mockSubmissions.aimsAll);
     }
 
-    return countsResponse(mockSubmissions.daartHl7);
+    if (dataStreamId == "daart")
+      return countsResponse(mockSubmissions.daartHl7);
+
+    return HttpResponse.json(defaultReportCounts);
   }),
 
   http.get(API_ENDPOINTS.submissionDetails, ({ request }) => {

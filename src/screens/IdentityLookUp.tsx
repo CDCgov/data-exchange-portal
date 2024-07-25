@@ -3,11 +3,7 @@ import { useAuth } from "react-oidc-context";
 import { jsonPrettyPrint } from "src/utils/helperFunctions/json";
 import Select, { SelectOption } from "src/components/formFields/Select";
 
-import {
-  getIdentities,
-  getIdentityDatastreamsAndRoutes,
-  Identity,
-} from "src/utils/api/identities";
+import { getIdentities, Identity } from "src/utils/api/identities";
 
 function IdentityLookUp() {
   const auth = useAuth();
@@ -15,9 +11,7 @@ function IdentityLookUp() {
 
   const [identitiesList, setIdentitiesList] = useState([]);
 
-  const [apiResponse, setApiResponse] = useState(
-    "API response will display here"
-  );
+  const [apiResponse] = useState("API response will display here");
 
   useEffect(() => {
     setAuthToken(auth.user?.access_token ?? "");
@@ -36,12 +30,7 @@ function IdentityLookUp() {
   const handleSetIdentities = async (
     e: React.ChangeEvent<HTMLSelectElement>
   ) => {
-    const res = await getIdentityDatastreamsAndRoutes(
-      authToken,
-      e.target.value
-    );
-    const json = await res.json();
-    setApiResponse(json);
+    console.log(e);
   };
 
   const identitiesOptions: SelectOption[] = identitiesList.map(
