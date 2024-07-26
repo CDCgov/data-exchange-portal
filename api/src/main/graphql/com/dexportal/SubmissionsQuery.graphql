@@ -1,0 +1,31 @@
+query SubmissionsQuery($data_stream: String!, $route: String!, $date_start: String!, $date_end: String!, $page_size: Int!, $page_number: Int!, $sort_by: String!, $sort_order: String!) {
+    uploads(
+        dataStreamId: $data_stream
+        dataStreamRoute: $route
+        dateStart: $date_start
+        dateEnd: $date_end
+        pageSize: $page_size
+        pageNumber: $page_number
+        sortBy: $sort_by
+        sortOrder: $sort_order
+    ) {
+        summary {
+            numberOfPages
+            pageNumber
+            pageSize
+            totalItems
+        }
+        items {
+            bytesUploaded
+            fileName
+            fileSizeBytes
+            issues
+            metadata
+            percentComplete
+            status
+            timeUploadingSec
+            timestamp
+            uploadId
+        }
+    }
+}
