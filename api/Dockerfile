@@ -5,11 +5,6 @@ RUN gradle buildFatJar --no-daemon
 
 FROM docker.io/library/openjdk:23-jdk-oraclelinux9
 RUN useradd -r app
-
-# Trust CDC certificate bundle:
-ADD config/bundle-ca.pem /etc/pki/ca-trust/source/anchors/
-RUN update-ca-trust
-
 RUN mkdir /app && chown app:app /app
 WORKDIR /app
 COPY --from=build /home/gradle/src/build/libs/*.jar /app/dex-portal-api.jar
