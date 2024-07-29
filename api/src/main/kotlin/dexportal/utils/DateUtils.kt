@@ -3,7 +3,9 @@ package dexportal.utils
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-fun processDateString(inputDate: String): String? {
+class InvalidDateFormatException(message: String) : Exception(message)
+
+fun processDateString(inputDate: String): String {
     try {
         val parsedDate = LocalDateTime.parse(inputDate, DateTimeFormatter.ISO_DATE_TIME)
 
@@ -13,7 +15,6 @@ fun processDateString(inputDate: String): String? {
 
         return cleanedDateString
     } catch (e: Exception) {
-        println("Error: Invalid date format")
-        return null
+        throw InvalidDateFormatException("Invalid date format: $inputDate -- ${e.message}")
     }
 }
