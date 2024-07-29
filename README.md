@@ -1,5 +1,7 @@
 # Data Exchange Portal
 
+NOTE: As of July 30th 2024 this application is no longer actively developed.
+
 This is the web application for the data upload management dashboard for DEX. It is built using ReactJS and Vite. The backend `api` application utilizes Kotlin/Spring MVC.
 
 ## Environments
@@ -31,8 +33,8 @@ To set your backend environment variables, first make a file called `.vars` with
 export SAMS_CLIENT_ID= ""; # Matches the VITE_SAMS_CLIENT_ID value set above.
 export SAMS_CLIENT_SECRET= ""; # The client secret given by SAMS when registering this app.  Can also be found in the key vault holding the client ID.
 export SAMS_URL= ""; # The base hostname for SAMS, without any path parameters.  Again, find this in the table in the Environments section above.
-export SAMS_REDIRECT_URL= ""; # The URL that was used to redirect the client after a successful SAMS login for a particular user's login attempt.  It should match the VITE_OAUTH_CALLBACK_URL value set in the front end environment variables.
-export SUPPLEMENTAL_API_URL="";
+export PS_API_URL= ""; # The URL to connect to PS-API. Must be on a GFE to connect to PS-API directly
+export MMS_API_URL=""; # Can be pointing to a local docker container if running locally, or the dev deployed url of MMS
 ```
 
 After this is complete run `source ./.vars`. You will also need to create an `application.properties` file within the `api/src/main/resources` directory. Then specify the server port `server.port={NUMBER}`.
@@ -79,6 +81,8 @@ This instance has a dev, staging, and production environment. Eventually, a CD p
 - Install Docker Desktop [download](https://www.docker.com/products/docker-desktop/)
 
 This should install docker desktop along with docker/docker-compose cmdline/terminal commands. Make sure you have your `./api/.env` file populated. Then run `docker-compose(.exe) build` in the root directory. This will create the container for the api. Then you will be able to start the api by running `docker-compose(.exe) up`.
+
+For connecting to PS-API, you will need to be on your GFE. You will need to create a file `bundle-ca.pem` in the root of the `/api` directory. Copy in CDC certs bundle to this file.
 
 ### Using the SWA CLI command
 
