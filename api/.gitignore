@@ -39,3 +39,4 @@ out/
 .env
 kls_database.db
 docs/
+bundle-ca.pem
