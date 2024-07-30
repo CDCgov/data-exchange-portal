@@ -3,7 +3,7 @@ COPY ./ /home/gradle/src
 WORKDIR /home/gradle/src
 RUN gradle buildFatJar --no-daemon
 
-FROM docker.io/library/openjdk:23-jdk-oraclelinux9
+FROM docker.io/library/ibm-semeru-runtimes:open-21.0.3_9-jre-jammy
 RUN useradd -r app
 RUN mkdir /app && chown app:app /app
 WORKDIR /app
