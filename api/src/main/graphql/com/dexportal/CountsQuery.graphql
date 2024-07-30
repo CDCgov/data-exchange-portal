@@ -1,0 +1,21 @@
+query CountsQuery($data_stream: String!, $route: String!, $date_start: String!, $date_end: String!) {
+    processingCounts(
+        dataStreamId: $data_stream
+        dataStreamRoute: $route
+        dateStart: $date_start
+        dateEnd: $date_end
+    ) {
+        totalCounts
+        statusCounts {
+            failed {
+                counts
+            }
+            uploaded {
+                counts
+            }
+            uploading {
+                counts
+            }
+        }
+    }
+}

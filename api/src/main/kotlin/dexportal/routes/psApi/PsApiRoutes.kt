@@ -1,12 +1,12 @@
 package dexportal.routes.psApi
 
-import io.ktor.client.*
+import com.apollographql.apollo3.ApolloClient
 import io.ktor.server.routing.*
 
-fun Route.psAPI(client: HttpClient) {
+fun Route.psAPI(apolloClient: ApolloClient) {
     route("/ps-api") {
-        fileSubmissions(client)
-        reportCounts(client)
-        submissionDetails(client)
+        countsRoute(apolloClient) // See the reportCounts endpoint for an example of making a GraphQL query
+        submissionsRoute(apolloClient)
+        submissionDetails(apolloClient)
     }
 }

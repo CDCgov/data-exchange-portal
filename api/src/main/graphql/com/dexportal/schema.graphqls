@@ -1,0 +1,824 @@
+"""
+Indicates an Input Object is a OneOf Input Object.
+"""
+directive @oneOf on INPUT_OBJECT
+
+"""
+Aggregate report counts
+"""
+type AggregateReportCounts {
+  """
+  Page summary for the counts provided
+  """
+  summary: PageSummary
+
+  """
+  List of the report counts
+  """
+  uploads: [ReportCounts!]
+}
+
+type CosmosDb implements HealthCheckSystem {
+  service: String!
+
+  """
+  Service health issues
+  """
+  healthIssues: String
+
+  """
+  Status of the dependency
+  """
+  status: String!
+}
+
+"""
+Structure containing the count details
+"""
+type CountsDetails {
+  """
+  Count of files
+  """
+  counts: Long!
+
+  """
+  If a file failed to upload, this contains a list of reasons why it may have failed and the count for each reason type
+  """
+  reasons: JSON
+}
+
+"""
+A slightly refined version of RFC-3339 compliant DateTime Scalar
+"""
+scalar DateTime
+
+"""
+Collection of duplicate uploaded filenames found
+"""
+type DuplicateFilenameCounts {
+  """
+  Filename of the file that is duplicated.
+  """
+  filename: String
+
+  """
+  Total number of times the duplicate filename was found, which will always be 2 or more.
+  """
+  totalCount: Long!
+}
+
+"""
+HL7v2 message counts using a direct and indirect counting method
+"""
+type HL7DirectIndirectMessageCounts {
+  """
+  The direct counting method is a sum of all the receiver.number_of_messages in the HL7 debatch reports
+  """
+  directCounts: Long
+
+  """
+  The indirect counting method is a sum of all the redacted reports
+  """
+  indirectCounts: Long
+
+  """
+  Total time to run the query in milliseconds
+  """
+  queryTimeMillis: Long
+}
+
+"""
+HL7v2 invalid message counts using a direct and indirect counting method
+"""
+type HL7InvalidMessageCounts {
+  """
+  The invalid message direct counting method is a sum of the redacted messages that were not propagated and the structure validator reports that are invalid
+  """
+  invalidMessageDirectCounts: Long
+
+  """
+  The invalid message indirect counting method is the total of the HL7-JSON-Lake-Transformer that are not present or HL7-JSON-Lake-Transformer < Structure-Validator
+  """
+  invalidMessageIndirectCounts: Long
+
+  """
+  Total time to run the query in milliseconds
+  """
+  queryTimeMillis: Long
+}
+
+"""
+Counts the number of HL7v2 structures that are invalid for the provided parameters
+"""
+type HL7InvalidStructureValidationCounts {
+  """
+  Count of HL7v2 messages with an invalid structure
+  """
+  counts: Long
+
+  """
+  Total time to run the query in milliseconds
+  """
+  queryTimeMillis: Long
+}
+
+type HealthCheck {
+  """
+  Status of the service dependencies
+  """
+  dependencyHealthChecks: [HealthCheckSystem!]!
+
+  """
+  Overall status of the service
+  """
+  status: String
+
+  """
+  Total time it took to evaluate the health of the service and its dependencies
+  """
+  totalChecksDuration: String
+}
+
+interface HealthCheckSystem {
+  """
+  Service health issues
+  """
+  healthIssues: String
+
+  """
+  Name of the service
+  """
+  service: String!
+
+  """
+  Status of the dependency
+  """
+  status: String!
+}
+
+"""
+A JSON scalar
+"""
+scalar JSON
+
+scalar Long
+
+type Mutation {
+  """
+  Subscribe Email Notifications
+  """
+  subscribeEmail(
+    dataStreamId: String!
+    dataStreamRoute: String!
+    email: String!
+    stageName: String!
+    statusType: String!
+  ): SubscriptionResult!
+
+  """
+  Subscribe Webhook Notifications
+  """
+  subscribeWebhook(
+    dataStreamId: String!
+    dataStreamRoute: String!
+    email: String!
+    stageName: String!
+    statusType: String!
+  ): SubscriptionResult!
+
+  """
+  Unsubscribe Email Notifications
+  """
+  unsubscribeEmail(subscriptionId: String!): SubscriptionResult!
+
+  """
+  Unsubscribe Webhook Notifications
+  """
+  unsubscribeWebhook(subscriptionId: String!): SubscriptionResult!
+}
+
+"""
+Page summary for a response to a query
+"""
+type PageSummary {
+  """
+  Total number of pages for the page size given
+  """
+  numberOfPages: Int!
+
+  """
+  Page number provided in the response
+  """
+  pageNumber: Int!
+
+  """
+  Page size of the response
+  """
+  pageSize: Int!
+
+  """
+  Total number of items that can be provided
+  """
+  totalItems: Int!
+}
+
+"""
+Provides file processing counts
+"""
+type ProcessingCounts {
+  """
+  Status counts for the files found matching the search criteria
+  """
+  statusCounts: StatusCounts!
+
+  """
+  Total number of files found matching the search criteria
+  """
+  totalCounts: Long!
+}
+
+type Query {
+  getHealth: HealthCheck!
+
+  """
+  Return all the reports associated with the provided upload ID.
+  """
+  getReports(
+    """
+    Upload ID to retrieve all the reports for.
+    """
+    uploadId: String!
+
+    """
+    Optional field to specify the field reports should be sorted by.  Available fields for sorting are: [`timestamp`].
+    """
+    reportsSortedBy: String
+
+    """
+    Optional sort order.  When `reportsSortedBy` is provided, the available options are `Ascending` or `Descending`, which defaults to `Ascending` if not provided.
+    """
+    sortOrder: SortOrder
+  ): [Report!]!
+
+  """
+  Return list of reports based on ReportSearchParameters options
+  """
+  searchReports(params: ReportSearchParametersInput!): [Report!]!
+
+  """
+  Returns HL7v2 message counts using both a direct and an indirect counting method for the provided parameters
+  """
+  hl7DirectIndirectMessageCounts(
+    """
+    Data stream ID
+    """
+    dataStreamId: String!
+
+    """
+    Data stream route
+    """
+    dataStreamRoute: String!
+
+    """
+    Start date of the included data.  dateStart or daysInterval is required.
+    """
+    dateStart: String
+
+    """
+    End date of the search.  If not specified then all data up to now is included.
+    """
+    dateEnd: String
+
+    """
+    Number of days to include in the search before today.  If 0, then search for today only.
+    """
+    daysInterval: Int
+  ): HL7DirectIndirectMessageCounts!
+
+  """
+  Returns HL7v2 invalid message counts using both a direct and an indirect counting method for the provided parameters
+  """
+  hl7InvalidMessageCounts(
+    """
+    Data stream ID
+    """
+    dataStreamId: String!
+
+    """
+    Data stream route
+    """
+    dataStreamRoute: String!
+
+    """
+    Start date of the included data.  dateStart or daysInterval is required.
+    """
+    dateStart: String
+
+    """
+    End date of the search.  If not specified then all data up to now is included.
+    """
+    dateEnd: String
+
+    """
+    Number of days to include in the search before today.  If 0, then search for today only.
+    """
+    daysInterval: Int
+  ): HL7InvalidMessageCounts!
+
+  """
+  Returns HL7v2 invalid structure counts for the provided parameters
+  """
+  hl7InvalidStructureValidationCounts(
+    """
+    Data stream ID
+    """
+    dataStreamId: String!
+
+    """
+    Data stream route
+    """
+    dataStreamRoute: String!
+
+    """
+    Start date of the included data.  dateStart or daysInterval is required.
+    """
+    dateStart: String
+
+    """
+    End date of the search.  If not specified then all data up to now is included.
+    """
+    dateEnd: String
+
+    """
+    Number of days to include in the search before today.  If 0, then search for today only.
+    """
+    daysInterval: Int
+  ): HL7InvalidStructureValidationCounts!
+
+  """
+  Returns processing counts for the provided parameters
+  """
+  processingCounts(
+    """
+    Data stream ID
+    """
+    dataStreamId: String!
+
+    """
+    Data stream route
+    """
+    dataStreamRoute: String!
+
+    """
+    Start date of the included data.  dateStart or daysInterval is required.
+    """
+    dateStart: String
+
+    """
+    End date of the search.  If not specified then all data up to now is included.
+    """
+    dateEnd: String
+
+    """
+    Number of days to include in the search before today.  If 0, then search for today only.
+    """
+    daysInterval: Int
+  ): ProcessingCounts!
+
+  """
+  Returns detailed counts within each stage for each matching upload with the provided parameters
+  """
+  reportCountsWithParams(
+    """
+    Data stream ID
+    """
+    dataStreamId: String!
+
+    """
+    Data stream route
+    """
+    dataStreamRoute: String!
+
+    """
+    Start date of the included data.  dateStart or daysInterval is required.
+    """
+    dateStart: String
+
+    """
+    End date of the search.  If not specified then all data up to now is included.
+    """
+    dateEnd: String
+
+    """
+    Number of days to include in the search before today.  If 0, then search for today only.
+    """
+    daysInterval: Int
+    pageSize: Int
+    pageNumber: Int
+  ): AggregateReportCounts!
+
+  """
+  Returns detailed counts within each stage for the provided uploadId
+  """
+  reportCountsWithUploadId(
+    """
+    Upload ID
+    """
+    uploadId: String!
+  ): ReportCounts
+
+  """
+  Returns rolled up counts by stage for the provided parameters
+  """
+  rollupCountsByStage(
+    """
+    Data stream ID
+    """
+    dataStreamId: String!
+
+    """
+    Data stream route
+    """
+    dataStreamRoute: String!
+
+    """
+    Start date of the included data.  dateStart or daysInterval is required.
+    """
+    dateStart: String
+
+    """
+    End date of the search.  If not specified then all data up to now is included.
+    """
+    dateEnd: String
+
+    """
+    Number of days to include in the search before today.  If 0, then search for today only.
+    """
+    daysInterval: Int
+  ): [StageCounts!]!
+
+  """
+  Return all the dead-letter reports associated with the provided datastreamId, datastreamroute and timestamp date range
+  """
+  getDeadLetterReportsByDataStream(
+    dataStreamId: String!
+    dataStreamRoute: String!
+    startDate: String
+    endDate: String
+    daysInterval: Int
+  ): [ReportDeadLetter!]!
+
+  """
+  Return all the dead-letter reports associated with the provided uploadId
+  """
+  getDeadLetterReportsByUploadId(uploadId: String!): [ReportDeadLetter!]!
+
+  """
+  Return count of dead-letter reports associated with the provided datastreamId, (optional) datastreamroute and timestamp date range
+  """
+  getDeadLetterReportsCountByDataStream(
+    dataStreamId: String!
+    dataStreamRoute: String
+    startDate: String
+    endDate: String
+    daysInterval: Int
+  ): Int!
+
+  """
+  Return list of dead-letter reports based on ReportSearchParameters options
+  """
+  searchDeadLetterReports(
+    params: ReportDeadLetterSearchParametersInput!
+  ): [ReportDeadLetter!]!
+
+  """
+  Return various uploads statistics
+  """
+  getUploadStats(
+    """
+    Data stream ID
+    """
+    dataStreamId: String!
+
+    """
+    Data stream route
+    """
+    dataStreamRoute: String!
+
+    """
+    Start date of the included data.  dateStart or daysInterval is required.
+    """
+    dateStart: String
+
+    """
+    End date of the search.  If not specified then all data up to now is included.
+    """
+    dateEnd: String
+
+    """
+    Number of days to include in the search before today.  If 0, then search for today only.
+    """
+    daysInterval: Int
+  ): UploadStats!
+
+  """
+  Get the upload statuses for the given filter, sort, and pagination criteria
+  """
+  uploads(
+    dataStreamId: String!
+    dataStreamRoute: String
+    dateStart: String
+    dateEnd: String
+    pageSize: Int!
+    pageNumber: Int!
+    sortBy: String
+    sortOrder: String
+  ): UploadsStatus!
+}
+
+"""
+Contains Report content.
+"""
+type Report {
+  """
+  Content of the report.  If the report is JSON then the content will be shown as JSON.  Otherwise, the content is a base64 encoded string.
+  """
+  content: JSON
+
+  """
+  Indicates the content type of the content; e.g. JSON, XML
+  """
+  contentType: String
+
+  """
+  Data stream ID
+  """
+  dataStreamId: String
+
+  """
+  Data stream route
+  """
+  dataStreamRoute: String
+
+  """
+  Identifier of the report recorded by the database
+  """
+  id: String
+
+  """
+  Message id this report belongs to; set to null if not applicable
+  """
+  messageId: String
+
+  """
+  Unique report identifier
+  """
+  reportId: String
+
+  """
+  Stage name this report is associated with
+  """
+  stageName: String
+
+  """
+  Status this report is indicating, such as success or failure
+  """
+  status: String
+
+  """
+  Datestamp the report was recorded in the database
+  """
+  timestamp: DateTime
+
+  """
+  Upload identifier this report belongs to
+  """
+  uploadId: String
+}
+
+"""
+Report counts for a given upload
+"""
+type ReportCounts {
+  """
+  Data stream ID
+  """
+  dataStreamId: String
+
+  """
+  Data stream route
+  """
+  dataStreamRoute: String
+
+  """
+  Processing stages this upload went through
+  """
+  stages: JSON!
+
+  """
+  Earliest timestamp associated with this upload
+  """
+  timestamp: DateTime
+
+  """
+  Upload ID of the report counts
+  """
+  uploadId: String
+}
+
+"""
+Contains Report DeadLetter content.
+"""
+type ReportDeadLetter {
+  """
+  Content of the report.  If the report is JSON then the content will be shown as JSON.  Otherwise, the content is a base64 encoded string.
+  """
+  content: JSON
+
+  """
+  Indicates the content type of the content; e.g. JSON, XML
+  """
+  contentType: String
+
+  """
+  Data stream ID
+  """
+  dataStreamId: String
+
+  """
+  Data stream route
+  """
+  dataStreamRoute: String
+
+  """
+  List of reasons the report was sent to dead-letter
+  """
+  deadLetterReasons: [String!]
+
+  """
+  Disposition type of the report
+  """
+  dispositionType: String
+
+  """
+  Identifier of the report recorded by the database
+  """
+  id: String
+
+  """
+  Message id this report belongs to; set to null if not applicable
+  """
+  messageId: String
+
+  """
+  Unique report identifier
+  """
+  reportId: String
+
+  """
+  Stage name this report is associated with
+  """
+  stageName: String
+
+  """
+  Status this report is indicating, such as success or failure
+  """
+  status: String
+
+  """
+  Datestamp the report was recorded in the database
+  """
+  timestamp: DateTime
+
+  """
+  Upload identifier this report belongs to
+  """
+  uploadId: String
+
+  """
+  Schemas used to validate the report
+  """
+  validationSchemas: [String!]
+}
+
+"""
+Parameters for searching for reports
+"""
+input ReportDeadLetterSearchParametersInput {
+  """
+  Array of report IDs to search for and retrieve
+  """
+  ids: [String!]!
+}
+
+"""
+Parameters for searching for reports
+"""
+input ReportSearchParametersInput {
+  """
+  Array of report IDs to search for and retrieve
+  """
+  ids: [String!]!
+}
+
+enum SortOrder {
+  Ascending
+  Descending
+}
+
+type StageCounts {
+  counts: Int
+  schema_name: String
+  schema_version: String
+  stageName: String
+}
+
+"""
+Counts by current state
+"""
+type StatusCounts {
+  """
+  Number of files that failed upload
+  """
+  failed: CountsDetails!
+
+  """
+  Number of files that were successfully uploaded
+  """
+  uploaded: CountsDetails!
+
+  """
+  Number of files in the process of uploading
+  """
+  uploading: CountsDetails!
+}
+
+type SubscriptionResult {
+  message: String
+  status: Boolean
+  subscription_id: String
+  timestamp: Long
+}
+
+"""
+Collection of various uploads statistics
+"""
+type UploadStats {
+  """
+  Total number of uploads that were stopped by the upload api due to one or more issues with the metadata received.
+  """
+  badMetadataCount: Long!
+
+  """
+  Number of uploads that have been completed.  This means, not only did the upload start, but according to the upload status reports we have received 100% of the expected chunks.
+  """
+  completedUploadsCount: Long!
+
+  """
+  Provides a list of all the duplicate filenames that were uploaded and how many.
+  """
+  duplicateFilenames: [DuplicateFilenameCounts!]!
+
+  """
+  Number of uploads where we have received at least one chunk of data, but not all of them.
+  """
+  inProgressUploadsCount: Long!
+
+  """
+  The total number of unique upload ids found for that day.  However, this does not mean that all those are successful uploads.  This will include any uploads that fail out due to retries on client side.
+  """
+  uniqueUploadIdsCount: Long!
+
+  """
+  Number of upload ids that made it past the metadata verify step; these are uploads that actually reported at least one status update.
+  """
+  uploadsWithStatusCount: Long!
+}
+
+type UploadStatus {
+  bytesUploaded: Long
+  fileName: String
+  fileSizeBytes: Long
+  issues: [String!]
+  metadata: JSON
+  percentComplete: Float
+  status: String
+  timeUploadingSec: Float
+  timestamp: DateTime
+  uploadId: String
+}
+
+"""
+Upload statuses for the provided parameters
+"""
+type UploadsStatus {
+  """
+  Upload status items
+  """
+  items: [UploadStatus!]!
+
+  """
+  Page summary for the upload statuses provided
+  """
+  summary: PageSummary!
+}

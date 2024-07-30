@@ -1,0 +1,6 @@
+query HealthQuery {
+    getHealth {
+        status
+        totalChecksDuration
+    }
+}

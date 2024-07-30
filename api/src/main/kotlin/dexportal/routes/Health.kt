@@ -4,15 +4,16 @@ import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.client.*
-import io.ktor.client.statement.*
+
+import com.apollographql.apollo3.ApolloClient
+import com.dexportal.HealthQuery
 
 import dexportal.config.ConfigLoader
 import io.ktor.client.request.*
 
-fun Route.healthCheck(client: HttpClient) {
+fun Route.healthCheck(client: HttpClient, apolloClient: ApolloClient) {
     get("/health") {
         val mmsUrl = ConfigLoader.getMmsApiEndpoint()
-        val psApiUrl = ConfigLoader.getPsApiEndpoint()
         val healthCheckResults = mutableListOf<String>()
 
         try {
@@ -23,7 +24,7 @@ fun Route.healthCheck(client: HttpClient) {
         }
 
         try {
-            client.get("$psApiUrl/health")
+            apolloClient.query(HealthQuery()).execute()
             healthCheckResults.add("PS API Service Status: OK")
         } catch (e: Exception) {
             healthCheckResults.add("PS API Service Status: Error\n${e.message ?: "An unknown error occurred"}")
